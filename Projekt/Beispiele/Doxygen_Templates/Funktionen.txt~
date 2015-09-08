@@ -1,0 +1,14 @@
+// ========================================DOKUMENTATION============================================
+///\fn		template<typename dtype> void fname(dtype_set_all value)
+///\brief	Beschreibung der Funktionalitaet.
+// -------------------------------------------------------------------------------------------------
+///@tparam	dtype 		Beschreibung des Template Parameters.
+///@param	var		Beschreibung der Funktionsvariable.
+// =================================================================================================
+	template<typename dtype> 
+	[Type] fname([Type] var)
+	{
+
+	}
+// =================================================================================================
+

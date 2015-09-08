@@ -1,0 +1,24 @@
+// #################################################################################################
+//			Studienprojekt Modellbildung & Simulation - 2015/16
+// #################################################################################################
+// 					Header: [Dateiname]
+// ------------------------------------Doxygen-Dokumentation----------------------------------------
+///  \file [Dateiname].h
+///  \brief
+///  Beschreibung der implementierten Klassen und Funktionen, sowie der Funktionalitaet der
+///  einzelnen Komponenten.
+// -------------------------------------------------------------------------------------------------
+// Verwendete Header:
+#    pragma once
+//#	include <Code/[Verzeichnis]/[Datei]>
+
+//#	include "Code/[Verzeichnis]/[Datei].h"
+// -------------------------------------------------------------------------------------------------
+// Verwendet in :
+//   [Dateiname].h
+//   [Dateiname].cpp
+// -------------------------------------------------------------------------------------------------
+// Erstellt von : Malte Loddoch
+//	 E-Mail : malte-christian.loddoch@tu-dortmund.de
+// #################################################################################################
+

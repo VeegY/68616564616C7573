@@ -1,0 +1,17 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cuda_runtime.h>
+#include "helper_functions.hpp"
+#define dim 3
+using namespace std;
+
+__global__ void csr_smvp_opt()
+{
+
+}
+
+int main()
+{
+     return 0;
+}
