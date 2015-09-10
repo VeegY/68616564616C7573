@@ -136,22 +136,22 @@ public:
 	// Matrix * Vektor ist in zwei Varianten (als nicht-Memberfkt) ausgelagert (s.u. - bald wahrscheinlich in Vector.hpp oder einer extra Datei)
 };
 
-// Matrix mal Vektor (noch ohne TODO: Typ-Konvertierung (und const Ausdruecke?))
-// Variante 1: Bsp: double result = matvec(A, x);
-template <typename restype>
-Vector<restype> matvec(DIA<restype>& mat, Vector<restype>& vec) {
-	Vector<restype> result(mat.dim());	// Alle Eintraege werden = 0 gesetzt
+// Matrix mal Vektor
+// Variante 1: Bsp: matvec(result, A, x);
+template <typename restype, typename mattype, typename vectype>
+void matvec(Vector<restype>& result, DIA<mattype>& mat, Vector<vectype>& vec) {
 	for (int i(0); i < mat.dim(); ++i) {
 		restype resval(0);
 		for (int j(0); j < mat.numDiags(); ++j) {
-			resval += (*mat._data)[mat.dim() * j + i] * vec[i + mat.offset()[j]];
+			resval += static_cast<restype>((*mat._data)[mat.dim() * j + i] * vec[i + mat.offset()[j]]);	// FRAGE: sollte man hier das Ergebnis der Multiplikation casten, oder beide Faktoren einzeln casten?
 		}
 		result._data[i] = resval;
 	}
+}
+/* Variante 2: Bsp: Vector<double> result = matvec(A, x);	-> laeuft so, aber ist mMn etwas unschoen.
+template <typename mattype, typename vectype>
+Vector<vectype> matvec(DIA<mattype>& mat, Vector<vectype>& vec) {
+	Vector<vectype> result(mat.dim());
+	matvec(result, mat, vec);
 	return result;
-}
-// Variante 2: Bsp: matvec(result, A, x);
-template <typename restype>
-void matvec(Vector<restype>& result, DIA<restype>& mat, Vector<restype>& vec) {
-	result = matvec(mat, vec);
-}
+}*/
