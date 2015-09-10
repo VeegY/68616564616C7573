@@ -7,7 +7,7 @@ using namespace std;
 
 // Implementierung der Vektorklasse auf Basis von Arrays
 template<typename data>
-class Vektor
+class Vector
 {
 public:
 	// Variablen, auf die man global zugreifen kann
@@ -15,8 +15,8 @@ public:
 	data* _daten;	// Eintraege des Vektors
 
 	// Standardkonstruktor
-	Vektor(): _daten(NULL)
-	// Anwendungsbsp: Vektor<double> Vektor1();
+	Vector(): _daten(NULL)
+	// Anwendungsbsp: Vector<double> Vektor1();
 	{
 		#ifdef CTOR_Test
 			std::cout << "Standard-CTOR, no memory allocation " << std::endl;
@@ -26,8 +26,8 @@ public:
 	}
 
 	// Konstruktor eines Vektors bestimmter Laenge 
-	Vektor(const int dim) : _dim(dim)
-	// Anwendungsbsp: Vektor<double> Vektor2(5);
+	Vector(const int dim) : _dim(dim)
+	// Anwendungsbsp: Vector<double> Vektor2(5);
 	{
 		#ifdef CTOR_Test
 			std::cout << "0-Vektor der Laenge: " << dim << " erstellen" <<  std::endl;
@@ -41,8 +41,8 @@ public:
     	}
 
 	// Copy-Konstruktor
-	Vektor(const Vektor& v)
-	// Anwendungsbsp: Vektor<double> Vektor3(v);
+	Vector(const Vector& v)
+	// Anwendungsbsp: Vector<double> Vektor3(v);
 	{
 		#ifdef CTOR_Test
 			std::cout << "copy-CTOR, memory allocation" << std::endl;
@@ -57,8 +57,8 @@ public:
 
 	// Copy-Konstruktor mit konvertierung des Datentyps
 	template<typename data2>
-	Vektor(const Vektor<data2>& v) 
-	// Anwendungsbsp: Vektor<float> Neuer_vektor(v);
+	Vector(const Vector<data2>& v) 
+	// Anwendungsbsp: Vector<float> Neuer_vektor(v);
 	{
 		#ifdef CTOR_Test
 			std::cout << "copy-CTOR (format conversion), memory allocation" << std::endl;
@@ -72,7 +72,7 @@ public:
 	}
 
 	// Destruktor um den Speicher freizugeben
-	~Vektor()
+	~Vector()
 	{
 		#ifdef CTOR_Test
 			std::cout << "DTOR" << std::endl;
@@ -83,28 +83,28 @@ public:
 
 	// Zugriff auf die Dimension eines Vektors
 	int dim() const
-	// Anwendungsbsp: dimension = Vektor.dim();
+	// Anwendungsbsp: dimension = Vector.dim();
 	{
 		return _dim;
 	}
 
 	// Ueberladung des "[]"-Operators (konstant)
     	const data& operator[] (const int index) const 
-	// Anwendungsbsp: a = Vektor[i]; gibt den i-ten Eintrag des Vektors wieder uns speichert ihn in a
+	// Anwendungsbsp: a = Vector[i]; gibt den i-ten Eintrag des Vektors wieder uns speichert ihn in a
 	{
         	return _daten[index];
 	}
 	
 	// Ueberladung des "[]"-Operators (veraenderlich)
  	data& operator[] (const int index) 
-	// Anwendungsbsp: Vektor[i] = b; veraendert den i-ten Eintrag des Vektors und setzt ihn als b
+	// Anwendungsbsp: Vector[i] = b; veraendert den i-ten Eintrag des Vektors und setzt ihn als b
 	{
         	return _daten[index];
 	}
 	
 	// Ueberladung des "="-Operators
-	Vektor& operator= (const Vektor&  v)
-	// Anwendungsbsp: Vektor Neuervektor = Altervektor;
+	Vector& operator= (const Vector&  v)
+	// Anwendungsbsp: Vector Neuervektor = Altervektor;
 	{
 		assert( _dim == v.dim() );
 
@@ -117,8 +117,8 @@ public:
 
 	// Multiplikation mit einem Skalar (mit Konvertierung des Datenformates (static_cast))
 	template<typename data2>
-	Vektor& skalarmult (const data2& skalar)
-	// Anwendungsbsp: Vektor.skalarmult(skalar);
+	Vector& skalarmult (const data2& skalar)
+	// Anwendungsbsp: Vector.skalarmult(skalar);
 	{
 		for(int i=0;i<_dim;i++)
 		{
@@ -129,8 +129,8 @@ public:
 	
 	// Vektoraddition (gleiche Dimension!) (mit Konvertierung des Datenformates (static_cast))
 	template<typename data2>
-	Vektor& vekadd (const Vektor<data2>& v)
-	// Anwendungsbsp: Vektor.vekadd(v);
+	Vector& vekadd (const Vector<data2>& v)
+	// Anwendungsbsp: Vector.vekadd(v);
 	 {
 		assert( _dim==v.dim() );
 
@@ -143,8 +143,8 @@ public:
 
 	// Vektorsubtraktion (gleiche Dimension!), Ueberladung des "-="-Operators (mit Konvertierung des Datenformates (static_cast))
 	template<typename data2>
-	Vektor& veksub (const Vektor<data2>& v)
-	// Anwendungsbsp: Vektor.veksub(v);
+	Vector& veksub (const Vector<data2>& v)
+	// Anwendungsbsp: Vector.veksub(v);
 	{
 		assert( _dim==v.dim() );
 
@@ -160,7 +160,7 @@ public:
 
 // Ausgabe von Vektoren, Ueberladung des "<<"-Operators
 template<typename data>
-ostream& operator<< (ostream& out, const Vektor<data>& v)
+ostream& operator<< (ostream& out, const Vector<data>& v)
 // Anwendungsbsp: cout << v << endl;
 {
 	for(int i=0;i<v._dim;i++)
@@ -173,7 +173,7 @@ ostream& operator<< (ostream& out, const Vektor<data>& v)
 
 // Skalarprodukt von zwei Vektoren v1 und v2 (mit Konvertierung des Datenformates (static_cast))
 template<typename data,typename data1, typename data2>
-data sp(const Vektor<data1>& v1, const Vektor<data2>& v2)
+data sp(const Vector<data1>& v1, const Vector<data2>& v2)
 // Anwendungsbsp: Skalarprodukt = sp(v1,v2);
 {
 	assert( v1.dim()==v2.dim() );
