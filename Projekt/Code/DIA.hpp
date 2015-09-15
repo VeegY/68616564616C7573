@@ -80,7 +80,7 @@ public:
 	
 	// Gibt den Matrix-Eintrag an (x, y) zurueck
 	datatype value(int x, int y) {
-		for (int i(0); i < _dim; ++i)
+		for (int i(0); i < _numDiags; ++i)
 			if (y - x == _offset->_data[i])
 				return _data->_data[i * _dim + x];
 		return datatype(0);
@@ -143,7 +143,7 @@ void matvec(Vector<restype>& result, DIA<mattype>& mat, Vector<vectype>& vec) {
 	for (int i(0); i < mat.dim(); ++i) {
 		restype resval(0);
 		for (int j(0); j < mat.numDiags(); ++j) {
-			resval += static_cast<restype>((*mat._data)[mat.dim() * j + i] * vec[i + mat.offset()[j]]);	// FRAGE: sollte man hier das Ergebnis der Multiplikation casten, oder beide Faktoren einzeln casten?
+			resval += static_cast<restype>((*mat._data)[mat.dim() * j + i]) * static_cast<restype>(vec[i + mat.offset()[j]]);
 		}
 		result._data[i] = resval;
 	}
