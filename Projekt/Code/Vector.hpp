@@ -197,3 +197,14 @@ data sp(const Vector<data1>& v1, const Vector<data2>& v2)
 	}	
 	return a;
 }
+
+template<typename data>
+double norm(Vector<data>& y)				
+{
+	double norm2=0;						
+	for (int i=0;i<y._dim; i++)					
+	{
+		norm2+=y[i]*y[i];	
+	}
+	return sqrt(norm2);							
+}
