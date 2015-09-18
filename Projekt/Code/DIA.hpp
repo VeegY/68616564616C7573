@@ -157,14 +157,13 @@ Vector<vectype> matvec(DIA<mattype>& mat, Vector<vectype>& vec) {
 }*/
 
 //Defektberechnung->r=b-A*x
-template<typename data>
-void defekt(Vector<data>&Ax, Vector<data>& r, DIA<data>& A, Vector<data>& b, Vector<data>& x)
-//ich weiss es sind viele eingaben; kann gerne jemand verbessern
+void defekt(Vector<data>& r, DIA<data>& A, Vector<data>& b, Vector<data>& x)
 {
 	if (r._dim!=A._dim || A._dim!=b._dim || b._dim!=x._dim)
 	{
 		throw invalid_argument(" -Achtung! Dimensionsfehler!- ");
 	}else{
+		Vector<data> Ax(A.dim());
 		matvec(Ax, A, x);
 	    	r=b;
 		r=r.vecsub(Ax);
