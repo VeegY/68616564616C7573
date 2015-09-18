@@ -198,6 +198,7 @@ data sp(const Vector<data1>& v1, const Vector<data2>& v2)
 	return a;
 }
 
+//Standard 2-Norm:   Betrag = norm(x)
 template<typename data>
 double norm(Vector<data>& y)				
 {
