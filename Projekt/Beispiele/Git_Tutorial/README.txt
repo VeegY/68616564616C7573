@@ -153,9 +153,9 @@ Um einen Remote Branch mit dem aktuell aktiven lokalen Branch zu verbinden
    git merge [remote-branch] -> Bsp: git merge origin/develop
 Falls ihr es entdeckt, lasst erstmal besser die Finger von 'rebase'!
 
-Andersherum laesst sich der aktive Branch des lokalen Repository mit dem
-gewaehlten Branch des Remote Repositorys mergen.
-   git push [remote-name] [remote-branch] -> Bsp: git push origin origin/develop
+Andersherum laesst sich ein ausgewaehlter Branch des lokalen Repository mit dem
+Remote Repositorys mergen.
+   git push [remote-name] [local-branch] -> Bsp: git push origin develop
 
 ------------------------------Github Repository--------------------------------
 
