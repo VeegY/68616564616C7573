@@ -1,0 +1,9 @@
+# Dies ist ein ein Kommentar - dieser wird ignoriert
+# Ignoriert alle Dateien, die mit .o enden oder temporaere ~-Datein
+*.o
+*~
+# ignoriert alle Dateien im build/ Verzeichnis nicht aber
+build/
+Dokumentation/
+!Dokumentation/doxygen_config
+

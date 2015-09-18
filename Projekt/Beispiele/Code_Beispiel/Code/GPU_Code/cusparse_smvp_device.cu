@@ -1,20 +1,34 @@
-// compile nvcc cusparse_smvp_device.cu -arch=sm_20 -Xcompiler=-fopenmp -lcusparse -o test
-
-// ################################################################################################
-//				  Header: cusparse_smvp_device
-// ------------------------------------Doxygen-Dokumentation---------------------------------------
+// #################################################################################################
+//					 FD - Code Projekt
+// #################################################################################################
+// 				     CPP-File: cusparse_smvp_device
+// ------------------------------------Doxygen-Dokumentation----------------------------------------
 ///  \file cusparse_smvp_device.cu
 ///  \brief
-///  sparse Matrix (im CSR Format) Vektor Produkt, ausgeführt auf dem Device mit Hilfe von Lib: cuSparse
-// ------------------------------------------------------------------------------------------------
-// ################################################################################################
+///  Sparse Matrix (im CSR Format) Vektor Produkt, ausgeführt auf dem Device mit Hilfe von Lib: cuSparse
+// -------------------------------------------------------------------------------------------------
+// Kompilieren mit dem folgenden Compilerbefehl: !! WIP !!
+//   nvcc cusparse_smvp_device.cu -arch=sm_20 -Xcompiler=-fopenmp -lcusparse -o test
+// -------------------------------------------------------------------------------------------------
+// Verwendete Header:
+#	pragma once
+#	include <iostream>
 
-#include "helper_functions.hpp"
-#include "csr_helper_functions.hpp"
-#include <iostream>
-#include "cusparse.h"
-#define dim 4
+#	include "helper_functions.hpp"
+#	include "csr_helper_functions.hpp"
+#	include "cusparse.h"
+#	define dim 4 ///< Irgendwas mit 4
+// #################################################################################################
 
+// ========================================DOKUMENTATION============================================
+//					       print
+///\brief	Macht irgendwas.
+// -------------------------------------------------------------------------------------------------
+///@param	A		Macht irgendwas.
+///@param	m		Macht irgendwas.
+///@param	n		Macht irgendwas.
+///@param	lda		Macht irgendwas.
+// =================================================================================================
 void print(double A[], int  m, int n, int lda)
 {
 	for(int i(0);i<n;++i)
@@ -26,6 +40,20 @@ void print(double A[], int  m, int n, int lda)
 		std::cout << std::endl;
 	}
 }
+// =================================================================================================
+
+// ========================================DOKUMENTATION============================================
+//					     loeschen
+///\brief	Macht irgendwas.
+// -------------------------------------------------------------------------------------------------
+///@param	handle		Macht irgendwas.
+///@param	descr		Macht irgendwas.
+///@param	nnzPerRowA	Macht irgendwas.
+///@param	A		Macht irgendwas.
+///@param	csrRowPtrA	Macht irgendwas.
+///@param	csrColIndA	Macht irgendwas.
+///@param	csrValA		Macht irgendwas.
+// =================================================================================================
 void loeschen(cusparseHandle_t handle, cusparseMatDescr_t descr, int *nnzPerRowA, double *A, int *csrRowPtrA, int *csrColIndA, double *csrValA)
 {
 cusparseDestroy(handle);
@@ -36,7 +64,13 @@ cudaFree(csrRowPtrA);
 cudaFree(csrColIndA);
 cudaFree(nnzPerRowA);
 }
+// =================================================================================================
 
+// =================================================================================================
+//					 main-Funktion
+// -------------------------------------------------------------------------------------------------
+///  \brief Fuehrt den Test der cusparse_smvp_device Implementierung durch.
+// =================================================================================================
 int main()
 {
  
@@ -156,3 +190,4 @@ std::cout << std::endl;
   loeschen(handle, descr, nnzPerRow, d_matrix, csrRowPtrA, csrColIndA, csrValA);
     
 }
+// =================================================================================================

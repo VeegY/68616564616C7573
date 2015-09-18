@@ -5,7 +5,7 @@
 // ------------------------------------Doxygen-Dokumentation----------------------------------------
 ///  \file vector_CPU_TEST.cpp
 ///  \brief
-///  Testet die Funktionalitaet der Implementierungen in vector_CPU.h.
+///  Testet die Funktionalitaet der Implementierungen in vector_CPU.hpp.
 // -------------------------------------------------------------------------------------------------
 // Kompilieren mit dem folgenden Compilerbefehl: !! WIP !!
 //   gcc vector_CPU_TEST.cpp
@@ -13,7 +13,7 @@
 // Verwendete Header:
 #	include <iostream>
 
-#	include "linear_algebra_metrics.h"
+#	include "vector_metrics.hpp"
 // -------------------------------------------------------------------------------------------------
 // Copyright : 2015 malte-christian.loddoch@tu-dortmund.de
 // #################################################################################################
@@ -108,7 +108,6 @@ int main(int argc, char** argv)
 // =================================================================================================
 // TEST - Ende der Tests
 // =================================================================================================
-	std::cin.get();
 
 	return 0;
 }

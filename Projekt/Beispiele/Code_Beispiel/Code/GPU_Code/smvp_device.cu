@@ -1,27 +1,31 @@
-/*   CompileInfo: 
-     nvcc smpv_device.cu -O3 -arch=sm_20 -Xcompiler=-fopenmp,-Wall -o prog
-     nvcc smpv_device.cu -arch=sm_20 -o prog
-*/
-// ################################################################################################
-//				  Header: smvp_device
-// ------------------------------------Doxygen-Dokumentation---------------------------------------
+// #################################################################################################
+//					 FD - Code Projekt
+// #################################################################################################
+// 				     CPP-File: smvp_device
+// ------------------------------------Doxygen-Dokumentation----------------------------------------
 ///  \file smvp_device.cu
 ///  \brief
-///  sparse Matrix Vektor Produkt, ausgeführt auf dem Device
-// ------------------------------------------------------------------------------------------------
-// ################################################################################################
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <cuda_runtime.h>
-#include "helper_functions.hpp"
-#define dim 3
-#define csr 2
-using namespace std;
+///  Sparse Matrix-Vektor Produkt, ausgeführt auf dem Device
+// -------------------------------------------------------------------------------------------------
+// Kompilieren mit dem folgenden Compilerbefehl: !! WIP !!
+//   nvcc smpv_device.cu -O3 -arch=sm_20 -Xcompiler=-fopenmp,-Wall -o prog
+//   nvcc smpv_device.cu -arch=sm_20 -o prog
+// -------------------------------------------------------------------------------------------------
+// Verwendete Header:
+#	pragma once
+#	include <iostream>
+#	include <cstdlib>
+#	include <ctime>
+#	include <cuda_runtime.h>
 
+#	include "helper_functions.hpp"
+#	define dim 3 ///< Irgendwas mit 3
+#	define csr 2 ///< Irgendwas mit 2
+using namespace std;
+// #################################################################################################
 
 // ========================================DOKUMENTATION============================================
-//					      smvp_oneperrow_sf
+//					 smvp_oneperrow_sf
 ///\brief	sparse Matrix Vektor Produkt, ein Thread pro Reihe
 // -------------------------------------------------------------------------------------------------
 ///@param	matrix    	dim x dim Matrix gespeichert als 1D Array der Größe dim*dim
@@ -43,10 +47,10 @@ __global__ void smvp_oneperrow_sf(float* matrix, float* vector, float* solution,
           solution[idx]=value;
      }
 }
-
+// =================================================================================================
 
 // ========================================DOKUMENTATION============================================
-//					      smvp_oneperrow_sf
+//					 smvp_oneperrow_sf
 ///\brief	sparse Matrix Vektor Produkt, ein Thread pro Element
 // -------------------------------------------------------------------------------------------------
 ///@param	matrix    	dim x dim Matrix gespeichert als 1D Array der Größe dim*dim
@@ -63,8 +67,13 @@ __global__ void smvp_threadperelement_sf(float* matrix, float* vector, float* so
           atomicAdd(&solution[idx/n],matrix[idx]);
      }     
 }
+// =================================================================================================
 
-
+// =================================================================================================
+//					 main-Funktion
+// -------------------------------------------------------------------------------------------------
+///  \brief Fuehrt den Test der smvp_device Implementierung durch.
+// =================================================================================================
 int main()
 {
 
@@ -173,3 +182,5 @@ int main()
      return 0;
      
 }
+// =================================================================================================
+

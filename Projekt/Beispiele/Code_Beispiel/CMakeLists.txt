@@ -2,7 +2,7 @@
 # 			CMake Quell-Verzeichnis				
 #========================================================================
 # Aufsetzen des Projekts
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 project(Doxygen_Beispiel)
 #------------------------------------------------------------------------
 # 			Lade benötigte Pakete				
@@ -34,6 +34,19 @@ add_custom_target(		# Konfiguriere built macro
 	)
 endif(DOXYGEN_FOUND)
 
+#------------------------------------------------------------------------
+# 		            Macro fuer CTest			
+#------------------------------------------------------------------------
+
+# ctest anschalten
+enable_testing()
+
+macro(create_test target)
+	add_test(
+	  NAME ${target} 
+	  COMMAND $<TARGET_FILE:${target}>)
+endmacro(create_test)
+
 #========================================================================
 # 				Compiler			
 #========================================================================
@@ -57,10 +70,15 @@ set (CUDA_PROPAGATE_HOST_FLAGS OFF)
 #------------------------------------------------------------------------
 # 		  	      GCC Compiler			
 #------------------------------------------------------------------------
-set(CMAKE_CXX_FLAGS"-g -std=c++0x -fopenmp -msse2 -mfpmath=sse -O3") 
+#Standard Flags:
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -fopenmp") 
 
-# ctest anschalten
-enable_testing()
+#Standard Flags mit CMAKE_BUILD_TYPE=Debug: -g
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -DCONSTRUCTOR_TEST")
+
+#Standard Flags mit CMAKE_BUILD_TYPE=Debug: -O3 -DNDEBUG
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -msse2 -mfpmath=sse")
+
 
 #------------------------------------------------------------------------
 # 	     - - - WIP - - -  MPI Compiler  - - - WIP - - -

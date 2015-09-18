@@ -1,35 +1,37 @@
-/*   CompileInfo: 
-     nvcc csr_smvp_device.cu -O3 -arch=sm_20 -Xcompiler=-fopenmp,-Wall -o prog
-     nvcc csr_smvp_device.cu -arch=sm_20 -o prog
-*/
+// ################################################################################################
+//					 FD - Code Project
 // ################################################################################################
 //				  Header: csr_smvp_device
 // ------------------------------------Doxygen-Dokumentation---------------------------------------
 ///  \file smvp_device.cu
 ///  \brief
-///  sparse Matrix (im CSR Format) Vektor Produkt, ausgeführt auf dem Device
+///  Sparse (im CSR Format) Matrix-Vektor Produkt, ausgeführt auf dem Device
+// -------------------------------------------------------------------------------------------------
+// Kompilieren mit dem folgenden Compilerbefehl: !! WIP !!
+//   nvcc csr_smvp_device.cu -O3 -arch=sm_20 -Xcompiler=-fopenmp,-Wall -o prog
+//   nvcc csr_smvp_device.cu -arch=sm_20 -o prog
 // ------------------------------------------------------------------------------------------------
-// ################################################################################################
+// Verwendete Header:
+#	include <iostream>
+#	include <cstdlib>
+#	include <ctime>
+#	include <cuda_runtime.h>
 
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <cuda_runtime.h>
-#include "helper_functions.hpp"
-#include "csr_helper_functions.hpp"
-#define dim 4
+#	include "helper_functions.hpp"
+#	include "csr_helper_functions.hpp"
+#	define dim 4
 using namespace std;
-
+// #################################################################################################
 
 // ========================================DOKUMENTATION============================================
-//					      csr_smvp_oneperrow_sf
-///\brief	sparse Matrix Vektor Produkt, ein Warp pro Reihe, Matrix im CSR Format
+//				       csr_smvp_oneperrow_sf
+///\brief	Sparse Matrix-Vektor Produkt, ein Warp pro Reihe, Matrix im CSR Format
 // -------------------------------------------------------------------------------------------------
-///@param	value     1D Array der Größe "nicht-Null-Einträge" der Matrix auf der das CSR Format beruht     
-///@param	column	1D Array der selben Größe wie "value", beinhalted die Spalten Indizes der nicht-Null-Einträgen
-///@param	pointer   1D Array der Größe "dim+1" beinhalted den Zeiger auf das erste Element jeder Zeile in "value"
-///@param vector    1D Array der Größe dim, dient zur Berechnung des Produktes
-///@param solution  1D Array der Größe dim, beinhalted nach Ausführung das Ergebniss
+///@param	value     	1D Array der Größe "nicht-Null-Einträge" der Matrix auf der das CSR Format beruht     
+///@param	column		1D Array der selben Größe wie "value", beinhalted die Spalten Indizes der nicht-Null-Einträgen
+///@param	pointer   	1D Array der Größe "dim+1" beinhalted den Zeiger auf das erste Element jeder Zeile in "value"
+///@param 	vector    	1D Array der Größe dim, dient zur Berechnung des Produktes
+///@param 	solution 	1D Array der Größe dim, beinhalted nach Ausführung das Ergebniss
 // =================================================================================================
 __global__ void csr_smvp_warpperrow_sf(float* value, int* column, int* pointer, float* vector,float* solution)
 {
@@ -45,6 +47,13 @@ __global__ void csr_smvp_warpperrow_sf(float* value, int* column, int* pointer, 
      }
 
 }
+// =================================================================================================
+
+// =================================================================================================
+//					 main-Funktion
+// -------------------------------------------------------------------------------------------------
+///  \brief Fuehrt den Test der csr_smvp_device Implementierung durch.
+// =================================================================================================
 int main()
 {
 
@@ -211,3 +220,4 @@ int main()
      return 0;
      
 }
+// =================================================================================================

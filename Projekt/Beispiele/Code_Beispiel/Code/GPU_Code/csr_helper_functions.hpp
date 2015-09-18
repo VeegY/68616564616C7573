@@ -1,26 +1,27 @@
 // ################################################################################################
+//					 FD - Code Project
+// ################################################################################################
 //				  Header: csr_helper_functions
 // ------------------------------------Doxygen-Dokumentation---------------------------------------
 ///  \file csr_helper_functions.hpp
 ///  \brief
 ///  Funktionen um das Benutzen des CSR Format zu erleichtern
 // ------------------------------------------------------------------------------------------------
-// ################################################################################################
-
-#include<iostream>
+// Verwendete Header:
+#	include <iostream>
 using namespace std;
+// #################################################################################################
 
 // ========================================DOKUMENTATION============================================
-//					      csr_format_cpu
-///\brief	liefert CSR Format einer Matrix über den Host berechnet
+//					   csr_format_cpu
+///\brief	Liefert CSR Format einer Matrix über den Host berechnet
 // -------------------------------------------------------------------------------------------------
-///@param	matrix    dim x dim Matrix gespeichert als 1D Array der Größe dim*dim
-///@param	value	1D Array der Größe "nicht-Null-Einträge", wird bei Laufzeit gefüllt
-///@param	column    1D Array der selben Größe wie "value", wird bei Laufzeit gefüllt
-///@param pointer   1D Array der Größe "dim+1", wird bei Laufzeit gefüllt
-///@param n         Dimension der Matrix
+///@param	in_matrix    	dim x dim Matrix gespeichert als 1D Array der Größe dim*dim
+///@param	value		1D Array der Größe "nicht-Null-Einträge", wird bei Laufzeit gefüllt
+///@param	column    	1D Array der selben Größe wie "value", wird bei Laufzeit gefüllt
+///@param 	pointer   	1D Array der Größe "dim+1", wird bei Laufzeit gefüllt
+///@param 	n         	Dimension der Matrix
 // =================================================================================================
-
 void csr_format_cpu(float* in_matrix,float* value,int* column,int* pointer,int n)
      {
           pointer[0]=0;
@@ -40,14 +41,14 @@ void csr_format_cpu(float* in_matrix,float* value,int* column,int* pointer,int n
                pointer[i+1]=idx;     
           }
      }
+// =================================================================================================
      
 // ========================================DOKUMENTATION============================================
-//					      csr_format_cpu
-///\brief	liefert CSR Format einer Matrix über den Host berechnet
+//					   csr_format_cpu
+///\brief	Liefert CSR Format einer Matrix über den Host berechnet
 // -------------------------------------------------------------------------------------------------
-///@param	matrix    dim x dim Matrix gespeichert als 1D Array der Größe dim*dim
+///@param	in_matrix    dim x dim Matrix gespeichert als 1D Array der Größe dim*dim
 ///@param	n	     Dimension der Matrix
-
 // =================================================================================================    
 int nz_values(float* in_matrix,int n)
 {
@@ -58,3 +59,5 @@ int nz_values(float* in_matrix,int n)
           }
           return count;          
 }
+// =================================================================================================
+
