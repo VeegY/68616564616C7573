@@ -45,6 +45,8 @@ int CG(Vector<restype>& x, DIA<mattype>& A, Vector<vectype>& b) {
 		matvec(z, A, d);	// zwischenspeichern um es nur einmal auszurechnen
 		sp(dz, d, z);		// Skalarprodukt von d_k*z_k
 		
+		rr_old = rr_new;	// das Skalarprodukt der letzten Iteration - r_(k+1)*r_(k+1) - ist jetzt nur noch r_k*r_k
+		
 		xold = x;		// x-Vektor wird aktualisiert
 		x = d;			// TODO: das hier direkt programmieren um die Zwischenschritte direkt und alles ohne Zwischenspeicherungen zu rechnen
 		x.scalmult(rr_old / dz);
@@ -55,7 +57,6 @@ int CG(Vector<restype>& x, DIA<mattype>& A, Vector<vectype>& b) {
 		r.scalmult(-(rr_old / dz));
 		r.vecadd(rold);
 		
-		rr_old = rr_new;	// das Skalarprodukt der letzten Iteration - r_(k+1)*r_(k+1) - ist jetzt nur noch r_k*r_k
 		sp(rr_new, r, r);
 		
 		d.scalmult(rr_new / rr_old);	// Suchrichtung wird aktualisiert
