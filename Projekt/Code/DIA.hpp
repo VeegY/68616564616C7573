@@ -20,6 +20,7 @@
 #pragma once
 #include <iostream>
 #include <math.h>
+#include <stdexcept>	// fuer: throw exception
 #include "Vector.hpp"
 using namespace std;
 
@@ -157,13 +158,14 @@ Vector<vectype> matvec(DIA<mattype>& mat, Vector<vectype>& vec) {
 }*/
 
 //Defektberechnung->r=b-A*x
-void defekt(Vector<data>& r, DIA<data>& A, Vector<data>& b, Vector<data>& x)
+template <typename datatype>
+void defekt(Vector<datatype>& r, DIA<datatype>& A, Vector<datatype>& b, Vector<datatype>& x)
 {
 	if (r._dim!=A._dim || A._dim!=b._dim || b._dim!=x._dim)
 	{
 		throw invalid_argument(" -Achtung! Dimensionsfehler!- ");
 	}else{
-		Vector<data> Ax(A.dim());
+		Vector<datatype> Ax(A.dim());
 		matvec(Ax, A, x);
 	    	r=b;
 		r=r.vecsub(Ax);
