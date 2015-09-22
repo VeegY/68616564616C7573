@@ -161,7 +161,7 @@ Vector<vectype> matvec(DIA<mattype>& mat, Vector<vectype>& vec) {
 template <typename datatype>
 void defekt(Vector<datatype>& r, DIA<datatype>& A, Vector<datatype>& b, Vector<datatype>& x)
 {
-	if (r._dim!=A._dim || A._dim!=b._dim || b._dim!=x._dim)
+	if (r._dim!=A._dim || A._dim!=b._dim || b._dim!=x._dim) 
 	{
 		throw invalid_argument(" -Achtung! Dimensionsfehler!- ");
 	}else{
