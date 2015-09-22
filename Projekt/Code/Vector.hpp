@@ -12,10 +12,10 @@ class Vector
 public:
 	// Variablen, auf die man global zugreifen kann
 	int _dim;	// Dimension des Vektors
-	data* _daten;	// Eintraege des Vektors
+	data* _data;	// Eintraege des Vektors
 
 	// Standardkonstruktor
-	Vector(): _daten(NULL)
+	Vector(): _data(NULL)
 	// Anwendungsbsp: Vector<double> Vektor1();
 	{
 		#ifdef CTOR_Test
@@ -33,10 +33,10 @@ public:
 			std::cout << "0-Vektor der Laenge: " << dim << " erstellen" <<  std::endl;
 		#endif
         
-		_daten = new data[_dim];
+		_data = new data[_dim];
 		for(int i=0;i<_dim;i++)
 		{
-				_daten[i]=data(0);
+				_data[i]=data(0);
 		}
     	}
 
@@ -49,9 +49,9 @@ public:
 		#endif
 
 		_dim=v.dim();
-		_daten = new data[_dim];
+		_data = new data[_dim];
 		for (int i=0; i < _dim; ++i) {
-				_daten[i] = v._daten[i];
+				_data[i] = v._data[i];
 		}
 	}
 
@@ -65,9 +65,9 @@ public:
 		#endif		
 
 		_dim=v.dim();
-		_daten = new data[_dim];
+		_data = new data[_dim];
 		for (int i=0; i < _dim; ++i) {
-				_daten[i] = static_cast<data>(v._daten[i]);
+				_data[i] = static_cast<data>(v._data[i]);
 		}
 	}
 
@@ -78,7 +78,7 @@ public:
 			std::cout << "DTOR" << std::endl;
 		#endif
 
-		delete[] _daten; //Destruktor funktioniert ja nur wenn ich vorher beim CTOR mit new Speicher fuer die Daten freigemacht habe
+		delete[] _data; //Destruktor funktioniert ja nur wenn ich vorher beim CTOR mit new Speicher fuer die Daten freigemacht habe
 	}
 
 	// Zugriff auf die Dimension eines Vektors
@@ -92,14 +92,14 @@ public:
     	const data& operator[] (const int index) const 
 	// Anwendungsbsp: a = Vector[i]; gibt den i-ten Eintrag des Vektors wieder uns speichert ihn in a
 	{
-        	return _daten[index];
+        	return _data[index];
 	}
 	
 	// Ueberladung des "[]"-Operators (veraenderlich)
  	data& operator[] (const int index) 
 	// Anwendungsbsp: Vector[i] = b; veraendert den i-ten Eintrag des Vektors und setzt ihn als b
 	{
-        	return _daten[index];
+        	return _data[index];
 	}
 	
 	// Ueberladung des "="-Operators
@@ -110,7 +110,7 @@ public:
 
 		for(int i=0;i<_dim;i++)
 		{
-			_daten[i]=v._daten[i];
+			_data[i]=v._data[i];
 		}
 		return *this;  
 	}
@@ -122,7 +122,7 @@ public:
 	{
 		for(int i=0;i<_dim;i++)
 		{
-			_daten[i]*=static_cast<data>(skalar);
+			_data[i]*=static_cast<data>(skalar);
 		}
 		return *this;
 	}
@@ -136,7 +136,7 @@ public:
 
 		for(int i=0;i<_dim;i++)
 		{
-			_daten[i]+=static_cast<data>(v._daten[i]);
+			_data[i]+=static_cast<data>(v._data[i]);
 		}
 		return *this;
 	 }
@@ -150,7 +150,7 @@ public:
 
 		for(int i=0;i<_dim;i++)
 		{
-			_daten[i]-=static_cast<data>(v._daten[i]);
+			_data[i]-=static_cast<data>(v._data[i]);
 		}
 		return *this;
 	}
@@ -162,7 +162,7 @@ public:
 	{
 		for(int i=0;i<_dim;i++)
 		{
-			_daten[i]=static_cast<data>(skalar);
+			_data[i]=static_cast<data>(skalar);
 		}
 		return *this;
 	}
@@ -196,4 +196,16 @@ data sp(const Vector<data1>& v1, const Vector<data2>& v2)
 		a += static_cast<data>(v1[i])*static_cast<data>(v2[i]);
 	}	
 	return a;
+}
+
+//Standard 2-Norm: Betrag = norm(x)
+template<typename data>
+double norm(Vector<data>& y)				
+{
+	double norm2=0;							
+	for (int i=0;i<y._dim; i++)				
+	{
+		norm2+=y[i]*y[i];				
+	}
+	return sqrt(norm2);							//Ziehe Wurzel, gebe Norm aus
 }

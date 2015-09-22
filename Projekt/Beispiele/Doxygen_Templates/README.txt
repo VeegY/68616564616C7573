@@ -28,7 +28,7 @@ zu den findet ihr in der Konfigurationsdatei. Der gesamte Dokumenationsordner
 wird fortan nicht (regelmaessig) im Versionskontrollsystem commitet. Ihr koennt
 also gerne eigene Konfigurationen erstellen.
 
--------------------------------------------------------------------------------
+-----------------------------Doxygen-Variablen---------------------------------
 
 PROJECT_NAME           = "Studienprojekt 2015_16"
 Mit dieser Variable laesst sich der Titel der Dokumentation bearbeiten.

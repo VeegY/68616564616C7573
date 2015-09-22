@@ -27,6 +27,23 @@ Anschliessend erzeugt der Compiler die in der 'CMakeLists.txt' definierten
 Makros. Die entsprechenden Verwaltungsarchitekturen werden im 'build'-
 Verzeichnis erstellt.
 
+Buildoption CMAKE_BUILD_TYPE:
+CMake laesst in verschiedenen Buildvarianten kompilieren. Dabei unterscheiden
+wir zwischen den Build Typen 'None', 'Debug' und 'Release'. Anleitung:
+   build/cmake -DCMAKE_BUILD_TYPE=[Build_Typ] ../Code
+
+'None':
+Standardeinstellung die ohne Spezifikation (wie oben) verwendet wird
+'Debug':
+Die Compilerflags koennen/werden gerade so gewaehlt, dass das der Code
+hinsichtlich des Debugvorgangs optimiert wird.
+'Release':
+Das Build System wird dahingehend ausgelegt, dass der Compiler den Code
+hinsichtlich der Leistungsfaehigkeit optimiert.
+
+(Optional lassen sich auch weitere und eigene Build Typen aufsetzen, fuer
+uns reicht das so jedoch völlig aus)
+
 MAKRO: make all / make
 Mithilfe dieses Makros wird das komplette build (bzw. alle dem Makro ALL 
 zugewiesenen Befehle) kompiliert. Das heisst, dass alle Compiler aufgesetzt
@@ -85,8 +102,9 @@ ueber den GCC-Compiler. Dabei wird im 'build/EXE'-Verzeichnis das zugehoerige
 Programm erzeugt.
 
 add_test([name] [command])
-Mithilfe dieses Befehls laesst sich ctest ein Test hinzufuegen. Damit lassen
-sich Unit-Tests umsetzen.
+Mithilfe dieses Befehls laesst sich fuer ctest ein Test hinzufuegen. Damit 
+lassen sich Unit-Tests umsetzen. Anschliessend wird der Test mit 'make test' 
+oder 'ctest (-V)' ausgefuehrt. Die Tests sollten keine Eingaben erfordern.
 
 cuda_add_executable([Makroname] [Dateiname].cu)
 Das entsprechende CUDA-Aequivalent zu 'add_executable'.
