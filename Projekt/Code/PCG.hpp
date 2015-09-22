@@ -23,38 +23,42 @@ void sp(data& result, const Vector<data1>& v1, const Vector<data2>& v2)
 
 template <typename restype, typename mattype, typename vectype>
 int CG(Vector<restype>& x, DIA<mattype>& A, Vector<vectype>& b) {
-	Vector<restype> r(b.dim());	// alle Eintraege werden bei der Initalisierung 0 gesetzt
-	matvec(r, A, x);	// r_0 setzen
-	r.skalarmult(-1);
-	r.vecadd(b);
-		Vector<restype> d(r);	// d_0 = r_0
-	Vector<restype> z(b.dim());
+	// Fuer den Algorithmus werden einige Vektoren und Werte benoetigt. Hier die Definitionen und Initialisierungen (teilweise mit Dummi-Werten)
+	Vector<restype> r(b.dim());	// r -> Residiuenvektor
+	defect(r, A, b, x);	// r_0
+	Vector<restype> d(r);	// Suchrichtung, d_0 := r_0
+	Vector<restype> z(b.dim());	// Wird benutzt um in jedem Durchlauf A*d_k nur einmal ausrechnen zu muessen
 
-		restype rr_old(0);
-	restype rr_new(1);
-	restype dz(1);
-	Vector<restype> xold(b.dim());
-	Vector<restype> rold(b.dim());
+	restype rr_old(0);	// ist im k-ten Durchlauf das Skalarprodukt von r_k*r_k
+	restype rr_new(1);	// ist im k-ten Durchlauf das Skalarprodukt von r_(k+1)*r_(k+1)
+	restype dz(1);		// ist im k-ten Durchlauf das Skalarprodukt von d_k*z_k
+	
+	sp(rr_new, r, r);	// wird fuer den ersten Schleifendurchlauf schon benoetigt
+	
+	Vector<restype> xold(b.dim());	// wird noch benoetigt um x_k auf x_k+1 zu aktualisieren, sollte noch aehnlich wie der Defekt neu programmiert werden um Zwischenschritte nicht speichern zu muessen
+	Vector<restype> rold(b.dim());	// wird noch benoetigt um r_k auf r_k+1 zu aktualisieren, sollte noch aehnlich wie der Defekt neu programmiert werden um Zwischenschritte nicht speichern zu muessen
 
-	cout << fixed << setprecision(3);
+	double TOL(0.0000000001);	// (Vorerst eine beliebige feste) Toleranz fuer das Abbruchkriterium...
 
-	double TOL(0.0000000001);
-
-	int k(0);
-	for (; k < b.dim() && rr_new > TOL; ++k) {
-		matvec(z, A, d);
-		sp(rr_old, r, r);
-		sp(dz, d, z);
-		xold = x;
-		x = d;
-		x.skalarmult(rr_old / dz);
+	int k(0);	// Anzahl der Iterationen. Wird zurueckgegeben, deshalb Initialisierung ausserhalb der Schleife
+	for (; rr_new > TOL*TOL && k < b.dim() ; ++k) {	// laueft bis die Norm des Residuums kleiner als TOL ist oder im Notfall maximal so oft wie das System gross ist
+		matvec(z, A, d);	// zwischenspeichern um es nur einmal auszurechnen
+		sp(dz, d, z);		// Skalarprodukt von d_k*z_k
+		
+		xold = x;		// x-Vektor wird aktualisiert
+		x = d;			// TODO: das hier direkt programmieren um die Zwischenschritte direkt und alles ohne Zwischenspeicherungen zu rechnen
+		x.scalmult(rr_old / dz);
 		x.vecadd(xold);
-		rold = r;
-		r = z;
-		r.skalarmult(-(rr_old / dz));
+		
+		rold = r;		// Residuen-Vektor wird aktualisiert
+		r = z;			// TODO: dasselbe wie beim x-Vektor, s.o.
+		r.scalmult(-(rr_old / dz));
 		r.vecadd(rold);
-		sp(rr_new, r, r);	// should be used for the new alpha1
-		d.skalarmult(rr_new / rr_old);
+		
+		rr_old = rr_new;	// das Skalarprodukt der letzten Iteration - r_(k+1)*r_(k+1) - ist jetzt nur noch r_k*r_k
+		sp(rr_new, r, r);
+		
+		d.scalmult(rr_new / rr_old);	// Suchrichtung wird aktualisiert
 		d.vecadd(r);
 	}
 	return k;
@@ -62,6 +66,7 @@ int CG(Vector<restype>& x, DIA<mattype>& A, Vector<vectype>& b) {
 
 template <typename restype, typename mattype, typename vectype>
 int PCG_Jacobi(Vector<restype>& x, DIA<mattype>& A, Vector<vectype>& b) {
+	// TODO
 	int k(0);
 	k = CG(x, A, b);
 	return k;
