@@ -117,12 +117,12 @@ public:
 
 	// Multiplikation mit einem Skalar (mit Konvertierung des Datenformates (static_cast))
 	template<typename data2>
-	Vector& skalarmult (const data2& skalar)
-	// Anwendungsbsp: Vector.skalarmult(skalar);
+	Vector& scalmult (const data2& scal)
+	// Anwendungsbsp: Vector.scalmult(scal);
 	{
 		for(int i=0;i<_dim;i++)
 		{
-			_data[i]*=static_cast<data>(skalar);
+			_data[i]*=static_cast<data>(scal);
 		}
 		return *this;
 	}

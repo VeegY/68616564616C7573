@@ -134,41 +134,43 @@ public:
 	}
 
 // Operatoren
-	// Matrix * Vektor ist in zwei Varianten (als nicht-Memberfkt) ausgelagert (s.u. - bald wahrscheinlich in Vector.hpp oder einer extra Datei)
+	// Matrix * Vektor ist (als nicht-Memberfkt) ausgelagert (s.u.)
 };
 
 // Matrix mal Vektor
-// Variante 1: Bsp: matvec(result, A, x);
+// Bsp: matvec(result, mat, vec);
 template <typename restype, typename mattype, typename vectype>
 void matvec(Vector<restype>& result, DIA<mattype>& mat, Vector<vectype>& vec) {
-	for (int i(0); i < mat.dim(); ++i) {
-		restype resval(0);
-		for (int j(0); j < mat.numDiags(); ++j) {
-			resval += static_cast<restype>((*mat._data)[mat.dim() * j + i]) * static_cast<restype>(vec[i + mat.offset()[j]]);
+	if (result._dim!=mat._dim || mat._dim!=vec._dim) {
+		throw invalid_argument(" -Achtung! Dimensionsfehler! (matvec)- ");
+	}
+	else {
+		restype resval(0);	// ist notwendig, da nicht gesichert ist, dass result nur Nulleintraege hat
+		for (int i(0); i < mat.dim(); ++i) {
+			for (int j(0); j < mat.numDiags(); ++j) {
+				resval += static_cast<restype>((*mat._data)[mat.dim() * j + i]) * static_cast<restype>(vec[i + mat.offset()[j]]);
+			}
+			result[i] = resval;
 		}
-		result._data[i] = resval;
 	}
 }
-/* Variante 2: Bsp: Vector<double> result = matvec(A, x);	-> laeuft so, aber ist mMn etwas unschoen.
-template <typename mattype, typename vectype>
-Vector<vectype> matvec(DIA<mattype>& mat, Vector<vectype>& vec) {
-	Vector<vectype> result(mat.dim());
-	matvec(result, mat, vec);
-	return result;
-}*/
 
-//Defektberechnung->r=b-A*x
+
+// Defektberechnung
+// Bsp: defect(r, mat, rhs, vec);
 template <typename datatype>
-void defekt(Vector<datatype>& r, DIA<datatype>& A, Vector<datatype>& b, Vector<datatype>& x)
-{
-	if (r._dim!=A._dim || A._dim!=b._dim || b._dim!=x._dim)
-	{
-		throw invalid_argument(" -Achtung! Dimensionsfehler!- ");
-	}else{
-		Vector<datatype> Ax(A.dim());
-		matvec(Ax, A, x);
-	    	r=b;
-		r=r.vecsub(Ax);
+void defect(Vector<datatype>& r, DIA<datatype>& mat, Vector<datatype>& rhs, Vector<datatype>& vec) {
+	if (r._dim!=mat._dim || mat._dim!=rhs._dim || rhs._dim!=vec._dim) {
+		throw invalid_argument(" -Achtung! Dimensionsfehler! (defect)- ");
+	}
+	else {
+		r = rhs;	// da dies hier gesetzt wird, kann man innerhalb der Schleifen "-=" nutzen
+		for (int i(0); i < mat.dim(); ++i) {
+			for (int j(0); j < mat.numDiags(); ++j) {
+				r[i] -= (*mat._data)[mat.dim() * j + i] * vec[i + mat.offset()[j]];
+			}
+
+		}
 	}
 
 }

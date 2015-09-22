@@ -8,8 +8,8 @@ untereinander absprechen
 
 unit-Tests (Mat+Vec)	-	Donner
 GPU			-	Jonas
-Löser(PCG)	Vorkond	-	Heiko (kann sich gerne jemand bei mir melden und mitmachen)
-		Löser	-	Heiko (~)
+Löser(PCG)	Vorkond	-	Heiko, Micha (kann sich gerne jemand bei mir melden und mitmachen)
+		Löser	-	Heiko, Micha (~)
 Doxygen			-	
 Wärmeübertragungmodell	-	Michael
 Netzgenerierung		-	Sophia
