@@ -88,7 +88,7 @@ der aktuelle Zustand des lokalen Repositorys als Zeiger des Branches verwendet
    git branch [local-branch]
 Eine weitere Moeglichkeit einen Branch zu erstellen und insbesondere direkt 
 darauf zu wechseln ist
-   git checkout -b [local-branch]
+   git checkout -b [local-branch] -> Bsp: git checkout -b develop
 Moechte man einen Branch loeschen, laesst sich dies mithilfe
    git branch -d [local-branch]
 erzielen.
