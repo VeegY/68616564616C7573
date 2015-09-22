@@ -165,10 +165,13 @@ void defekt(Vector<datatype>& r, DIA<datatype>& A, Vector<datatype>& b, Vector<d
 	{
 		throw invalid_argument(" -Achtung! Dimensionsfehler!- ");
 	}else{
-		Vector<datatype> Ax(A.dim());
-		matvec(Ax, A, x);
-	    	r=b;
-		r=r.vecsub(Ax);
+		r=b;
+		for (int i(0); i < A.dim(); ++i) {
+			for (int j(0); j < A.numDiags(); ++j) {
+				r._data[i] -= (*A._data)[A.dim() * j + i] * x[i + A.offset()[j]];
+			}
+
+		}
 	}
 
 }
