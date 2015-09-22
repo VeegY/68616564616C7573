@@ -147,6 +147,7 @@ void matvec(Vector<restype>& result, DIA<mattype>& mat, Vector<vectype>& vec) {
 	else {
 		restype resval(0);	// ist notwendig, da nicht gesichert ist, dass result nur Nulleintraege hat
 		for (int i(0); i < mat.dim(); ++i) {
+			resval = 0;
 			for (int j(0); j < mat.numDiags(); ++j) {
 				resval += static_cast<restype>((*mat._data)[mat.dim() * j + i]) * static_cast<restype>(vec[i + mat.offset()[j]]);
 			}
