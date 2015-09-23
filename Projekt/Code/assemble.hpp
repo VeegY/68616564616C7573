@@ -70,6 +70,8 @@ void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& u
 					(*(A._data))[x+Nx*y+Nx*Ny*z+4*N]=0;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+5*N]=0;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=0;
+					//Rechte seite setzen
+					rhs[x+Nx*y+Nx*Ny*z]=0;
 				}
 				//innere Punkte
 				else{
@@ -88,9 +90,9 @@ void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& u
 									+v[x+Nx*y+Nx*Ny*z]/h;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=-c[x+Nx*y+Nx*Ny*z]/h/h\
 									+w[x+Nx*y+Nx*Ny*z]/h;
+					//Rechte seite setzen
+					rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z];
 				}
-				//Rechte seite setzen
-				rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z];
 			}
 		}
 	}
@@ -139,6 +141,8 @@ void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& c
 					(*(A._data))[x+Nx*y+Nx*Ny*z+4*N]=0;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+5*N]=0;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=0;
+					//Rechte seite setzen
+					rhs[x+Nx*y+Nx*Ny*z]=0;
 				}
 				//innere Punkte
 				else{
@@ -151,9 +155,9 @@ void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& c
 					(*(A._data))[x+Nx*y+Nx*Ny*z+4*N]=-c[x+Nx*y+Nx*Ny*z]/h/h;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+5*N]=-c[x+Nx*y+Nx*Ny*z]/h/h;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=-c[x+Nx*y+Nx*Ny*z]/h/h;
+					//Rechte seite setzen
+					rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z];
 				}
-				//Rechte seite setzen
-				rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z];
 			}
 		}
 	}
@@ -204,6 +208,8 @@ void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& q
 					(*(A._data))[x+Nx*y+Nx*Ny*z+4*N]=0;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+5*N]=0;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=0;
+					//Rechte seite setzen
+					rhs[x+Nx*y+Nx*Ny*z]=0;
 				}
 				//innere Punkte
 				else{
@@ -216,9 +222,10 @@ void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& q
 					(*(A._data))[x+Nx*y+Nx*Ny*z+4*N]=-1/h/h;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+5*N]=-1/h/h;
 					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=-1/h/h;
+					//Rechte seite setzen
+					rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z];
 				}
-				//Rechte seite setzen
-				rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z];
+				
 			}
 		}
 	}
