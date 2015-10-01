@@ -3,6 +3,7 @@
 #include <cmath>
 #include "Vector.hpp"
 #include "DIA.hpp"
+#include <algorithm>
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +21,6 @@ Routinen zur Setzung von Randbedingungen
 
 //////////////////////////////////////////////////////////
 //Assemblierungsroutinen fuer Transport/Waermeleitungsproblem
-//c=k/(rho*c_p)->q muss mit 1/(rho*c_p) angepasst werden
 //////////////////////////////////////////////////////////
 
 /*
@@ -41,7 +41,8 @@ T	-	Temperatur
 u	-	Geschwindigkeit in x
 v	-	Geschwindigkeit in y
 w	-	Geschwindigkeit in z Richtung
-c	-	Waermeuebertragungskonstante
+c	-	spezifische Waermekapazitaet*Dichte
+k	-	Waermeausbreitungskoeefizient
 q	-	Waermequelle
 h	-	Gitterweite
 tau	-	Zeitschrittweite
@@ -50,11 +51,13 @@ Ny	-	Anzahl Gitterpunkte in y
 Nz	-	Anzahl Gitterpunkte in z Richtung
 ////////////////////////////////////////////////////////////////////////////////
 
+Diffusionsterm	-	zentrale DQ 2. Ordnung
+Konvektion	-	Upwind Scheme
 
 */
 
 template<typename data>
-void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& u, Vector<data>& v, Vector<data>& w, Vector<data>& c, Vector<data>& q, double h, double tau, int Nx, int Ny, int Nz)
+void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& u, Vector<data>& v, Vector<data>& w, Vector<data>& c, Vector<data>& k, Vector<data>& q, double h, double tau, int Nx, int Ny, int Nz)
 {	
 	
 	int N = Nx*Ny*Nz;
@@ -76,22 +79,28 @@ void assembleT(DIA<data>& A, Vector<data>& rhs, Vector<data>& T, Vector<data>& u
 				//innere Punkte
 				else{
 					//setzen der werte beginnend bei der untersten nebendiagonalen
-					(*(A._data))[x+Nx*y+Nx*Ny*z]=-c[x+Nx*y+Nx*Ny*z]/h/h;
-					(*(A._data))[x+Nx*y+Nx*Ny*z+N]=-c[x+Nx*y+Nx*Ny*z]/h/h;
-					(*(A._data))[x+Nx*y+Nx*Ny*z+2*N]=-c[x+Nx*y+Nx*Ny*z]/h/h;
-					(*(A._data))[x+Nx*y+Nx*Ny*z+3*N]=6*c[x+Nx*y+Nx*Ny*z]/h/h\
-									-u[x+Nx*y+Nx*Ny*z]/h\
-									-v[x+Nx*y+Nx*Ny*z]/h\
-									-w[x+Nx*y+Nx*Ny*z]/h\
+					(*(A._data))[x+Nx*y+Nx*Ny*z]=-c[x+Nx*y+Nx*Ny*z]/k[x+Nx*y+Nx*Ny*z]/h/h\
+									-max(w[x+Nx*y+Nx*Ny*z],0.0)/h;
+					(*(A._data))[x+Nx*y+Nx*Ny*z+N]=-c[x+Nx*y+Nx*Ny*z]/k[x+Nx*y+Nx*Ny*z]/h/h\
+									-max(v[x+Nx*y+Nx*Ny*z],0.0)/h;
+					(*(A._data))[x+Nx*y+Nx*Ny*z+2*N]=-c[x+Nx*y+Nx*Ny*z]/k[x+Nx*y+Nx*Ny*z]/h/h
+									-max(u[x+Nx*y+Nx*Ny*z],0.0)/h;;
+					(*(A._data))[x+Nx*y+Nx*Ny*z+3*N]=6*c[x+Nx*y+Nx*Ny*z]/k[x+Nx*y+Nx*Ny*z]/h/h\
+									+max(u[x+Nx*y+Nx*Ny*z],0.0)/h\
+									+max(v[x+Nx*y+Nx*Ny*z],0.0)/h\
+									+max(w[x+Nx*y+Nx*Ny*z],0.0)/h\
+									-min(u[x+Nx*y+Nx*Ny*z],0.0)/h\
+									-min(v[x+Nx*y+Nx*Ny*z],0.0)/h\
+									-min(w[x+Nx*y+Nx*Ny*z],0.0)/h\
 									+1/tau;
-					(*(A._data))[x+Nx*y+Nx*Ny*z+4*N]=-c[x+Nx*y+Nx*Ny*z]/h/h\
-									+u[x+Nx*y+Nx*Ny*z]/h;
-					(*(A._data))[x+Nx*y+Nx*Ny*z+5*N]=-c[x+Nx*y+Nx*Ny*z]/h/h\
-									+v[x+Nx*y+Nx*Ny*z]/h;
-					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=-c[x+Nx*y+Nx*Ny*z]/h/h\
-									+w[x+Nx*y+Nx*Ny*z]/h;
+					(*(A._data))[x+Nx*y+Nx*Ny*z+4*N]=-c[x+Nx*y+Nx*Ny*z]/k[x+Nx*y+Nx*Ny*z]/h/h\
+									+min(u[x+Nx*y+Nx*Ny*z],0.0)/h;
+					(*(A._data))[x+Nx*y+Nx*Ny*z+5*N]=-c[x+Nx*y+Nx*Ny*z]/k[x+Nx*y+Nx*Ny*z]/h/h\
+									+min(v[x+Nx*y+Nx*Ny*z],0.0)/h;
+					(*(A._data))[x+Nx*y+Nx*Ny*z+6*N]=-c[x+Nx*y+Nx*Ny*z]/k[x+Nx*y+Nx*Ny*z]/h/h\
+									+min(w[x+Nx*y+Nx*Ny*z],0.0)/h;
 					//Rechte seite setzen
-					rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z];
+					rhs[x+Nx*y+Nx*Ny*z]=T[x+Nx*y+Nx*Ny*z]/tau+q[x+Nx*y+Nx*Ny*z]/c[x+Nx*y+Nx*Ny*z];
 				}
 			}
 		}
@@ -121,6 +130,8 @@ Nx	-	Anzahl Gitterpunkte in x
 Ny	-	Anzahl Gitterpunkte in y
 Nz	-	Anzahl Gitterpunkte in z Richtung
 ////////////////////////////////////////////////////////////////////////////////
+
+Diffusionsterm	-	zentrale DQ 2. Ordnung
 
 
 */
@@ -188,6 +199,7 @@ Ny	-	Anzahl Gitterpunkte in y
 Nz	-	Anzahl Gitterpunkte in z Richtung
 ////////////////////////////////////////////////////////////////////////////////
 
+Diffuisionsterm	-	zentrale DQ 2. Ordnung	
 
 */
 template<typename data>
@@ -374,5 +386,7 @@ void introduceConstraints(DIA<data>& A, Vector<data>& rhs, double h, Vector<int>
 		rhs[indexN[n]]=neumann[n];
 	}
 }
+
+
 
 
