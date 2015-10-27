@@ -1,4 +1,4 @@
-//=============================================================================================//
+﻿//=============================================================================================//
 //                                      DIA-Matrix Klasse                                      //
 //=============================================================================================//
 // enthaelt: (int)        _dim        Matrixdimension (quadratisch)                            //
@@ -67,18 +67,18 @@ public:
 // Daten-Ausgaben
 	// Gibt die Dimension der Matrix zurueck
 	int dim() { return _dim; }
-	
+
 	// Gibt die Anzahl der Baender zurueck
 	int numDiags() { return _numDiags; }
-	
+
 	// Gibt einen Zeiger auf den Datenvektor als Array zurueck (Daten lassen sich darueber nicht veraendern)
 	// Bsp: const double* matrixbandeintraege = matrix.data();
 	const datatype* data() { return _data->_data; }
-	
+
 	// Gibt einen Zeiger auf den offset-Vektor als Array zurueck (Daten lassen sich darueber nicht veraendern)
 	// Bsp: const int* bandpositionen = matrix.offset();
 	const int* offset() { return _offset->_data; }
-	
+
 	// Gibt den Matrix-Eintrag an (x, y) zurueck
 	datatype value(int x, int y) {
 		for (int i(0); i < _numDiags; ++i)
@@ -86,7 +86,7 @@ public:
 				return _data->_data[i * _dim + x];
 		return datatype(0);
 	}
-	
+
 	// Matrixausgabe (maximal bis 10x10)
 	void show() {
 		if (_dim > 10)
@@ -98,7 +98,7 @@ public:
 				cout << endl;
 			}
 	}
-	
+
 // Funktionen
 	// Ueberprueft, ob da Nullen stehen, wo Nullen stehen muessen
 	// Nur zur Not. Endgueltige Funktionen/Algorithmen sollten ohne auskommen!
@@ -117,7 +117,7 @@ public:
 		}
 		return true;
 	}
-	
+
 	// Setzt ohne zu ueberpruefen alle notwendigen Werte = 0
 	// Nur zur Not. Endgueltige Funktionen/Algorithmen sollten ohne auskommen!
 	void repair() {
@@ -137,21 +137,31 @@ public:
 	// Matrix * Vektor ist (als nicht-Memberfkt) ausgelagert (s.u.)
 };
 
-// Matrix mal Vektor
+
+// Matrix mal Vektor: Alternativversion. Nur noch numDiags() if- Abfragen (und innere for-Schleife grundsätzlich vektorisierbar).
 // Bsp: matvec(result, mat, vec);
 template <typename restype, typename mattype, typename vectype>
 void matvec(Vector<restype>& result, DIA<mattype>& mat, Vector<vectype>& vec) {
-	if (result._dim!=mat._dim || mat._dim!=vec._dim) {
+	int start, end;
+	if (result._dim != mat._dim || mat._dim != vec._dim) {
 		throw invalid_argument(" -Achtung! Dimensionsfehler! (matvec)- ");
 	}
 	else {
-		restype resval(0);	// ist notwendig, da nicht gesichert ist, dass result nur Nulleintraege hat
-		for (int i(0); i < mat.dim(); ++i) {
-			resval = 0;
-			for (int j(0); j < mat.numDiags(); ++j) {
-				resval += static_cast<restype>((*mat._data)[mat.dim() * j + i]) * static_cast<restype>(vec[i + mat.offset()[j]]);
+		for (int i(0); i < result.dim(); ++i){
+			result[i] = 0;
+		}
+		for (int j(0); j < mat.numDiags(); ++j) {
+			if (mat.offset()[j] <= 0){
+				start = -mat.offset()[j];
+				end = mat.dim();
 			}
-			result[i] = resval;
+			else{
+				start = 0;
+				end = mat.dim() - mat.offset()[j];
+			}
+			for (int i(start); i < end; ++i) {
+				result[i] += static_cast<restype>((*mat._data)[mat.dim() * j + i]) * static_cast<restype>(vec[i + mat.offset()[j]]);
+			}
 		}
 	}
 }
@@ -161,17 +171,25 @@ void matvec(Vector<restype>& result, DIA<mattype>& mat, Vector<vectype>& vec) {
 // Bsp: defect(r, mat, rhs, vec);
 template <typename datatype>
 void defect(Vector<datatype>& r, DIA<datatype>& mat, Vector<datatype>& rhs, Vector<datatype>& vec) {
+	int start, end;
 	if (r._dim!=mat._dim || mat._dim!=rhs._dim || rhs._dim!=vec._dim) {
 		throw invalid_argument(" -Achtung! Dimensionsfehler! (defect)- ");
 	}
 	else {
 		r = rhs;	// da dies hier gesetzt wird, kann man innerhalb der Schleifen "-=" nutzen
-		for (int i(0); i < mat.dim(); ++i) {
-			for (int j(0); j < mat.numDiags(); ++j) {
+		for (int j(0); j < mat.numDiags(); ++j) {
+			if (mat.offset()[j] <= 0){
+				start = -mat.offset()[j];
+				end = mat.dim();
+			}
+			else{
+				start = 0;
+				end = mat.dim() - mat.offset()[j];
+			}
+			for (int i(start); i < end; ++i) {
 				r[i] -= (*mat._data)[mat.dim() * j + i] * vec[i + mat.offset()[j]];
 			}
-
 		}
 	}
-
 }
+
