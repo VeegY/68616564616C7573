@@ -1,0 +1,208 @@
+|---------------------------------------------------------------------|
+| Studienprojekt Technomathematik 2015/16                             |
+| Coding Conventions C++                                              |
+| Autor: D.S.                                                         |
+| Version 1 vom 6. November 2015, zur Diskussion am 11. November 2015 |
+|---------------------------------------------------------------------|
+
+
+Ziele und Aufbau des Dokuments
+==============================
+
+Die Coding Conventions sollen helfen, mit unterschiedlichen C++-Kenntnissen sicheren, wartbaren und konsistenten Code zu schreiben. Außerdem soll bestehender Code mit geringem Aufwand angepasst werden können. Die folgenden Abschnitte enthalten eine Mischung aus Regeln, Beispielen, Hintergrundinformationen und "Best Practices", die zum Teil allgemein anerkannt sind und zum Teil meine eigene Erfahrung / Meinung beinhalten.
+
+
+Grundsätzliches
+===============
+
+Der Sprachstandard ist C++11 inklusive STL mit Ausnahme der Teile, die in GCC 4.8.1 noch nicht implementiert sind.
+
+Compiler-Warnungen sind beim Debugging wie Fehler zu behandeln. Sehr gut begründete Ausnahmen sind gesondert an der Stelle im Code zu kommentieren, die die Warnung verursacht.
+
+Es werden keine Compiler-spezifischen Erweiterungen benutzt (z.B. #pragma, statische Arrays mit unbekannter Größe).
+
+Es wird sich niemals auf undefiniertes Verhalten verlassen. Wenn z.B. das logische Programmverhalten von der Wahl der Optimierungsstufe abhängt, wurde vermutlich diese Regel verletzt.
+
+
+Namenskonventionen und Dateistruktur
+====================================
+
+Alle Klassen, Typen, Structs und Enums werden im Namensraum icarus definiert.
+
+Dateinamen enthalten ausschließlich Kleinbuchstaben, gefolgt von einem Punkt und einer der unten beschriebenen Endungen.
+
+Die Namen von Klassen, Typen, Structs, Enums, Typedefs und Typ-Template-Parameter beginnen mit einem Großbuchstaben und enthalten für jedes enthaltene Wort einen weiteren Großbuchstaben ("Pascal case"). Beispiele: ImportantColorPicker, NoisySoundHandler.
+
+Von Akronymen wird nur der erste Buchstabe groß geschrieben, Beispiel: LuDecomp
+
+Die Namen von Variablen enthalten ausschließlich Kleinbuchstaben und Unterstriche. Beispiel: num_params, is_initialized, _internal_state
+
+Der Typ der Variablen wird *nicht* als Teil ihres Namens geführt.
+
+Die Namen sehr kurzer Funktionen (i.d.R. inline) folgen der Konvention für Variablen. Beispiel: is_empty(), get_num_entries()
+
+Die Namen aller anderen Funktionen folgen der Konvention für Klassen. Beispiel: PerformLuDecomposition()
+
+Private und geschützte Member-Variablen werden ausschließlich mit einem führenden Unterstrich gekennzeichnet: _member_variable. Es wird insbesondere kein "m_" vorgestellt.
+
+Bezeichner mit zwei führenden Unterstrichen werden nicht verwendet.
+
+Es existieren die folgenden Typen von Dateien:
+
+classname.hpp 
+------------- 
+
+Enthält die Definition der Klasse ClassName und eventuell stark verwandter, kleiner Zusatzklassen / structs.
+
+Jeder Header enthält einen Include-Guard der folgenden Form:
+// Kopf der Datei
+#ifndef __CLASSNAME_HPP_
+#define __CLASSNAME_HPP_
+namespace icarus
+{
+// Inhalt der Datei
+}
+#endif // __CLASSNAME_HPP_
+
+
+templateclassname.tpp 
+---------------------
+
+Implementierung der Template-Klasse TemplateClassName.
+
+Zur (optischen) Trennung von Header und Implementierung bei Templates wird am Ende der entsprechenden hpp-Datei die tpp-Datei mit #include eingebunden.
+
+
+classname.cpp
+-------------
+
+Implementierung der (nicht-Template) Klasse ClassName. Statische Member stehen am Anfang der Datei.
+
+
+classname_test.cpp
+------------------
+
+Unit-Test zur Klasse ClassName.
+
+
+Klassen und Templates
+=====================
+
+Faustregel: Klassen unterscheiden sich semantisch von structs dadurch, dass sie ein komplexes Innenleben haben.
+
+Methoden, die nur die Funktion haben, eine private oder geschützte Membervariable auszulesen oder zu setzen, werden inline (d.h. in der entsprechenden Header-Datei) deklariert und get_variable bzw. set_variable genannt. Ausnahmen sind Boolesche Membervariablen, Beispiel: is_empty()
+
+Triviale Konstruktoren, die z.B. nur eine (kurze) Initialisierungsliste enthalten, werden ebenfalls inline deklariert.
+
+Template-Parameter sind typedefs in der Regel vorzuziehen.
+
+Komplexe Template-Strukturen sind komplexen Vererbungshierarchien vorzuziehen.
+
+Vermeide Template-Parameter wie T oder S, besser sind sprechende Namen wie ComplexType.
+
+Konstruktoren mit genau einem Argument sind standardmäßig als explicit zu deklarieren.
+
+Die Rule of Three ist in jedem Fall einzuhalten, konkret: Eine Klasse implementiert entweder die gesamte Menge {Destruktor, Zuweisungsoperator, Kopierkonstruktur} oder nichts davon. Move-Konstruktor und Move-Zuweisungsoperator werden eingesetzt, wenn sie sinnvoll sind. 
+
+
+Programmierung allgemein
+========================
+
+typedefs sollten vorwiegend als Abkürzung verwendet werden, typischerweise für mehrfach geschachtelte Instanziierungen, Beispiel:
+typedef std::vector<std::pair<std::complex<double> >, double> MyFancyType;
+
+typedef sollte nicht verwendet werden, um Pointer zu verstecken. Schlechtes Beispiel: 
+typedef MyClass* MyClassPointer;
+
+Das Schlüsselwort auto wird sparsam eingesetzt, um die Lesbarkeit des Codes nicht zu verringern.
+
+Rohe Pointer sind so weit wie möglich zu vermeiden, benutze stattdessen unique_ptr oder shared_ptr.
+
+static_cast ist sparsam einzusetzen und gut zu begründen. Wenn ein Teil des Codes viele static_cast enthält, stimmt wahrscheinlich mit dem Design etwas nicht.
+
+const_cast ist noch sparsamer einzusetzen und noch besser zu begründen.
+
+
+Formatierung des Codes
+======================
+
+Der Zeichensatz der Quellcode-Dateien ist Unicode (UTF-8). 
+
+Eine maximale Zeilenlänge von etwa 100 Zeichen sollte eingehalten werden.
+
+Zur Einrückung werden ausschließlich Leerzeichen, d.h. *keine Tabulatoren* verwendet. Jede moderne IDE / jeder moderne Editor hat eine entprechende Einstellung dafür.
+
+Eine Einrückungsebene entspricht 4 Leerzeichen.
+
+Geschweifte Klammern stehen in einer eigenen Zeile. Ausnahme: Initialisierungslisten. Beispiel:
+if(foo)
+{
+    std::vector<T> vec = {T(0.1), T(0.2)};
+    // do things
+}
+else
+{
+    // do some other stuff
+}
+
+Leerzeichen z.B. zwischen Operatoren und Operanden erhöhen die Lesbarkeit vieler Konstrukte enorm.
+
+
+Ausnahmebehandlung und Logging
+==============================
+
+Grundsätzlich treten in unserem Projekt vermutlich in erster Linie Ausnahmen auf, die eine sinnvolle und sichere Fortsetzung des Programms nicht mehr möglich machen. In so einem Fall sind zwei Dinge wichtiger als ein ausgiebiges Umherwerfen von Exceptions:
+1. Möglichst präzises Logging von Fehlerverursacher und Umgebungssituation.
+2. Sichere Terminierung der Laufzeitumgebung (MPI etc.)
+
+Beide Aufgaben werden durch Logger-Objekte gelöst (siehe entsprechende Klassendokumentation, sobald sie existiert). Sie sind der *einzige* Weg, über den Meldungen erzeugt werden, insbesondere sind die Standard-Streams (std::cout, std::cerr etc.) grundsätzlich tabu. 
+
+Es existieren fünf Arten von Logs:
+DEBUG: Informationen, die nur zum Debugging relevant sind.
+INFO: Informationen, z.B. Dimension eines Objekts oder Laufzeit einer Operation.
+WARNING: Es existiert ein Zustand, der zum Problem werden könnte, die weitere Ausführung im Moment aber nicht gefährdet (z.B. sehr kleine Norm, Auslöschungsgefahr etc.)
+ERROR: Ein Fehler ist aufgetreten, der zumindest einen Teil des Programms an der weiteren Ausführung hindert.
+ERROR_CRITICAL: Ein Fehler ist aufgetreten, der eine weitere Ausführung des gesamten Programms unmöglich macht.
+
+Es werden *keine* C++-Exceptions benutzt, einzige Ausnahme ist die Erfolgsprüfung einer Anforderung großer Speicherbereiche durch die STL.
+
+Assertions sollten ausschließlich zum lokalen Debugging benutzt werden.
+
+Für CUDA- und MPI-Funktionen werden Wrapper geschrieben, die die entsprechenden Error Codes in lesbare Mitteilungen übersetzen und an ein Logger-Objekt (s.o.) übergeben. Die entsprechenden Funktionen werden nur über diese Wrapper aufgerufen.
+
+
+Globaler Namensraum
+===================
+
+Es werden keine Makrofunktionen benutzt.
+
+#define wird hauptsächlich für Schalter verwendet, die den Kompilierfluss beeinflussen sollen, nicht zur Definition globaler Variablen.
+
+Konstante globale Variablen sind sparsam zu verwenden und vollständig in Großbuchstaben zu bezeichnen, Beispiel:
+const unsigned BUILD_VER = 1012;
+
+Es werden keine nicht-konstanten globalen Variablen verwendet. Ausnahme: Logger-Objekte.
+
+Es werden keine globalen using-Direktiven (z.B. using namespace std) verwendet. Die Verwendung des using-Schlüsselworts ist innerhalb von Klassen- oder Funktionendefinitionen natürlich völlig in Ordnung.
+
+
+Kommentierung und Commits
+=========================
+
+Die Kommentierung und Dokumentation erfolgt auf Deutsch.
+
+Es soll sinnvoll, knapp und präzise kommentiert werden. Dabei wird beschreiben, WAS getan wird, und nicht WIE.
+
+Fehlende oder Dummy-Implementierungen werden mit TODO gekennzeichnet (vier Großbuchstaben). Viele Editoren heben diese Sequenz automatisch farblich hervor.
+
+Unsichere oder nicht vollständig getestete Funktionen werden mit TOCHECK gekennzeichnet.
+
+Eine möglichst vollständige Dokumentation der Klassen mit doxygen wäre schön. Das beinhaltet insbesondere die Beschreibung von Klassen, Member-Variablen, Funktionen, Parametern und Rückgabewerten.
+
+Beispiele zur Benutzung der öffentlichen Schnittstelle einer Klasse können aus einer guten eine exzellente Dokumentation machen.
+
+Commits mit aussagekräftigen Beschreibungen sind sinnvoll. Nicht sinnvoll ist es, in der commit message jede einzelne Änderung aufzuführen. Bearbeitete Bugs oder Issues werden mit der entsprechenden Nummer aufgeführt. 
+Schlechtes Beispiel: Removed line 123 of somelengthyfilename.cpp.
+Gutes Beispiel: Fixed bug #109 (buffer overflow in sshServer).
+
+Häufige Commits sind sinnvoll. Was einmal ein Commit ist, lässt sich nur sehr schwer unabsichtlich wieder löschen.
