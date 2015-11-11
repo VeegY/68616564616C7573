@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vector.hpp"
-#include "DIA.hpp"
+#include "vector.hpp"
+#include "dia.hpp"
 #include <iostream>
 #include <math.h>
 using namespace std;

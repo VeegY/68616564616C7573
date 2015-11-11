@@ -21,7 +21,7 @@
 #include <iostream>
 #include <math.h>
 #include <stdexcept>	// fuer: throw exception
-#include "Vector.hpp"
+#include "vector.hpp"
 using namespace std;
 
 template<typename datatype>

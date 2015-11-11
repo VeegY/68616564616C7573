@@ -3,13 +3,14 @@
 #========================================================================
 # Aufsetzen des Projekts
 cmake_minimum_required(VERSION 2.8)
-project(StudProTM1516)
+project(stuprotm1516)
 #------------------------------------------------------------------------
 # 			Lade benötigte Pakete				
 #------------------------------------------------------------------------
 find_package(Doxygen)		# Lade Doxygen
-find_package(CUDA REQUIRED)	# Lade CUDA
+find_package(CUDA 7.5 EXACT)	# Lade CUDA
 #find_package(MPI REQUIRED)	# Lade MPI
+
 
 #========================================================================
 # 				 MACROS			
@@ -20,6 +21,8 @@ find_package(CUDA REQUIRED)	# Lade CUDA
 # Beispiel: make doxy
 # Bemerke: CMAKE_CURRENT_SOURCE_DIR = arg wo ([dir]/cmake [arg]) hier: ../Code
 # Bemerke: CMAKE_CURRENT_BINARY_DIR = dir wo ([dir]/cmake [arg]) hier: ./ bzw pwd
+
+
 if(DOXYGEN_FOUND)
 configure_file(			# Lade Doxygenkonfiguration
 	${CMAKE_CURRENT_SOURCE_DIR}/../Dokumentation/doxygen_config
@@ -32,7 +35,10 @@ add_custom_target(		# Konfiguriere built macro
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	COMMENT "Erzeuge API Dokumentation mit Doxygen" VERBATIM
 	)
+else()
+     message("DOXYGEN LOST")	
 endif(DOXYGEN_FOUND)
+
 
 #------------------------------------------------------------------------
 # 		            Macro fuer CTest			
@@ -54,7 +60,9 @@ endmacro(create_test)
 #------------------------------------------------------------------------
 # 		  	     CUDA Compiler			
 #------------------------------------------------------------------------
-set(CUDA_NVCC_FLAGS "-g -lineinfo -O3 --restrict --use_fast_math --compiler-options -Wall; -g")
+set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -lineinfo -arch=sm_20")
+
+#set(CUDA_NVCC_FLAGS "-g -lineinfo -O3 --restrict --use_fast_math --compiler-options -Wall; -g")
 
 #if (DEBUG_MODE) #WIRHABENHIEREXTRADEBUGFLAGS
 #  set (CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-v -Xptxas=-v -G --compiler-options=-rdynamic")
@@ -68,17 +76,24 @@ set(CUDA_NVCC_FLAGS "-g -lineinfo -O3 --restrict --use_fast_math --compiler-opti
 # Host Compiler Flags NICHT uebernehmen
 set (CUDA_PROPAGATE_HOST_FLAGS OFF)
 
+
+
 #------------------------------------------------------------------------
 # 		  	      GCC Compiler			
 #------------------------------------------------------------------------
-#Standard Flags:
+
+
+#Standard Flags:.........................................................
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -fopenmp") 
 
-#Standard Flags mit CMAKE_BUILD_TYPE=Debug: -g
+
+#Standard Flags mit CMAKE_BUILD_TYPE=Debug: -g...........................
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -DCONSTRUCTOR_TEST")
 
-#Standard Flags mit CMAKE_BUILD_TYPE=Debug: -O3 -DNDEBUG
+
+#Standard Flags mit CMAKE_BUILD_TYPE=Release: -O3 -DNDEBUG...............
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -msse2 -mfpmath=sse")
+
 
 #------------------------------------------------------------------------
 # 	     - - - WIP - - -  MPI Compiler  - - - WIP - - -
@@ -88,17 +103,39 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -msse2 -mfpmath=sse")
 #set(CMAKE_CXX_LINK_FLAGS ${CMAKE_CXX_LINK_FLAGS} ${MPI_LINK_FLAGS})
 
 #========================================================================
+#                   Linking
+#========================================================================
+#------------------------------------------------------------------------
+#                   Executables
+#------------------------------------------------------------------------
+#alle cpp. bzw .cu bzw Dateien mit einem "main" Teilen bilden ein executable
+
+add_executable(heattest heattest1.cpp)
+add_executable(hostfile HostfileCreator.cpp)
+
+
+add_custom_target(
+     code ALL
+     COMMAND mf --help >> network.txt   #test 
+     #arp-scan 190.168.0.1-192.168.0.100 >> network.txt for hostfileCr
+     hostfile
+     DEPENDS heattest
+     DEPENDS hostfile
+     )
+
+     
+#========================================================================
 # 			     Verzeichnis-Linking			
 #========================================================================
 #------------------------------------------------------------------------
 # 		  	    Verzeichnisarchitektur strukturieren			
 #------------------------------------------------------------------------
-include_directories(			# Verzeichnisse linken
-	${PROJECT_SOURCE_DIR} 
-	)
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY 	# Executables
-	${CMAKE_BINARY_DIR}/EXE
-	)
+#include_directories(			# Verzeichnisse linken
+#	${PROJECT_SOURCE_DIR} 
+#	)
+#set (CMAKE_RUNTIME_OUTPUT_DIRECTORY 	# Executables
+#	${CMAKE_BINARY_DIR}/EXE
+#	)
 #------------------------------------------------------------------------
 # 		  	    CMakeLists Linking			
 #------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "Vector.hpp"
-#include "DIA.hpp"
+#include "vector.hpp"
+#include "dia.hpp"
 #include <algorithm>
 
 

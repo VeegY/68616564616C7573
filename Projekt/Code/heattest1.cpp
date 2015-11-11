@@ -1,12 +1,12 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "Vector.hpp"
-#include "DIA.hpp"
+#include "vector.hpp"
+#include "dia.hpp"
 #include "assemble.hpp"
 #include <math.h>
-#include "PCG.hpp"
-#include "vtkFileWriter.hpp"
+#include "pcg.hpp"
+#include "vtkfilewriter.hpp"
 
 #define _USE_MATH_DEFINES
 
