@@ -1,9 +1,9 @@
-|---------------------------------------------------------------------|
-| Studienprojekt Technomathematik 2015/16                             |
-| Coding Conventions C++                                              |
-| Autor: D.S.                                                         |
-| Version 1 vom 6. November 2015, zur Diskussion am 11. November 2015 |
-|---------------------------------------------------------------------|
+|------------------------------------------------------------------------|
+| Studienprojekt Technomathematik 2015/16                                |
+| Coding Conventions C++                                                 |
+| Autor: D.S.                                                            |
+| Version 1.1 vom 11. November 2015, zur Diskussion am 11. November 2015 |
+|------------------------------------------------------------------------|
 
 
 Ziele und Aufbau des Dokuments
@@ -155,7 +155,9 @@ Grundsätzlich treten in unserem Projekt vermutlich in erster Linie Ausnahmen au
 1. Möglichst präzises Logging von Fehlerverursacher und Umgebungssituation.
 2. Sichere Terminierung der Laufzeitumgebung (MPI etc.)
 
-Beide Aufgaben werden durch Logger-Objekte gelöst (siehe entsprechende Klassendokumentation, sobald sie existiert). Sie sind der *einzige* Weg, über den Meldungen erzeugt werden, insbesondere sind die Standard-Streams (std::cout, std::cerr etc.) grundsätzlich tabu. 
+Beide Aufgaben werden durch Logger-Objekte gelöst (siehe entsprechende Klassendokumentation, sobald sie existiert). 
+
+Logger-Objekte sind der *einzige* Weg, über den Meldungen erzeugt werden, insbesondere sind die Standard-Streams (std::cout, std::cerr etc.) grundsätzlich tabu (zu unflexibel und i.A. nicht threadsicher). 
 
 Es existieren fünf Arten von Logs:
 DEBUG: Informationen, die nur zum Debugging relevant sind.
@@ -166,7 +168,9 @@ ERROR_CRITICAL: Ein Fehler ist aufgetreten, der eine weitere Ausführung des ges
 
 Es werden *keine* C++-Exceptions benutzt, einzige Ausnahme ist die Erfolgsprüfung einer Anforderung großer Speicherbereiche durch die STL.
 
-Assertions sollten ausschließlich zum lokalen Debugging benutzt werden.
+Assertions sollten ausschließlich zum Debugging benutzt werden. In der Release Version nicht vergessen, das Symbol NODEBUG zu definieren.
+
+Faustregel: Mit Assertions werden nur (programmier-)logische Fehler abgefangen, also Fälle, die "eigentlich" nicht eintreten können (Beispiel: Parameterprüfung von ausschließlich privaten Methoden).
 
 Für CUDA- und MPI-Funktionen werden Wrapper geschrieben, die die entsprechenden Error Codes in lesbare Mitteilungen übersetzen und an ein Logger-Objekt (s.o.) übergeben. Die entsprechenden Funktionen werden nur über diese Wrapper aufgerufen.
 
@@ -191,7 +195,7 @@ Kommentierung und Commits
 
 Die Kommentierung und Dokumentation erfolgt auf Deutsch.
 
-Es soll sinnvoll, knapp und präzise kommentiert werden. Dabei wird beschreiben, WAS getan wird, und nicht WIE.
+Es soll sinnvoll, knapp und präzise kommentiert werden. Dabei wird in erster Linie beschreiben, WAS getan wird, und nicht WIE.
 
 Fehlende oder Dummy-Implementierungen werden mit TODO gekennzeichnet (vier Großbuchstaben). Viele Editoren heben diese Sequenz automatisch farblich hervor.
 
@@ -201,8 +205,10 @@ Eine möglichst vollständige Dokumentation der Klassen mit doxygen wäre schön
 
 Beispiele zur Benutzung der öffentlichen Schnittstelle einer Klasse können aus einer guten eine exzellente Dokumentation machen.
 
-Commits mit aussagekräftigen Beschreibungen sind sinnvoll. Nicht sinnvoll ist es, in der commit message jede einzelne Änderung aufzuführen. Bearbeitete Bugs oder Issues werden mit der entsprechenden Nummer aufgeführt. 
-Schlechtes Beispiel: Removed line 123 of somelengthyfilename.cpp.
-Gutes Beispiel: Fixed bug #109 (buffer overflow in sshServer).
+Die erste Zeile einer Commit Message sollte nicht mehr als 50 Zeichen enthalten und deskriptiv sein (wie ein Titel). Schlechtes Beispiel: "Es hat sich viel getan". Üblich ist eine Formulierung als Imperativ (zumindest auf Englisch).
 
-Häufige Commits sind sinnvoll. Was einmal ein Commit ist, lässt sich nur sehr schwer unabsichtlich wieder löschen.
+In den restlichen Zeilen der Commit Message wird auf logischer Ebene erklärt, was getan wurde und vor allem WARUM. Details der Änderungen sind nicht nötig, da sie ohnehin im Diff auftauchen.
+
+Bearbeitete Bugs oder Issues werden mit der entsprechenden Nummer aufgeführt. 
+
+Häufige Commits sind sinnvoll. Das führt zum einen zu übersichtlichen Commit messages, zum anderen lässt sich nur sehr schwer unabsichtlich wieder löschen, was einmal ein Commit ist.
