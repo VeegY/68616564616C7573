@@ -2,7 +2,7 @@
 | Studienprojekt Technomathematik 2015/16                                |
 | Coding Conventions C++                                                 |
 | Autor: D.S.                                                            |
-| Version 1.1 vom 11. November 2015, zur Diskussion am 11. November 2015 |
+| Version 1.1 vom 17. November 2015, zur Diskussion am 18. November 2015 |
 |------------------------------------------------------------------------|
 
 
@@ -27,7 +27,7 @@ Es wird sich niemals auf undefiniertes Verhalten verlassen. Wenn z.B. das logisc
 Namenskonventionen und Dateistruktur
 ====================================
 
-Alle Klassen, Typen, Structs und Enums werden im Namensraum icarus definiert.
+Alle Klassen, Typen, Structs und Enums werden im Namensraum Icarus definiert.
 
 Dateinamen enthalten ausschließlich Kleinbuchstaben, gefolgt von einem Punkt und einer der unten beschriebenen Endungen.
 
@@ -39,9 +39,9 @@ Die Namen von Variablen enthalten ausschließlich Kleinbuchstaben und Unterstric
 
 Der Typ der Variablen wird *nicht* als Teil ihres Namens geführt.
 
-Die Namen sehr kurzer Funktionen (i.d.R. inline) folgen der Konvention für Variablen. Beispiel: is_empty(), get_num_entries()
+Die Namen sehr kurzer Funktionen (i.d.R. inline) dürfen der Konvention für Variablen folgen. Beispiel: is_empty(), get_num_entries()
 
-Die Namen aller anderen Funktionen folgen der Konvention für Klassen. Beispiel: PerformLuDecomposition()
+Die Namen aller anderen Funktionen folgen der Konvention für Klassen. Der erste Buchstabe wird klein geschrieben. Beispiel: performLuDecomposition()
 
 Private und geschützte Member-Variablen werden ausschließlich mit einem führenden Unterstrich gekennzeichnet: _member_variable. Es wird insbesondere kein "m_" vorgestellt.
 
@@ -58,7 +58,7 @@ Jeder Header enthält einen Include-Guard der folgenden Form:
 // Kopf der Datei
 #ifndef __CLASSNAME_HPP_
 #define __CLASSNAME_HPP_
-namespace icarus
+namespace Icarus
 {
 // Inhalt der Datei
 }

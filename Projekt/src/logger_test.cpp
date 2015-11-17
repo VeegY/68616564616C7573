@@ -27,5 +27,5 @@ int main()
         std::cout << ">>> Ausnahme gefangen wie gewuenscht." << std::endl;
     }
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
