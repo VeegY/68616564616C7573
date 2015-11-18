@@ -66,6 +66,14 @@ LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
 TARGET_LINK_LIBRARIES(icarus /usr/local/cuda/lib64/libcudart.so ${MPI_LIBRARIES})
 
+if (DEBUG_MODE)
+LIST(APPEND CMAKE_NVCC_FLAGS "") #TODO insert nvcc debug flags
+LIST(APPEND CMAKE_CXX_FLAGS "") #TODO insert gcc debug flags
+endif (DEBUG_MODE)
 
+if (RELEASE_MODE)
+LIST(APPEND CMAKE_NVCC_FLAGS "") #TODO insert nvcc debug flags
+LIST(APPEND CMAKE_CXX_FLAGS "") #TODO insert gcc debug flags
+endif (RELEASE_MODE) 
 
 
