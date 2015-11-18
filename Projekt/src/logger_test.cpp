@@ -17,15 +17,8 @@ int main()
     LOG_WARNING("Ich bin eine Warnung und eine echte ", 0, ".");
     LOG_INFO("Ich bin eine Falschinformation mit ", 2, " Zahlen darin!");
     LOG_DEBUG("Ich helfe beim Debugging in ", 2.2, " Prozent der ", "Faelle.");
-
-    try
-    {
-        LOG_ERROR("Ich bin ein Fehler und der einzige, der Ausnahmen hochwerfen darf.");
-    }
-    catch (...)
-    {
-        std::cout << ">>> Ausnahme gefangen wie gewuenscht." << std::endl;
-    }
-
+    LOG_ERROR("Ich bin ein Fehler und dekonstruiere nur statische Objekte.");  
+  
+    // wird nie erreicht
     return EXIT_SUCCESS;
 }

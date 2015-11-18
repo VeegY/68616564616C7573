@@ -34,6 +34,8 @@
 #include <chrono>
 #include <iomanip>
 
+#define EXIT_LOGFAIL -2
+
 namespace Icarus
 {
 
@@ -90,10 +92,8 @@ namespace Icarus
         virtual void openLogStream(const std::string &name = "")
         {
             _outfile->open(name);
-            if (!_outfile->is_open())
-            {
-                throw std::runtime_error("Failed to open specified logfile.");
-            }
+            // wenn der logger nicht startet, aufgeben
+            if (!_outfile->is_open()) exit(EXIT_LOGFAIL);
         }
 
         virtual void closeLogStream()
@@ -205,16 +205,21 @@ namespace Icarus
             // zeitstempel der nachricht, menschenlesbar
             std::time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());   
             
-            // viele ms compiler haben probleme mit localtime
-#ifdef _MSC_VER            
+            // ms compiler haben probleme mit localtime ("unsafe" trotz standard)
+            // gcc < 5 hat put_time noch nicht implementiert
+            std::stringstream tsstr;
+#if _MSC_VER  > 1700         
             std::tm tm;
             std::tm * ptm = &tm;
             localtime_s(ptm,&tt);
+            tsstr << std::put_time(ptm, "%c");
 #else
             std::tm * ptm = std::localtime(&tt);
+            tsstr << ptm->tm_mday + 1 << '/' << ptm->tm_mon + 1 << '/' 
+                << (1900 + ptm->tm_year)%100 << ' '
+                << ptm->tm_hour << ':' << ptm->tm_min << ':' << ptm->tm_sec;
 #endif
-            info << " [ " << std::put_time(ptm, "%c")
-                << " - ";
+            info << " [ " << tsstr.str() << " - ";
 
             // zeitstempel in clock ticks seit programmbeginn
             info.fill('0');
@@ -239,7 +244,7 @@ namespace Icarus
             if (critical)
             {
                 _pol->write_err(getLogInfo() + _s.str());
-                throw std::runtime_error("A fatal error occured.");
+                exit(EXIT_LOGFAIL);
             }
             else
             {
