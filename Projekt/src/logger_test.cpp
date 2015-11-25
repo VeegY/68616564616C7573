@@ -12,7 +12,7 @@
 #include "logger.hpp"
 #include <iostream>
 
-int main()
+int logger_test()
 {    
     LOG_WARNING("Ich bin eine Warnung und eine echte ", 0, ".");
     LOG_INFO("Ich bin eine Falschinformation mit ", 2, " Zahlen darin!");
@@ -20,5 +20,5 @@ int main()
     LOG_ERROR("Ich bin ein Fehler und dekonstruiere nur statische Objekte.");  
   
     // wird nie erreicht
-    return EXIT_SUCCESS;
+    return 0;
 }

@@ -1,9 +1,9 @@
-|------------------------------------------------------------------------|
-| Studienprojekt Technomathematik 2015/16                                |
-| Coding Conventions C++                                                 |
-| Autor: D.S.                                                            |
-| Version 1.1 vom 17. November 2015, zur Diskussion am 18. November 2015 |
-|------------------------------------------------------------------------|
+|-----------------------------------------|
+| Studienprojekt Technomathematik 2015/16 |
+| Coding Conventions C++                  |
+| Autor: D.S.                             |
+| Version 1.2 vom 23. November 2015       |     
+|-----------------------------------------|
 
 
 Ziele und Aufbau des Dokuments
@@ -72,6 +72,7 @@ Implementierung der Template-Klasse TemplateClassName.
 
 Zur (optischen) Trennung von Header und Implementierung bei Templates wird am Ende der entsprechenden hpp-Datei die tpp-Datei mit #include eingebunden.
 
+Inlcude-Guards schaden nicht, sind aber auch nicht nötig.
 
 classname.cpp
 -------------
@@ -82,7 +83,7 @@ Implementierung der (nicht-Template) Klasse ClassName. Statische Member stehen a
 classname_test.cpp
 ------------------
 
-Unit-Test zur Klasse ClassName.
+Unit-Test / Demo zur Klasse ClassName.
 
 
 Klassen und Templates
@@ -164,7 +165,6 @@ DEBUG: Informationen, die nur zum Debugging relevant sind.
 INFO: Informationen, z.B. Dimension eines Objekts oder Laufzeit einer Operation.
 WARNING: Es existiert ein Zustand, der zum Problem werden könnte, die weitere Ausführung im Moment aber nicht gefährdet (z.B. sehr kleine Norm, Auslöschungsgefahr etc.)
 ERROR: Ein Fehler ist aufgetreten, der zumindest einen Teil des Programms an der weiteren Ausführung hindert.
-ERROR_CRITICAL: Ein Fehler ist aufgetreten, der eine weitere Ausführung des gesamten Programms unmöglich macht.
 
 Es werden *keine* C++-Exceptions benutzt, einzige Ausnahme ist die Erfolgsprüfung einer Anforderung großer Speicherbereiche durch die STL.
 
@@ -185,7 +185,7 @@ Es werden keine Makrofunktionen benutzt.
 Konstante globale Variablen sind sparsam zu verwenden und vollständig in Großbuchstaben zu bezeichnen, Beispiel:
 const unsigned BUILD_VER = 1012;
 
-Es werden keine nicht-konstanten globalen Variablen verwendet. Ausnahme: Logger-Objekte.
+Es werden keine nicht-konstanten globalen Variablen verwendet. Ausnahme: Logger-/Handler-Objekte.
 
 Es werden keine globalen using-Direktiven (z.B. using namespace std) verwendet. Die Verwendung des using-Schlüsselworts ist innerhalb von Klassen- oder Funktionendefinitionen natürlich völlig in Ordnung.
 
