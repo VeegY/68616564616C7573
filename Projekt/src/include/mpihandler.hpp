@@ -5,12 +5,14 @@
 * Autor / Ansprechpartner:  David
 *
 * Kurzbeschreibung:
-* - Diese Singleton-Klasse verwaltet Initialisierung und Deinitialisierung der MPI-Umgebung und
+* - Diese Klasse verwaltet Initialisierung und Deinitialisierung der MPI-Umgebung und
 *   stellt die Makrofunktion MPI_SCALL(...) zur Verfügung, die als Wrapper für alle
 *   Aufrufe an die MPI-API benutzt werden sollte.
 * - Es wird garantiert, dass der Thread, der Init aufruft, auch Finalize aufruft. 
 *   MpiSafeCall ist in dieser Form *nicht* Thread-sicher.
 * - Das Symbol USE_MPI_ERROR_CHECKING steuert, ob MPI_SCALL wirklich etwas tut (leichter Overhead).
+* - Über die Abkürzung MPI_HANDLER stehen ein paar praktische
+*   Funktionen der aktiven Instanz zur Verfügung.
 */
 
 /// \file mpihandler.hpp
@@ -37,14 +39,6 @@ namespace Icarus
 
     public:       
 
-        static MpiHandler& inst()
-        {
-            // seit c++11 sollte das threadsicher sein
-            // aber es existieren wohl bugs in VS <= 2013
-            static MpiHandler _the_instance;
-            return _the_instance;
-        }
-
         int get_n_procs() const { return _n_procs; }
 
         bool is_first() const {return _my_rank == 0;}
@@ -55,14 +49,17 @@ namespace Icarus
 
         void MpiSafeCall(int line, std::string file, int error) const;
 
-    private:
         MpiHandler();
         ~MpiHandler();
     };
 }
 
+extern Icarus::MpiHandler __mpi_inst;
+
+#define MPI_HANDLER __mpi_inst
+
 #ifdef USE_MPI_ERROR_CHECKING
-#define MPI_SCALL(X) Icarus::MpiHandler::inst().MpiSafeCall(__LINE__,__FILE__,X)
+#define MPI_SCALL(X) __mpi_inst.MpiSafeCall(__LINE__,__FILE__,X)
 #else
 #define MPI_SCALL(...)
 #endif

@@ -72,6 +72,7 @@ void Logger<LogPolicyType>::printRec(bool critical)
     if (critical)
     {
         _pol->write_err(getLogInfo() + _s.str());
+        _mx_log.unlock();
         exit(EXIT_LOGFAIL);
     }
     else
