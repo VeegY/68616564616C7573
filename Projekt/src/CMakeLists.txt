@@ -16,14 +16,8 @@ INCLUDE(FindCUDA)
 INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 #========================================================================
-# 				 MACROS			
+# 				Doxy		
 #========================================================================
-#------------------------------------------------------------------------
-# 		  Macro fuer die Doxygen Dokumentation			
-#------------------------------------------------------------------------
-# Beispiel: make doxy
-# Bemerke: CMAKE_CURRENT_SOURCE_DIR = arg wo ([dir]/cmake [arg]) hier: ../Code
-# Bemerke: CMAKE_CURRENT_BINARY_DIR = dir wo ([dir]/cmake [arg]) hier: ./ bzw pwd
 
 if(DOXYGEN_FOUND)
 configure_file(			# Lade Doxygenkonfiguration
@@ -39,15 +33,35 @@ add_custom_target(		# Konfiguriere built macro
 	)
 endif(DOXYGEN_FOUND)
 
-##TODO _TEST MAKRO
+
 #========================================================================
 # 				Executables			
 #========================================================================
 
-##TODO logger_test in src gives double main,fix
-FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c")
-LIST(REMOVE_ITEM SOURCES "logger_test.cpp")
+FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h")
 CUDA_ADD_EXECUTABLE(icarus ${SOURCES})
+
+
+#========================================================================
+# 				Custom_Target/Unit_Test
+#========================================================================
+
+#enables make code
+add_custom_target(
+     code ALL
+     DEPENDS icarus
+     )
+
+
+# ctest anschalten
+enable_testing()
+
+# Beispiel: create_test(logger_test)
+macro(create_test target)
+	add_test(
+	  NAME ${target} 
+	  COMMAND $<TARGET_FILE:${target}>)
+endmacro(create_test)
 
 
 
@@ -64,7 +78,12 @@ LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
-TARGET_LINK_LIBRARIES(icarus /usr/local/cuda/lib64/libcudart.so ${MPI_LIBRARIES})
+#TARGET_LINK_LIBRARIES(icarus /usr/local/cuda/lib64/libcudart.so ${MPI_LIBRARIES})
+
+
+#========================================================================
+# 				MODE		
+#========================================================================
 
 if (DEBUG_MODE)
 LIST(APPEND CMAKE_NVCC_FLAGS "") #TODO insert nvcc debug flags
@@ -72,8 +91,8 @@ LIST(APPEND CMAKE_CXX_FLAGS "") #TODO insert gcc debug flags
 endif (DEBUG_MODE)
 
 if (RELEASE_MODE)
-LIST(APPEND CMAKE_NVCC_FLAGS "") #TODO insert nvcc debug flags
-LIST(APPEND CMAKE_CXX_FLAGS "") #TODO insert gcc debug flags
+LIST(APPEND CMAKE_NVCC_FLAGS "") #TODO insert nvcc release flags
+LIST(APPEND CMAKE_CXX_FLAGS "-DNODEBUG") #TODO insert gcc release flags
 endif (RELEASE_MODE) 
 
 
