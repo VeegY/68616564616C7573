@@ -78,7 +78,7 @@ LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
-#TARGET_LINK_LIBRARIES(icarus /usr/local/cuda/lib64/libcudart.so ${MPI_LIBRARIES})
+#TARGET_LINK_LIBRARIES(icarus ${MPI_LIBRARIES})
 
 
 #========================================================================
