@@ -1,9 +1,9 @@
-|------------------------------------------------------------------------|
-| Studienprojekt Technomathematik 2015/16                                |
-| Coding Conventions C++                                                 |
-| Autor: D.S.                                                            |
-| Version 1.1 vom 11. November 2015, zur Diskussion am 11. November 2015 |
-|------------------------------------------------------------------------|
+|-----------------------------------------|
+| Studienprojekt Technomathematik 2015/16 |
+| Coding Conventions C++                  |
+| Autor: D.S.                             |
+| Version 1.2 vom 23. November 2015       |     
+|-----------------------------------------|
 
 
 Ziele und Aufbau des Dokuments
@@ -27,7 +27,7 @@ Es wird sich niemals auf undefiniertes Verhalten verlassen. Wenn z.B. das logisc
 Namenskonventionen und Dateistruktur
 ====================================
 
-Alle Klassen, Typen, Structs und Enums werden im Namensraum icarus definiert.
+Alle Klassen, Typen, Structs und Enums werden im Namensraum Icarus definiert.
 
 Dateinamen enthalten ausschließlich Kleinbuchstaben, gefolgt von einem Punkt und einer der unten beschriebenen Endungen.
 
@@ -39,9 +39,9 @@ Die Namen von Variablen enthalten ausschließlich Kleinbuchstaben und Unterstric
 
 Der Typ der Variablen wird *nicht* als Teil ihres Namens geführt.
 
-Die Namen sehr kurzer Funktionen (i.d.R. inline) folgen der Konvention für Variablen. Beispiel: is_empty(), get_num_entries()
+Die Namen sehr kurzer Funktionen (i.d.R. inline) dürfen der Konvention für Variablen folgen. Beispiel: is_empty(), get_num_entries()
 
-Die Namen aller anderen Funktionen folgen der Konvention für Klassen. Beispiel: PerformLuDecomposition()
+Die Namen aller anderen Funktionen folgen der Konvention für Klassen. Der erste Buchstabe wird klein geschrieben. Beispiel: performLuDecomposition()
 
 Private und geschützte Member-Variablen werden ausschließlich mit einem führenden Unterstrich gekennzeichnet: _member_variable. Es wird insbesondere kein "m_" vorgestellt.
 
@@ -58,7 +58,7 @@ Jeder Header enthält einen Include-Guard der folgenden Form:
 // Kopf der Datei
 #ifndef __CLASSNAME_HPP_
 #define __CLASSNAME_HPP_
-namespace icarus
+namespace Icarus
 {
 // Inhalt der Datei
 }
@@ -72,6 +72,7 @@ Implementierung der Template-Klasse TemplateClassName.
 
 Zur (optischen) Trennung von Header und Implementierung bei Templates wird am Ende der entsprechenden hpp-Datei die tpp-Datei mit #include eingebunden.
 
+Inlcude-Guards schaden nicht, sind aber auch nicht nötig.
 
 classname.cpp
 -------------
@@ -82,7 +83,7 @@ Implementierung der (nicht-Template) Klasse ClassName. Statische Member stehen a
 classname_test.cpp
 ------------------
 
-Unit-Test zur Klasse ClassName.
+Unit-Test / Demo zur Klasse ClassName.
 
 
 Klassen und Templates
@@ -164,7 +165,6 @@ DEBUG: Informationen, die nur zum Debugging relevant sind.
 INFO: Informationen, z.B. Dimension eines Objekts oder Laufzeit einer Operation.
 WARNING: Es existiert ein Zustand, der zum Problem werden könnte, die weitere Ausführung im Moment aber nicht gefährdet (z.B. sehr kleine Norm, Auslöschungsgefahr etc.)
 ERROR: Ein Fehler ist aufgetreten, der zumindest einen Teil des Programms an der weiteren Ausführung hindert.
-ERROR_CRITICAL: Ein Fehler ist aufgetreten, der eine weitere Ausführung des gesamten Programms unmöglich macht.
 
 Es werden *keine* C++-Exceptions benutzt, einzige Ausnahme ist die Erfolgsprüfung einer Anforderung großer Speicherbereiche durch die STL.
 
@@ -185,7 +185,7 @@ Es werden keine Makrofunktionen benutzt.
 Konstante globale Variablen sind sparsam zu verwenden und vollständig in Großbuchstaben zu bezeichnen, Beispiel:
 const unsigned BUILD_VER = 1012;
 
-Es werden keine nicht-konstanten globalen Variablen verwendet. Ausnahme: Logger-Objekte.
+Es werden keine nicht-konstanten globalen Variablen verwendet. Ausnahme: Logger-/Handler-Objekte.
 
 Es werden keine globalen using-Direktiven (z.B. using namespace std) verwendet. Die Verwendung des using-Schlüsselworts ist innerhalb von Klassen- oder Funktionendefinitionen natürlich völlig in Ordnung.
 
