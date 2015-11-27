@@ -27,11 +27,11 @@ SlicedVector(size_t dim_global) :
     _data(nullptr)
 {
     // wenn weniger nodes vorhanden als angefordert, abbruch
-    if(_num_nodes > MPI_HANDLER.get_n_procs())
-        LOG_ERROR("SlicedVector cannot use more nodes than available.");
+    if(_last_node + 1 > MPI_HANDLER.get_n_procs())
+        LOG_ERROR("SlicedVector is not compatible to node structure.");
 
     // ist diese node überhaupt beteiligt?
-    if(MPI_HANDLER.get_my_rank() > _last_node) return;
+    if(MPI_HANDLER.get_my_rank() > _last_node || MPI_HANDLER.get_my_rank() < _first_node) return;
 
     // geht die division genau auf
     if(_dim_global % _num_nodes == 0)
@@ -127,7 +127,7 @@ set_global(size_t pos, const Scalar& val)
 {
     int affected_rank = pos / _dim_local_nopad;
     if (MPI_HANDLER.get_my_rank() == affected_rank)
-        _data[pos - affected_rank*_dim_local_nopad] = val;
+        _data[pos - (affected_rank-_first_node)*_dim_local_nopad] = val;
 }
 
 template<typename Scalar, int _num_nodes, int _first_node>
@@ -138,7 +138,7 @@ get_global(size_t pos)
     Scalar val;
     if (MPI_HANDLER.get_my_rank() == affected_rank)
     {
-        val = _data[pos - affected_rank*_dim_local_nopad];
+        val = _data[pos - (affected_rank - _first_node)*_dim_local_nopad];
     }
     MPI_SCALL(MPI_Bcast(&val,1,ScalarTraits<Scalar>::mpi_type,
                         affected_rank,MPI_COMM_WORLD));
