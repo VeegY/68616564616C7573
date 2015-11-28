@@ -28,7 +28,7 @@ SlicedVector(size_t dim_global) :
 {
     // wenn weniger nodes vorhanden als angefordert, abbruch
     if(_last_node + 1 > MPI_HANDLER.get_n_procs())
-        LOG_ERROR("SlicedVector is not compatible to node structure.");
+        LOG_ERROR("SlicedVector is not compatible with node structure.");
 
     // ist diese node überhaupt beteiligt?
     if(MPI_HANDLER.get_my_rank() > _last_node || MPI_HANDLER.get_my_rank() < _first_node) return;
@@ -54,7 +54,7 @@ SlicedVector(size_t dim_global) :
     {
         LOG_ERROR("Memory allocation for SlicedVector failed.");
     }
-    LOG_DEBUG("dim_local ",_dim_local,", dim_local_nopad", _dim_local_nopad);
+    LOG_DEBUG("dim_local ",_dim_local,", dim_local_nopad ", _dim_local_nopad);
 }
 
 template<typename Scalar, int _num_nodes, int _first_node>
@@ -132,7 +132,7 @@ set_global(size_t pos, const Scalar& val)
 
 template<typename Scalar, int _num_nodes, int _first_node>
 Scalar SlicedVector<Scalar, _num_nodes, _first_node>::
-get_global(size_t pos)
+get_global(size_t pos) const
 {
     int affected_rank = pos / _dim_local_nopad;
     Scalar val;
@@ -148,7 +148,7 @@ get_global(size_t pos)
 template<typename Scalar, int _num_nodes, int _first_node>
 typename SlicedVector<Scalar, _num_nodes, _first_node>::RealType
 SlicedVector<Scalar, _num_nodes, _first_node>::
-l2norm2_impl()
+l2norm2_impl() const
 {
     RealType res(0), res_global;
     for(size_t i=0; i<_dim_local; i++)
@@ -161,7 +161,7 @@ l2norm2_impl()
 template<typename Scalar, int _num_nodes, int _first_node>
 typename SlicedVector<Scalar, _num_nodes, _first_node>::RealType
 SlicedVector<Scalar, _num_nodes, _first_node>::
-maxnorm_impl()
+maxnorm_impl() const
 {
     RealType res(0), res_global;
     for(size_t i=0; i<_dim_local; i++)
@@ -170,6 +170,39 @@ maxnorm_impl()
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
     return res_global;
 }
+
+template<typename Scalar, int _num_nodes, int _first_node>
+Scalar SlicedVector<Scalar, _num_nodes, _first_node>::
+scal_prod_impl(const SlicedVector<Scalar, _num_nodes, _first_node>& other) const
+{
+    assert(_dim_global == other._dim_global);
+
+    Scalar res(0), res_global;
+    for(size_t i=0; i<_dim_local; i++)
+        res += ScalarTraits<Scalar>::smult(_data[i], other._data[i]);
+    MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
+                            ScalarTraits<Scalar>::mpi_type, MPI_SUM, MPI_COMM_WORLD));
+    return res_global;
+}
+
+template<typename Scalar, int _num_nodes, int _first_node>
+void SlicedVector<Scalar, _num_nodes, _first_node>::
+axpy_impl(const Scalar& alpha, const SlicedVector<Scalar, _num_nodes, _first_node>& y)
+{
+    assert(_dim_global == y._dim_global);
+
+    if(alpha != Scalar(1))
+    {
+        for(size_t i=0; i<_dim_local; i++)
+            _data[i] = alpha*_data[i] + y._data[i];
+    }
+    else
+    {
+        for(size_t i=0; i<_dim_local; i++)
+            _data[i] += y._data[i];
+    }
+}
+
 
 
 /********** Spezialisierung der VectorTraits **********/

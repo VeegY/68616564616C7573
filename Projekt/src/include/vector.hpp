@@ -32,30 +32,19 @@ public:
 
     Vector() : _leaf(*static_cast<Child*>(this)) { }
 
-    RealType l2norm2() const
-    {
-        return _leaf.l2norm2_impl();
-    }
+    RealType l2norm2() const { return _leaf.l2norm2_impl(); }
 
-    RealType l2norm() const
-    {
-        return sqrt(_leaf.l2norm2_impl());
-    }
+    RealType l2norm() const { return sqrt(_leaf.l2norm2_impl()); }
 
-    RealType maxnorm() const
-    {
-        return _leaf.maxnorm_impl();
-    }
+    RealType maxnorm() const { return _leaf.maxnorm_impl(); }
 
-    void clear()
-    {
-        _leaf.clear_impl();
-    }
+    void clear() { _leaf.clear_impl(); }
 
-    void fill_const(const ScalarType& s)
-    {
-        _leaf.fill_const_impl(s);
-    }
+    void fill_const(const ScalarType& s) { _leaf.fill_const_impl(s); }
+
+    ScalarType scal_prod(const Vector<Child>& other) { return _leaf.scal_prod_impl(other._leaf); }
+
+    void axpy(const ScalarType& alpha, const Vector<Child>& y) { _leaf.axpy_impl(alpha, y._leaf); }
 
 };
 

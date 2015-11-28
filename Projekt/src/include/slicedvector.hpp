@@ -51,22 +51,22 @@ public:
 
     void set_global(size_t pos, const Scalar& val);
 
-    Scalar get_global(size_t pos);
+    Scalar get_global(size_t pos) const;
 
     void set_local(size_t pos, const Scalar& val)
     {
         _data[pos] = val;
     }
 
-    Scalar get_local(size_t pos)
+    Scalar get_local(size_t pos) const
     {
         return _data[pos];
     }
 
 private:
-    RealType l2norm2_impl();
+    RealType l2norm2_impl() const;
 
-    RealType maxnorm_impl();
+    RealType maxnorm_impl() const;
 
     void clear_impl()
     {
@@ -77,6 +77,11 @@ private:
     {
         for(size_t i=0; i<_dim_local; i++) _data[i] = s;
     }
+
+    Scalar scal_prod_impl(const SlicedVector& other) const;
+
+    void axpy_impl(const Scalar& alpha, const SlicedVector& y);
+
 };
 
 }
