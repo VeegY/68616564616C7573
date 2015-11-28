@@ -24,31 +24,34 @@ struct VectorTraits;
 template<class Child>
 class Vector
 {
-    Child& _leaf;
 public:
 
     typedef typename VectorTraits<Child>::RealType RealType;
     typedef typename VectorTraits<Child>::ScalarType ScalarType;
 
 protected:
-    Vector() : _leaf(*static_cast<Child*>(this)) { }
+    Vector() { }
 
 public:
-    RealType l2norm2() const { return _leaf.l2norm2_impl(); }
 
-    RealType l2norm() const { return sqrt(_leaf.l2norm2_impl()); }
+    Child& leaf() { return static_cast<Child&>(*this); }
+    const Child& leaf() const { return static_cast<const Child&>(*this); }
 
-    RealType maxnorm() const { return _leaf.maxnorm_impl(); }
+    RealType l2norm2() const { return leaf().l2norm2_impl(); }
 
-    void clear() { _leaf.clear_impl(); }
+    RealType l2norm() const { return sqrt(leaf().l2norm2_impl()); }
 
-    void fill_const(const ScalarType& s) { _leaf.fill_const_impl(s); }
+    RealType maxnorm() const { return leaf().maxnorm_impl(); }
 
-    ScalarType scal_prod(const Vector<Child>& other) { return _leaf.scal_prod_impl(other._leaf); }
+    void clear() { leaf().clear_impl(); }
 
-    void axpy(const ScalarType& alpha, const Vector<Child>& y) { _leaf.axpy_impl(alpha, y._leaf); }
+    void fill_const(const ScalarType& s) { leaf().fill_const_impl(s); }
 
-    void scal(const ScalarType& alpha) { _leaf.scal_impl(alpha); }
+    ScalarType scal_prod(const Vector<Child>& other) { return leaf().scal_prod_impl(other.leaf()); }
+
+    void axpy(const ScalarType& alpha, const Vector<Child>& y) { leaf().axpy_impl(alpha, y.leaf()); }
+
+    void scal(const ScalarType& alpha) { leaf().scal_impl(alpha); }
 };
 
 }

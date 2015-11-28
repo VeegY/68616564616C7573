@@ -15,17 +15,19 @@ struct MatrixTraits;
 template <class Child>
 class Matrix
 {
-    Child& _leaf;
 public:
     typedef typename MatrixTraits<Child>::RealType RealType;
     typedef typename MatrixTraits<Child>::ScalarType ScalarType;
     typedef typename MatrixTraits<Child>::VectorType VectorType;
 
 protected:
-    Matrix() : _leaf(*static_cast<Child*>(this)) { }
+    Matrix() { }
 
 public:
-    void mult_vec(const VectorType& x, VectorType& res) const { _leaf.mult_vec_impl(x,res); }
+    Child& leaf() { return static_cast<Child&>(*this); }
+    const Child& leaf() const { return static_cast<const Child&>(*this); }
+
+    void mult_vec(const Vector<VectorType>& x, Vector<VectorType>& res) const { leaf().mult_vec_impl(x.leaf(),res.leaf()); }
 
 };
 
