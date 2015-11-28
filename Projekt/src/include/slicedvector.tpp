@@ -12,6 +12,9 @@
 #ifndef __SLICEDVECTOR_TPP_
 #define __SLICEDVECTOR_TPP_
 
+// nur für intellisense
+#include "slicedvector.hpp"
+
 namespace Icarus
 {
 
@@ -44,6 +47,7 @@ SlicedVector(size_t dim_global) :
         _dim_local = _dim_local_nopad = _dim_global/_num_nodes + 1;
         if(MPI_HANDLER.get_my_rank() == _last_node)
             _dim_local = _dim_global - (_num_nodes - 1)*_dim_local_nopad;
+        assert(_dim_local >= 0);
     }
     // allokiere lokalen speicher
     try
@@ -61,7 +65,7 @@ template<typename Scalar, int _num_nodes, int _first_node>
 SlicedVector<Scalar, _num_nodes, _first_node>::
 ~SlicedVector()
 {
-    if(_data) delete _data;
+    if(_data) delete[] _data;
 }
 
 template<typename Scalar, int _num_nodes, int _first_node>
@@ -163,16 +167,19 @@ typename SlicedVector<Scalar, _num_nodes, _first_node>::RealType
 SlicedVector<Scalar, _num_nodes, _first_node>::
 maxnorm_impl() const
 {
-    RealType res(0), res_global;
+    RealType res = std::numeric_limits<RealType>::min(), res_global, tmp;
     for(size_t i=0; i<_dim_local; i++)
-        res += ScalarTraits<Scalar>::abs2(_data[i]);
+    {
+        tmp = ScalarTraits<Scalar>::abs(_data[i]);
+        if(tmp > res) res = tmp;
+    }
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
     return res_global;
 }
 
 template<typename Scalar, int _num_nodes, int _first_node>
-Scalar SlicedVector<Scalar, _num_nodes, _first_node>::
+Scalar SlicedVector<Scalar,_num_nodes, _first_node>::
 scal_prod_impl(const SlicedVector<Scalar, _num_nodes, _first_node>& other) const
 {
     assert(_dim_global == other._dim_global);
@@ -191,16 +198,16 @@ axpy_impl(const Scalar& alpha, const SlicedVector<Scalar, _num_nodes, _first_nod
 {
     assert(_dim_global == y._dim_global);
 
-    if(alpha != Scalar(1))
-    {
-        for(size_t i=0; i<_dim_local; i++)
-            _data[i] = alpha*_data[i] + y._data[i];
-    }
-    else
-    {
-        for(size_t i=0; i<_dim_local; i++)
-            _data[i] += y._data[i];
-    }
+    for(size_t i=0; i<_dim_local; i++)
+        _data[i] = _data[i] + alpha*y._data[i];
+}
+
+template<typename Scalar, int _num_nodes, int _first_node>
+void SlicedVector<Scalar, _num_nodes, _first_node>::
+scal_impl(const Scalar& alpha)
+{
+   for(size_t i=0; i<_dim_local; i++)
+        _data[i] *= alpha;
 }
 
 

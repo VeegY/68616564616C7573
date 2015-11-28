@@ -18,6 +18,7 @@
 #include <memory>
 #include <vector>
 #include <random>
+#include <limits>
 #include "vector.hpp"
 
 namespace Icarus
@@ -53,6 +54,12 @@ public:
 
     Scalar get_global(size_t pos) const;
 
+    size_t get_dim_global() const {return _dim_global;}
+
+    size_t get_dim_local() const {return _dim_local;}
+
+    size_t get_dim_local_nopad() const {return _dim_local_nopad;}
+
     void set_local(size_t pos, const Scalar& val)
     {
         _data[pos] = val;
@@ -81,6 +88,8 @@ private:
     Scalar scal_prod_impl(const SlicedVector& other) const;
 
     void axpy_impl(const Scalar& alpha, const SlicedVector& y);
+
+    void scal_impl(const Scalar& alpha);
 
 };
 

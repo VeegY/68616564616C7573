@@ -30,8 +30,10 @@ public:
     typedef typename VectorTraits<Child>::RealType RealType;
     typedef typename VectorTraits<Child>::ScalarType ScalarType;
 
+protected:
     Vector() : _leaf(*static_cast<Child*>(this)) { }
 
+public:
     RealType l2norm2() const { return _leaf.l2norm2_impl(); }
 
     RealType l2norm() const { return sqrt(_leaf.l2norm2_impl()); }
@@ -46,6 +48,7 @@ public:
 
     void axpy(const ScalarType& alpha, const Vector<Child>& y) { _leaf.axpy_impl(alpha, y._leaf); }
 
+    void scal(const ScalarType& alpha) { _leaf.scal_impl(alpha); }
 };
 
 }

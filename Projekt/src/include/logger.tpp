@@ -11,6 +11,9 @@
 #ifndef __LOGGER_TPP_
 #define __LOGGER_TPP_
 
+// nur für intellisense
+#include "logger.hpp"
+
 namespace Icarus
 {
 
