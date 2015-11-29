@@ -52,6 +52,13 @@ public:
     void axpy(const ScalarType& alpha, const Vector<Child>& y) { leaf().axpy_impl(alpha, y.leaf()); }
 
     void scal(const ScalarType& alpha) { leaf().scal_impl(alpha); }
+
+    void copy(const Vector<Child>& other) {leaf().copy_impl(other.leaf());}
+
+    size_t get_dim() const { leaf().get_dim_impl(); }
+
+    void swap(Vector<Child>& other) { leaf().swap_impl(other.leaf()); }
+
 };
 
 }

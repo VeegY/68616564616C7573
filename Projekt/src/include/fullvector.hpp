@@ -73,6 +73,7 @@ private:
 
     void scal_impl(const Scalar& alpha);
 
+    size_t get_dim_impl() const { return _dim; }
 };
 
 }

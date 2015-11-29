@@ -29,6 +29,7 @@ public:
 
     void mult_vec(const Vector<VectorType>& x, Vector<VectorType>& res) const { leaf().mult_vec_impl(x.leaf(),res.leaf()); }
 
+    size_t get_dim() const {return leaf().get_dim_impl();}
 };
 
 }

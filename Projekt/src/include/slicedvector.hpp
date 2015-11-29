@@ -71,6 +71,10 @@ public:
     }
 
 private:
+    void swap_impl(SlicedVector& other);
+
+    void copy_impl(const SlicedVector& other);
+
     RealType l2norm2_impl() const;
 
     RealType maxnorm_impl() const;
@@ -90,6 +94,8 @@ private:
     void axpy_impl(const Scalar& alpha, const SlicedVector& y);
 
     void scal_impl(const Scalar& alpha);
+
+    size_t get_dim_impl() const { return _dim_global; }
 
 };
 

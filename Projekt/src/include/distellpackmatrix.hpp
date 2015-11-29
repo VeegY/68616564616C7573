@@ -36,6 +36,8 @@ public:
 
     ~DistEllpackMatrix();
 
+    //TODO: copy, move, assignment, move assignment
+
     size_t get_dim_local() const { return _dim_local; }
 
     size_t get_dim_local_nopad() const { return _dim_local_nopad; }
@@ -51,6 +53,8 @@ public:
     bool is_filled() const { return _filled; }
 
 private:
+
+    size_t get_dim_impl() const {return _dim_global;}
 
     void mult_vec_impl(const VectorType& vec, VectorType& result) const;
 };

@@ -70,6 +70,10 @@ FullVector<Scalar>::FullVector(const SlicedVector<Scalar, _num_nodes, _first_nod
         MPI_SCALL(MPI_Bcast(this_chunk,vec.get_dim_local(),ScalarTraits<Scalar>::mpi_type,
                   node,MPI_COMM_WORLD));
     }
+
+    // nach der barriere können die kopierquellen gefahrlos überschrieben werden
+    // (z.b. matvec-multiplikation mit x = dst)
+    MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
 }
 
 

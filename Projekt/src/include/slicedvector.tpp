@@ -58,7 +58,7 @@ SlicedVector(size_t dim_global) :
     {
         LOG_ERROR("Memory allocation for SlicedVector failed.");
     }
-    LOG_DEBUG("dim_local ",_dim_local,", dim_local_nopad ", _dim_local_nopad);
+    // LOG_DEBUG("dim_local ",_dim_local,", dim_local_nopad ", _dim_local_nopad);
 }
 
 template<typename Scalar, int _num_nodes, int _first_node>
@@ -210,6 +210,24 @@ scal_impl(const Scalar& alpha)
         _data[i] *= alpha;
 }
 
+
+template<typename Scalar, int _num_nodes, int _first_node>
+void SlicedVector<Scalar, _num_nodes, _first_node>::
+swap_impl(SlicedVector &other)
+{
+    assert(_dim_global == other._dim_global);
+
+    std::swap(_data,other._data);
+}
+
+template<typename Scalar, int _num_nodes, int _first_node>
+void SlicedVector<Scalar, _num_nodes, _first_node>::
+copy_impl(const SlicedVector &other)
+{
+    assert(_dim_global == other._dim_global);
+
+    for(size_t i=0; i<_dim_local; i++) _data[i] = other._data[i];
+}
 
 
 /********** Spezialisierung der VectorTraits **********/
