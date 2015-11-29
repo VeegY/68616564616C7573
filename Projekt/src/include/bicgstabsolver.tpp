@@ -28,18 +28,23 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
     assert(x0.get_dim() == _b.get_dim());
     const size_t dim = x0.get_dim();
 
-    VectorType r_hat(dim), r(dim), y(dim), nu(dim), s(dim), z(dim), t(dim), p(dim);
-    VectorType *K1inv_t = nullptr, *K1inv_s = nullptr;
+    VectorType r_hat(dim), r(dim), nu(dim), s(dim), t(dim), p(dim);
+    VectorType *K1inv_t = nullptr, *K1inv_s = nullptr, *y = nullptr, *z = nullptr;
     if(_K1inv)
     {
         K1inv_t = new VectorType(dim);
         K1inv_s = new VectorType(dim);
     }
+    if(_K1inv || _K2inv)
+    {
+        y = new VectorType(dim);
+        z = new VectorType(dim);
+    }
     ScalarType rho, rho_, alpha, beta, omega;
 
     r.copy(_b);
-    _A.mult_vec(x0,y);
-    r.axpy(-1,y);
+    _A.mult_vec(x0,nu);
+    r.axpy(-1,nu);
 
     r_hat.copy(r);
 
@@ -63,16 +68,21 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
         if(_K1inv && _K2inv)
         {
             _K1inv->mult_vec(p,nu);
-            _K2inv->mult_vec(nu,y);
+            _K2inv->mult_vec(nu,*y);
+            _A.mult_vec(*y,nu);
         }
         else if(_K2inv)
-            _K2inv->mult_vec(p,y);
+        {
+            _K2inv->mult_vec(p,*y);
+            _A.mult_vec(*y,nu);
+        }
         else if(_K1inv)
-            _K1inv->mult_vec(p,y);
+        {
+            _K1inv->mult_vec(p,*y);
+            _A.mult_vec(*y,nu);
+        }
         else
-            y.copy(p);
-
-        _A.mult_vec(y,nu);
+            _A.mult_vec(p,nu);
 
         alpha = rho/r_hat.scal_prod(nu);
 
@@ -89,16 +99,21 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
         if(_K1inv && _K2inv)
         {
             _K1inv->mult_vec(s,t);
-            _K2inv->mult_vec(t,z);
+            _K2inv->mult_vec(t,*z);
+            _A.mult_vec(*z,t);
         }
         else if(_K1inv)
-            _K1inv->mult_vec(s,z);
+        {
+            _K1inv->mult_vec(s,*z);
+            _A.mult_vec(*z,t);
+        }
         else if(_K2inv)
-            _K2inv->mult_vec(s,z);
+        {
+            _K2inv->mult_vec(s,*z);
+            _A.mult_vec(*z,t);
+        }
         else
-            z.copy(s);
-
-        _A.mult_vec(z,t);
+            _A.mult_vec(s,t);
 
         if(_K1inv)
         {
@@ -109,8 +124,10 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
         else
             omega = t.scal_prod(s) / t.l2norm2();
 
-        x0.axpy(alpha,y);
-        x0.axpy(omega,z);
+        if(y) x0.axpy(alpha,*y);
+        else x0.axpy(alpha,p);
+        if(z) x0.axpy(omega,*z);
+        else x0.axpy(omega,s);
 
         r.copy(s);
         r.axpy(-omega, t);
