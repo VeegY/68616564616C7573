@@ -73,6 +73,10 @@ private:
 
     void scal_impl(const Scalar& alpha);
 
+    void swap_impl(FullVector& other);
+
+    void copy_impl(const FullVector& other);
+
     size_t get_dim_impl() const { return _dim; }
 };
 

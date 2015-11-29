@@ -182,6 +182,24 @@ scal_impl(const Scalar& alpha)
         _data[i] *= alpha;
 }
 
+template<typename Scalar>
+void FullVector<Scalar>::
+copy_impl(const FullVector<Scalar>& other)
+{
+   assert(_dim == other._dim);
+
+   for(size_t i=0; i<_dim; i++)
+       _data[i] = other._data[i];
+}
+
+template<typename Scalar>
+void FullVector<Scalar>::
+swap_impl(FullVector<Scalar>& other)
+{
+   assert(_dim == other._dim);
+
+   std::swap(_data,other._data);
+}
 
 
 /********** Spezialisierung der VectorTraits **********/
