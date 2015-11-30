@@ -29,16 +29,16 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
     const size_t dim = x0.get_dim();
 
     VectorType r_hat(dim), r(dim), nu(dim), s(dim), t(dim), p(dim);
-    VectorType *K1inv_t = nullptr, *K1inv_s = nullptr, *y = nullptr, *z = nullptr;
+    std::unique_ptr<VectorType> K1inv_t, K1inv_s, y, z;
     if(_K1inv)
     {
-        K1inv_t = new VectorType(dim);
-        K1inv_s = new VectorType(dim);
+        K1inv_t.reset(new VectorType(dim));
+        K1inv_s.reset(new VectorType(dim));
     }
     if(_K1inv || _K2inv)
     {
-        y = new VectorType(dim);
-        z = new VectorType(dim);
+        y.reset(new VectorType(dim));
+        z.reset(new VectorType(dim));
     }
     ScalarType rho, rho_, alpha, beta, omega;
 
