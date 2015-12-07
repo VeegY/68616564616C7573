@@ -1,8 +1,6 @@
 #ifndef __DISCRETIZER_CPP_
 #define __DISCRETIZER_CPP_
 
-#include<iostream>
-
 namespace Icarus
 {
 
@@ -29,35 +27,24 @@ bool Face::pointInsideYz(Vertex point)
     {
         return _last_check;
     }
-    else
+    // wuerde hier ein 'else' das ganze uebersichtlicher machen?
+    // ich mag es nach dem Testen so viel wie moeglich zu kuerzen :)
+    bool inside(false);
+    _last_point = point;
+    for (int l(0); l<_num_vertices; ++l)
     {
-        bool inside(false);
-        _last_point = point;
-        for (int l(0); l<_num_vertices; ++l)
+        if (((_vertices[l].z > point.z) != (_vertices[l+1].z > point.z))
+            || ((_vertices[l].z >= point.z) != (_vertices[l+1].z >= point.z)))
         {
-            /*if (_vertices[l].y == point.y && _vertices[l].z == point.z)
-            * {
-            *     //TODO
-            * }
-            */
-            
-            if ((_vertices[l].z < point.z && _vertices[l+1].z > point.z)    // TODO zur Zeit werden manche Raender uebersehen...
-                || (_vertices[l].z > point.z && _vertices[l+1].z < point.z))
-            {
-                float temp((point.z - _vertices[l].z) / (_vertices[l+1].z - _vertices[l].z)
-                    * (_vertices[l+1].y - _vertices[l].y) + _vertices[l].y);
-                if (temp == point.y)
-                {
-                    return _last_check = true;
-                }
-                else if (temp > point.y)
-                {
-                    inside = !inside;
-                }
-            }
+            float temp((point.z - _vertices[l].z) / (_vertices[l+1].z - _vertices[l].z)
+                * (_vertices[l+1].y - _vertices[l].y) + _vertices[l].y);
+            if (temp > point.y-1e-6f && temp < point.y+1e-6f)
+                return _last_check = true;
+            else if (temp > point.y)
+                inside = !inside;
         }
-        return _last_check = inside;
     }
+    return _last_check = inside;
 }
 
 //****************  Object  ****************//
@@ -93,20 +80,21 @@ char Object::pointInside(Vertex point)
     {
         if (_faces[f].pointInsideYz(point))
         {
+            /*
             Vertex vector{_faces[f].get_vertex(0).x - point.x,
                 _faces[f].get_vertex(0).y - point.y,
                 _faces[f].get_vertex(0).z - point.z};
             float scalprod(vector.x * _faces[f].get_normal().x +
                 vector.y * _faces[f].get_normal().y + vector.z * _faces[f].get_normal().z);
-            if (scalprod == 0.0)
-            {
-                // TODO laesst sich evtl auch das todo von pointInsideYz loesen
-            }
-            else if (scalprod > 0.0)
+            */
+            float scalprod((_faces[f].get_vertex(0).x - point.x) * _faces[f].get_normal().x
+                + (_faces[f].get_vertex(0).y - point.y) * _faces[f].get_normal().y
+                + (_faces[f].get_vertex(0).z - point.z) * _faces[f].get_normal().z);
+            if (scalprod > 1e-6f)
             {
                 ++in_and_out;
             }
-            if (scalprod < 0.0)
+            else if (scalprod < -1e-6f)
             {
                 --in_and_out;
             }
@@ -129,7 +117,7 @@ void discretizer(std::string inputFile, std::string outputFile,
     
     std::ifstream fin;
     fin.open(inputFile.c_str());
-    std::fstream fout;
+    std::ofstream fout;
     fout.open(outputFile.c_str());
     // TODISCUSS: Dateien lieber nur so lange wie noetig oeffnen?
     // dh: fin oeffnen, lesen, schliessen - rechnen - fout oeffnen, schreiben, schliessen
@@ -234,16 +222,17 @@ void discretizer(std::string inputFile, std::string outputFile,
         stream.clear();
     }//while(getline)
 
-
     //*** Raum diskretisieren ***//
 
     std::vector<char> discretized_points;
     // Preufe fuer jeden Punkt, ob Luft oder Gegenstand
-    for (int x(0); x<nx; ++x)
+    
+    //{
+    for (int z(0); z<nz; ++z)
     {
         for (int y(0); y<ny; ++y)
         {
-            for (int z(0); z<nz; ++z)
+            for (int x(0); x<nx; ++x)
             {
                 Vertex point{(float)x*h, (float)y*h, (float)z*h};
                 char what('a');
@@ -257,55 +246,62 @@ void discretizer(std::string inputFile, std::string outputFile,
     }//x-loop
     
     // Pruefe fuer alle Objekt-Punkte, ob es Randpunkte sind
+    ///*
     for (int x(0); x<nx; ++x)
     {
         for (int y(0); y<ny; ++y)
         {
             for (int z(0); z<nz; ++z)
             {
-                if (discretized_points[x*ny*nz + y*nz + z] != 'a')
+                if (discretized_points[z*ny*nx + y*nx + x] != 'a')
                 {
                     if (x==0 || y==0 || z==0 || x==nx-1 || y==ny-1 || z==nz-1)
                     {
                         // TODO
-                        discretized_points[x*ny*nz + y*nz + z] = 'b';
+                        discretized_points[z*ny*nx + y*nx + x] = 'b';
                     }
-                    else if ((discretized_points[x*ny*nz + y*nz + z + 1] == 'a')
-                    || (discretized_points[x*ny*nx + y*nz + z - 1] == 'a')
-                    || (discretized_points[x*ny*nx + (y+1)*nz + z] == 'a')
-                    || (discretized_points[x*ny*nx + (y-1)*nz + z] == 'a')
-                    || (discretized_points[(x+1)*ny*nx + y*nz + z] == 'a')
-                    || (discretized_points[(x-1)*ny*nx + y*nz + z] == 'a'))
+                    else if ((discretized_points[z*ny*nx + y*nx + x + 1] == 'a')
+                    || (discretized_points[z*ny*nx + y*nx + x - 1] == 'a')
+                    || (discretized_points[z*ny*nx + (y+1)*nx + x] == 'a')
+                    || (discretized_points[z*ny*nx + (y-1)*nx + x] == 'a')
+                    || (discretized_points[(z+1)*ny*nx + y*nx + x] == 'a')
+                    || (discretized_points[(z-1)*ny*nx + y*nx + x] == 'a'))
                     {
-                        discretized_points[x*ny*nz + y*nz + z] = 'b';
+                        discretized_points[z*ny*nx + y*nx + x] = 'b';
                     }
                 }//!= 'a'
             }//z-loop
         }//y-loop
     }//x-loop
+    //*/
     
     //*** Diskretisierung abspeichern ***//
     fout << nx << " " << ny << " " << nz << std::endl;
-    for (int i(0); i<nx*ny*nz; ++i)
-    {
-        fout << discretized_points[i] << " ";
-        // TODISCUSS: direkt hintereinander, Leerzeichen oder neue Zeile?
-    }
     
     /*
-    for (int x(0); x<nx; ++x)
+    for (int i(0); i<nx*ny*nz; ++i)
     {
+        //fout << discretized_points[i] << " ";
+        fout << discretized_points[i] << std::endl;
+        // TODISCUSS: direkt hintereinander, Leerzeichen oder neue Zeile?
+    }
+    */
+    
+    ///*
+    for (int z(0); z<nz; ++z)
+    {   fout << "z = " << z*h << std::endl;
         for (int y(0); y<ny; ++y)
         {
-            for (int z(0); z<nz; ++z)
+            for (int x(0); x<nx; ++x)
             {
-                fout << discretized_points[x*ny*nz + y*nz + z];
+                fout << ((discretized_points[z*ny*nx + y*nx + x] == 'o')? 'o' : ((discretized_points[z*ny*nx + y*nx + x] == 'b')? 'b' : '.'));
+                //fout << discretized_points[z*ny*nx + y*nx + x];
             }//z-loop
             fout << std::endl;
         }//y-loop
         fout << std::endl << std::endl;
     }//x-loop
-    */
+    //*/
     
     fin.close();
     fout.close();
