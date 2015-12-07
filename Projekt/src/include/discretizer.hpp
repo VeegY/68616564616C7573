@@ -11,9 +11,13 @@
 namespace Icarus
 {
 
+//*** Vertex ***//
+
 struct Vertex {
     float x, y, z;
 };
+
+//*** Face ***//
 
 class Face
 {
@@ -34,6 +38,8 @@ private:
     Vertex _last_point;
     bool _last_check;
 };
+
+//*** Object ***//
 
 class Object
 {
