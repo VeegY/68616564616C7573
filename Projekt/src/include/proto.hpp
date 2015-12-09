@@ -13,6 +13,7 @@
 
 namespace Icarus
 {
+
 class NonCopyable
 {
 protected:
@@ -21,6 +22,13 @@ private:
     NonCopyable(const NonCopyable&) = delete;
     NonCopyable& operator=(const NonCopyable&) = delete;
 };
+
+class Interface
+{
+protected:
+    Interface();
+};
+
 }
 
 #endif // __PROTO_HPP_

@@ -11,8 +11,6 @@
 
 #include "include/logger.hpp"
 
-Icarus::Logger<Icarus::StdLogPolicy> __log_inst;
-
 namespace Icarus
 {
 

@@ -1,0 +1,68 @@
+\documentclass[pdflatex,12pt,a4paper,twoside]{scrartcl}
+\usepackage[a4paper,left=30mm,right=30mm,top=36mm,bottom=36mm]{geometry}
+\usepackage{authblk,amsmath,amsfonts,amssymb,amsthm,ngerman}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{nicefrac}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\begin{document}
+
+\section{Herleitung des Laplace-Modells}
+
+\subsection{Annahmen}
+
+Die Luft ist inkompressibel. Das heißt $\rho$ (Dichte der Luft) ist konstant.
+Effekte der Viskosität und Turbulenzen werden vernachlässigt.
+Das Geschwindigkeitsfeld der Luftmoleküle ist ein wirbelfreies Potentialfeld.
+$\nabla \times v =0$ und $v= \nabla \phi$, wobei $\phi$ eine skalare Funktion ist.
+
+\subsection{Herleitung der Laplace-Gleichung}
+
+Einsetzen dieser Annahme in die Kontinuitätsgleichung
+\begin{align*}
+\frac{\partial \rho}{\partial t}+\nabla \cdot (\rho v)=0
+\end{align*}
+
+und Ausnutzen, dass $\rho$ konstant ist, liefert die Laplace-Gleichung
+\begin{align*}
+\Delta \phi = \frac{\partial^2 \phi}{\partial x^2}+\frac{\partial^2 \phi}{\partial y^2}+\frac{\partial^2 \phi}{\partial z^2}=0
+\end{align*}
+
+\subsubsection{Randbedingungen}
+An den Rändern nehmen wir Neumann-Randbedingungen an:
+\begin{align*}
+n \cdot \nabla \phi =v_N
+\end{align*}
+Für Wände gilt, dass $v_N=0$ ist. Bei Lüftern variiert dieser Wert.
+
+Aus Gründen der Eindeutigkeit muss $\phi$ an einer Stelle bekannt sein. Hierzu reicht es auf einem Randpunkt gleich Null zu setzen.
+
+\subsection{Wärmekonvektion}
+
+Zur Berechnung unserer Temperatur benötigen wir noch eine Gleichung, die den Wärmeübertrag beschreibt. Diese ist:
+\begin{align*}
+\rho c_p v \cdot \nabla T - \nabla \cdot (k\nabla T)=0
+\end{align*}
+T ist hierbei die Temperatur, $\rho$ die Dichte, $c_p$ die spezifische Wärme und $k$ die Wärmeleitfähigkeit von Luft. 
+
+Einsetzen ergibt:
+\begin{align*}
+\rho c_p \nabla \phi \cdot \nabla T - k\Delta T=0
+\end{align*}
+
+\subsubsection{Randbedingungen}
+Auch hier benötigen wir als Randbedingung wieder einen bekannten Wert $T_D$ am Rand.
+
+Desweiteren gibt es noch Neumann-Randbedingungen, welche den Wärme-Zufluss charakterisieren. 
+\begin{align*}
+-n \cdot (k\nabla T)=q
+\end{align*} 
+
+
+\section{Literatur}
+[1] : \url{https://www.ima.umn.edu/preprints/pp2014/2434.pdf}
+
+\end{document}

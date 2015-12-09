@@ -6,7 +6,7 @@ namespace Icarus
 
 void MpiHandler::MpiSafeCall(int line, std::string file, int error) const
 {
-    // nichts tun, wenn call erfolgreich
+    // nichts tun, wenncall erfolgreich
     if(error == MPI_SUCCESS) return;
 
     // sonst fehlertext aufbereiten
