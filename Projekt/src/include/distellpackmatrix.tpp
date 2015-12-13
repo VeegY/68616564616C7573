@@ -1,5 +1,5 @@
-#ifndef __DISTMATRIXELLPACK_TPP_
-#define __DISTMATRIXELLPACK_TPP_
+#ifndef __DISTELLPACKMATRIX_TPP_
+#define __DISTELLPACKMATRIX_TPP_
 
 // nur für intellisense
 #include "distellpackmatrix.hpp"
@@ -98,7 +98,6 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::end_of_row()
         _filled = true;
 }
 
-
 template <typename Scalar, int _num_nodes, int _first_node>
 void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::mult_vec_impl(const VectorType& vec, VectorType& result) const
 {
@@ -116,7 +115,7 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::mult_vec_impl(const Vec
         for(size_t col = 0; col < _max_row_length; col++)
         {
             size_t pos = col*_dim_local + row;
-            if(_indices[pos] == PAD) continue;
+            if(_data[pos] == PAD) continue;
             res += _data[pos] * fvec[_indices[pos]];
         }
         result.set_local(row, res);
@@ -126,6 +125,107 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::mult_vec_impl(const Vec
 
 }
 
+
+template <typename Scalar, int _num_nodes, int _first_node>
+DistEllpackMatrix<Scalar, _num_nodes, _first_node>
+DistEllpackMatrix<Scalar, _num_nodes, _first_node>::import_csr_file(const std::string &filename)
+{
+    std::ifstream file_colind, file_rowptr, file_vals;
+
+    // drei teile der matrix öffnen
+    file_colind.open(filename + "_colind.csr");
+    file_rowptr.open(filename + "_rowptr.csr");
+    file_vals.open(filename + "_vals.csr");
+    if(!file_colind.is_open() || !file_rowptr.is_open() || !file_vals.is_open())
+        LOG_ERROR("Failed to open ", filename, "_*.csr.");
+
+    // bestimme globale dimension und #values
+    size_t dim_global = get_num_lines(file_rowptr);
+    size_t nnz = get_num_lines(file_vals);
+    if(get_num_lines(file_colind) != nnz)
+        LOG_ERROR("Inconsistent CSR data in ", filename, "_*.csr");
+
+    DistEllpackMatrix<Scalar, _num_nodes, _first_node> mat(dim_global);
+
+    // wenn wir nicht am füllen beteiligt sind, fertig
+    const int this_node = MPI_HANDLER.get_my_rank();
+    if(this_node >= _first_node + _num_nodes)
+        return mat;
+
+    // springe zur ersten zeile, die eingelesen wird
+    go_to_line(file_rowptr,mat.first_row_on_node());
+
+    const bool last_node = (this_node == _first_node + _num_nodes - 1);
+
+    // bestimme die maximale zeilenlänge auf der node
+    size_t prev = 0, cur = 0, max_row_length = 0;
+    file_rowptr >> prev;
+    for(size_t i=0; i < mat.get_dim_local(); i++)
+    {
+        // global letzte zeile hat keinen nachfolger
+        if(last_node && i == mat.get_dim_local()-1)
+            cur = nnz;
+        else
+            file_rowptr >> cur;
+        size_t row_len = cur-prev;
+        if(row_len > max_row_length) max_row_length = row_len;
+        prev = cur;
+    }
+
+    // bereite füllung auf mat-seite vor
+    mat.prepare_sequential_fill(max_row_length);
+    go_to_line(file_rowptr,mat.first_row_on_node());
+
+    // vals und colind vorspulen
+    file_rowptr >> prev;
+    go_to_line(file_vals, prev);
+    go_to_line(file_colind, prev);
+
+    // zweiter durchgang: eigentliche füllung
+    for(size_t i=0; i < mat.get_dim_local(); i++)
+    {
+        // global letzte zeile hat keinen nachfolger
+        if(last_node && i == mat.get_dim_local()-1)
+            cur = nnz;
+        else
+            file_rowptr >> cur;
+        size_t row_len = cur-prev;
+
+        for(size_t j=0; j < row_len; j++)
+        {
+            size_t colind;
+            Scalar val;
+            file_colind >> colind;
+            file_vals >> val;
+            mat.sequential_fill(colind,val);
+        }
+        mat.end_of_row();
+
+        prev = cur;
+    }
+
+    if(!mat.is_filled())
+        LOG_ERROR("csr_import failed unexpectedly.");
+
+    LOG_INFO("Successfully loaded sparse matrix with dim=",dim_global,", nnz=",nnz,".");
+
+    return mat;
+}
+
+
+template <typename Scalar, int _num_nodes, int _first_node>
+void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::print_local_data(std::ostream& os) const
+{
+    for(size_t i=0; i<_dim_local; i++)
+    {
+        for(size_t j=0; j <_max_row_length; j++)
+        {
+            size_t pos = j*_dim_local + i;
+            os << _data[pos] << "(" << _indices[pos] << ")\t";
+        }
+        os << std::endl;
+    }
+}
 
 /**********  Passende MatrixTraits  **********/
 
@@ -140,4 +240,4 @@ struct MatrixTraits<DistEllpackMatrix<Scalar, _num_nodes, _first_node>>
 
 }
 
-#endif
+#endif // __DISTELLPACKMATRIX_TPP_
