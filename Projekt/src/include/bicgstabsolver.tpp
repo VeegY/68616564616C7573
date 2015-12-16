@@ -89,7 +89,7 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
         s.copy(r);
         s.axpy(-alpha, nu);
 
-        LOG_DEBUG("BiCgStab: After ",i+1,". its, sq_tol = ", s.l2norm2());
+        LOG_DEBUG("BiCgStab: After ",i+1," its, sq_tol = ", s.l2norm2());
         if(s.l2norm2() < _tol)
         {
             x0.axpy(alpha, p);
@@ -119,7 +119,7 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
         {
             _K1inv->mult_vec(t,*K1inv_t);
             _K1inv->mult_vec(s,*K1inv_s);
-            omega = K1inv_t->scal_prod(*K1inv_s) / K1inv_t->l2norm();
+            omega = K1inv_t->scal_prod(*K1inv_s) / K1inv_t->l2norm2();
         }
         else
             omega = t.scal_prod(s) / t.l2norm2();

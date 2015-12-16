@@ -2,6 +2,10 @@
 #define __DISTELLPACKMATRIX_HPP_
 
 #include "matrix.hpp"
+#include "utility.hpp"
+#include <fstream>
+#include <iterator>
+#include <algorithm>
 
 namespace Icarus
 {
@@ -14,7 +18,7 @@ class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar, _num_nodes, _f
     friend class Matrix<DistEllpackMatrix<Scalar, _num_nodes, _first_node>>;
 
     // Mit PAD wird das padding durchgeführt
-    static constexpr size_t PAD = std::numeric_limits<size_t>::max();
+    static constexpr int PAD = 0;
 
     static constexpr int _last_node = _first_node + _num_nodes - 1;
 
@@ -44,6 +48,8 @@ public:
 
     size_t get_dim_global() const { return _dim_global; }
 
+    //TODO: get, set local/global
+
     void prepare_sequential_fill(size_t max_row_length);
 
     void sequential_fill(size_t colind, const Scalar& val);
@@ -51,6 +57,16 @@ public:
     void end_of_row();
 
     bool is_filled() const { return _filled; }
+
+    size_t first_row_on_node() const { return (MPI_HANDLER.get_my_rank() - _first_node) * _dim_local_nopad; }
+
+    DistEllpackMatrix precond_equi() const;
+
+    DistEllpackMatrix precond_jacobi() const;
+
+    void print_local_data(std::ostream &os) const;
+
+    static DistEllpackMatrix import_csr_file(const std::string& filename);
 
 private:
 

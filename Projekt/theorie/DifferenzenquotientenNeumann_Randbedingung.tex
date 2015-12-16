@@ -1,0 +1,36 @@
+\documentclass[pdflatex,12pt,a4paper,twoside]{scrartcl}
+\usepackage[a4paper,left=30mm,right=30mm,top=36mm,bottom=36mm]{geometry}
+\usepackage{authblk,amsmath,amsfonts,amssymb,amsthm,ngerman}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{nicefrac}
+\usepackage{mathrsfs}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\begin{document}
+
+\section{Differnzenquotient für Randpunkte}
+An den Randpunkten kann der zentrale Differenzenquotient nicht mehr benutzt werden.
+Deshalb muss ein einseitiger Differenzenquotient der Ordnung 2 benutzt werden.
+Eine Möglichkeit:
+\begin{align*}
+\frac{\partial^2}{\partial x^2}f(x,y,z)=\frac{11f(x,y,z)-28f(x-h,y,z)+17f(x-2h,y,z)}{38h^2}+\mathcal O(h^2)
+\end{align*}
+bzw.
+\begin{align*}
+\frac{\partial^2}{\partial x^2}f(xy,z,)=\frac{11f(x,y,z)-28f(x+h,y,z)+17f(x+2h,y,z)}{38h^2}+\mathcal O(h^2)
+\end{align*}
+Der Laplace-Operator ist eine Zusammensetzung dieser Ableitungen, wobei an einfachen Randpunkten die anderen Richtungen mit Hilfe des zentralen Differenzenquotienten berechnet werden.
+An den zweifachen Randpunkten benötigt man zweimal den einseitigen Differenzenquotienten und an dreifachen sogar dreimal.
+
+\section{Neumann-Randbedingungen}
+Zur Berechnung des einseitigen Differnzenquotienten der ersten Ableitung kann dieser Differnzenquotient benutzt werden.
+\begin{align*}
+\frac{\partial}{\partial x}f(x,y,z)=\frac{(3f(x,y,z)-f(x-h,y,z)+4f(x-2h,y,z)}{2h}+\mathcal O(h^2)
+\end{align*}
+bzw.
+\begin{align*}
+\frac{\partial}{\partial x}f(x,y,z)=\frac{(3f(x,y,z)-f(x+h,y,z)+4f(x+2h,y,z)}{2h}+\mathcal O(h^2)
+\end{align*} 
+In den Neumann-Randbedingungen wird $\nabla f(x,y,z) \cdot n$ benötigt. Da $n$ abhängig von der Art des Randpunktes ist, kann ein Ergebnis allgemein nicht angegeben werden.
+\end{document}
