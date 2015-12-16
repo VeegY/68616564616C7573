@@ -14,10 +14,10 @@ __global__ void mult_vec_gpu(Scalar *data, Scalar *fvec, Scalar *result, int *in
 }
 
 template <typename Scalar>
-extern  void mult_vec_memcpy(Scalar *e_data, Scalar *e_fvec, Scalar *e_result, int *e_indices, int e_max_row_length, int e_dim_local)
+void mult_vec_memcpy(Scalar* e_data, Scalar* e_fvec, Scalar* e_result, int* e_indices, int e_max_row_length, int e_dim_local)
 {
 
-     Scalar* d_data,d_fvec,d_result;
+     int* d_data,d_fvec,d_result;
      int* d_indices;
      
      int size_m = e_max_row_length*e_dim_local;

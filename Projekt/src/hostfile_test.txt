@@ -1,0 +1,2 @@
+127.0.0.1 slots=1
+icarus-27 slots=11
