@@ -11,6 +11,7 @@ __global__ void fib_gpu(int *fib)
     int temp=fib[1];
     fib[1]+=fib[0];
     fib[0]=temp;
+    
 }
 
 extern  void Fibonacci(int* h_fib)
