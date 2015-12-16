@@ -60,9 +60,13 @@ public:
 
     size_t first_row_on_node() const { return (MPI_HANDLER.get_my_rank() - _first_node) * _dim_local_nopad; }
 
-    static DistEllpackMatrix import_csr_file(const std::string& filename);
+    DistEllpackMatrix precond_equi() const;
+
+    DistEllpackMatrix precond_jacobi() const;
 
     void print_local_data(std::ostream &os) const;
+
+    static DistEllpackMatrix import_csr_file(const std::string& filename);
 
 private:
 

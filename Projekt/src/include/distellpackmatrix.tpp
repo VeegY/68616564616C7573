@@ -212,6 +212,55 @@ DistEllpackMatrix<Scalar, _num_nodes, _first_node>::import_csr_file(const std::s
     return mat;
 }
 
+template <typename Scalar, int _num_nodes, int _first_node>
+DistEllpackMatrix<Scalar, _num_nodes, _first_node>
+DistEllpackMatrix<Scalar, _num_nodes, _first_node>::
+precond_equi() const
+{
+    DistEllpackMatrix<Scalar, _num_nodes, _first_node> Kinv(_dim_global);
+    Scalar val;
+
+    Kinv.prepare_sequential_fill(1);
+
+    for(size_t i=0; i<_dim_local; i++)
+    {
+        val = 0;
+        for(size_t j=0; j<_max_row_length; j++)
+            val += _data[j*_dim_local + i];
+        Kinv.sequential_fill(i, 1./val);
+        Kinv.end_of_row();
+    }
+    return Kinv;
+}
+
+template <typename Scalar, int _num_nodes, int _first_node>
+DistEllpackMatrix<Scalar, _num_nodes, _first_node>
+DistEllpackMatrix<Scalar, _num_nodes, _first_node>::
+precond_jacobi() const
+{
+    DistEllpackMatrix<Scalar, _num_nodes, _first_node> Kinv(_dim_global);
+    size_t fron = first_row_on_node();
+    Scalar val;
+
+    Kinv.prepare_sequential_fill();
+
+    for(size_t i=0; i<_dim_local; i++)
+    {
+          val = 1;
+        for(size_t j=0; j<_max_row_length; j++)
+        {
+            if(_indices[j*_dim_local + i] == fron+i && _data[j*_dim_local + i] != 0)
+            {
+                val = 1./_data[j*_dim_local + i];
+                break;
+            }
+        }
+        Kinv.sequential_fill(i,val);
+        Kinv.end_of_row();
+    }
+
+    return Kinv;
+}
 
 template <typename Scalar, int _num_nodes, int _first_node>
 void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::print_local_data(std::ostream& os) const
