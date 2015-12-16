@@ -1,6 +1,8 @@
 #ifndef __DISCRETIZER_CPP_
 #define __DISCRETIZER_CPP_
 
+#include "include/discretizer.hpp"
+
 namespace Icarus
 {
 
@@ -109,16 +111,14 @@ char Object::pointInside(Vertex point)
 
 //****************  discretizer  ****************//
 
-void discretizer(std::string inputFile, std::string outputFile,
+std::vector<char>discretizer(std::string inputFile,
     float h, int nx, int ny, int nz)
 // TODO: "von wo bis wo" einstellen koennen
 {
     //*** Ein- und Ausgabedatei oeffnen ***//
     
     std::ifstream fin;
-    fin.open(inputFile.c_str());
-    std::ofstream fout;
-    fout.open(outputFile.c_str());
+    fin.open(inputFile);
     // TODISCUSS: Dateien lieber nur so lange wie noetig oeffnen?
     // dh: fin oeffnen, lesen, schliessen - rechnen - fout oeffnen, schreiben, schliessen
     // dadurch waeren waehrend der Rechnung alle Dateien geschlossen.
@@ -224,7 +224,7 @@ void discretizer(std::string inputFile, std::string outputFile,
 
     //*** Raum diskretisieren ***//
 
-    std::vector<char> discretized_points;
+    std::vector<char> discretized_points(nx*ny*nz);
     // Preufe fuer jeden Punkt, ob Luft oder Gegenstand
     
     //{
@@ -275,6 +275,17 @@ void discretizer(std::string inputFile, std::string outputFile,
     }//x-loop
     //*/
     
+    // hier ist discretized_points fertig
+    return discretized_points;
+}
+
+void save_discretizer(std::vector<char> discretized_points,
+                      std::string outputFile,
+                      float h,
+                      int nx, int ny, int nz)
+{
+    std::ofstream fout(outputFile);
+
     //*** Diskretisierung abspeichern ***//
     fout << nx << " " << ny << " " << nz << std::endl;
     
@@ -302,10 +313,7 @@ void discretizer(std::string inputFile, std::string outputFile,
         fout << std::endl << std::endl;
     }//x-loop
     //*/
-    
-    fin.close();
-    fout.close();
-}
+ }
 
 }//namespace Icarus
 

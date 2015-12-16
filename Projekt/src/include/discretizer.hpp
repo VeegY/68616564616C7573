@@ -1,5 +1,3 @@
-// -std=c++11 noetig
-
 #ifndef __DISCRETIZER_HPP_
 #define __DISCRETIZER_HPP_
 
@@ -62,6 +60,13 @@ private:
     std::vector<Vertex> _normals;
     std::vector<Face> _faces;
 };
+
+std::vector<char> discretizer(std::string inputFile,
+    float h, int nx, int ny, int nz);
+
+void save_discretizer(std::vector<char> discretized_points,
+                      std::string outputFile,
+                      int nx, int ny, int nz);
 
 }//namespace Icarus
 
