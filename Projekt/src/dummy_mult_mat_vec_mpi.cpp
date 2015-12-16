@@ -6,8 +6,8 @@
 #include <iomanip>
 using namespace std;
 
-extern template void mult_vec_memcpy<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local);
-extern template void mult_vec_memcpy<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local);
+template<typename Scalar>
+extern void mult_vec_memcpy(Scalar* data, Scalar* fvec, Scalar* result, int* indices, int max_row_length, int dim_local);
 
 
 int main(int argc, char* argv[])
