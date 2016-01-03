@@ -69,7 +69,7 @@ endmacro(create_test)
 # 				Compiler			
 #========================================================================
 
-LIST(APPEND CMAKE_CXX_FLAGS "-std=c++0x -O3 -ffast-math -Wall ")
+LIST(APPEND CMAKE_CXX_FLAGS "-std=c++0x -arch sm_11 -O3 -ffast-math -Wall ")
 
 #-L/sfw/openmpi/gcc4.9.x/1.8.5/lib/ -I/sfw/openmpi/gcc4.9.x/1.8.5/include -L/usr/local/cuda-7.5/targets/x86_64-linux/lib/ -I/usr/local/cuda-7.5/targets/x86_64-linux/include/ -lmpi -lcudart
 
