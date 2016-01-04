@@ -33,5 +33,14 @@ int main(int argc, char* argv[])
 
      mult_vec_zero(data_i, fvec_i, result_i, indices, max_row_length, dim_local);
      mult_vec_unified(data_f, fvec_f, result_f, indices, max_row_length, dim_local);
-    return 0;
+    
+    for(int i=0;i<=4;i++)
+    {
+      printf("unified float result in row %i is %f.\n",i,result_f[i]);
+      printf("zero copy int result in row %i is %i.\n",i,result_i[i]);
+    }
+
+
+
+     return 0;
 }

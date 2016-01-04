@@ -1,4 +1,3 @@
-#include <seqan/parallel.h>
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
@@ -12,31 +11,27 @@
 template<typename Scalar>
 __global__ void  gpu_ax(Scalar *data, Scalar* fvec, Scalar* result, int *indices)
 {
+    extern __shared__ float s[];
+
     int idx = threadIdx.x+blockIdx.x*blockDim.x;
-    int row = blockIdx.x;
 
     Scalar value = 0;
-    if(!data[idx] == 0)
+    if(data[idx]!=0)
     {
       value = data[idx]*fvec[indices[idx]];
-      atomicAdd(&result[row],value);
+    }
+    s[threadIdx.x] = value;
+    __syncthreads();
+
+    //TODO-REDUCE PART ON SHARED MEMORY (atomicADD)
+    if(threadIdx.x==0)
+    {
+      result[blockIdx.x]=23;
     }
 
 }
 
 
-__global__ void  gpu_ax(double *data, double* fvec, double* result, int *indices)
-{
-    int idx = threadIdx.x+blockIdx.x*blockDim.x;
-    int row = blockIdx.x;
-
-    double value = 0;
-    if(!data[idx] == 0)
-    {
-      value = data[idx]*fvec[indices[idx]];
-      atomicCAS(&result[row],result[row],result[row]+value);
-    }
-}
 
 template<typename Scalar>
 void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local)
@@ -49,8 +44,10 @@ void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, 
     cudaMallocManaged(&result, sizeof(Scalar)*dim_local);
     cudaMallocManaged(&indices, sizeof(int)*max_row_length*dim_local);
 
-    gpu_ax<<<dim_local,max_row_length>>>(data,fvec,result,indices);
-    cudaDeviceSyncrhonize();
+    gpu_ax<<<dim_local,max_row_length,max_row_length*sizeof(Scalar)>>>
+      (data,fvec,result,indices);
+
+    cudaDeviceSynchronize();
 
 //    float elapsed = timer.stop();
 //    printf("unified memory takes %f ms to complete with max row length %i and dim local %i \n", elapsed,max_row_length,dim_local);
@@ -65,6 +62,8 @@ void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int
 {
     Scalar *data_map, *fvec_map, *result_map;
     int *indices_map;
+
+    cudaDeviceProp prop;
 
     cudaGetDeviceProperties(&prop,0);
     if(prop.canMapHostMemory)
@@ -81,7 +80,8 @@ void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int
       cudaHostGetDevicePointer(&result_map, result, 0);
       cudaHostGetDevicePointer(&indices_map, indices, 0);
 
-      gpu_ax<<<dim_local,max_row_length>>>(data_map,fvec_map,result_map,indices_map);
+      gpu_ax<<<dim_local,max_row_length,max_row_length*sizeof(Scalar)>>>
+        (data_map,fvec_map,result_map,indices_map);
 
 //      float elapsed = timer.stop();
 //      printf("zero copy takes %f ms to complete with max row length %i and dim local %i \n", elapsed,max_row_length,dim_local);
