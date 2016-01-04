@@ -18,9 +18,9 @@ class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar, _num_nodes, _f
     friend class Matrix<DistEllpackMatrix<Scalar, _num_nodes, _first_node>>;
 
     // Mit PAD wird das padding durchgeführt
-    static constexpr int PAD = 0;
+    static const int PAD = 0;
 
-    static constexpr int _last_node = _first_node + _num_nodes - 1;
+	static const int _last_node = _first_node + _num_nodes - 1;
 
     size_t _dim_global, _dim_local, _dim_local_nopad, _max_row_length;
 
@@ -40,7 +40,19 @@ public:
 
     ~DistEllpackMatrix();
 
-    //TODO: copy, move, assignment, move assignment
+	DistEllpackMatrix(DistEllpackMatrix&& other) :
+		_dim_global(other._dim_global),
+		_dim_local(other._dim_local),
+		_dim_local_nopad(other._dim_local_nopad),
+		_max_row_length(other._max_row_length),
+		_indices(other._indices),
+		_data(other._data)
+	{
+		other._indices = nullptr;
+		other._data = nullptr;
+	}
+
+    //TODO: copy, assignment, move assignment
 
     size_t get_dim_local() const { return _dim_local; }
 

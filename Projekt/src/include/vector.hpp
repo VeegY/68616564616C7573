@@ -55,7 +55,7 @@ public:
 
     void copy(const Vector<Child>& other) {leaf().copy_impl(other.leaf());}
 
-    size_t get_dim() const { leaf().get_dim_impl(); }
+    size_t get_dim() const { return leaf().get_dim_impl(); }
 
     void swap(Vector<Child>& other) { leaf().swap_impl(other.leaf()); }
 

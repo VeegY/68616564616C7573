@@ -39,7 +39,7 @@ public:
     static const int MAX_ITER = 10000;
 
     /// \brief  Toleranz, die ohne explizite Angabe angenommen wird
-    static constexpr RealType DEFAULT_TOL = RealType(1e-9);
+	static const RealType DEFAULT_TOL;
 
 
     /// \brief  Konstruktor
@@ -60,6 +60,9 @@ private:
     void solve_impl(VectorType& x0);
 
 };
+
+template <typename MatrixType>
+const typename BiCgStabSolver<MatrixType>::RealType BiCgStabSolver<MatrixType>::DEFAULT_TOL(1e-9);
 
 }
 

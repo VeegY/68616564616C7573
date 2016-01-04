@@ -6,87 +6,79 @@
 #include "scalartraits.hpp"
 #include "utility.hpp"
 
-//////////////////////////////////////////////////////////
-//Assemblierungsroutinen fuer Poisson Problem (laplace u = 0)
-//////////////////////////////////////////////////////////
-
-/*
-assmble
-////////////////////////////////////
-Systemmatrix fuer Poisson Problem
-////////////////////////////////////
-assembliert die Zeile der Systemmatrix für einen Knoten und den Eintrag
-in der rechte Seite
-aeussere Randzellen werden a priori mit Dirichlet Nullranddaten besetzt
-////////////////////////////////////////////////////////////////////////////////
-Eingabeparameter
-A       -       Systemmatrix
-rhs     -       Rechteseite
-h       -       Gitterweite
-Type    -       Buchstabe für board/luft/i board
-Nx      -       Anzahl Gitterpunkte in x
-Ny      -       Anzahl Gitterpunkte in y
-Nz      -       Anzahl Gitterpunkte in z Richtung
-node    -       Der Aktuelle Knoten für den die Matrix Zeile assembliert werden soll
-nodex_  -       linker Nachbarknoten von node in x Richtung
-nodex   -       rechter Nachbarknoten von node in x Richtung
-nodey_  -       linker Nachbarknoten von node in y Richtung
-nodey   -       rechter Nachbarknoten von node in y Richtung
-nodez_  -       linker Nachbarknoten von node in z Richtung
-nodez   -       rechter Nachbarknoten von node in z Richtung
-
-////////////////////////////////////////////////////////////////////////////////
-diskretisiert durch    -     zentrale DQ 2. Ordnung
-
-
-Knoten benennung startet bei 0
-*/
-
 namespace Icarus
 {
 
+/**
+ * \brief	Assembliert eine Zeile (ein Vertex) mittels zentraler Differenzen.
+ *			Zur Zeit werden homogene Dirichlet BCs verwendet
+ *
+ * \param A			Matrix, die aufgebaut wird
+ * \param rhs		Rechte Seite, die aufgebaut wird
+ * \param h			Schrittweite des finiten Differnezenquotienten
+ * \param Type		Typ des Vertex
+ * \param Nx		Anzahl der (äquidistanten Punkte in x-Richtung)
+ * \param Ny		Anzahl der (äquidistanten Punkte in y-Richtung)
+ * \param Nz		Anzahl der (äquidistanten Punkte in z-Richtung)
+ * \param vertex	Vertex in Node-Zählung
+ * \param rhs_val	Wert der rechten Seite am Vertex
+ */
 template<typename Scalar, int _num_nodes, int _first_node = 0>
 void assemble_row(
         DistEllpackMatrix<Scalar,_num_nodes,_first_node>& A,
         SlicedVector<Scalar, _num_nodes, _first_node>& rhs,
         typename ScalarTraits<Scalar>::RealType h,
-        char Type, int Nx, int Ny, int node)
+        char Type, int Nx, int Ny, int vertex, Scalar rhs_val)
 {
-    A.prepare_sequential_fill(7);
-
     // Setze Randwerte
     if (Type=='b'||Type=='o') // Abfrage welcher Typ der Knoten hat
     {
-        A.sequential_fill(node, 1.0);
-        rhs.set_local(node,0.0*(h*h)); // Dirichlet Nullranddaten
+        A.sequential_fill(vertex, 1.0);
+        rhs.set_local(vertex,0.0*(h*h)); // Dirichlet Nullranddaten
     }
 
     else   // Setze innere Punkte durch zentralen DQ 2. Ordnung
     {
-        int nodex = node+1;
-        int nodey = node+Nx;
-        int nodez = node+(Nx*Ny);
+        int vertexx = vertex+1;
+        int vertexy = vertex+Nx;
+        int vertexz = vertex+(Nx*Ny);
 
-        A.sequential_fill(node -(node-nodez), 1.0);
-        A.sequential_fill(node +(node-nodez), 1.0);
+        A.sequential_fill(vertex -(vertex-vertexz), 1.0);
+        A.sequential_fill(vertex +(vertex-vertexz), 1.0);
 
-        A.sequential_fill(node -(node-nodey), 1.0);
-        A.sequential_fill(node +(node-nodey), 1.0);
+        A.sequential_fill(vertex -(vertex-vertexy), 1.0);
+        A.sequential_fill(vertex +(vertex-vertexy), 1.0);
 
-        A.sequential_fill(node -(node-nodex), 1.0);
-        A.sequential_fill(node, -6.0);
-        A.sequential_fill(node +(node-nodex),1.0);
+        A.sequential_fill(vertex -(vertex-vertexx), 1.0);
+        A.sequential_fill(vertex, -6.0);
+        A.sequential_fill(vertex +(vertex-vertexx),1.0);
 
-        rhs.set_local(node,0.0); // 0 da rechte Seite (f) = 0 ist
+        rhs.set_local(vertex,rhs_val); // 0 da rechte Seite (f) = 0 ist
     }
 }
 
+/**
+ * \brief	Assembliert eine Matrix und eine rechte Seite
+ *			mittels zentraler Differenzen.
+ *			Zur Zeit werden homogene Dirichlet BCs verwendet
+ *
+ * \param dic_points	Vektor mit dem Typ der auftretenden Punkte
+ * \param h				Schrittweite des finiten Differnezenquotienten
+ * \param Nx			Anzahl der (äquidistanten Punkte in x-Richtung)
+ * \param Ny			Anzahl der (äquidistanten Punkte in y-Richtung)
+ * \param Nz			Anzahl der (äquidistanten Punkte in z-Richtung)
+ * \param rhs_func		Funktion, die jedem räumlichen Index einen Wert
+ *						der rechten Seite zuweist.
+ *
+ * \return Gibt ein Paar aus Matrix und rechter Seite zurück.
+ */
 template<typename Scalar, int _num_nodes, int _first_node = 0>
 std::pair<DistEllpackMatrix<Scalar,_num_nodes,_first_node>,
 SlicedVector<Scalar, _num_nodes, _first_node>>
 assemble(std::vector<char>& disc_points,
         typename ScalarTraits<Scalar>::RealType h,
-        int Nx, int Ny, int Nz)
+        int Nx, int Ny, int Nz,
+		std::function<Scalar(size_t,size_t,size_t)> rhs_func)
 {
     const size_t N = Nx*Ny*Nz;
     DistEllpackMatrix<Scalar,_num_nodes,_first_node> A(N);
@@ -100,6 +92,8 @@ assemble(std::vector<char>& disc_points,
     size_t end_x, end_y, end_z;
     deflatten_3d(end, Nx, Ny, end_x, end_y, end_z);
 
+	A.prepare_sequential_fill(7);
+
     for(size_t z=fron_z; z<end_z; z++)
     {
         size_t ymin = (z==fron_z) ? fron_y : 0;
@@ -111,7 +105,7 @@ assemble(std::vector<char>& disc_points,
             for(size_t x=xmin; x<xmax; x++)
             {
                 const size_t index = x + y*Nx + z*Nx*Ny;
-                assemble_row(A,rhs,h,disc_points[index],Nx,Ny,index-fron);
+                assemble_row(A,rhs,h,disc_points[index],Nx,Ny,index-fron,rhs_func(x,y,z));
             }
         }
     }
