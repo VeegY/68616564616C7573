@@ -1,6 +1,8 @@
 #ifndef __ASSEMBLE_HPP_
 #define __ASSEMBLE_HPP_
 
+#include <functional>
+
 #include "distellpackmatrix.hpp"
 #include "slicedvector.hpp"
 #include "scalartraits.hpp"

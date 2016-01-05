@@ -19,17 +19,21 @@
 #include <vector>
 #include <random>
 #include <limits>
+
+#include "mpihandler.hpp"
 #include "vector.hpp"
 
 namespace Icarus
 {
 
-template<typename Scalar, int _num_nodes, int _first_node = 0>
-class SlicedVector : public Vector<SlicedVector<Scalar, _num_nodes, _first_node>>
+template<typename Scalar>
+class SlicedVector : public Vector<SlicedVector<Scalar>>
 {
-    friend class Vector<SlicedVector<Scalar, _num_nodes, _first_node>>;
+    friend class Vector<SlicedVector<Scalar>>;
 
-    static const int _last_node = _first_node + _num_nodes - 1;
+	// mpi umgebung
+	MPI_Comm _my_comm;
+	int _my_rank, _num_nodes;
 
     size_t _dim_global, _dim_local, _dim_local_nopad;
     Scalar* _data;
@@ -38,7 +42,7 @@ public:
     typedef Scalar ScalarType;
     typedef typename ScalarTraits<Scalar>::RealType RealType;
 
-    explicit SlicedVector(size_t dim_global);
+    explicit SlicedVector(size_t dim_global, MPI_Comm my_comm = MPI_COMM_WORLD);
 
     ~SlicedVector();
 
@@ -59,6 +63,8 @@ public:
     size_t get_dim_local() const {return _dim_local;}
 
     size_t get_dim_local_nopad() const {return _dim_local_nopad;}
+
+	MPI_Comm get_comm() const { return _my_comm; }
 
     void set_local(size_t pos, const Scalar& val)
     {

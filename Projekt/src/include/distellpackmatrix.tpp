@@ -10,8 +10,9 @@ namespace Icarus
 /**********  DistEllpackMatrix  **********/
 
 
-template <typename Scalar, int _num_nodes, int _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>::DistEllpackMatrix(size_t dim_global) :
+template <typename Scalar>
+DistEllpackMatrix<Scalar>::DistEllpackMatrix(size_t dim_global, MPI_Comm my_comm) :
+	_my_comm(my_comm),
     _dim_global(dim_global),
     _dim_local(0),
     _dim_local_nopad(0),
@@ -22,12 +23,9 @@ DistEllpackMatrix<Scalar, _num_nodes, _first_node>::DistEllpackMatrix(size_t dim
     _col_ptr(0),
     _filled(false)
 {
-    // wenn weniger nodes vorhanden als angefordert, abbruch
-    if(_last_node + 1 > MPI_HANDLER.get_n_procs())
-        LOG_ERROR("DistEllpackMatrix is not compatible with node structure.");
-
-    // ist diese node überhaupt beteiligt?
-    if(MPI_HANDLER.get_my_rank() > _last_node || MPI_HANDLER.get_my_rank() < _first_node) return;
+	// hole informationen über die mpi umgebung
+	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
+	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
 
     // geht die division genau auf
     if(_dim_global % _num_nodes == 0)
@@ -38,21 +36,21 @@ DistEllpackMatrix<Scalar, _num_nodes, _first_node>::DistEllpackMatrix(size_t dim
     else
     {
         _dim_local = _dim_local_nopad = _dim_global/_num_nodes + 1;
-        if(MPI_HANDLER.get_my_rank() == _last_node)
+        if(_my_rank == _num_nodes - 1)
             _dim_local = _dim_global - (_num_nodes - 1)*_dim_local_nopad;
         assert(_dim_local >= 0);
     }
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>::~DistEllpackMatrix()
+template <typename Scalar>
+DistEllpackMatrix<Scalar>::~DistEllpackMatrix()
 {
     if(_data) delete[] _data;
     if(_indices) delete[] _indices;
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::prepare_sequential_fill(size_t max_row_length)
+template <typename Scalar>
+void DistEllpackMatrix<Scalar>::prepare_sequential_fill(size_t max_row_length)
 {
     // make sure the allocation has not yet taken place
     assert(!_data && !_indices);
@@ -69,8 +67,8 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::prepare_sequential_fill
     }
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::sequential_fill(size_t colind, const Scalar& val)
+template <typename Scalar>
+void DistEllpackMatrix<Scalar>::sequential_fill(size_t colind, const Scalar& val)
 {
     assert(!_filled);
     assert(_col_ptr < _max_row_length);
@@ -80,8 +78,8 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::sequential_fill(size_t 
     _col_ptr++;
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::end_of_row()
+template <typename Scalar>
+void DistEllpackMatrix<Scalar>::end_of_row()
 {
     assert(!_filled);
 
@@ -98,8 +96,8 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::end_of_row()
         _filled = true;
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::mult_vec_impl(const VectorType& vec, VectorType& result) const
+template <typename Scalar>
+void DistEllpackMatrix<Scalar>::mult_vec_impl(const VectorType& vec, VectorType& result) const
 {
     assert(_dim_global == vec.get_dim_global());
     assert(_dim_global == result.get_dim_global());
@@ -126,10 +124,15 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::mult_vec_impl(const Vec
 }
 
 
-template <typename Scalar, int _num_nodes, int _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>::import_csr_file(const std::string &filename)
+template <typename Scalar>
+DistEllpackMatrix<Scalar>
+DistEllpackMatrix<Scalar>::import_csr_file(const std::string &filename, MPI_Comm new_comm)
 {
+	// mpi umgebung des ziels
+	int num_nodes, my_rank;
+	MPI_SCALL(MPI_Comm_size(new_comm, &num_nodes));
+	MPI_SCALL(MPI_Comm_rank(new_comm, &my_rank));
+
     std::ifstream file_colind, file_rowptr, file_vals;
 
     // drei teile der matrix öffnen
@@ -145,17 +148,12 @@ DistEllpackMatrix<Scalar, _num_nodes, _first_node>::import_csr_file(const std::s
     if(get_num_lines(file_colind) != nnz)
         LOG_ERROR("Inconsistent CSR data in ", filename, "_*.csr");
 
-    DistEllpackMatrix<Scalar, _num_nodes, _first_node> mat(dim_global);
-
-    // wenn wir nicht am füllen beteiligt sind, fertig
-    const int this_node = MPI_HANDLER.get_my_rank();
-    if(this_node >= _first_node + _num_nodes)
-        return mat;
+    DistEllpackMatrix<Scalar> mat(dim_global, new_comm);
 
     // springe zur ersten zeile, die eingelesen wird
     go_to_line(file_rowptr,mat.first_row_on_node());
 
-    const bool last_node = (this_node == _first_node + _num_nodes - 1);
+    const bool last_node = (my_rank == num_nodes - 1);
 
     // bestimme die maximale zeilenlänge auf der node
     size_t prev = 0, cur = 0, max_row_length = 0;
@@ -212,12 +210,11 @@ DistEllpackMatrix<Scalar, _num_nodes, _first_node>::import_csr_file(const std::s
     return mat;
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>::
-precond_equi() const
+template <typename Scalar>
+DistEllpackMatrix<Scalar>
+DistEllpackMatrix<Scalar>::precond_equi() const
 {
-    DistEllpackMatrix<Scalar, _num_nodes, _first_node> Kinv(_dim_global);
+    DistEllpackMatrix<Scalar> Kinv(_dim_global);
     Scalar val;
 
     Kinv.prepare_sequential_fill(1);
@@ -233,12 +230,11 @@ precond_equi() const
     return Kinv;
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>
-DistEllpackMatrix<Scalar, _num_nodes, _first_node>::
-precond_jacobi() const
+template <typename Scalar>
+DistEllpackMatrix<Scalar>
+DistEllpackMatrix<Scalar>::precond_jacobi() const
 {
-    DistEllpackMatrix<Scalar, _num_nodes, _first_node> Kinv(_dim_global);
+    DistEllpackMatrix<Scalar> Kinv(_dim_global);
     size_t fron = first_row_on_node();
     Scalar val;
 
@@ -262,8 +258,8 @@ precond_jacobi() const
     return Kinv;
 }
 
-template <typename Scalar, int _num_nodes, int _first_node>
-void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::print_local_data(std::ostream& os) const
+template <typename Scalar>
+void DistEllpackMatrix<Scalar>::print_local_data(std::ostream& os) const
 {
     for(size_t i=0; i<_dim_local; i++)
     {
@@ -279,12 +275,12 @@ void DistEllpackMatrix<Scalar, _num_nodes, _first_node>::print_local_data(std::o
 /**********  Passende MatrixTraits  **********/
 
 
-template<typename Scalar, int _num_nodes, int _first_node>
-struct MatrixTraits<DistEllpackMatrix<Scalar, _num_nodes, _first_node>>
+template<typename Scalar>
+struct MatrixTraits<DistEllpackMatrix<Scalar>>
 {
     typedef typename ScalarTraits<Scalar>::RealType RealType;
     typedef Scalar ScalarType;
-    typedef SlicedVector<Scalar, _num_nodes, _first_node> VectorType;
+    typedef SlicedVector<Scalar> VectorType;
 };
 
 }

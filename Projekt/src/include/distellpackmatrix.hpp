@@ -3,6 +3,7 @@
 
 #include "matrix.hpp"
 #include "utility.hpp"
+#include "mpihandler.hpp"
 #include <fstream>
 #include <iterator>
 #include <algorithm>
@@ -12,16 +13,18 @@ namespace Icarus
 
 // quadratische matrix, global zeilenweise verteilt, lokal
 // in ellpack gespeichert
-template <typename Scalar, int _num_nodes, int _first_node = 0>
-class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar, _num_nodes, _first_node>>
+template <typename Scalar>
+class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar>>
 {
-    friend class Matrix<DistEllpackMatrix<Scalar, _num_nodes, _first_node>>;
+    friend class Matrix<DistEllpackMatrix<Scalar>>;
+
+	// MPI Eigenschaften
+	MPI_Comm _my_comm;
+	int _my_rank, _num_nodes;
 
     // Mit PAD wird das padding durchgeführt
     static const int PAD = 0;
-
-	static const int _last_node = _first_node + _num_nodes - 1;
-
+	
     size_t _dim_global, _dim_local, _dim_local_nopad, _max_row_length;
 
     size_t * _indices;
@@ -34,9 +37,9 @@ class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar, _num_nodes, _f
 
 public:
 
-    typedef typename MatrixTraits<DistEllpackMatrix<Scalar, _num_nodes, _first_node>>::VectorType VectorType;
+    typedef typename MatrixTraits<DistEllpackMatrix<Scalar>>::VectorType VectorType;
 
-    DistEllpackMatrix(size_t dim_global);
+    DistEllpackMatrix(size_t dim_global, MPI_Comm my_comm = MPI_COMM_WORLD);
 
     ~DistEllpackMatrix();
 
@@ -70,7 +73,7 @@ public:
 
     bool is_filled() const { return _filled; }
 
-    size_t first_row_on_node() const { return (MPI_HANDLER.get_my_rank() - _first_node) * _dim_local_nopad; }
+    size_t first_row_on_node() const { return _my_rank * _dim_local_nopad; }
 
     DistEllpackMatrix precond_equi() const;
 
@@ -78,7 +81,7 @@ public:
 
     void print_local_data(std::ostream &os) const;
 
-    static DistEllpackMatrix import_csr_file(const std::string& filename);
+    static DistEllpackMatrix import_csr_file(const std::string& filename, MPI_Comm new_comm = MPI_COMM_WORLD);
 
 private:
 

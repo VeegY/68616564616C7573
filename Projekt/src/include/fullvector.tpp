@@ -37,43 +37,42 @@ FullVector<Scalar>::FullVector(size_t dim) :
 }
 
 template<typename Scalar>
-template<int _num_nodes, int _first_node>
-FullVector<Scalar>::FullVector(const SlicedVector<Scalar, _num_nodes, _first_node>& vec) :
+FullVector<Scalar>::FullVector(const SlicedVector<Scalar>& vec) :
     _dim(vec.get_dim_global()),
-    _data(nullptr)
+    _data(nullptr),
+	_my_comm(vec.get_comm())
 {
     try
     {
-        _dim = vec.get_dim_global();
-        _data = new Scalar[_dim];
+		_data = new Scalar[_dim];
     }
-    catch(...)
-    {
-        LOG_ERROR("Memory allocation for FullVector failed.");
-    }
+	catch (...)
+	{
+		LOG_ERROR("Memory allocation for FullVector failed.");
+	}
 
-    int this_node = MPI_HANDLER.get_my_rank();
-    Scalar* this_chunk = _data + (this_node - _first_node) * vec.get_dim_local_nopad();
+	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
+	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
 
-    // haben wir selbst einen teil des slicedvectors?
-    if(this_node >= _first_node && this_node < _first_node + _num_nodes)
-    {
+    Scalar* this_chunk = _data + _my_rank * vec.get_dim_local_nopad();
+
+    // eigenen teil des sliced_vektors herauskopieren
+    
         // dann herauskopieren
         for(size_t i=0; i<vec.get_dim_local(); i++)
             this_chunk[i] = vec.get_local(i);
-    }
-
+    
     // synchronisiere die teile
-    for(int node = _first_node; node < _first_node + _num_nodes; node++)
+    for(int node = 0; node < _num_nodes; node++)
     {
-        this_chunk = _data + (node - _first_node) * vec.get_dim_local_nopad();
+        this_chunk = _data + node * vec.get_dim_local_nopad();
         MPI_SCALL(MPI_Bcast(this_chunk,vec.get_dim_local(),ScalarTraits<Scalar>::mpi_type,
-                  node,MPI_COMM_WORLD));
+                  node,_my_comm));
     }
 
     // nach der barriere können die kopierquellen gefahrlos überschrieben werden
     // (z.b. matvec-multiplikation mit x = dst)
-    MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
+    MPI_SCALL(MPI_Barrier(_my_comm));
 }
 
 

@@ -21,22 +21,20 @@ namespace Icarus
 /**********  SlicedVector  **********/
 
 
-template<typename Scalar, int _num_nodes, int _first_node>
-SlicedVector<Scalar, _num_nodes, _first_node>::
-SlicedVector(size_t dim_global) :
+template<typename Scalar>
+SlicedVector<Scalar>::
+SlicedVector(size_t dim_global, MPI_Comm my_comm) :
+	_my_comm(my_comm),
     _dim_global(dim_global),
     _dim_local(0),
     _dim_local_nopad(0),
     _data(nullptr)
 {
-    // wenn weniger nodes vorhanden als angefordert, abbruch
-    if(_last_node + 1 > MPI_HANDLER.get_n_procs())
-        LOG_ERROR("SlicedVector is not compatible with node structure.");
+	// hole informationen über die mpi umgebung
+	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
+	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
 
-    // ist diese node überhaupt beteiligt?
-    if(MPI_HANDLER.get_my_rank() > _last_node || MPI_HANDLER.get_my_rank() < _first_node) return;
-
-    // geht die division genau auf
+	// geht die division genau auf
     if(_dim_global % _num_nodes == 0)
     {
         _dim_local = _dim_local_nopad = _dim_global/_num_nodes;
@@ -45,7 +43,7 @@ SlicedVector(size_t dim_global) :
     else
     {
         _dim_local = _dim_local_nopad = _dim_global/_num_nodes + 1;
-        if(MPI_HANDLER.get_my_rank() == _last_node)
+        if(_my_rank == _num_nodes - 1)
             _dim_local = _dim_global - (_num_nodes - 1)*_dim_local_nopad;
         assert(_dim_local >= 0);
     }
@@ -61,15 +59,15 @@ SlicedVector(size_t dim_global) :
     // LOG_DEBUG("dim_local ",_dim_local,", dim_local_nopad ", _dim_local_nopad);
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+SlicedVector<Scalar>::
 ~SlicedVector()
 {
     if(_data) delete[] _data;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+SlicedVector<Scalar>::
 SlicedVector(const SlicedVector& other) :
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
@@ -80,8 +78,8 @@ SlicedVector(const SlicedVector& other) :
         _data[i] = other._data[i];
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+SlicedVector<Scalar>::
 SlicedVector(const SlicedVector&& other) :
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
@@ -91,9 +89,9 @@ SlicedVector(const SlicedVector&& other) :
     other._data = nullptr;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-SlicedVector<Scalar, _num_nodes, _first_node>&
-SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+SlicedVector<Scalar>&
+SlicedVector<Scalar>::
 operator=(const SlicedVector& other)
 {
     // selbst
@@ -109,9 +107,9 @@ operator=(const SlicedVector& other)
     return *this;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-SlicedVector<Scalar, _num_nodes, _first_node>&
-SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+SlicedVector<Scalar>&
+SlicedVector<Scalar>::
 operator=(const SlicedVector&& other)
 {
     // selbst
@@ -125,46 +123,46 @@ operator=(const SlicedVector&& other)
     return *this;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-void SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+void SlicedVector<Scalar>::
 set_global(size_t pos, const Scalar& val)
 {
     int affected_rank = pos / _dim_local_nopad;
-    if (MPI_HANDLER.get_my_rank() == affected_rank)
+    if (_my_rank == affected_rank)
         _data[pos - (affected_rank-_first_node)*_dim_local_nopad] = val;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-Scalar SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+Scalar SlicedVector<Scalar>::
 get_global(size_t pos) const
 {
     int affected_rank = pos / _dim_local_nopad;
     Scalar val;
-    if (MPI_HANDLER.get_my_rank() == affected_rank)
+    if (_my_rank == affected_rank)
     {
         val = _data[pos - (affected_rank - _first_node)*_dim_local_nopad];
     }
     MPI_SCALL(MPI_Bcast(&val,1,ScalarTraits<Scalar>::mpi_type,
-                        affected_rank,MPI_COMM_WORLD));
+                        affected_rank,_my_comm));
     return val;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-typename SlicedVector<Scalar, _num_nodes, _first_node>::RealType
-SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+typename SlicedVector<Scalar>::RealType
+SlicedVector<Scalar>::
 l2norm2_impl() const
 {
     RealType res(0), res_global;
     for(size_t i=0; i<_dim_local; i++)
         res += ScalarTraits<Scalar>::abs2(_data[i]);
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
-                            ScalarTraits<RealType>::mpi_type, MPI_SUM, MPI_COMM_WORLD));
+                            ScalarTraits<RealType>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-typename SlicedVector<Scalar, _num_nodes, _first_node>::RealType
-SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+typename SlicedVector<Scalar>::RealType
+SlicedVector<Scalar>::
 maxnorm_impl() const
 {
     RealType res = std::numeric_limits<RealType>::min(), res_global, tmp;
@@ -178,9 +176,9 @@ maxnorm_impl() const
     return res_global;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-Scalar SlicedVector<Scalar,_num_nodes, _first_node>::
-scal_prod_impl(const SlicedVector<Scalar, _num_nodes, _first_node>& other) const
+template<typename Scalar>
+Scalar SlicedVector<Scalar>::
+scal_prod_impl(const SlicedVector<Scalar>& other) const
 {
     assert(_dim_global == other._dim_global);
 
@@ -188,13 +186,13 @@ scal_prod_impl(const SlicedVector<Scalar, _num_nodes, _first_node>& other) const
     for(size_t i=0; i<_dim_local; i++)
         res += ScalarTraits<Scalar>::smult(_data[i], other._data[i]);
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
-                            ScalarTraits<Scalar>::mpi_type, MPI_SUM, MPI_COMM_WORLD));
+                            ScalarTraits<Scalar>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-void SlicedVector<Scalar, _num_nodes, _first_node>::
-axpy_impl(const Scalar& alpha, const SlicedVector<Scalar, _num_nodes, _first_node>& y)
+template<typename Scalar>
+void SlicedVector<Scalar>::
+axpy_impl(const Scalar& alpha, const SlicedVector<Scalar>& y)
 {
     assert(_dim_global == y._dim_global);
 
@@ -202,8 +200,8 @@ axpy_impl(const Scalar& alpha, const SlicedVector<Scalar, _num_nodes, _first_nod
         _data[i] = _data[i] + alpha*y._data[i];
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-void SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+void SlicedVector<Scalar>::
 scal_impl(const Scalar& alpha)
 {
    for(size_t i=0; i<_dim_local; i++)
@@ -211,8 +209,8 @@ scal_impl(const Scalar& alpha)
 }
 
 
-template<typename Scalar, int _num_nodes, int _first_node>
-void SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+void SlicedVector<Scalar>::
 swap_impl(SlicedVector &other)
 {
     assert(_dim_global == other._dim_global);
@@ -220,8 +218,8 @@ swap_impl(SlicedVector &other)
     std::swap(_data,other._data);
 }
 
-template<typename Scalar, int _num_nodes, int _first_node>
-void SlicedVector<Scalar, _num_nodes, _first_node>::
+template<typename Scalar>
+void SlicedVector<Scalar>::
 copy_impl(const SlicedVector &other)
 {
     assert(_dim_global == other._dim_global);
@@ -233,8 +231,8 @@ copy_impl(const SlicedVector &other)
 /********** Spezialisierung der VectorTraits **********/
 
 
-template<typename Scalar, int _num_nodes, int _first_node>
-struct VectorTraits<SlicedVector<Scalar,_num_nodes,_first_node>>
+template<typename Scalar>
+struct VectorTraits<SlicedVector<Scalar>>
 {
     typedef typename ScalarTraits<Scalar>::RealType RealType;
     typedef Scalar ScalarType;

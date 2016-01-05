@@ -18,6 +18,7 @@
 #include <random>
 #include <limits>
 #include "slicedvector.hpp"
+#include "mpihandler.hpp"
 
 namespace Icarus
 {
@@ -26,6 +27,9 @@ template<typename Scalar>
 class FullVector : public Vector<FullVector<Scalar>>
 {
     friend class Vector<FullVector<Scalar>>;
+
+	MPI_Comm _my_comm;
+	int _my_rank, _num_nodes;
 
     Scalar* _data;
 
@@ -37,8 +41,7 @@ public:
 
     explicit FullVector(size_t dim);
 
-    template<int _num_nodes, int _first_node>
-    explicit FullVector(const SlicedVector<Scalar, _num_nodes, _first_node>& vec);
+    explicit FullVector(const SlicedVector<Scalar>& vec);
 
     ~FullVector();
 
