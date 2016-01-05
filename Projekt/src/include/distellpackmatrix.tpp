@@ -43,6 +43,114 @@ DistEllpackMatrix<Scalar>::DistEllpackMatrix(size_t dim_global, MPI_Comm my_comm
 }
 
 template <typename Scalar>
+DistEllpackMatrix<Scalar>::
+DistEllpackMatrix(const DistEllpackMatrix& other) :
+_my_comm(other._my_comm),
+_my_rank(other._my_rank),
+_num_nodes(other._num_nodes),
+_dim_global(other._dim_global),
+_dim_local(other._dim_local),
+_dim_local_nopad(other._dim_local_nopad),
+_max_row_length(other._max_row_length),
+_indices(nullptr),
+_data(nullptr)
+{
+	try
+	{
+		_indices = new Scalar[_dim_local * _max_row_length];
+		_data = new Scalar[_dim_local * _max_row_length];
+	}
+	catch (std::exception& e)
+	{
+		LOG_ERROR("Memory allocation in DistEllpackMatrix failed.");
+	}
+	for (size_t i = 0; i < _dim_local * _max_row_length; i++)
+	{
+		_indices[i] = other._indices[i];
+		_data[i] = other._data[i];
+	}
+}
+
+template <typename Scalar>
+DistEllpackMatrix<Scalar>::
+DistEllpackMatrix(DistEllpackMatrix&& other) :
+_my_comm(other._my_comm),
+_my_rank(other._my_rank),
+_num_nodes(other._num_nodes),
+_dim_global(other._dim_global),
+_dim_local(other._dim_local),
+_dim_local_nopad(other._dim_local_nopad),
+_max_row_length(other._max_row_length),
+_indices(other._indices),
+_data(other._data)
+{
+	other._indices = nullptr;
+	other._data = nullptr;
+}
+
+template <typename Scalar>
+DistEllpackMatrix<Scalar>&
+DistEllpackMatrix<Scalar>::operator=(DistEllpackMatrix&& other)
+{
+	// selbst
+	if (this == &other) return this;
+
+	// fremd
+	_my_comm = other._my_comm;
+	_my_rank = other._my_rank;
+	_num_nodes = other._num_nodes;
+	_dim_global = other._dim_global;
+	_dim_local = other._dim_local;
+	_dim_local_nopad = other._dim_local_nopad;
+	_max_row_length = other._max_row_length;
+	_indices = other._indices;
+	_data = other._data;
+
+	other._indices = nullptr;
+	other._data = nullptr;
+
+	return this;
+}
+
+template <typename Scalar>
+DistEllpackMatrix<Scalar>&
+DistEllpackMatrix<Scalar>::operator=(const DistEllpackMatrix& other)
+{
+	// selbst
+	if (this == &other) return this;
+
+	// fremd
+	if (_indices) delete[] _indices;
+	if (_data) delete[] _data;
+
+	_my_comm = other._my_comm;
+	_my_rank = other._my_rank;
+	_num_nodes = other._num_nodes;
+	_dim_global = other._dim_global;
+	_dim_local = other._dim_local;
+	_dim_local_nopad = other._dim_local_nopad;
+	_max_row_length = other._max_row_length;
+
+	try
+	{
+		_indices = new Scalar[_dim_local * _max_row_length];
+		_data = new Scalar[_dim_local * _max_row_length];
+	}
+	catch (std::exception& e)
+	{
+		LOG_ERROR("Memory allocation in DistEllpackMatrix failed.");
+	}
+	for (size_t i = 0; i < _dim_local * _max_row_length; i++)
+	{
+		_indices[i] = other._indices[i];
+		_data[i] = other._data[i];
+	}
+
+	return this;
+}
+
+
+template <typename Scalar>
 DistEllpackMatrix<Scalar>::~DistEllpackMatrix()
 {
     if(_data) delete[] _data;

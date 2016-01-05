@@ -46,13 +46,13 @@ public:
 
     ~SlicedVector();
 
-    explicit SlicedVector(const SlicedVector& other);
+    SlicedVector(const SlicedVector& other);
 
-    explicit SlicedVector(const SlicedVector&& other);
+    SlicedVector(SlicedVector&& other);
 
     SlicedVector& operator=(const SlicedVector& other);
 
-    SlicedVector& operator=(const SlicedVector&& other);
+    SlicedVector& operator=(SlicedVector&& other);
 
     void set_global(size_t pos, const Scalar& val);
 

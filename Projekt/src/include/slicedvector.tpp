@@ -69,6 +69,9 @@ SlicedVector<Scalar>::
 template<typename Scalar>
 SlicedVector<Scalar>::
 SlicedVector(const SlicedVector& other) :
+	_my_comm(other._my_comm),
+	_my_rank(other._my_rank),
+	_num_nodes(other._num_nodes),
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
     _dim_local_nopad(other._dim_local_nopad)
@@ -80,7 +83,10 @@ SlicedVector(const SlicedVector& other) :
 
 template<typename Scalar>
 SlicedVector<Scalar>::
-SlicedVector(const SlicedVector&& other) :
+SlicedVector(SlicedVector&& other) :
+	_my_comm(other._my_comm),
+	_my_rank(other._my_rank),
+	_num_nodes(other._num_nodes),
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
     _dim_local_nopad(other._dim_local_nopad)
@@ -97,7 +103,10 @@ operator=(const SlicedVector& other)
     // selbst
     if (this == &other) return this;
     // fremd
-    delete[] _data;
+    if(_data) delete[] _data;
+	_my_comm = other._my_comm;
+	_my_rank = other._my_rank;
+	_num_nodes = other._num_nodes;
     _dim_global = other._dim_global;
     _dim_local = other._dim_local;
     _dim_local_nopad = other._dim_local_nopad;
@@ -110,11 +119,14 @@ operator=(const SlicedVector& other)
 template<typename Scalar>
 SlicedVector<Scalar>&
 SlicedVector<Scalar>::
-operator=(const SlicedVector&& other)
+operator=(SlicedVector&& other)
 {
     // selbst
     if (this == &other) return this;
     // fremd
+	_my_comm = other._my_comm;
+	_my_rank = other._my_rank;
+	_num_nodes = other._num_nodes;
     _dim_global = other._dim_global;
     _dim_local = other._dim_local;
     _dim_local_nopad = other._dim_local_nopad;
@@ -129,7 +141,7 @@ set_global(size_t pos, const Scalar& val)
 {
     int affected_rank = pos / _dim_local_nopad;
     if (_my_rank == affected_rank)
-        _data[pos - (affected_rank-_first_node)*_dim_local_nopad] = val;
+        _data[pos - affected_rank*_dim_local_nopad] = val;
 }
 
 template<typename Scalar>
@@ -140,7 +152,7 @@ get_global(size_t pos) const
     Scalar val;
     if (_my_rank == affected_rank)
     {
-        val = _data[pos - (affected_rank - _first_node)*_dim_local_nopad];
+        val = _data[pos - affected_rank *_dim_local_nopad];
     }
     MPI_SCALL(MPI_Bcast(&val,1,ScalarTraits<Scalar>::mpi_type,
                         affected_rank,_my_comm));

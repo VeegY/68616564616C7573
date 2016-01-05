@@ -92,7 +92,7 @@ FullVector<Scalar>::FullVector(const FullVector& other) :
 }
 
 template<typename Scalar>
-FullVector<Scalar>::FullVector(const FullVector&& other) :
+FullVector<Scalar>::FullVector(FullVector&& other) :
     _dim(other._dim)
 {
     _data = other._data;
@@ -116,7 +116,7 @@ FullVector<Scalar>::operator=(const FullVector& other)
 
 template<typename Scalar>
 FullVector<Scalar>&
-FullVector<Scalar>::operator=(const FullVector&& other)
+FullVector<Scalar>::operator=(FullVector&& other)
 {
     // selbst
     if (this == &other) return *this;

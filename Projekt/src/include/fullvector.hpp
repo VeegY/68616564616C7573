@@ -45,13 +45,13 @@ public:
 
     ~FullVector();
 
-    explicit FullVector(const FullVector& other);
+    FullVector(const FullVector& other);
 
-    explicit FullVector(const FullVector&& other);
+    FullVector(FullVector&& other);
 
     FullVector& operator=(const FullVector& other);
 
-    FullVector& operator=(const FullVector&& other);
+    FullVector& operator=(FullVector&& other);
 
     Scalar& operator[](size_t index) {assert(index<_dim); return _data[index];}
 

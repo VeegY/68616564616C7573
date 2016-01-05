@@ -43,19 +43,13 @@ public:
 
     ~DistEllpackMatrix();
 
-	DistEllpackMatrix(DistEllpackMatrix&& other) :
-		_dim_global(other._dim_global),
-		_dim_local(other._dim_local),
-		_dim_local_nopad(other._dim_local_nopad),
-		_max_row_length(other._max_row_length),
-		_indices(other._indices),
-		_data(other._data)
-	{
-		other._indices = nullptr;
-		other._data = nullptr;
-	}
+	DistEllpackMatrix(DistEllpackMatrix&& other);
 
-    //TODO: copy, assignment, move assignment
+	DistEllpackMatrix(const DistEllpackMatrix& other);
+
+	DistEllpackMatrix& operator=(DistEllpackMatrix&& other);
+
+	DistEllpackMatrix& operator=(const DistEllpackMatrix& other);
 
     size_t get_dim_local() const { return _dim_local; }
 
