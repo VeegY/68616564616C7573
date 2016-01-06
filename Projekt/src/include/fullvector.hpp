@@ -55,6 +55,8 @@ public:
 
     Scalar& operator[](size_t index) {assert(index<_dim); return _data[index];}
 
+	const Scalar& operator[](size_t index) const { assert(index<_dim); return _data[index]; }
+
 private:
     RealType l2norm2_impl() const;
 

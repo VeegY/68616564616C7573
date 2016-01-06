@@ -3,7 +3,7 @@
 #define __VTKWRITER_TPP_
 
 // nur für intellisense
-#include "vector.hpp"
+#include "vtkwriter.hpp"
 
 namespace Icarus
 {
@@ -22,14 +22,14 @@ vtkWriter::vtkWriter(std::string filename, std::string title, int xdim, int ydim
         _point_data_written_last=new bool[_tsteps]();
         std::ofstream file;
         std::string hfname(_filename);
-        for (int i=0; i<tsteps; ++i)
+        for (unsigned i=0; i<_tsteps; ++i)
         {
             _point_data_written_last[i]=false;
             _cell_data_written_last[i]=false;
             hfname=_filename;
             hfname.append(".vtk.");
             hfname.append(std::to_string(i));
-            file.open(hfname.c_str(), ios::out | ios::trunc );
+            file.open(hfname.c_str(), std::ios::out | std::ios::trunc );
             if (file.is_open())
             {
                 file << "# vtk DataFile Version 3.0\n";
@@ -44,8 +44,8 @@ vtkWriter::vtkWriter(std::string filename, std::string title, int xdim, int ydim
     }
 vtkWriter::~vtkWriter()
 {
-    delete cell_data_written_last;
-    delete point_data_written_last;
+    delete[] _cell_data_written_last;
+    delete[] _point_data_written_last;
 }
 
 template<typename type>
@@ -88,9 +88,9 @@ void vtkWriter::addPointDataToTimestep(const type data[], const int length, cons
 }
 
 template<typename type>
-void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const int timestep, const std::string name)
+void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const unsigned timestep, const std::string name)
 {
-    if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep")
+	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
     {
         if (data.get_dim()==_points)
@@ -99,10 +99,10 @@ void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const int ti
             std::string hfname(_filename);
             hfname.append(".vtk.");
             hfname.append(std::to_string(timestep));
-            file.open(hfname.c_str(), ios::out | ios::app);
+            file.open(hfname.c_str(), std::ios::out | std::ios::app);
             if (file.is_open())
             {
-                if (point_data_written_last[timestep]==false)
+                if (_point_data_written_last[timestep]==false)
                 {
                     file << "POINT_DATA " << _points <<std::endl;
                 }
@@ -114,8 +114,8 @@ void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const int ti
                 }
                 file << std::endl;
                 file.close();
-                point_data_written_last[timestep]=true;
-                cell_data_written_last[timestep]=false;
+                _point_data_written_last[timestep]=true;
+                _cell_data_written_last[timestep]=false;
             }
             else LOG_ERROR("Unable to open file.");
         }
@@ -129,41 +129,41 @@ void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const int ti
 template<typename type>
 void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const int timestep, const std::string name)
 {
-    if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep")
-    else
-    {
-        if (datax.get_dim()==_points || datax.get_dim()==_points || datax.get_dim()==_points )
-        {
-            std::ofstream file;
-            std::string hfname(_filename);
-            hfname.append(".vtk.");
-            hfname.append(std::to_string(timestep));
-            file.open(hfname.c_str(), ios::out | ios::app);
-            if (file.is_open())
-            {
-                if (point_data_written_last[timestep]==false)
-                {
-                    file << "POINT_DATA " << _points <<std::endl;
-                }
-                file << "SCALARS " << name <<" float"<<std::endl;
-                file << "LOOKUP_TABLE default" << std::endl;
-                for (int i=0; i<_points; ++i)
-                {
-                    file << static_cast<float>datax[i]<<" "<<datay[i]<<" "<<dataz[i]<<std::endl;
-                }
-                file << std::endl;
-                file.close();
-                point_data_written_last[timestep]=true;
-                cell_data_written_last[timestep]=false;
-            }
-            else LOG_ERROR("Unable to open file.");
-        }
-        else
-        {
-            LOG_ERROR("invalid length of data");
-        }
-    }
-
+	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep")
+	else
+	{
+		if (datax.get_dim() == _points || datax.get_dim() == _points || datax.get_dim() == _points)
+		{
+			std::ofstream file;
+			std::string hfname(_filename);
+			hfname.append(".vtk.");
+			hfname.append(std::to_string(timestep));
+			file.open(hfname.c_str(), ios::out | ios::app);
+			if (file.is_open())
+			{
+				if (point_data_written_last[timestep] == false)
+				{
+					file << "POINT_DATA " << _points << std::endl;
+				}
+				file << "SCALARS " << name << " float" << std::endl;
+				file << "LOOKUP_TABLE default" << std::endl;
+				for (int i = 0; i < _points; ++i)
+				{
+					file << static_cast<float>datax[i] << " " << datay[i] << " " << dataz[i] << std::endl;
+				}
+				file << std::endl;
+				file.close();
+				point_data_written_last[timestep] = true;
+				cell_data_written_last[timestep] = false;
+			}
+			else LOG_ERROR("Unable to open file.");
+		}
+		else
+		{
+			LOG_ERROR("invalid length of data");
+		}
+	}
+}
 
 }
 #endif // __VTKWRITER_HPP_

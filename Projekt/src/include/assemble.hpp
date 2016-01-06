@@ -25,10 +25,10 @@ namespace Icarus
  * \param vertex	Vertex in Node-Zählung
  * \param rhs_val	Wert der rechten Seite am Vertex
  */
-template<typename Scalar, int _num_nodes, int _first_node = 0>
+template<typename Scalar>
 void assemble_row(
-        DistEllpackMatrix<Scalar,_num_nodes,_first_node>& A,
-        SlicedVector<Scalar, _num_nodes, _first_node>& rhs,
+        DistEllpackMatrix<Scalar>& A,
+        SlicedVector<Scalar>& rhs,
         typename ScalarTraits<Scalar>::RealType h,
         char Type, int Nx, int Ny, int vertex, Scalar rhs_val)
 {
@@ -57,6 +57,7 @@ void assemble_row(
 
         rhs.set_local(vertex,rhs_val); // 0 da rechte Seite (f) = 0 ist
     }
+	A.end_of_row();
 }
 
 /**
@@ -74,17 +75,17 @@ void assemble_row(
  *
  * \return Gibt ein Paar aus Matrix und rechter Seite zurück.
  */
-template<typename Scalar, int _num_nodes, int _first_node = 0>
-std::pair<DistEllpackMatrix<Scalar,_num_nodes,_first_node>,
-SlicedVector<Scalar, _num_nodes, _first_node>>
+template<typename Scalar>
+std::pair<DistEllpackMatrix<Scalar>,
+SlicedVector<Scalar>>
 assemble(std::vector<char>& disc_points,
         typename ScalarTraits<Scalar>::RealType h,
         int Nx, int Ny, int Nz,
 		std::function<Scalar(size_t,size_t,size_t)> rhs_func)
 {
     const size_t N = Nx*Ny*Nz;
-    DistEllpackMatrix<Scalar,_num_nodes,_first_node> A(N);
-    SlicedVector<Scalar, _num_nodes, _first_node> rhs(N);
+    DistEllpackMatrix<Scalar> A(N);
+    SlicedVector<Scalar> rhs(N);
 
     const size_t fron = A.first_row_on_node();
     size_t fron_x, fron_y, fron_z;

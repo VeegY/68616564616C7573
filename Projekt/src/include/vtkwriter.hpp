@@ -13,7 +13,7 @@
 #define __VTKWRITER_HPP_
 
 #include "logger.hpp"
-#include "Vector.hpp"
+#include "fullvector.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -68,7 +68,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointDataToTimestep(const FullVector<type>& data,const int timestep, const std::string name);
+    void addPointDataToTimestep(const FullVector<type>& data,const unsigned timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Zelldaten zu einem Zeitschritt hinzu.

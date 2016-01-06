@@ -57,7 +57,7 @@ _data(nullptr)
 {
 	try
 	{
-		_indices = new Scalar[_dim_local * _max_row_length];
+		_indices = new size_t[_dim_local * _max_row_length];
 		_data = new Scalar[_dim_local * _max_row_length];
 	}
 	catch (std::exception& e)
@@ -133,7 +133,7 @@ DistEllpackMatrix<Scalar>::operator=(const DistEllpackMatrix& other)
 
 	try
 	{
-		_indices = new Scalar[_dim_local * _max_row_length];
+		_indices = new size_t[_dim_local * _max_row_length];
 		_data = new Scalar[_dim_local * _max_row_length];
 	}
 	catch (std::exception& e)
