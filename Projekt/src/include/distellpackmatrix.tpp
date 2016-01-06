@@ -60,7 +60,7 @@ _data(nullptr)
 		_indices = new size_t[_dim_local * _max_row_length];
 		_data = new Scalar[_dim_local * _max_row_length];
 	}
-	catch (std::exception& e)
+	catch (...)
 	{
 		LOG_ERROR("Memory allocation in DistEllpackMatrix failed.");
 	}
@@ -136,7 +136,7 @@ DistEllpackMatrix<Scalar>::operator=(const DistEllpackMatrix& other)
 		_indices = new size_t[_dim_local * _max_row_length];
 		_data = new Scalar[_dim_local * _max_row_length];
 	}
-	catch (std::exception& e)
+	catch (...)
 	{
 		LOG_ERROR("Memory allocation in DistEllpackMatrix failed.");
 	}
@@ -180,6 +180,7 @@ void DistEllpackMatrix<Scalar>::sequential_fill(size_t colind, const Scalar& val
 {
     assert(!_filled);
     assert(_col_ptr < _max_row_length);
+	assert(colind < _dim_global);
 
     _data[_col_ptr * _dim_local + _row_ptr] = val;
     _indices[_col_ptr * _dim_local + _row_ptr] = colind;
@@ -371,6 +372,7 @@ void DistEllpackMatrix<Scalar>::print_local_data(std::ostream& os) const
 {
     for(size_t i=0; i<_dim_local; i++)
     {
+		os << i << ":\t";
         for(size_t j=0; j <_max_row_length; j++)
         {
             size_t pos = j*_dim_local + i;

@@ -19,6 +19,7 @@
 #include <vector>
 #include <random>
 #include <limits>
+#include <ostream>
 
 #include "mpihandler.hpp"
 #include "vector.hpp"
@@ -65,6 +66,8 @@ public:
     size_t get_dim_local_nopad() const {return _dim_local_nopad;}
 
 	MPI_Comm get_comm() const { return _my_comm; }
+
+	void print_local_data(std::ostream& out) const;
 
     void set_local(size_t pos, const Scalar& val)
     {

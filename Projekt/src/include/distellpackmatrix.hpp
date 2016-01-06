@@ -51,6 +51,8 @@ public:
 
 	DistEllpackMatrix& operator=(const DistEllpackMatrix& other);
 
+	MPI_Comm get_comm() const { return _my_comm; }
+
     size_t get_dim_local() const { return _dim_local; }
 
     size_t get_dim_local_nopad() const { return _dim_local_nopad; }

@@ -236,30 +236,32 @@ std::vector<char>discretizer(std::string inputFile,
             {
                 Vertex point{(float)x*h, (float)y*h, (float)z*h};
                 char what('a');
+				// prüfe, ob punkt in irgendeinem objekt liegt
                 for (int o(0); o<num_objects && what=='a'; ++o)
                 {
                     what = objects[o].pointInside(point);
                 }
                 discretized_points.push_back(what);
-            }//z-loop
+            }//x-loop
         }//y-loop
-    }//x-loop
+    }//z-loop
     
     // Pruefe fuer alle Objekt-Punkte, ob es Randpunkte sind
-    ///*
-    for (int x(0); x<nx; ++x)
+    for (int z(0); z<nz; ++z)
     {
         for (int y(0); y<ny; ++y)
         {
-            for (int z(0); z<nz; ++z)
+            for (int x(0); x<nx; ++x)
             {
                 if (discretized_points[z*ny*nx + y*nx + x] != 'a')
                 {
+					// globaler rand des gebiets
                     if (x==0 || y==0 || z==0 || x==nx-1 || y==ny-1 || z==nz-1)
                     {
                         // TODO
                         discretized_points[z*ny*nx + y*nx + x] = 'b';
                     }
+					// wenn min. ein nachbar frei und ich nicht, bin ich rand
                     else if ((discretized_points[z*ny*nx + y*nx + x + 1] == 'a')
                     || (discretized_points[z*ny*nx + y*nx + x - 1] == 'a')
                     || (discretized_points[z*ny*nx + (y+1)*nx + x] == 'a')
@@ -270,9 +272,9 @@ std::vector<char>discretizer(std::string inputFile,
                         discretized_points[z*ny*nx + y*nx + x] = 'b';
                     }
                 }//!= 'a'
-            }//z-loop
+            }//x-loop
         }//y-loop
-    }//x-loop
+    }//z-loop
     //*/
     
     // hier ist discretized_points fertig

@@ -160,6 +160,13 @@ get_global(size_t pos) const
 }
 
 template<typename Scalar>
+void SlicedVector<Scalar>::print_local_data(std::ostream& out) const
+{
+	for (size_t i = 0; i < _dim_local; i++)
+		out << i << ":\t" << _data[i] << std::endl;
+}
+
+template<typename Scalar>
 typename SlicedVector<Scalar>::RealType
 SlicedVector<Scalar>::
 l2norm2_impl() const

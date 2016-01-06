@@ -9,6 +9,9 @@
 namespace Icarus
 {
 
+/**
+ * \brief Wandle linearen Index in (x,y,z) Tripel um.
+ */
 inline void deflatten_3d(size_t index,
                   size_t nx, size_t ny,
                   size_t& ax, size_t& ay, size_t& az)
