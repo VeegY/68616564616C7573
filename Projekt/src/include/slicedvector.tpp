@@ -28,6 +28,7 @@ SlicedVector(size_t dim_global, MPI_Comm my_comm) :
     _dim_global(dim_global),
     _dim_local(0),
     _dim_local_nopad(0),
+	_dim_local_last(0),
     _data(nullptr)
 {
 	// hole informationen über die mpi umgebung
@@ -37,14 +38,15 @@ SlicedVector(size_t dim_global, MPI_Comm my_comm) :
 	// geht die division genau auf
     if(_dim_global % _num_nodes == 0)
     {
-        _dim_local = _dim_local_nopad = _dim_global/_num_nodes;
+        _dim_local = _dim_local_nopad = _dim_local_last = _dim_global/_num_nodes;
     }
     // funktioniert nur, wenn dim_global >> _num_nodes
     else
     {
         _dim_local = _dim_local_nopad = _dim_global/_num_nodes + 1;
+		_dim_local_last = _dim_global - (_num_nodes - 1)*_dim_local_nopad;
         if(_my_rank == _num_nodes - 1)
-            _dim_local = _dim_global - (_num_nodes - 1)*_dim_local_nopad;
+            _dim_local = _dim_local_last;
         assert(_dim_local >= 0);
     }
     // allokiere lokalen speicher
@@ -74,7 +76,8 @@ SlicedVector(const SlicedVector& other) :
 	_num_nodes(other._num_nodes),
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
-    _dim_local_nopad(other._dim_local_nopad)
+    _dim_local_nopad(other._dim_local_nopad),
+	_dim_local_last(other._dim_local_last)
 {
     _data = new Scalar[_dim_local];
     for (size_t i = 0; i < _dim_local; i++)
@@ -89,7 +92,8 @@ SlicedVector(SlicedVector&& other) :
 	_num_nodes(other._num_nodes),
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
-    _dim_local_nopad(other._dim_local_nopad)
+    _dim_local_nopad(other._dim_local_nopad),
+	_dim_local_last(other._dim_local_last)
 {
     _data = other._data;
     other._data = nullptr;
@@ -110,6 +114,7 @@ operator=(const SlicedVector& other)
     _dim_global = other._dim_global;
     _dim_local = other._dim_local;
     _dim_local_nopad = other._dim_local_nopad;
+	_dim_local_last = other._dim_local_last;
     _data = new Scalar[_dim_local];
     for (size_t i = 0; i < _dim_local; i++)
         _data[i] = other._data[i];
@@ -130,6 +135,7 @@ operator=(SlicedVector&& other)
     _dim_global = other._dim_global;
     _dim_local = other._dim_local;
     _dim_local_nopad = other._dim_local_nopad;
+	_dim_local_last = other._dim_local_last;
     _data = other._data;
     other._data = nullptr;
     return *this;

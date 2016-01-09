@@ -39,9 +39,9 @@ void assemble_row(
 	// Typ boundary or object
     if (types[vtx_global] == 'b' || types[vtx_global] == 'o')
     {
-        A.sequential_fill(vtx_local, 1.0);
-		// dirichlet
-        rhs.set_local(vtx_local,rhs_val);
+        A.sequential_fill(vtx_global, 1.0);
+		// homog. dirichlet
+        rhs.set_local(vtx_local,0.0);
     }
 	// Typ freier knoten
     else  
@@ -52,7 +52,7 @@ void assemble_row(
 			vtx_global + Nx, vtx_global - Nx,
 			vtx_global + Nx*Ny, vtx_global - Nx*Ny };
         
-		A.sequential_fill(vtx_local, -6.0);
+		A.sequential_fill(vtx_global, -6.0);
 		for (int i = 0; i < 6; i++) A.sequential_fill(nn[i], 1.0);
 
 		// rechte seite
@@ -112,7 +112,6 @@ assemble(std::vector<char>& disc_points,
             {
                 const size_t index = x + y*Nx + z*Nx*Ny;
                 assemble_row(A,rhs,h,disc_points,Nx,Ny,index,rhs_func(x,y,z));
-				//std::cout << "Assembling row " << index << " (" << x << "," << y << "," << z <<") on node " << MPI_HANDLER.get_my_rank() << std::endl;
 			}
         }
     }

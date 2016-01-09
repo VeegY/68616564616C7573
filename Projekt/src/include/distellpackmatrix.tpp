@@ -212,18 +212,18 @@ void DistEllpackMatrix<Scalar>::mult_vec_impl(const VectorType& vec, VectorType&
     assert(_dim_global == result.get_dim_global());
 
     // hole vec komplett in die node
-    FullVector<Scalar> fvec(vec);
+	FullVector<Scalar> fvec(vec);
 
-    // *************** BEGIN Durch CUDA-isierung ersetzen ************
+	// *************** BEGIN Durch CUDA-isierung ersetzen ************
 
     for(size_t row = 0; row < _dim_local; row++)
     {
-        Scalar res(0);
+        Scalar res = 0;
         for(size_t col = 0; col < _max_row_length; col++)
         {
             size_t pos = col*_dim_local + row;
-            if(_data[pos] == PAD) continue;
-            res += _data[pos] * fvec[_indices[pos]];
+			if(_data[pos] == PAD) continue;
+			res += _data[pos] * fvec[_indices[pos]];
         }
         result.set_local(row, res);
     }

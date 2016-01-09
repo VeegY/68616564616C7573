@@ -36,7 +36,7 @@ class SlicedVector : public Vector<SlicedVector<Scalar>>
 	MPI_Comm _my_comm;
 	int _my_rank, _num_nodes;
 
-    size_t _dim_global, _dim_local, _dim_local_nopad;
+    size_t _dim_global, _dim_local, _dim_local_nopad, _dim_local_last;
     Scalar* _data;
 
 public:
@@ -64,6 +64,8 @@ public:
     size_t get_dim_local() const {return _dim_local;}
 
     size_t get_dim_local_nopad() const {return _dim_local_nopad;}
+
+	size_t get_dim_local_last() const { return _dim_local_last; }
 
 	MPI_Comm get_comm() const { return _my_comm; }
 

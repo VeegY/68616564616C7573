@@ -8,17 +8,20 @@
 
 double rhs(int ix, int iy, int iz)
 {
-	return 5.0 * (ix < 10 && iy < 10 && iz < 10);
+	if (iz <= 20 && ix <= 20 && iy <= 20) return 20.0;
+	else if (iz >= 30 && ix >= 30 && iy >= 30) return -20.0;
+	return 0.0;
 }
 
-int main()
+int poisson_demo()
 {
+	const int Nx = 50, Ny = 50, Nz = 50;
+	const float h = 0.1;
 	// diskretisieren
-	std::vector<char> disc = Icarus::discretizer("leer.obj", 0.1, 50, 50, 50);
+	std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
 	
 	// assemblieren
-	auto lgs = Icarus::assemble<double>(disc, 0.1, 50, 50, 50, rhs);
-	MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
+	auto lgs = Icarus::assemble<double>(disc, h, Nx, Ny, Nz, rhs);
 	
 	// lösen
 	size_t n = lgs.first.get_dim_global();
@@ -26,10 +29,21 @@ int main()
 	sol.clear();
 	Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(lgs.first, lgs.second);
 	solver.solve(sol);
-	
-	// speichern
-	Icarus::FullVector<double> fullsol(sol);
-	Icarus::vtkWriter writer("out", "Testdatensatz", 50, 50, 50, 1);
-	writer.addPointDataToTimestep(fullsol, 0, "Potential");
+
+	// speichern (nur master)
+	Icarus::FullVector<double> fullsol(sol);	
+	int myrank;
+	MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
+	if (myrank == 0)
+	{
+		Icarus::vtkWriter writer("out", "Testdatensatz", Nx, Ny, Nz, 1);
+		writer.addPointDataToTimestep(fullsol, 0, "Potential");
+	}
+	MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
 	return 0;
+}
+
+int main()
+{
+	return poisson_demo();
 }

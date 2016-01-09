@@ -35,11 +35,11 @@ public:
 
 ///\brief	Konstruktor
 // -------------------------------------------------------------------------------------------------
-///@param 	_filename       string mit dem Dateinamen OHNE DATEIENDUNG
-///@param   _title          Titel der Datei
-///@param   _xdim           Anzahl der Punkte in x Richtung
-///@param   _ydim           Anzahl der Punkte in y Richtung
-///@param   _zdim           Anzahl der Punkte in z Richtung
+///@param 	filename       string mit dem Dateinamen OHNE DATEIENDUNG
+///@param   title          Titel der Datei
+///@param   xdim           Anzahl der Punkte in x Richtung
+///@param   ydim           Anzahl der Punkte in y Richtung
+///@param   zdim           Anzahl der Punkte in z Richtung
 ///@param   timesteps       Anzahl der Zeitschritte
     vtkWriter(std::string filename, std::string title, int xdim, int ydim, int zdim, unsigned int timesteps);
 

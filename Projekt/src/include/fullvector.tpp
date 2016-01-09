@@ -56,17 +56,16 @@ FullVector<Scalar>::FullVector(const SlicedVector<Scalar>& vec) :
 
     Scalar* this_chunk = _data + _my_rank * vec.get_dim_local_nopad();
 
-    // eigenen teil des sliced_vektors herauskopieren
+    // eigenen teil herauskopieren
+    for(size_t i=0; i<vec.get_dim_local(); i++)
+       this_chunk[i] = vec.get_local(i);
     
-        // dann herauskopieren
-        for(size_t i=0; i<vec.get_dim_local(); i++)
-            this_chunk[i] = vec.get_local(i);
-    
-    // synchronisiere die teile
+	// synchronisiere die teile
     for(int node = 0; node < _num_nodes; node++)
     {
         this_chunk = _data + node * vec.get_dim_local_nopad();
-        MPI_SCALL(MPI_Bcast(this_chunk,vec.get_dim_local(),ScalarTraits<Scalar>::mpi_type,
+		size_t this_len = (node == _num_nodes - 1) ? vec.get_dim_local_last() : vec.get_dim_local_nopad();
+        MPI_SCALL(MPI_Bcast(this_chunk,this_len,ScalarTraits<Scalar>::mpi_type,
                   node,_my_comm));
     }
 
