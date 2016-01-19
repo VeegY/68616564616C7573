@@ -13,15 +13,17 @@ namespace Icarus
 {
 /**
  * \brief	Assembliert eine Matrix	mittels Differenzenquotienten zweiter Ordnung.
- *			Es werden Neumann BC verwendet
+ *		Es werden Neumann BC verwendet
  *
+ * \param A 			Systemmatrix 
  * \param nx			Anzahl der (äquidistanten Punkte in x-Richtung)
  * \param ny			Anzahl der (äquidistanten Punkte in y-Richtung)
  * \param nz			Anzahl der (äquidistanten Punkte in z-Richtung)
- * \param h				Schrittweite des finiten Differnezenquotienten
- * \function bdry			Funktion, die den Neumann-Wert eines Punktes zurückgibt.
+ * \param N			Anzahl aller Gitterpunkte
+ * \param h			Schrittweite des finiten Differnezenquotienten
+ * \function bdry		Funktion, die den Neumann-Wert eines Punktes zurückgibt.
  *
- * \return Gibt eine Matrix zurück.
+ * \return 			Gibt eine Matrix zurück.
  */
 template<typename Scalar>
 std::pair<DistEllpackMatrix<Scalar>
