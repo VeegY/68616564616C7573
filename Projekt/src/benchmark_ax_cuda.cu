@@ -46,7 +46,7 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 		}
 		else
 		{
-			value += data[idx*dim_local+threadIdx.x] * fvec[indices[idx]];
+			value += data[idx*dim_local+threadIdx.x] * fvec[indices[idx*dim_local+threadIdx.x]];
 			idx++;
 		}
       
