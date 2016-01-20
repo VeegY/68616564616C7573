@@ -4,7 +4,10 @@
 #include <string.h>
 #include <iostream>
 #include <iomanip>
+#include "include/benchmark_help.hpp"
+#include "include/timer.hpp"
 using namespace std;
+#define dim 2
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -22,82 +25,30 @@ void mult_vec_zero(Scalar* data, Scalar* fvec, Scalar* result, int* inices, int 
 int main(int argc, char* argv[])
 {
 
-     MPI_Init(&argc, &argv);
-     //MPI_Status status;
+//Generiere Data/Indices Int-Array sowie fvec Int Array
+	int *data_host = new int[dim*dim];
+	int *indices_host = new int[dim*dim];
+	int *fvec_host = new int[dim];
 
-     int rank;
-     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	random_ints(data_host, indices_host, fvec_host, dim);
+//Unified INT Kernel
+	Timer timer_unified;
 
-     if(rank == 0)
-     {
-       int max_row_length = 2;
-       int dim_local = 2;
-       int dim_fvec = 2;
+	int *data_unified = NULL;
+    int *fvec_unified = NULL;
+    int *result_unified = NULL;
+	int *indices_unified = NULL;
+	
+	alloc_unified(&data, &fvec, &result, &indices, dim, dim, dim);
+	set_values(data_host,indices_host,fvec_host,fvec_host,data_unified,indices_unified,fvec_unified, dim);
+	print_stuff(data_unified, indices_unified, fvec_unified, dim);
+    mult_vec_unified(data, fvec, result, indices, dim, dim, dim);
 
-       float *data = NULL;
-       float *fvec = NULL;
-       float *result = NULL;
-       int *indices = NULL;
+    for(int i=0;i<dim;i++)
+    {
+	  printf("Rank %i unified float result in row %i is %f.\n",rank , i,result[i]);
+	}
 
-       alloc_unified(&data,&fvec,&result,&indices,max_row_length,dim_local,dim_fvec);
-
-       data[0]=1;
-       data[1]=2;
-       data[2]=3;
-       data[3]=4;
-
-       fvec[0]=1;
-       fvec[1]=2;
-
-       indices[0]=0;
-       indices[1]=1;
-       indices[2]=0;
-       indices[3]=1;
-
-       mult_vec_unified(data, fvec, result, indices, max_row_length, dim_local, dim_fvec);
-
-       for(int i=0;i<dim_fvec;i++)
-       {
-         printf("Rank %i unified float result in row %i is %f.\n",rank , i,result[i]);
-       }
-
-     }
-
-
-     if(rank == 1)
-     {
-       int max_row_length = 2;
-       int dim_local = 2;
-       int dim_fvec = 2;
-
-       int *data = NULL;
-       int *fvec = NULL;
-       int *result = NULL;
-       int *indices = NULL;
-
-       alloc_zero(&data,&fvec,&result,&indices,max_row_length,dim_local,dim_fvec);
-
-       data[0]=1;
-       data[1]=2;
-       data[2]=3;
-       data[3]=4;
-
-       fvec[0]=1;
-       fvec[1]=2;
-
-       indices[0]=0;
-       indices[1]=1;
-       indices[2]=0;
-       indices[3]=1;
-
-       mult_vec_zero(data, fvec, result, indices, max_row_length, dim_local, dim_fvec);
-
-       for(int i=0;i<dim_fvec;i++)
-       {
-         printf("Rank %i zero copy int result in row %i is %i.\n", rank, i, result[i]);
-       }
-
-     }
-     MPI_Finalize();
-     return 0;
+ 
+    return 0;
 }

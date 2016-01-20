@@ -9,9 +9,34 @@
 
 //KERNEL
 template<typename type>
+__global__ void  gpu_ax_opt(type* data, type* fvec, type* result, int* indices)
+{
+	/*
+	Kernel Idee:
+	-extern shared memory für data oder data und indices -testen!
+	-values im shared array speicher, d/i
+	-berrechnen über alle Werte (data = 0 auslassen)? hinderlich für memory coalescence?)
+	-danach reduce Teil über max_row_length auf gleichen shared memory
+	-ein Block hat die Größe: ceil: (shared_memory/32) keine halbe Reihen!
+	*/
+	/*
+		Block Größe Detail
+		shared memory: 32kB
+		Datentyp:
+		 foat(4),int(4),double(8)
+		Menge:
+		 Type*max_row_length*dim_local
+		+int*max_row_length*dim_local
+		wähle große Blöcke, keine halben Reihen und vielfaches von 32!
+     */
+}
+
+
+//KERNEL
+template<typename type>
 __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices)
 {
-
+	
 
     type value = 0;
     for(int idx=0;idx<2;idx++)
