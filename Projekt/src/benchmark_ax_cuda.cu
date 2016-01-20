@@ -7,7 +7,7 @@
 
 //KERNEL
 template<typename type>
-__global__ void  gpu_ax_opt(type* data, type* fvec, type* result, int* indices)
+__global__ void  gpu_ax_opt(type* data, type* fvec, type* result, int* indices, int dim_local)
 {
 	/*
 	Kernel Idee:
@@ -32,7 +32,7 @@ __global__ void  gpu_ax_opt(type* data, type* fvec, type* result, int* indices)
 
 //KERNEL
 template<typename type>
-__global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length)
+__global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length, int dim_local)
 {
 
 	int idx = 0;
@@ -40,18 +40,18 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
     type value = 0;
     while(zero)
     {
-		if (data[idx + blockIdx.x*max_row_length] == 0)
+		if (data[idx*dim_local+threadIdx.x] == 0)
 		{
 			zero = false;
 		}
 		else
 		{
-			value += data[idx + blockIdx.x*max_row_length] * fvec[indices[idx]];
+			value += data[idx*dim_local+threadIdx.x] * fvec[indices[idx]];
 			idx++;
 		}
       
     }
-    result[blockIdx.x]=value;
+    result[threadIdx.x]=value;
 }
 
 //ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY
@@ -95,7 +95,7 @@ template<typename Scalar>
 void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
 
-    gpu_ax<<<dim_local,1>>>(data,fvec,result,indices,max_row_length);
+    gpu_ax<<<1,max_row_length>>>(data,fvec,result,indices,max_row_length, dim_local);
     cudaDeviceSynchronize();
 
 }
@@ -116,7 +116,7 @@ void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int
     cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
     cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
 
-    gpu_ax<<<dim_local,1>>>(d_data, d_fvec, d_result, d_indices, max_row_length);
+    gpu_ax<<<1,dim_local>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
     cudaDeviceSynchronize();
 }
 template void mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec);

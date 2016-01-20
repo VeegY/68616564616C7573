@@ -17,10 +17,10 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
 	        //Fuelle i-te Stelle der Reihe
 	        if (j < entries_row)  //entries row 3
 	        {
-		        data[i*dim + j] = rand() % 1000;  //passt
+		        data[j*dim+i] = rand() % 1000;  //passt
 		        range = dim - (entries_row - j) - place_old + 1;
 		        place_current = (rand() % range) + place_old;
-		        indices[i*dim + j] = place_current;
+		        indices[j*dim+i] = place_current;
 		        place_old = place_current+1;
 	        }
 	        else

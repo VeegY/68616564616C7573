@@ -60,7 +60,9 @@ int main(int argc, char* argv[])
     cout << "KERNEL TIME: " << elapsed_unified_kernel * 1000 << "\n";
 	cout << "OVERALL TIMER: " << elapsed_unfified_overall * 1000 << "\n\n";
 
-	//cleanup(data_unified, fvec_unified, result_unified, indices_unified);
+	print_stuff(data_unified, indices_unified, fvec_unified, dim);
+	printf("result row 1 is %i", result_unified[0]);
+	cleanup(data_unified, fvec_unified, result_unified, indices_unified);
 
 
 //================================================================================================/
@@ -90,7 +92,7 @@ int main(int argc, char* argv[])
 	cout << "OVERALL TIMER: " << elapsed_zero_overall * 1000 << "\n\n";
 
 	cleanup(data_zero, fvec_zero, result_zero, indices_zero);
-
+	
 //================================================================================================/
 
     delete[] data_host;
