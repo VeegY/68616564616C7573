@@ -35,8 +35,8 @@ int neumann_demo()
 	MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
 	if (myrank == 0)
 	{
-		Icarus::vtkWriter writer("out", "Testdatensatz", Nx, Ny, Nz, 1);
-		writer.addPointDataToTimestep(fullsol, 0, "Potential");
+		Icarus::vtkWriter writer("out", "Testdatensatz", nx, ny, nz, 1);
+		writer.addPointDataToTimestep(fullsol, 0, "Geschwindigkeitspotential");
 	}
 	MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
 	return 0;
@@ -44,5 +44,5 @@ int neumann_demo()
 
 int main()
 {
-	return poisson_demo();
+	return neumann_demo();
 }
