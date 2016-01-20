@@ -39,10 +39,10 @@ int main(int argc, char* argv[])
     int *result_unified = NULL;
 	int *indices_unified = NULL;
 	
-	alloc_unified(&data, &fvec, &result, &indices, dim, dim, dim);
-	set_values(data_host,indices_host,fvec_host,fvec_host,data_unified,indices_unified,fvec_unified, dim);
+	alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, dim, dim, dim);
+	set_values(data_host,indices_host,fvec_host,data_unified,indices_unified,fvec_unified, dim);
 	print_stuff(data_unified, indices_unified, fvec_unified, dim);
-    mult_vec_unified(data, fvec, result, indices, dim, dim, dim);
+    mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, dim, dim, dim);
 
     for(int i=0;i<dim;i++)
     {

@@ -21,7 +21,7 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
 		        range = dim - (entries_row - i) - place_old;
 		        place_current = (rand() % range) + place_old + 1;
 		        indices[i*dim + j] = place_current;
-		        place_old = place_curent;
+		        place_old = place_current;
 	        }
 	        else
 	        {
@@ -30,7 +30,7 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
 	        }
 
         }
-		fvec[i]=rand()%1000
+		fvec[i] = rand() % 1000;
     }
 }
 
