@@ -113,4 +113,14 @@ template void mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices
 template void mult_vec_zero<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
 template void mult_vec_zero<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
 
-
+template <typename Scalar>
+void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices)
+{
+	CUDA(cudaFreeHost(data));
+	CUDA(cudaFreeHost(fvec));
+	CUDA(cudaFreeHost(result));
+	CUDA(cudaFreeHost(indices));
+}
+template void cleanup<int>(int *data, int *fvec, int *result, int *indices);
+template void cleanup<float>(float *data, float *fvec, float *result, int *indices);
+template void cleanup<double>(double *data, double *fvec, double *result, int *indices);

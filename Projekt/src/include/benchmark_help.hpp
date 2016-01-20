@@ -26,7 +26,7 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
 	        else
 	        {
 		        data[i*dim + j] = 0;
-		        indices[i*dim + j] = 0;
+		        indices[i*dim + j] = 0; 
 	        }
 
         }
