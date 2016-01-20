@@ -7,7 +7,7 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim 10000
+#define dim 3000
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -38,8 +38,9 @@ int main(int argc, char* argv[])
 //										Unified Kernel
 //================================================================================================/
 
-	Timer timer_unified_kernel, timer_unified_overall;
-	cout << "UNIFIED KERNEL STARTED" << "\n--------------------------------------------------------------\n"
+	Timer timer_unified_kernel;
+        Timer timer_unified_overall;
+	cout << "UNIFIED KERNEL STARTED" << "\n--------------------------------------------------------------\n";
 	timer_unified_overall.start();
 
     int *data_unified = NULL;
@@ -57,17 +58,18 @@ int main(int argc, char* argv[])
 	float elapsed_unified_kernel = timer_unified_kernel.stop();
 	float elapsed_unfified_overall = timer_unified_overall.stop();
     cout << "KERNEL TIME: " << elapsed_unified_kernel * 1000 << "\n";
-	cout << "OVERALL TIMER" << elapsed_unfified_overall * 1000 << "\n\n";
+	cout << "OVERALL TIMER: " << elapsed_unfified_overall * 1000 << "\n\n";
 
-	cleanup(data_unified, fvec_unified, result_unified, indices_unified);
+	//cleanup(data_unified, fvec_unified, result_unified, indices_unified);
 
 
 //================================================================================================/
 //										Zero Copy Kernel
 //================================================================================================/
 
-	Timer timer_zero_kernel, timer_zero_overall;
-	cout << "ZERO_COPY KERNEL STARTED" << "\n--------------------------------------------------------------\n"
+	Timer timer_zero_kernel;
+        Timer timer_zero_overall;
+	cout << "ZERO_COPY KERNEL STARTED" << "\n--------------------------------------------------------------\n";
 	timer_zero_overall.start();
 
 	int *data_zero = NULL;
@@ -85,7 +87,7 @@ int main(int argc, char* argv[])
 	float elapsed_zero_kernel = timer_zero_kernel.stop();
 	float elapsed_zero_overall = timer_zero_overall.stop();
 	cout << "KERNEL TIME: " << elapsed_zero_kernel * 1000 << "\n";
-	cout << "OVERALL TIMER" << elapsed_zero_overall * 1000 << "\n\n";
+	cout << "OVERALL TIMER: " << elapsed_zero_overall * 1000 << "\n\n";
 
 	cleanup(data_zero, fvec_zero, result_zero, indices_zero);
 

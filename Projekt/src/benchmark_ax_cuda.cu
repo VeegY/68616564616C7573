@@ -116,10 +116,10 @@ template void mult_vec_zero<double>(double* data, double* fvec, double* restult,
 template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices)
 {
-	CUDA(cudaFreeHost(data));
-	CUDA(cudaFreeHost(fvec));
-	CUDA(cudaFreeHost(result));
-	CUDA(cudaFreeHost(indices));
+	cudaFreeHost(data);
+	cudaFreeHost(fvec);
+	cudaFreeHost(result);
+	cudaFreeHost(indices);
 }
 template void cleanup<int>(int *data, int *fvec, int *result, int *indices);
 template void cleanup<float>(float *data, float *fvec, float *result, int *indices);
