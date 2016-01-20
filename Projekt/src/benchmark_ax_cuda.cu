@@ -4,8 +4,6 @@
 #include <string.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
-//#include "timer.hpp"
-#define N 5
 
 //KERNEL
 template<typename type>
@@ -34,14 +32,14 @@ __global__ void  gpu_ax_opt(type* data, type* fvec, type* result, int* indices)
 
 //KERNEL
 template<typename type>
-__global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices)
+__global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length)
 {
-	
+
 
     type value = 0;
-    for(int idx=0;idx<2;idx++)
+    for(int idx=0;idx<max_row_length;idx++)
     {
-      value += data[idx+blockIdx.x*2]*fvec[indices[idx]];
+      value += data[idx+blockIdx.x*max_row_length]*fvec[indices[idx]];
     }
     result[blockIdx.x]=value;
 }
@@ -87,7 +85,7 @@ template<typename Scalar>
 void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
 
-    gpu_ax<<<dim_local,1>>>(data,fvec,result,indices);
+    gpu_ax<<<dim_local,1>>>(data,fvec,result,indices,max_row_length);
     cudaDeviceSynchronize();
 
 }
@@ -108,7 +106,7 @@ void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int
     cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
     cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
 
-    gpu_ax<<<dim_local,1>>>(d_data, d_fvec, d_result, d_indices);
+    gpu_ax<<<dim_local,1>>>(d_data, d_fvec, d_result, d_indices, max_row_length);
     cudaDeviceSynchronize();
 }
 template void mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec);

@@ -8,20 +8,20 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
 	for (int i = 0; i < dim;i++)
 	{ 
   //Fuelle Reihe
-        int entries_row=rand()%dim; //0-DIM Eintraege pro Reihe
-        int place_current;
-        int place_old=0;
-        int range;
+        int entries_row=rand()%dim; //0-DIM Eintraege pro Reihe B: dim 4  entries_row =3
+        int place_current; //der zu setzende Index zwischen 
+        int place_old=0; // Index Postition vom Wert davor
+        int range; //Reichweite fuer den Zufall
         for (int j = 0; j < dim; j++)
         {
 	        //Fuelle i-te Stelle der Reihe
-	        if (j < entries_row)
+	        if (j < entries_row)  //entries row 3
 	        {
-		        data[i*dim + j] = rand() % 1000;
-		        range = dim - (entries_row - i) - place_old;
-		        place_current = (rand() % range) + place_old + 1;
+		        data[i*dim + j] = rand() % 1000;  //passt
+		        range = dim - (entries_row - j) - place_old + 1;
+		        place_current = (rand() % range) + place_old;
 		        indices[i*dim + j] = place_current;
-		        place_old = place_current;
+		        place_old = place_current+1;
 	        }
 	        else
 	        {

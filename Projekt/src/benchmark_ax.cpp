@@ -7,7 +7,7 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim 2
+#define dim 10000
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -26,29 +26,36 @@ int main(int argc, char* argv[])
 {
 
 //Generiere Data/Indices Int-Array sowie fvec Int Array
-	int *data_host = new int[dim*dim];
-	int *indices_host = new int[dim*dim];
-	int *fvec_host = new int[dim];
+    int *data_host = new int[dim*dim];
+    int *indices_host = new int[dim*dim];
+    int *fvec_host = new int[dim];
 
-	random_ints(data_host, indices_host, fvec_host, dim);
+    random_ints(data_host, indices_host, fvec_host, dim);
+    
 //Unified INT Kernel
-	Timer timer_unified;
+    Timer timer_unified;
 
-	int *data_unified = NULL;
+    int *data_unified = NULL;
     int *fvec_unified = NULL;
     int *result_unified = NULL;
-	int *indices_unified = NULL;
-	
-	alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, dim, dim, dim);
-	set_values(data_host,indices_host,fvec_host,data_unified,indices_unified,fvec_unified, dim);
-	print_stuff(data_unified, indices_unified, fvec_unified, dim);
+    int *indices_unified = NULL;
+    
+    alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, dim, dim, dim);
+    set_values(data_host,indices_host,fvec_host,data_unified,indices_unified,fvec_unified, dim);
+    //print_stuff(data_unified, indices_unified, fvec_unified, dim);
+    cout << "Kernel Start\n";
+    timer_unified.start();
     mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, dim, dim, dim);
+    float elapsed_unified = timer_unified.stop();
+    cout << "time: " << elapsed_unified*1000 << "ms\n";
+    //for(int i=0;i<dim;i++)
+   // {
+       // printf("unified  result in row %i is %i.\n", i,result_unified[i]);
+   // }
 
-    for(int i=0;i<dim;i++)
-    {
-	  printf("unified float result in row %i is %i.\n", i,result_unified[i]);
-	}
 
- 
+    delete[] data_host;
+    delete[] indices_host;
+    delete[] fvec_host;
     return 0;
 }
