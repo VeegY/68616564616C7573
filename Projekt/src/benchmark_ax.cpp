@@ -7,7 +7,7 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim 2
+#define dim 4
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
