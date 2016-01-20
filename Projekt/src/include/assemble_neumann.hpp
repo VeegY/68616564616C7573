@@ -21,16 +21,18 @@ namespace Icarus
  * \param h				Schrittweite des finiten Differnezenquotienten
  * \function bdry			Funktion, die den Neumann-Wert eines Punktes zurückgibt.
  *
- * \return Gibt eine Matrix zurück.
+ * \return Gibt ein Paar aus Matrix und rechter Seite zurück.
  */
 template<typename Scalar>
-std::pair<DistEllpackMatrix<Scalar>
+std::pair<DistEllpackMatrix<Scalar>,
+SlicedVector<Scalar>>
 assemble_neumann(size_t nx, size_t ny, size_t nz,
 		typename ScalarTraits<Scalar>::RealType h,
 		std::function<Scalar(size_t)> bdry)
 {
     const size_t N = nx*ny*nz;
     DistEllpackMatrix<Scalar> A(N);
+	SlicedVector<Scalar> rhs(N);
 
     size_t fron = A.first_row_on_node();
     size_t lron = fron + A.get_dim_local() - 1;
@@ -40,10 +42,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
     for(size_t vtx_global=fron; vtx_global<=lron; vtx_global++)
     {
         std::vector<int> index = { 0, 0, 0, 0, 0, 0, 0 };
-        std::vector<double> wert = { 0, 0, 0, 0, 0, 0, 0 };
+        std::vector<Scalar> wert = { 0, 0, 0, 0, 0, 0, 0 };
 		
 		//vereinfacht den Zugriff auf die Array-Elemente
-		int j=size_t;
+		int i=vtx_global+1;
+		int j=vtx_global;
 	
 		//Überprüfung der Position
 		if(i % nx*ny*nz <= nx*ny)) //Boden
@@ -1325,9 +1328,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 		A.sequential_fill(index[4],wert[4]);
 		A.sequential_fill(index[5],wert[5]);
 		A.sequential_fill(index[6],wert[6]);
-		
 		A.end_of_row();
+		
+		rhs.set_local(vtx_global,h*h*bdry(vtx_global));
 	}
+	return {A, rhs};
 }
 
 }
