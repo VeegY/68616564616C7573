@@ -7,7 +7,7 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim 3000
+#define dim 8192
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -33,14 +33,14 @@ int main(int argc, char* argv[])
     int *fvec_host = new int[dim];
 
     random_ints(data_host, indices_host, fvec_host, dim);
-    
+    cout << "DIM = " << dim << "\n";
 //================================================================================================/
 //										Unified Kernel
 //================================================================================================/
 
 	Timer timer_unified_kernel;
         Timer timer_unified_overall;
-	cout << "UNIFIED KERNEL STARTED" << "\n--------------------------------------------------------------\n";
+	cout << "\n-------------------------------------------------\n" << "UNIFIED KERNEL STARTED\n";
 	timer_unified_overall.start();
 
     int *data_unified = NULL;
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 	cout << "OVERALL TIMER: " << elapsed_zero_overall * 1000 << "\n\n";
 
 	cleanup(data_zero, fvec_zero, result_zero, indices_zero);
-	
+
 //================================================================================================/
 
     delete[] data_host;
