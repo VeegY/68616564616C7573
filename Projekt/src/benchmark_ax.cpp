@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 
     for(int i=0;i<dim;i++)
     {
-	  printf("unified float result in row %i is %f.\n", i,result_unified[i]);
+	  printf("unified float result in row %i is %i.\n", i,result_unified[i]);
 	}
 
  

@@ -41,7 +41,7 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices)
     type value = 0;
     for(int idx=0;idx<2;idx++)
     {
-      value += data[idx+blockIdx.x*2]*fvec[indices[idx-1]];
+      value += data[idx+blockIdx.x*2]*fvec[indices[idx]-1];
     }
     result[blockIdx.x]=value;
 }
