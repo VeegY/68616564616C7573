@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 	alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, dim, dim, dim);
 	set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, dim);
 
-	timer_unified_kernel.start();
+	timer_zero_kernel.start();
 
 	mult_vec_zero(data_zero, fvec_zero, result_zero, indices_zero, dim, dim, dim);
 
