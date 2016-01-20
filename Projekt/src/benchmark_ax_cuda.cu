@@ -35,11 +35,21 @@ template<typename type>
 __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length)
 {
 
-
+	int idx = 0;
+	bool zero = true;
     type value = 0;
-    for(int idx=0;idx<max_row_length;idx++)
+    while(zero)
     {
-      value += data[idx+blockIdx.x*max_row_length]*fvec[indices[idx]];
+		if (data[idx + blockIdx.x*max_row_length] == 0)
+		{
+			zero = false;
+		}
+		else
+		{
+			value += data[idx + blockIdx.x*max_row_length] * fvec[indices[idx]];
+			idx++;
+		}
+      
     }
     result[blockIdx.x]=value;
 }
