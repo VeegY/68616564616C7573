@@ -7,7 +7,9 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim 8
+#define dim 8192
+
+void print_p();
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -34,6 +36,7 @@ int main(int argc, char* argv[])
 
     random_ints(data_host, indices_host, fvec_host, dim);
     cout << "DIM = " << dim << "\n";
+    print_p();
 //================================================================================================/
 //										Unified Kernel
 //================================================================================================/
@@ -54,17 +57,21 @@ int main(int argc, char* argv[])
     timer_unified_kernel.start();
 
     mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, dim, dim, dim);
-
-	float elapsed_unified_kernel = timer_unified_kernel.stop();
-	float elapsed_unfified_overall = timer_unified_overall.stop();
+//EVALUATING STUFF
+//TIME
+    float elapsed_unified_kernel = timer_unified_kernel.stop();
+    float elapsed_unfified_overall = timer_unified_overall.stop();
     cout << "KERNEL TIME: " << elapsed_unified_kernel * 1000 << "\n";
-	cout << "OVERALL TIMER: " << elapsed_unfified_overall * 1000 << "\n\n";
+    cout << "OVERALL TIMER: " << elapsed_unfified_overall * 1000 << "\n\n";
 
-        if(check_result(result_unified, data_host, indices_host, fvec_host, dim))
-        {
-            cout << "\n*CORRECT*\n";
-        }
-        else{cout << "\n*FALSE*\n";}
+//RESULT
+  // print_stuff(data_unified, indices_unified, fvec_unified,result_unified, dim);
+
+    if(check_result(result_unified, data_host, indices_host, fvec_host, dim))
+    {
+        cout << "\n*CORRECT*\n";
+    }
+    else{cout << "\n*FALSE*\n";}
 
 
 

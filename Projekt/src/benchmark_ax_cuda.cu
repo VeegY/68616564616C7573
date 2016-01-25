@@ -4,6 +4,7 @@
 #include <string.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <cmath>
 
 //KERNEL
 template<typename type>
@@ -35,23 +36,31 @@ template<typename type>
 __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length, int dim_local)
 {
 
-	int idx = 0;
-	bool zero = true;
-    type value = 0;
-    while(zero)
+    int idx = threadIdx.x+blockDim.x*blockIdx.x;
+    if(idx<dim_local)
     {
-		if (data[idx*dim_local+threadIdx.x] == 0)
-		{
-			zero = false;
-		}
-		else
-		{
-			value += data[idx*dim_local+threadIdx.x] * fvec[indices[idx*dim_local+threadIdx.x]];
-			idx++;
-		}
-      
+      int col;
+      type svalue = 0, value;
+      for(int i = 0;i < max_row_length; i++)
+      {
+        value = data[i*dim_local+idx];
+        col = indices[i*dim_local+idx];
+        svalue += value*fvec[col];
+      }
+      result[idx]=svalue;
     }
-    result[threadIdx.x]=value;
+}
+
+//PROPERTIES OF TEGRA K1
+void print_p()
+{
+
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop,0);
+
+    printf("Max Threads Per Block: %i\n", prop.maxThreadsPerBlock);
+    printf("Max Grid Size: %ix%ix%i\n", prop.maxGridSize[0],prop.maxGridSize[1],prop.maxGridSize[2]);
+
 }
 
 //ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY
@@ -94,8 +103,10 @@ template void alloc_zero<double>(double **data, double **fvec, double **result, 
 template<typename Scalar>
 void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
+    int num_blocks = ceil(dim_local/1024);
+    int num_threads = ceil((dim_local/num_blocks)/32)*32;
 
-    gpu_ax<<<1,max_row_length>>>(data,fvec,result,indices,max_row_length, dim_local);
+    gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
     cudaDeviceSynchronize();
 
 }
@@ -116,7 +127,10 @@ void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int
     cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
     cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
 
-    gpu_ax<<<1,dim_local>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+    int num_blocks = ceil(dim_local/1024);
+    int num_threads = ceil((dim_local/num_blocks)/32)*32;
+
+    gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
     cudaDeviceSynchronize();
 }
 template void mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec);

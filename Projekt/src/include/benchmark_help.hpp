@@ -65,7 +65,7 @@ void set_values(int *datah, int *indicesh, int *fvech, int *datag, int *indicesg
 	}
 }
 
-void print_stuff(int *data, int *indices, int *fvec, int dim)
+void print_stuff(int *data, int *indices, int *fvec,int *result,  int dim)
 {
 	for (int i = 0; i < dim; i++)
 	{
@@ -73,6 +73,6 @@ void print_stuff(int *data, int *indices, int *fvec, int dim)
 		{
 			printf("%i:%i - ", data[i*dim + j], indices[i*dim + j]);
 		}
-		printf(" --- fvec: %i\n", fvec[i]);
+		printf(" --- vec: %i ~~~> Result: %i\n", fvec[i],result[i]);
 	}
 }
