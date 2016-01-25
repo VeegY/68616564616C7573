@@ -60,8 +60,9 @@ int main(int argc, char* argv[])
     cout << "KERNEL TIME: " << elapsed_unified_kernel * 1000 << "\n";
 	cout << "OVERALL TIMER: " << elapsed_unfified_overall * 1000 << "\n\n";
 
-	print_stuff(data_unified, indices_unified, fvec_unified, dim);
-	printf("result row 1 is %i", result_unified[0]);
+	//print_stuff(data_unified, indices_unified, fvec_unified, dim);
+	//printf("\nresult row 0 is %i\n", result_unified[0]);
+	//printf("\nresult row 1 is %i\n", result_unified[1]);
 	cleanup(data_unified, fvec_unified, result_unified, indices_unified);
 
 
@@ -71,7 +72,7 @@ int main(int argc, char* argv[])
 
 	Timer timer_zero_kernel;
         Timer timer_zero_overall;
-	cout << "ZERO_COPY KERNEL STARTED" << "\n--------------------------------------------------------------\n";
+	cout << "\n-------------------------------------------------\n" << "ZERO KERNEL STARTED\n";
 	timer_zero_overall.start();
 
 	int *data_zero = NULL;
