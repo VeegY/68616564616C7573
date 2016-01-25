@@ -34,6 +34,23 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
     }
 }
 
+bool check_result(int *result, int *datah, int *indicesh, int *fvech, int dim)
+{
+    //bool check = true;
+    for (int i = 0; i < dim; i++);
+    {
+        int value = 0;
+        for (int j = 0; j < dim; j++)
+        {
+            value += datah[i*dim + j] * fvech[indicesh[i*dim + j]];
+        }
+        if (value != result[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
 void set_values(int *datah, int *indicesh, int *fvech, int *datag, int *indicesg, int *fvecg, int dim)
 {
 	for (int i = 0; i < dim; i++)
