@@ -7,7 +7,7 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim 8192
+#define dim 8
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -60,9 +60,14 @@ int main(int argc, char* argv[])
     cout << "KERNEL TIME: " << elapsed_unified_kernel * 1000 << "\n";
 	cout << "OVERALL TIMER: " << elapsed_unfified_overall * 1000 << "\n\n";
 
-	//print_stuff(data_unified, indices_unified, fvec_unified, dim);
-	//printf("\nresult row 0 is %i\n", result_unified[0]);
-	//printf("\nresult row 1 is %i\n", result_unified[1]);
+        if(check_result(result_unified, data_host, indices_host, fvec_host, dim))
+        {
+            cout << "\n*CORRECT*\n";
+        }
+        else{cout << "\n*FALSE*\n";}
+
+
+
 	cleanup(data_unified, fvec_unified, result_unified, indices_unified);
 
 
@@ -92,6 +97,13 @@ int main(int argc, char* argv[])
 	cout << "KERNEL TIME: " << elapsed_zero_kernel * 1000 << "\n";
 	cout << "OVERALL TIMER: " << elapsed_zero_overall * 1000 << "\n\n";
 
+
+        if(check_result(result_zero, data_host, indices_host, fvec_host, dim))
+        {
+            cout << "\n*CORRECT*\n";
+        }
+        else{cout << "\n*FALSE*\n";}
+        
 	cleanup(data_zero, fvec_zero, result_zero, indices_zero);
 
 //================================================================================================/

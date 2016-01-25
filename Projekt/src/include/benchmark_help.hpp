@@ -17,7 +17,7 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
 	        //Fuelle i-te Stelle der Reihe
 	        if (j < entries_row)  //entries row 3
 	        {
-		        data[j*dim+i] = rand() % 1000;  //passt
+		        data[j*dim+i] = rand() % 10;  //passt
 		        range = dim - (entries_row - j) - place_old + 1;
 		        place_current = (rand() % range) + place_old;
 		        indices[j*dim+i] = place_current;
@@ -25,24 +25,24 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
 	        }
 	        else
 	        {
-		        data[i*dim + j] = 0;
-		        indices[i*dim + j] = 0; 
+		        data[j*dim+i] = 0;
+		        indices[j*dim+i] = 0; 
 	        }
 
         }
-		fvec[i] = rand() % 1000;
+		fvec[i] = rand() % 10;
     }
 }
 
 bool check_result(int *result, int *datah, int *indicesh, int *fvech, int dim)
 {
     //bool check = true;
-    for (int i = 0; i < dim; i++);
+    for (int i = 0; i < dim; i++)
     {
         int value = 0;
         for (int j = 0; j < dim; j++)
         {
-            value += datah[i*dim + j] * fvech[indicesh[i*dim + j]];
+            value += datah[j*dim+i] * fvech[indicesh[j*dim+i]];
         }
         if (value != result[i])
         {
@@ -51,6 +51,7 @@ bool check_result(int *result, int *datah, int *indicesh, int *fvech, int dim)
     }
     return true;
 }
+
 void set_values(int *datah, int *indicesh, int *fvech, int *datag, int *indicesg, int *fvecg, int dim)
 {
 	for (int i = 0; i < dim; i++)
