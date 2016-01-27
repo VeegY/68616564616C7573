@@ -56,7 +56,7 @@ namespace Icarus
 	/// werden nullbasiert gezählt.
 	/// \param f    Dateistream, auf dem operiert wird
 	/// \param line Zeilennummer, zu der gesprungen wird
-	std::istream& go_to_line(std::istream& f, size_t line)
+	inline std::istream& go_to_line(std::istream& f, size_t line)
 	{
 		f.seekg(0);
 		for (size_t i = 0; i < line; i++)
@@ -66,7 +66,7 @@ namespace Icarus
 
 	/// \brief Zählt die Zeilen (definiert durch '\n') in der Datei f
 	/// \param f    Dateistream, auf dem operiert wird
-	size_t get_num_lines(std::ifstream& f)
+	inline size_t get_num_lines(std::ifstream& f)
 	{
 		f.seekg(0);
 		f.unsetf(std::ios_base::skipws);
@@ -97,7 +97,7 @@ namespace Icarus
 	/// \brief Spult den Stream eine Anzahl von Zeilen vor
 	/// \param f         Dateistream, auf dem operiert wird
 	/// \param num_lines Anzahl der Zeilen, um die vorgespult wird
-	std::istream& skip_lines(std::istream& f, size_t num_lines)
+	inline std::istream& skip_lines(std::istream& f, size_t num_lines)
 	{
 		for (size_t i = 0; i < num_lines; i++)
 			f.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
