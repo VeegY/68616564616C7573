@@ -4,7 +4,7 @@ namespace Icarus
 template<typename type>
 void vtkWriter::addPointDataToTimestep(const type data[], const int length, const int timestep, std::string name)
 {
-    if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep")
+    if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
     {
         if (length==_points)
@@ -82,7 +82,7 @@ void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const unsign
 template<typename type>
 void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const int timestep, const std::string name)
 {
-	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep")
+	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
 	else
 	{
 		if (datax.get_dim() == _points || datax.get_dim() == _points || datax.get_dim() == _points)
@@ -102,7 +102,7 @@ void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullV
 				file << "LOOKUP_TABLE default" << std::endl;
 				for (int i = 0; i < _points; ++i)
 				{
-					file << static_cast<float>datax[i] << " " << datay[i] << " " << dataz[i] << std::endl;
+					file << static_cast<float>(datax[i]) << " " << datay[i] << " " << dataz[i] << std::endl;
 				}
 				file << std::endl;
 				file.close();

@@ -85,7 +85,7 @@ template<typename Scalar>
 FullVector<Scalar>::FullVector(const FullVector& other) :
 	_my_comm(other._my_comm),
 	_my_rank(other._my_rank),
-	_num_nodes(orher._num_nodes),
+	_num_nodes(other._num_nodes),
     _dim(other._dim)
 {
     _data = new Scalar[_dim];
@@ -97,7 +97,7 @@ template<typename Scalar>
 FullVector<Scalar>::FullVector(FullVector&& other) :
 	_my_comm(other._my_comm),
 	_my_rank(other._my_rank),
-	_num_nodes(orher._num_nodes),
+	_num_nodes(other._num_nodes),
     _dim(other._dim)
 {
     _data = other._data;
