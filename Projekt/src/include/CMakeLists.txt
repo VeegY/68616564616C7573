@@ -21,13 +21,13 @@ INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 if(DOXYGEN_FOUND)
 configure_file(         # Lade Doxygenkonfiguration
-    ${CMAKE_CURRENT_SOURCE_DIR}/../Dokumentation/doxygen_config
-    ${CMAKE_CURRENT_BINARY_DIR}/../Dokumentation/doxygen_config
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../Dokumentation/doxygen_config
+    ${CMAKE_CURRENT_BINARY_DIR}/../../Dokumentation/doxygen_config
     @ONLY)
 add_custom_target(      # Konfiguriere built macro
     doxy ALL
     ${DOXYGEN_EXECUTABLE} 
-    ${CMAKE_CURRENT_BINARY_DIR}/../Dokumentation/doxygen_config
+    ${CMAKE_CURRENT_BINARY_DIR}/../../Dokumentation/doxygen_config
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Erzeuge API Dokumentation mit Doxygen" VERBATIM
     )
@@ -38,7 +38,7 @@ endif(DOXYGEN_FOUND)
 #               Executables         
 #========================================================================
 
-FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h")
+FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h" "*.hpp")
 CUDA_ADD_EXECUTABLE(icarus ${SOURCES})
 
 
