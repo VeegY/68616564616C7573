@@ -1,10 +1,10 @@
-#include "include\slicedvector.hpp"
-#include "include\bicgstabsolver.hpp"
-#include "include\distellpackmatrix.hpp"
+#include "include/slicedvector.hpp"
+#include "include/bicgstabsolver.hpp"
+#include "include/distellpackmatrix.hpp"
 
-#include "include\vtkwriter.hpp"
-#include "include\discretizer.hpp"
-#include "include\assemble.hpp"
+#include "include/vtkwriter.hpp"
+#include "include/discretizer.hpp"
+#include "include/assemble.hpp"
 
 double bdry(int vtx_global)
 {

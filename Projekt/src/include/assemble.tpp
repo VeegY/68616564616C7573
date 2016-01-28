@@ -1377,7 +1377,7 @@ namespace Icarus
 					//keine RB
 				}
 
-				for (int j=0, j<=7, j++) A.sequential_fill(index[j], wert[j]);
+				for (int j=0; j<7; j++) A.sequential_fill(index[j], wert[j]);
 				A.end_of_row();
 
 				rhs.set_local(vtx_global, h*h*bdry(vtx_global));

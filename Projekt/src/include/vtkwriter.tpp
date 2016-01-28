@@ -13,10 +13,10 @@ void vtkWriter::addPointDataToTimestep(const type data[], const int length, cons
             std::string hfname(_filename);
             hfname.append(".vtk.");
             hfname.append(std::to_string(timestep));
-            file.open(hfname.c_str(), ios::out | ios::app);
+            file.open(hfname.c_str(), std::ios::out | std::ios::app);
             if (file.is_open())
             {
-                if (point_data_written_last[timestep]==false)
+                if (_point_data_written_last[timestep]==false)
                 {
                     file << "POINT_DATA " << _points <<std::endl;
                 }
@@ -28,8 +28,8 @@ void vtkWriter::addPointDataToTimestep(const type data[], const int length, cons
                 }
                 file << std::endl;
                 file.close();
-                point_data_written_last[timestep]=true;
-                cell_data_written_last[timestep]=false;
+                _point_data_written_last[timestep]=true;
+                _cell_data_written_last[timestep]=false;
             }
             else LOG_ERROR("Unable to open file.");
         }
@@ -91,10 +91,10 @@ void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullV
 			std::string hfname(_filename);
 			hfname.append(".vtk.");
 			hfname.append(std::to_string(timestep));
-			file.open(hfname.c_str(), ios::out | ios::app);
+			file.open(hfname.c_str(), std::ios::out | std::ios::app);
 			if (file.is_open())
 			{
-				if (point_data_written_last[timestep] == false)
+				if (_point_data_written_last[timestep] == false)
 				{
 					file << "POINT_DATA " << _points << std::endl;
 				}
@@ -106,8 +106,8 @@ void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullV
 				}
 				file << std::endl;
 				file.close();
-				point_data_written_last[timestep] = true;
-				cell_data_written_last[timestep] = false;
+				_point_data_written_last[timestep] = true;
+				_cell_data_written_last[timestep] = false;
 			}
 			else LOG_ERROR("Unable to open file.");
 		}
