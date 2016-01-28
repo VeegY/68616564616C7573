@@ -8,31 +8,6 @@
 
 //KERNEL
 template<typename type>
-__global__ void  gpu_ax_opt(type* data, type* fvec, type* result, int* indices, int dim_local)
-{
-	/*
-	Kernel Idee:
-	-extern shared memory für data oder data und indices -testen!
-	-values im shared array speicher, d/i
-	-berrechnen über alle Werte (data = 0 auslassen)? hinderlich für memory coalescence?)
-	-danach reduce Teil über max_row_length auf gleichen shared memory
-	-ein Block hat die Größe: ceil: (shared_memory/32) keine halbe Reihen!
-	*/
-	/*
-		Block Größe Detail
-		shared memory: 32kB
-		Datentyp:
-		 foat(4),int(4),double(8)
-		Menge:
-		 Type*max_row_length*dim_local
-		+int*max_row_length*dim_local
-		wähle große Blöcke, keine halben Reihen und vielfaches von 32!
-     */
-}
-
-
-//KERNEL
-template<typename type>
 __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length, int dim_local)
 {
 
@@ -103,8 +78,8 @@ template void alloc_zero<double>(double **data, double **fvec, double **result, 
 template<typename Scalar>
 void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
-    int num_blocks = ceil(dim_local/1024);
-    int num_threads = ceil((dim_local/num_blocks)/32)*32;
+    int num_blocks = ceil((double)dim_local/1024);
+    int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
 
     gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
     cudaDeviceSynchronize();
@@ -127,8 +102,8 @@ void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int
     cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
     cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
 
-    int num_blocks = ceil(dim_local/1024);
-    int num_threads = ceil((dim_local/num_blocks)/32)*32;
+    int num_blocks = ceil((double)dim_local/1024);
+    int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
 
     gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
     cudaDeviceSynchronize();

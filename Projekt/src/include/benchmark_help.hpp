@@ -65,6 +65,24 @@ void set_values(int *datah, int *indicesh, int *fvech, int *datag, int *indicesg
 	}
 }
 
+void print_time(float *ukt, float *uot, float *zkt, float *zot,int runs)
+{
+    float uktime=0, uotime=0, zktime=0, zotime=0;
+    for(int n=0;n<runs;n++)
+    {
+      uktime += ukt[n];
+      uotime += uot[n];
+      zktime += zkt[n];
+      zotime += zot[n];
+    }
+    uktime = (uktime/runs)*1000;
+    uotime = (uotime/runs)*1000;
+    zktime = (zktime/runs)*1000;
+    zotime = (zotime/runs)*1000;
+
+    printf("UK: %fms - UO: %fms - ZK: %fms - ZO: %fms\n",uktime,uotime,zktime,zotime);
+}
+
 void print_stuff(int *data, int *indices, int *fvec,int *result,  int dim)
 {
 	for (int i = 0; i < dim; i++)
