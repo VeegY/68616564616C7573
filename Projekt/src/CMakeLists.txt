@@ -38,7 +38,8 @@ endif(DOXYGEN_FOUND)
 #               Executables         
 #========================================================================
 
-FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h" "*.hpp")
+FILE(GLOB SOURCES "*.cu" "*.cpp")# "*.c" "*.h" "*.hpp") # adding all source files
+FILE(GLOB UNIT_TESTS "unittests/*_test.cpp")
 CUDA_ADD_EXECUTABLE(icarus ${SOURCES})
 
 
@@ -56,13 +57,22 @@ add_custom_target(
 # ctest anschalten
 enable_testing()
 
+# alle Testfunktionen werden ctest "bereitgestellt"
+#FOREACH(testpath ${unit_tests})
+FOREACH(testpath ${UNIT_TESTS})
+    # nicht unbedingt optimal, aber es funktioniert fuers erste
+    string(REGEX REPLACE "([^ ]*)/src/" "" filename ${testpath})
+    string(REPLACE ".cpp" "" testname ${filename})
+    add_executable(${testname} ${filename})
+    add_test(${filename} ${testname})
+ENDFOREACH(testpath)
+
 # Beispiel: create_test(logger_test)
 macro(create_test target)
     add_test(
       NAME ${target} 
       COMMAND $<TARGET_FILE:${target}>)
 endmacro(create_test)
-
 
 
 #========================================================================
