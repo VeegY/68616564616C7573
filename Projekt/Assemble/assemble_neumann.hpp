@@ -62,13 +62,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
 				
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				//zeile[j] = 3*11/38;
 				//zeile[j+1] = -28/38;
@@ -81,13 +81,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 3*1/sqrt(3)*3/2*h;
-				wert[1] += 1/sqrt(3)*(-h)/2;
-				wert[2] += 1/sqrt(3) *2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[0] += 3*1.0/sqrt(3)*3/2*h;
+				wert[1] += 1.0/sqrt(3)*(-h)/2;
+				wert[2] += 1.0/sqrt(3) *2*h;
+				wert[3] += 1.0/sqrt(3)*(-h)/2;
+				wert[4] += 1.0/sqrt(3) *2*h;
+				wert[5] += 1.0/sqrt(3)*(-h)/2;
+				wert[6] += 1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += 3*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -111,13 +111,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
 				
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				
 				//zeile[j] = 3*11/38;
@@ -131,13 +131,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 1*1/sqrt(3)*3/2*h;
-				wert[1] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[2] += (-1)*1/sqrt(3) *2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[0] += 1*1.0/sqrt(3)*3/2*h;
+				wert[1] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[2] += (-1)*1.0/sqrt(3) *2*h;
+				wert[3] += 1.0/sqrt(3)*(-h)/2;
+				wert[4] += 1.0/sqrt(3) *2*h;
+				wert[5] += 1.0/sqrt(3)*(-h)/2;
+				wert[6] += 1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += 1*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -160,13 +160,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
 				
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				//zeile[j] = 3*11/38;
 				//zeile[j+1] = -28/38;
@@ -179,13 +179,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 1*1/sqrt(3)*3/2*h;
-				wert[1] += 1/sqrt(3)*(-h)/2;
-				wert[2] += 1/sqrt(3) *2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[0] += 1*1.0/sqrt(3)*3/2*h;
+				wert[1] += 1.0/sqrt(3)*(-h)/2;
+				wert[2] += 1.0/sqrt(3) *2*h;
+				wert[3] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(3) *2*h;
+				wert[5] += 1.0/sqrt(3)*(-h)/2;
+				wert[6] += 1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += 1*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -208,13 +208,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
 				
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				//zeile[j] = 3*11/38;
 				//zeile[j-1] = -28/38;
@@ -227,13 +227,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (-1/sqrt(3),-1/sqrt(3),1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += (-1)*1/sqrt(3)*3/2*h;
-				wert[1] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[2] += (-1)*1/sqrt(3) *2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[0] += (-1)*1.0/sqrt(3)*3/2*h;
+				wert[1] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[2] += (-1)*1.0/sqrt(3) *2*h;
+				wert[3] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(3) *2*h;
+				wert[5] += 1.0/sqrt(3)*(-h)/2;
+				wert[6] += 1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += (-1)*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -259,11 +259,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in y/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in x-Richtung möglich
 				//zeile[j] = -2;
@@ -279,11 +279,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (0,1/sqrt(2),1/sqrt(2))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 2*1/sqrt(3)*3/2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[0] += 2*1.0/sqrt(3)*3/2*h; //TODO Ueberpruefen
+				wert[3] += 1.0/sqrt(2)*(-h)/2;
+				wert[4] += 1.0/sqrt(2) *2*h;
+				wert[5] += 1.0/sqrt(2)*(-h)/2;
+				wert[6] += 1.0/sqrt(2) *2*h;
 				
 				//zeile[j] += 2*1/sqrt(3)*3/2*h;
 				//zeile[j+nx] += 1/sqrt(3)*(-h)/2;
@@ -307,11 +307,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in y/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in x-Richtung möglich
 				//zeile[j] = -2;
@@ -328,10 +328,10 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
 				//wert[0] += 0*1/sqrt(3)*3/2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[3] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(2) *2*h;
+				wert[5] += 1.0/sqrt(2)*(-h)/2;
+				wert[6] += 1.0/sqrt(2) *2*h;
 				
 				//zeile[j] += 0*1/sqrt(3)*3/2*h;		
 				//zeile[j-nx] += (-1)*1/sqrt(3)*(-h)/2;
@@ -355,11 +355,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in y-Richtung möglich
 				//zeile[j] = -2;
@@ -375,11 +375,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (1/sqrt(2),0,1/sqrt(2))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 2*1/sqrt(3)*3/2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[0] += 2*1.0/sqrt(3)*3/2*h; //TODO Ueberpruefen
+				wert[1] += 1.0/sqrt(2)*(-h)/2; //Geaendert, weil NV (X,0,X) struktur hat.
+				wert[2] += 1.0/sqrt(2) *2*h;
+				wert[5] += 1.0/sqrt(2)*(-h)/2;
+				wert[6] += 1.0/sqrt(2) *2*h;
 				
 				//zeile[j] += 2*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -403,11 +403,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in y-Richtung möglich
 				//zeile[j] = -2;
@@ -424,10 +424,10 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
 				//wert[0] += 0*1/sqrt(3)*3/2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[1] += (-1)*1.0/sqrt(2)*(-h)/2; //Geaendert zu wert[1],wert[2]
+				wert[2] += (-1)*1.0/sqrt(2) *2*h;
+				wert[5] += 1.0/sqrt(2)*(-h)/2;
+				wert[6] += 1.0/sqrt(2) *2*h;
 				
 				////zeile[j] += 0*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -448,15 +448,15 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				
 				////zentraler Differenzenquotient in x/y-Richtung möglich
 				
-				wert[0] = -4;
-				wert[1] = 1;
-				wert[2] = 1;
-				wert[3] = 1;
-				wert[4] = 1;
+				wert[0] = -4.0;
+				wert[1] = 1.0;
+				wert[2] = 1.0;
+				wert[3] = 1.0;
+				wert[4] = 1.0;
 				//modifizierter Differenzenquotient in z-Richtung
-				wert[0] += 11/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 11.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient in x/y-Richtung möglich
 				//zeile[j] = -4;
@@ -472,7 +472,7 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (0,0,1))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 3/2*h;
+				wert[0] += 3.0/2*h;
 				wert[5] += (-h)/2;
 				wert[6] += 2*h;
 				
@@ -496,13 +496,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				index[6]=j-2*nx*ny;
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient in keine Richtung möglich
 				//zeile[j] = 3*11/38;
@@ -516,13 +516,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),-1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 1*1/sqrt(3)*3/2*h;
-				wert[1] += 1/sqrt(3)*(-h)/2;
-				wert[2] += 1/sqrt(3) *2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[0] += 1*1.0/sqrt(3)*3/2*h;
+				wert[1] += 1.0/sqrt(3)*(-h)/2;
+				wert[2] += 1.0/sqrt(3) *2*h;
+				wert[3] += 1.0/sqrt(3)*(-h)/2;
+				wert[4] += 1.0/sqrt(3) *2*h;
+				wert[5] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += 1*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -544,13 +544,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				index[6]=j-2*nx*ny;
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient in keine Richtung möglich
 				//zeile[j] = 3*11/38;
@@ -564,13 +564,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),-1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += (-1)*1/sqrt(3)*3/2*h;
-				wert[1] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[2] += (-1)*1/sqrt(3) *2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[0] += (-1)*1.0/sqrt(3)*3/2*h;
+				wert[1] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[2] += (-1)*1.0/sqrt(3) *2*h;
+				wert[3] += 1.0/sqrt(3)*(-h)/2;
+				wert[4] += 1.0/sqrt(3) *2*h;
+				wert[5] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += (-1)*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -592,13 +592,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				index[6]=j-2*nx*ny;
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient in keine Richtung möglich
 				//zeile[j] = 3*11/38;
@@ -612,13 +612,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += (-1)*1/sqrt(3)*3/2*h;
-				wert[1] += 1/sqrt(3)*(-h)/2;
-				wert[2] += 1/sqrt(3) *2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[0] += (-1)*1.0/sqrt(3)*3/2*h;
+				wert[1] += 1.0/sqrt(3)*(-h)/2;
+				wert[2] += 1.0/sqrt(3) *2*h;
+				wert[3] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(3) *2*h;
+				wert[5] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += (-1)*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -640,13 +640,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				index[6]=j-2*nx*ny;
 				
 				//zentraler Differenzenquotient in keine Richtung möglich
-				wert[0] = 3*11/38;
-				wert[1] = -28/38;
-				wert[2] = 17/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] = 3*11.0/38.0;
+				wert[1] = -28.0/38.0;
+				wert[2] = 17.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient in keine Richtung möglich
 				//zeile[j] = 3*11/38;
@@ -660,13 +660,13 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (-1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += (-3)*1/sqrt(3)*3/2*h;
-				wert[1] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[2] += (-1)*1/sqrt(3) *2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[0] += (-3)*1.0/sqrt(3)*3/2*h;
+				wert[1] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[2] += (-1)*1.0/sqrt(3) *2*h;
+				wert[3] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(3) *2*h;
+				wert[5] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(3) *2*h;
 				
 				//zeile[j] += (-3)*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -692,11 +692,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in y/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in x-Richtung möglich
 				//zeile[j] = -2;
@@ -713,10 +713,10 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
 				//wert[0] += 0*1/sqrt(3)*3/2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[3] += 1.0/sqrt(3)*(-h)/2;
+				wert[4] += 1.0/sqrt(3) *2*h;
+				wert[5] += (-1)*1.0/sqrt(3)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(3) *2*h;
 				
 				////zeile[j] += 0*1/sqrt(3)*3/2*h;
 				//zeile[j+nx] += 1/sqrt(3)*(-h)/2;
@@ -740,11 +740,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in y/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in x-Richtung möglich
 				//zeile[j] = -2;
@@ -760,11 +760,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),-1/sqrt(2))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += (-2)*1/sqrt(3)*3/2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[0] += (-2)*1.0/sqrt(3)*3.0/2*h; //TODO Ueberpruefen
+				wert[3] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(2) *2*h;
+				wert[5] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(2) *2*h;
 				
 				//zeile[j] += (-2)*1/sqrt(3)*3/2*h;
 				//zeile[j-nx] += (-1)*1/sqrt(3)*(-h)/2;
@@ -788,11 +788,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in y-Richtung möglich
 				//zeile[j] = -2;
@@ -808,11 +808,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (1/sqrt(2),0,-1/sqrt(2))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				//wert[0] += 0*1/sqrt(3)*3/2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				//wert[0] += 0*1/sqrt(3)*3/2*h; //Wieso wird hier nicht wert[0] angepasst ?
+				wert[1] += 1.0/sqrt(2)*(-h)/2; //Geaendert zu wert[1],wert[2]
+				wert[2] += 1.0/sqrt(2) *2*h;
+				wert[5] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(2) *2*h;
 				
 				////zeile[j] += 0*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -836,11 +836,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/z-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differezenquotient in y-Richtung möglich
 				//zeile[j] = -2;
@@ -856,11 +856,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,-1/sqrt(2))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += (-2)*1/sqrt(3)*3/2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[0] += (-2)*1.0/sqrt(3)*3.0/2*h;
+				wert[1] += (-1)*1.0/sqrt(2)*(-h)/2; //Geaendert zu wert[1],wert[2]
+				wert[2] += (-1)*1.0/sqrt(2) *2*h;
+				wert[5] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[6] += (-1)*1.0/sqrt(2) *2*h;
 				
 				//zeile[j] += (-2)*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -886,9 +886,9 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[3] = 1;
 				wert[4] = 1;
 				//modifizierter Differenzenquotient in z-Richtung
-				wert[0] += 11/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 11.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient in x/y-Richtung möglich
 				//zeile[j] = -4;
@@ -904,7 +904,7 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (0,0,-1))
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += (-1)*3/2*h;
+				wert[0] += (-1)*3.0/2*h;
 				wert[5] += (-1)*(-h)/2;
 				wert[6] += (-1)*2*h;
 				
@@ -932,11 +932,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/y-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient nur in z-Richtung möglich
 				//zeile[j] = -2;
@@ -952,11 +952,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (1/sqrt(2),1/sqrt(2),0)
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 2*1/sqrt(3)*3/2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[0] += 2*1.0/sqrt(3)*3.0/2*h;
+				wert[1] += 1.0/sqrt(2)*(-h)/2;
+				wert[2] += 1.0/sqrt(2) *2*h;
+				wert[3] += 1.0/sqrt(2)*(-h)/2;
+				wert[4] += 1.0/sqrt(2) *2*h;
 				
 				//zeile[j] += 2*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -981,11 +981,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/y-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient nur in z-Richtung möglich
 				//zeile[j] = -2;
@@ -1002,10 +1002,10 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
 				//wert[0] += 0*1/sqrt(3)*3/2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += 1/sqrt(3)*(-h)/2;
-				wert[6] += 1/sqrt(3) *2*h;
+				wert[1] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[2] += (-1)*1.0/sqrt(2) *2*h;
+				wert[3] += 1.0/sqrt(2)*(-h)/2;
+				wert[4] += 1.0/sqrt(2) *2*h;
 				
 				////zeile[j] += 0*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -1031,9 +1031,9 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[3]=1;
 				wert[4]=1;
 				//modifizierter Differenzenquotient in y-Richtung
-				wert[0] += 11/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 11.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 								
 				////zentraler Differenzenquotient in x/z-Richtung möglich
 				//zeile[j] = -4;
@@ -1049,7 +1049,7 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//NeumannRB, Normalenvektor ist (0,1,0)
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
-				wert[0] += 3/2*h;
+				wert[0] += 3.0/2*h;
 				wert[5] += (-h)/2;
 				wert[6] += 2*h;
 				
@@ -1076,11 +1076,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/y-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient nur in z-Richtung möglich
 				//zeile[j] = -2;
@@ -1097,10 +1097,10 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 				
 				//wert[0] += 0*1/sqrt(3)*3/2*h;
-				wert[3] += 1/sqrt(3)*(-h)/2;
-				wert[4] += 1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[1] += 1.0/sqrt(2)*(-h)/2;
+				wert[2] += 1.0/sqrt(2) *2*h;
+				wert[3] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(2) *2*h;
 				
 				////zeile[j] += 0*1/sqrt(3)*3/2*h;
 				//zeile[j+1] += 1/sqrt(3)*(-h)/2;
@@ -1125,11 +1125,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[1] = 1;
 				wert[2] = 1;
 				//modifizierter Differenzenquotient in x/y-Richtung
-				wert[0] += 2*11/38;
-				wert[3] = -28/38;
-				wert[4] = 17/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 2*11.0/38.0;
+				wert[3] = -28.0/38.0;
+				wert[4] = 17.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient nur in z-Richtung möglich
 				//zeile[j] = -2;
@@ -1144,11 +1144,11 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 			
 				//NeumannRB, Normalenvektor ist (-1/sqrt(2),-1/sqrt(2),0)
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-				wert[0] += (-2)*1/sqrt(3)*3/2*h;
-				wert[3] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[4] += (-1)*1/sqrt(3) *2*h;
-				wert[5] += (-1)*1/sqrt(3)*(-h)/2;
-				wert[6] += (-1)*1/sqrt(3) *2*h;
+				wert[0] += (-2)*1.0/sqrt(3)*3.0/2*h;
+				wert[1] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[2] += (-1)*1.0/sqrt(2) *2*h;
+				wert[3] += (-1)*1.0/sqrt(2)*(-h)/2;
+				wert[4] += (-1)*1.0/sqrt(2) *2*h;
 				
 				//zeile[j] += (-2)*1/sqrt(3)*3/2*h;
 				//zeile[j-1] += (-1)*1/sqrt(3)*(-h)/2;
@@ -1174,9 +1174,9 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				wert[3] =1;
 				wert[4] =1;
 				//modifizierter Differenzenquotient in y-Richtung
-				wert[0] += 11/38;
-				wert[5] = -28/38;
-				wert[6] = 17/38;
+				wert[0] += 11.0/38.0;
+				wert[5] = -28.0/38.0;
+				wert[6] = 17.0/38.0;
 				
 				////zentraler Differenzenquotient in x/z-Richtung möglich
 				//zeile[j] = -4;
@@ -1191,7 +1191,7 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 				
 				//NeumannRB, Normalenvektor ist (0,-1,0)
 				//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-				wert[0] += (-1)*3/2*h;
+				wert[0] += (-1)*3.0/2*h;
 				wert[5] += (-1)*(-h)/2;
 				wert[6] += (-1)*2*h;
 				
@@ -1218,9 +1218,9 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 			wert[3] = 1;
 			wert[4] = 1;
 			//modifizierter Differenzenquotient in x-Richtung
-			wert[0] += 11/38;
-			wert[5] = -28/38;
-			wert[6] = 17/38;
+			wert[0] += 11.0/38.0;
+			wert[5] = -28.0/38.0;
+			wert[6] = 17.0/38.0;
 			
 			////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
 			//zeile[j] = -4;
@@ -1236,7 +1236,7 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 			//NeumannRB, Normalenvektor ist (1,0,0)
 			//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 			
-			wert[0] += 3/2*h;
+			wert[0] += 3.0/2*h;
 			wert[5] += (-h)/2;
 			wert[6] += 2*h;
 			
@@ -1262,9 +1262,9 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 			wert[3] = 1;
 			wert[4] = 1;
 			//modifizierter Differenzenquotient in x-Richtung
-			wert[0] += 11/38;
-			wert[5] = -28/38;
-			wert[6] = 17/38;
+			wert[0] += 11.0/38.0;
+			wert[5] = -28.0/38.0;
+			wert[6] = 17.0/38.0;
 						
 			////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
 			//zeile[j] = -4;
@@ -1280,7 +1280,7 @@ assemble_neumann(size_t nx, size_t ny, size_t nz,
 			//NeumannRB, Normalenvektor ist (-1,0,0)
 			//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 			
-			wert[0] += (-1)*3/2*h;
+			wert[0] += (-1)*3.0/2*h;
 			wert[5] += (-1)*(-h)/2;
 			wert[6] += (-1)*2*h;
 			
