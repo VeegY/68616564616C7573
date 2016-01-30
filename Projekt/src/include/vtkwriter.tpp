@@ -2,7 +2,7 @@ namespace Icarus
 {
 
 template<typename type>
-void vtkWriter::addPointDataToTimestep(const type data[], const int length, const int timestep, std::string name)
+void vtkWriter::addPointDataToTimestep(const type data[], const int length, const unsigned timestep, std::string name)
 {
     if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
@@ -41,7 +41,7 @@ void vtkWriter::addPointDataToTimestep(const type data[], const int length, cons
 }
 
 template<typename type>
-void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const unsigned timestep, const std::string name)
+void vtkWriter::addPointDataToTimestep(const FullVector<type>& data, const unsigned timestep, const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
@@ -80,7 +80,7 @@ void vtkWriter::addPointDataToTimestep(const FullVector<type>& data,const unsign
 }
 
 template<typename type>
-void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const int timestep, const std::string name)
+void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const unsigned timestep, const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
 	else
@@ -120,7 +120,7 @@ void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullV
 
 template<typename type>
 void vtkWriter::addPointVecToTimestep(const type datax[], const type datay[],
-                                      const type dataz[], const unsigned length,
+                                      const type dataz[], const int length,
                                       const unsigned timestep, std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
@@ -245,7 +245,7 @@ template<typename type>
 void vtkWriter::addCellVecToTimestep(const FullVector<type>& datax,
                                       const FullVector<type>& datay,
                                       const FullVector<type>& dataz,
-                                      const int timestep,
+                                      const unsigned timestep,
                                       const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
@@ -286,7 +286,7 @@ void vtkWriter::addCellVecToTimestep(const FullVector<type>& datax,
 
 template<typename type>
 void vtkWriter::addCellVecToTimestep(const type datax[], const type datay[],
-                                      const type dataz[], const unsigned length,
+                                      const type dataz[], const int length,
                                       const unsigned timestep, std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
@@ -330,7 +330,7 @@ void vtkWriter::addCellVecToTimestep(const type datax[], const type datay[],
 
 template<typename type>
 void vtkWriter::addPointDataToAll(const type data[],
-                                  const unsigned length, std::string name)
+                                  const int length, std::string name)
 {
     for (unsigned i(0); i<_tsteps; ++i )
     {
@@ -352,7 +352,7 @@ void vtkWriter::addPointDataToAll(const FullVector<type>& data,
 
 template<typename type>
 void vtkWriter::addCellDataToAll(const type data[],
-                                 const unsigned length,
+                                 const int length,
                                  std::string name)
 {
     for (unsigned i(0); i<_tsteps; ++i )

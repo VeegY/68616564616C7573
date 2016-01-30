@@ -67,7 +67,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointDataToTimestep(const type data[], const int length, const int timestep, std::string name);
+    void addPointDataToTimestep(const type data[], const int length, const unsigned timestep, std::string name);
 
 ///\brief	Fuegt skalarwertige Punktdaten zu einem Zeitschritt hinzu.
 ///         Die Daten werden in der Datei als float abgespeichert.
@@ -78,7 +78,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointDataToTimestep(const FullVector<type>& data,const unsigned timestep, const std::string name);
+    void addPointDataToTimestep(const FullVector<type>& data, const unsigned timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Zelldaten zu einem Zeitschritt hinzu.
@@ -91,7 +91,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellDataToTimestep(const type* data[], const int length, const int timestep, const std::string name);
+    void addCellDataToTimestep(const type* data[], const int length, const unsigned timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Zelldaten zu einem Zeitschritt hinzu.
@@ -103,7 +103,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellDataToTimestep(const FullVector<type>& data, const int timestep, const std::string name);
+    void addCellDataToTimestep(const FullVector<type>& data, const unsigned timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Punktdaten zu allen Zeitschritten hinzu.
@@ -164,7 +164,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointVecToTimestep(const type datax[], const type datay[], const type dataz[], const int length, const int timestep, std::string name);
+    void addPointVecToTimestep(const type datax[], const type datay[], const type dataz[], const int length, const unsigned timestep, std::string name);
 
 
 ///\brief	Fuegt vektorwertige Punktdaten zu einem Zeitschritt hinzu.
@@ -178,7 +178,7 @@ public:
 ///@param   name        Name der Daten
 
     template<typename type>
-    void addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const int timestep, const std::string name);
+    void addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const unsigned timestep, const std::string name);
 
 
 
@@ -194,7 +194,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellVecToTimestep(const type datax[], const type datay[], const type dataz[], const int length, const int timestep, std::string name);
+    void addCellVecToTimestep(const type datax[], const type datay[], const type dataz[], const int length, const unsigned timestep, std::string name);
 
 ///\brief	Fuegt vektorwertige Punktdaten zu einem Zeitschritt hinzu.
 ///         Die Daten werden in der Datei als float abgespeichert.
@@ -207,7 +207,7 @@ public:
 ///@param   name        Name der Daten
 
     template<typename type>
-    void addCellVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const int timestep, const std::string name);
+    void addCellVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const unsigned timestep, const std::string name);
 
 
 ///\brief	Fuegt vektorwertige Punktdaten zu allen Zeitschritten hinzu.
