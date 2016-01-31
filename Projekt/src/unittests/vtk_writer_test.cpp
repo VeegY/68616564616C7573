@@ -1,5 +1,5 @@
-#include "include\fullvector.hpp"
-#include "include\vtkwriter.hpp"
+#include "include/fullvector.hpp"
+#include "include/vtkwriter.hpp"
 /*
 *test für den vtk writer
 *ausgabe im ordner out (muss existieren)

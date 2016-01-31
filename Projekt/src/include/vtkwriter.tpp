@@ -202,7 +202,7 @@ void vtkWriter::addCellDataToTimestep(const FullVector<type>& data,
 }
 
 template<typename type>
-void vtkWriter::addCellDataToTimestep(const type data[], const unsigned length,
+void vtkWriter::addCellDataToTimestep(const type data[], const int length,
                                    const unsigned timestep, const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");

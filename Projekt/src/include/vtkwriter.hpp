@@ -91,7 +91,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellDataToTimestep(const type* data[], const int length, const unsigned timestep, const std::string name);
+    void addCellDataToTimestep(const type data[], const int length, const unsigned timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Zelldaten zu einem Zeitschritt hinzu.
