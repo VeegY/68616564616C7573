@@ -13,6 +13,9 @@ using namespace std;
 
 void print_p();
 
+//?template
+void bandwith(int max_row_length, int dim_local, float time);
+
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 
