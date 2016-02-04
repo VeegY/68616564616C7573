@@ -95,7 +95,7 @@ namespace Icarus
 			size_t lron = fron + A.get_dim_local() - 1;
 
 			A.prepare_sequential_fill(7);
-
+			
 			for (size_t vtx_global = fron; vtx_global <= lron; vtx_global++)
 			{
 				std::vector<int> index = { 0, 0, 0, 0, 0, 0, 0 };
@@ -108,7 +108,10 @@ namespace Icarus
 				if (i <= nx*ny) //Boden
 				{
 					if (i == 1) //vorderer unterer linker Eckpunkt
-					{
+					{	
+						//Dirichlet Randwert in der vorderen unteren linken Ecke
+						A.sequential_fill(0, 1)
+						
 						index[0] = vtx_global;
 						index[1] = vtx_global + 1;
 						index[2] = vtx_global + 2;
@@ -1377,7 +1380,7 @@ namespace Icarus
 					//keine RB
 				}
 
-				for (int j=0; j<7; j++) A.sequential_fill(index[j], wert[j]);
+				if (i=/1) {for (int j=0; j<7; j++) A.sequential_fill(index[j], wert[j]);}
 				A.end_of_row();
 
 				rhs.set_local(vtx_global, h*h*bdry(vtx_global));
