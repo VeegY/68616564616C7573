@@ -35,5 +35,7 @@ INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 #    )
 #endif(DOXYGEN_FOUND)
 
+INCLUDE(CTest) # beinhaltet enable_testing()
+
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(tests)

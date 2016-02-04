@@ -11,9 +11,6 @@ FILE(GLOB UNIT_TESTS "*_test.cpp")
 #               Custom_Target/Unit_Test
 #========================================================================
 
-ENABLE_TESTING() # sollte eig nicht gebraucht werden, wird es aber wohl doch
-#INCLUDE(CTest)
-
 # alle Testfunktionen werden ctest "bereitgestellt"
 FOREACH(testpath ${UNIT_TESTS})
     # nicht unbedingt optimal, aber es funktioniert fuers erste
