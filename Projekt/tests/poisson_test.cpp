@@ -1,10 +1,10 @@
-#include "include/slicedvector.hpp"
-#include "include/bicgstabsolver.hpp"
-#include "include/distellpackmatrix.hpp"
+#include "../src/include/slicedvector.hpp"
+#include "../src/include/bicgstabsolver.hpp"
+#include "../src/include/distellpackmatrix.hpp"
 
-#include "include/vtkwriter.hpp"
-#include "include/discretizer.hpp"
-#include "include/assemble.hpp"
+#include "../src/include/vtkwriter.hpp"
+#include "../src/include/discretizer.hpp"
+#include "../src/include/assemble.hpp"
 
 double rhs(int ix, int iy, int iz)
 {
