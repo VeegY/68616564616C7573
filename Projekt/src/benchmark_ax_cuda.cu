@@ -200,7 +200,7 @@ template float mult_vec_zero_time<double>(double* data, double* fvec, double* re
 
 
 template<typename Scalar>
-void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
+void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
     Scalar *d_data, *d_fvec, *d_result;
     int *d_indices;
