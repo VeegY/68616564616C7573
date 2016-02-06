@@ -65,15 +65,21 @@ int main(int argc, char* argv[])
         float *fvec_unified = NULL;
         float *result_unified = NULL;
         int *indices_unified = NULL;
-
+        
+        std::cout <<" ALLOC\n";
         alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
-        set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal);
 
+        std::cout <<" SET\n";
+        set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal);
+        
+        std::cout << " KERNEL\n";
         mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec);
+        std::cout << " KERNEL END \n";
         
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+        std::cout << " CLEANUP END\n ";
 
     }
         float elapsed_unified = timer_overall.stop();

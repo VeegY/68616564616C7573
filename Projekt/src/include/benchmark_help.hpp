@@ -28,8 +28,8 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
             if (diag[j] >= 0 && diag [j] < dim_local);
             {
                 value = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
-                data[i*max_row_length + offset] = value;
-                indices[i*max_row_length + offset] = diag[j];
+                data[i + offset*dim_local] = value;
+                indices[i + offset*dim_local] = diag[j];
                 offset++;
             }
             diag[j] +=  1;
@@ -37,8 +37,8 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
         }
         for (int off = 6 - offset; off > 1; off--)
         {
-            data[i*max_row_length + offset] = 0;
-            indices[i*max_row_length + offset] = 0;
+            data[i + offset*dim_local] = 0;
+            indices[i + offset*dim_local] = 0;
             offset++;
         }
 
