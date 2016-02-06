@@ -52,3 +52,5 @@ int vtk_writer_test()
 	return 0;
 }
 
+int main(){return vtk_writer_test();}
+
