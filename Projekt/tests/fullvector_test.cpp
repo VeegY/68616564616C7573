@@ -13,9 +13,8 @@ int fullvectortest()
 {
     srand (static_cast <unsigned> (time(0)));
 	const size_t N=100000;
-	const int randintmax(100);
 	Icarus::FullVector<double> vec1(N), vec2(N), vec4(N);
-	Icarus::FullVector<double> vecint1(N), vecint2(N), vecint3(N);
+	Icarus::FullVector<double> vec6(N), vec7(N), vec8(N);
 	if (vec1.get_dim()!=N){
         LOG_ERROR("get_dim failed");
 	}
@@ -25,9 +24,8 @@ int fullvectortest()
     {
         double r = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
         int sign=2*(rand()%2)-1;
-        int randint=rand()%randintmax;
         vec1[i]=r;
-        vecint1[i]=sign*randint;
+        vec6[i]=sign*r;
     }
     Icarus::FullVector<double> vec3(vec1); //test copy constructor
 	vec2=vec1;
@@ -48,35 +46,35 @@ int fullvectortest()
     }
 
     //check artihmetic operations
-    int randint=rand()%randintmax;
-    int maxnorm(0), l2norm2(0);
-    vecint2=vecint1;
-    vecint3=vecint1;
-    vecint2.scal(randint);
-    vecint3.axpy(randint, vec2);
+    double randdouble= static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+    double maxnorm(0), l2norm2(0);
+    vec7=vec6;
+    vec8=vec6;
+    vec7.scal(randdouble);
+    vec8.axpy(randdouble, vec2);
     for (size_t i(0); i<N; i++)
     {
-        l2norm2+=vecint1[i]*vecint1[i];
-        if (abs(vecint1[i]) > maxnorm )
+        l2norm2+=vec6[i]*vec6[i];
+        if (abs(vec6[i]) > maxnorm )
         {
-            maxnorm=abs(vecint1[0]);
+            maxnorm=abs(vec6[0]);
         }
-        if (vecint2[i]!=randint*vecint1[i])
+        if (vec7[i]!=randdouble*vec6[i])
         {
-             LOG_ERROR("scal failed");
+             LOG_DEBUG("scal failed ; value: ",vec7[i], "refernce value: ", randdouble*vec6[i]);
         }
-        if (vecint3[i]!=randint*vecint3[i]+vecint2[i])
+        if (vec8[i]!=randdouble*vec8[i]+vec7[i])
         {
-             LOG_ERROR("axpy failed");
+             LOG_DEBUG("axpy failed; value: ",vec8[i], "refernce value: ", randdouble*vec8[i]+vec7[i]);
         }
     }
-    if (maxnorm!=vecint1.maxnorm())
+    if (maxnorm!=vec6.maxnorm())
     {
-        LOG_ERROR("maxnorm failed");
+        LOG_DEBUG("maxnorm failed; value: ",vec6.maxnorm(), "refernce value: ", maxnorm);
     }
-    if (l2norm2!=vecint1.l2norm2())
+    if (l2norm2!=vec6.l2norm2())
     {
-        LOG_ERROR("L2norm2 failed");
+        LOG_DEBUG("L2norm2 failed; value: ",vec6.l2norm2(), "refernce value: ", l2norm2);
     }
     return 0;
 }
