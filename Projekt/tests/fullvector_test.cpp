@@ -12,7 +12,6 @@
 int fullvectortest()
 {
     srand (static_cast <unsigned> (time(0)));
-    double r = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 	const size_t N=100000;
 	const int randintmax(100);
 	Icarus::FullVector<double> vec1(N), vec2(N), vec4(N);
@@ -30,7 +29,7 @@ int fullvectortest()
         vec1[i]=r;
         vecint1[i]=sign*randint;
     }
-    FullVector<double> vec3(vec1); //test copy constructor
+    Icarus::FullVector<double> vec3(vec1); //test copy constructor
 	vec2=vec1;
 	for (size_t i(0); i<N; i++)
     {
@@ -79,6 +78,7 @@ int fullvectortest()
     {
         LOG_ERROR("L2norm2 failed");
     }
+    return 0;
 }
 
 int main()
