@@ -17,7 +17,7 @@ int fullvectortest()
 	const int randintmax(100);
 	Icarus::FullVector<double> vec1(N), vec2(N), vec4(N);
 	Icarus::FullVector<double> vecint1(N), vecint2(N), vecint3(N);
-	if (vec1.get_dim()=N){
+	if (vec1.get_dim()!=N){
         LOG_ERROR("get_dim failed");
 	}
 	double constdouble (static_cast <double> (rand()) / static_cast <double> (RAND_MAX));
@@ -52,6 +52,7 @@ int fullvectortest()
     int randint=rand()%randintmax;
     int maxnorm(0), l2norm2(0);
     vecint2=vecint1;
+    vecint3=vecint1;
     vecint2.scal(randint);
     vecint3.axpy(randint, vec2);
     for (size_t i(0); i<N; i++)
@@ -65,7 +66,7 @@ int fullvectortest()
         {
              LOG_ERROR("scal failed");
         }
-        if (vecint3[i]!=randint*vecint1[i]+vecint2[i])
+        if (vecint3[i]!=randint*vecint3[i]+vecint2[i])
         {
              LOG_ERROR("axpy failed");
         }
