@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     int *indices_host = new int[dimlocal*maxrowlength];
     float *fvec_host = new float[dimfvec];
 
-    diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal);
+    diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
     Timer timer_overall;
 
