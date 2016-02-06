@@ -52,3 +52,14 @@ int vtk_writer_test()
 	return 0;
 }
 
+int main()
+{
+    int myrank;
+    MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
+    if (myrank == 0)
+    {
+        return vtk_writer_test();
+    }
+    return 0;
+}
+
