@@ -66,7 +66,7 @@ namespace Icarus
                 file << title << std::endl;
                 file << "ASCII\nDATASET STRUCTURED_POINTS\nDIMENSIONS ";
                 file << xdim << " " << ydim << " " << zdim << std::endl;
-                file << "SPACING" << h << " " << h << " " << h << "\nORIGIN 0 0 0\n\n";
+                file << "SPACING " << h << " " << h << " " << h << "\nORIGIN 0 0 0\n\n";
                 file.close();
             }
             else LOG_ERROR("Unable to open file.");
