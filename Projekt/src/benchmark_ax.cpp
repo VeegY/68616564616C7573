@@ -8,8 +8,8 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dimlocal 64
-#define dimfvec 64
+#define dimlocal 8
+#define dimfvec 8
 #define maxrowlength 7
 #define iteration 1
 
@@ -49,8 +49,11 @@ int main(int argc, char* argv[])
     float *data_host = new float[dimlocal*maxrowlength];
     int *indices_host = new int[dimlocal*maxrowlength];
     float *fvec_host = new float[dimfvec];
+    float *result_host = new float[dimlocal];
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
+
+    print_stuff(data_host, indices_host, fvec_host, result_host, maxrowlength, dimlocal, dimfvec);
 
     Timer timer_overall;
 
@@ -77,9 +80,11 @@ int main(int argc, char* argv[])
         std::cout << " KERNEL END \n";
         
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
-        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
-        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
+        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
         std::cout << " CLEANUP END\n ";
+
+        print_stuff(data_unified, indices_unified, fvec_unified, result_unified, maxrowlength, dimlocal, dimfvec);
 
     }
         float elapsed_unified = timer_overall.stop();

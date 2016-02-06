@@ -44,8 +44,13 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
 
 
     }
+    for (int k = 0; k < dim_fvec; k++)
+    {
+        fvec[k]= static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
+    }
 
 }
+
 void random_ints(int *data,int *indices, int* fvec, int dim)
 {
 	for (int i = 0; i < dim;i++)
@@ -95,17 +100,20 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
     return true;
 }
 
-void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *indicesg, float *fvecg, int max_row_length, int dim_local)
+void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *indicesg, float *fvecg, int max_row_length, int dim_local, int dim_fvec)
 {
-	for (int i = 0; i < max_row_length; i++)
+	for (int i = 0; i < dim_local; i++)
 	{
-		for (int j = 0; j < dim_local; j++)
+		for (int j = 0; j < max_row_length j++)
 		{
-			datag[i*dim_local + j] = datah[i*dim_local + j];
-			indicesg[i*dim_local + j] = indicesh[i*dim_local + j];
+			datag[j*dim_local + i] = datah[j*dim_local + i];
+			indicesg[j*dim_local + i] = indicesh[j*dim_local + i];
 		}
-		fvecg[i] = fvech[i];
 	}
+    for (int k = 0; k < dim_fvec; k++)
+    {
+        fvecg[k] = fvech[k];
+    }
 }
 
 void print_time(float *ukt, float *uot, float *zkt, float *zot,int runs)
@@ -126,13 +134,13 @@ void print_time(float *ukt, float *uot, float *zkt, float *zot,int runs)
     printf("UK: %fms - UO: %fms - ZK: %fms - ZO: %fms\n",uktime,uotime,zktime,zotime);
 }
 
-void print_stuff(int *data, int *indices, int *fvec,int *result,  int dim)
+void print_stuff(float *data, int *indices, float *fvec, float *result,  int max_row_length, int dim_local, int dim_fvec)
 {
-	for (int i = 0; i < dim; i++)
+	for (int i = 0; i < dim_local; i++)
 	{
-		for (int j = 0; j < dim; j++)
+		for (int j = 0; j < max_row_length; j++)
 		{
-			printf("%i:%i - ", data[i*dim + j], indices[i*dim + j]);
+			printf("%i:%i - ", data[j*dim_local + i], indices[j*dim_local + i]);
 		}
 		printf(" --- vec: %i ~~~> Result: %i\n", fvec[i],result[i]);
 	}
