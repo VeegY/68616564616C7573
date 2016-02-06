@@ -9,37 +9,44 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
 {
     srand(static_cast <unsigned> (time(0)));
     int diag[7];
-    diag[0] = -floor(pow(dim_local, (2 / 3)));
-    diag[1] = -floor(pow(dim_local, (1 / 3)));
+    diag[0] = -floor(pow(dim_local, (2.0/3.0)));
+    diag[1] = -floor(pow(dim_local, (1.0/3.0)));
     diag[2] = -1;
     diag[3] = 0;
     diag[4] = 1;
-    diag[5] = floor(pow(dim_local, (1 / 3)));
-    diag[6] = floor(pow(dim_local, (2 / 3)));
-
+    diag[5] = floor(pow(dim_local, (1.0/3.0)));
+    diag[6] = floor(pow(dim_local, (2.0/3.0)));
+    
+    std::cout << diag[0] << "\n";    
+    std::cout << diag[1] << "\n";    
+    std::cout << diag[2] << std::endl;   
+    std::cout << diag[3] << std::endl;    
+    std::cout << diag[4] << std::endl;    
+    std::cout << diag[5] << std::endl;    
+    std::cout << diag[6] << std::endl;    
+    
+    std::cout << dim_local << std::endl;    
 
     for (int i = 0; i < dim_local;i++)
     {
-        int offset = 0;
+        int offset=0;
         for (int j = 0; j < max_row_length; j++)
         {
             float value = 0;
-            
-            if (diag[j] >= 0 && diag [j] < dim_local);
+            if (diag[j] >= 0 && diag[j] < dim_local)
             {
                 value = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
-                data[i + offset*dim_local] = value;
-                indices[i + offset*dim_local] = diag[j];
+                data[i+offset*dim_local] = value;
+                indices[i+offset*dim_local] = diag[j];
                 offset++;
             }
-            diag[j] +=  1;
+        diag[j] = diag[j]+1;
 
         }
-        for (int off = 6 - offset; off > 1; off--)
+        for (int off = offset; off < max_row_length; off++)
         {
-            data[i + offset*dim_local] = 0;
-            indices[i + offset*dim_local] = 0;
-            offset++;
+            data[i+offset*dim_local] = 0;
+            indices[i+offset*dim_local] = 0;
         }
 
 
@@ -104,9 +111,9 @@ void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *in
 {
 	for (int i = 0; i < dim_local; i++)
 	{
-		for (int j = 0; j < max_row_length j++)
+		for (int j = 0; j < max_row_length;j++)
 		{
-			datag[j*dim_local + i] = datah[j*dim_local + i];
+			datag[j*dim_local+i] = datah[j*dim_local + i];
 			indicesg[j*dim_local + i] = indicesh[j*dim_local + i];
 		}
 	}
@@ -140,7 +147,7 @@ void print_stuff(float *data, int *indices, float *fvec, float *result,  int max
 	{
 		for (int j = 0; j < max_row_length; j++)
 		{
-			printf("%f:%i - ", data[j*dim_local + i], indices[j*dim_local + i]);
+			printf("%f:%i - ", data[max_row_length*i+j], indices[max_row_length*i+j]);
 		}
 		printf(" --- vec: %f ~~~> Result: %f\n", fvec[i],result[i]);
 	}
