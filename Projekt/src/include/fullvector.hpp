@@ -28,8 +28,8 @@ class FullVector : public Vector<FullVector<Scalar>>
 {
     friend class Vector<FullVector<Scalar>>;
 
-	MPI_Comm _my_comm;
-	int _my_rank, _num_nodes;
+    MPI_Comm _my_comm;
+    int _my_rank, _num_nodes;
 
     Scalar* _data;
 
@@ -39,7 +39,7 @@ public:
     typedef Scalar ScalarType;
     typedef typename ScalarTraits<Scalar>::RealType RealType;
 
-    explicit FullVector(size_t dim);
+    explicit FullVector(size_t dim, MPI_Comm my_comm = MPI_COMM_WORLD);
 
     explicit FullVector(const SlicedVector<Scalar>& vec);
 
