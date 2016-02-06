@@ -51,30 +51,30 @@ int fullvectortest()
     vec7=vec6;
     vec8=vec6;
     vec7.scal(randdouble);
-    vec8.axpy(randdouble, vec2);
+    vec8.axpy(randdouble, vec7);
     for (size_t i(0); i<N; i++)
     {
         l2norm2+=vec6[i]*vec6[i];
         if (abs(vec6[i]) > maxnorm )
         {
-            maxnorm=abs(vec6[0]);
+            maxnorm=abs(vec6[i]);
         }
         if (vec7[i]!=randdouble*vec6[i])
         {
-             LOG_DEBUG("scal failed ; value: ",vec7[i], "refernce value: ", randdouble*vec6[i]);
+             LOG_DEBUG("scal failed ; value: ",vec7[i], "  refernce value: ", randdouble*vec6[i]);
         }
-        if (vec8[i]!=randdouble*vec8[i]+vec7[i])
+        if (vec8[i]!=randdouble*vec6[i]+vec7[i])
         {
-             LOG_DEBUG("axpy failed; value: ",vec8[i], "refernce value: ", randdouble*vec8[i]+vec7[i]);
+             LOG_DEBUG("axpy failed; value: ",vec8[i], "  refernce value: ", randdouble*vec6[i]+vec7[i]);
         }
     }
     if (maxnorm!=vec6.maxnorm())
     {
-        LOG_DEBUG("maxnorm failed; value: ",vec6.maxnorm(), "refernce value: ", maxnorm);
+        LOG_DEBUG("maxnorm failed; value: ",vec6.maxnorm(), "  refernce value: ", maxnorm);
     }
     if (l2norm2!=vec6.l2norm2())
     {
-        LOG_DEBUG("L2norm2 failed; value: ",vec6.l2norm2(), "refernce value: ", l2norm2);
+        LOG_DEBUG("L2norm2 failed; value: ",vec6.l2norm2(), "  refernce value: ", l2norm2);
     }
     return 0;
 }
