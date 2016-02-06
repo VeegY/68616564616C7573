@@ -3,7 +3,7 @@
 namespace Icarus
 {
 
-	vtkWriter::vtkWriter(std::string filename, std::string title, int xdim, int ydim, int zdim, unsigned int timesteps) :
+	vtkWriter::vtkWriter(std::string filename, std::string title, size_t xdim, size_t ydim, size_t zdim, size_t timesteps) :
 		_filename(filename),
 		_title(title),
 		_tsteps(timesteps),
@@ -17,7 +17,7 @@ namespace Icarus
 		_point_data_written_last = new bool[_tsteps]();
 		std::ofstream file;
 		std::string hfname(_filename);
-		for (unsigned i = 0; i < _tsteps; ++i)
+		for (size_t i(0); i < _tsteps; ++i)
 		{
 			_point_data_written_last[i] = false;
 			_cell_data_written_last[i] = false;
@@ -38,7 +38,7 @@ namespace Icarus
 		}
 	}
 
-	vtkWriter::vtkWriter(std::string filename, std::string title, int xdim, int ydim, int zdim, double h, unsigned int timesteps):
+	vtkWriter::vtkWriter(std::string filename, std::string title, size_t xdim, size_t ydim, size_t zdim, double h, unsigned size_t timesteps):
     _filename(filename),
     _title(title),
     _tsteps(timesteps),
@@ -52,7 +52,7 @@ namespace Icarus
         _point_data_written_last=new bool[_tsteps]();
         std::ofstream file;
         std::string hfname(_filename);
-        for (unsigned i=0; i<_tsteps; ++i)
+        for (size_t i(0); i<_tsteps; ++i)
         {
             _point_data_written_last[i]=false;
             _cell_data_written_last[i]=false;

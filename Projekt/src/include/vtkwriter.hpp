@@ -27,9 +27,9 @@ class vtkWriter
     bool* _point_data_written_last;
     std::string _filename;
     std::string _title;
-    unsigned int _tsteps;
-    int _xdim, _ydim, _zdim;
-    int _cells, _points;
+    size_t _tsteps;
+    size_t _xdim, _ydim, _zdim;
+    size_t _cells, _points;
 
 public:
 
@@ -41,7 +41,7 @@ public:
 ///@param   ydim           Anzahl der Punkte in y Richtung
 ///@param   zdim           Anzahl der Punkte in z Richtung
 ///@param   timesteps       Anzahl der Zeitschritte
-    vtkWriter(std::string filename, std::string title, int xdim, int ydim, int zdim, unsigned int timesteps);
+    vtkWriter(std::string filename, std::string title, size_t xdim, size_t ydim, size_t zdim, size_t timesteps);
 
 ///\brief	Konstruktor
 // -------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ public:
 ///@param   zdim           Anzahl der Punkte in z Richtung
 ///@param   h              Ortschrittweite in alle Richtungen
 ///@param   timesteps       Anzahl der Zeitschritte
-    vtkWriter(std::string filename, std::string title, int xdim, int ydim, int zdim, double h, unsigned int timesteps);
+    vtkWriter(std::string filename, std::string title, size_t xdim, size_t ydim, size_t zdim, double h, size_t timesteps);
 
 ///\brief	Destruktor
     ~vtkWriter();
@@ -67,7 +67,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointDataToTimestep(const type data[], const int length, const unsigned timestep, std::string name);
+    void addPointDataToTimestep(const type data[], const size_t length, const size_t timestep, std::string name);
 
 ///\brief	Fuegt skalarwertige Punktdaten zu einem Zeitschritt hinzu.
 ///         Die Daten werden in der Datei als float abgespeichert.
@@ -78,7 +78,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointDataToTimestep(const FullVector<type>& data, const unsigned timestep, const std::string name);
+    void addPointDataToTimestep(const FullVector<type>& data, const size_t timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Zelldaten zu einem Zeitschritt hinzu.
@@ -91,7 +91,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellDataToTimestep(const type data[], const int length, const unsigned timestep, const std::string name);
+    void addCellDataToTimestep(const type data[], const size_t length, const size_t timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Zelldaten zu einem Zeitschritt hinzu.
@@ -103,7 +103,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellDataToTimestep(const FullVector<type>& data, const unsigned timestep, const std::string name);
+    void addCellDataToTimestep(const FullVector<type>& data, const size_t timestep, const std::string name);
 
 
 ///\brief	Fuegt skalarwertige Punktdaten zu allen Zeitschritten hinzu.
@@ -115,7 +115,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointDataToAll(const type data[], int length, std::string name);
+    void addPointDataToAll(const type data[], size_t length, std::string name);
 
 
 
@@ -139,7 +139,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellDataToAll(const type data[], int length, std::string name);
+    void addCellDataToAll(const type data[], size_t length, std::string name);
 
 
 ///\brief	Fuegt skalarwertige Zelldaten zu allen Zeitschritten hinzu
@@ -164,7 +164,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointVecToTimestep(const type datax[], const type datay[], const type dataz[], const int length, const unsigned timestep, std::string name);
+    void addPointVecToTimestep(const type datax[], const type datay[], const type dataz[], const size_t length, const size_t timestep, std::string name);
 
 
 ///\brief	Fuegt vektorwertige Punktdaten zu einem Zeitschritt hinzu.
@@ -178,7 +178,7 @@ public:
 ///@param   name        Name der Daten
 
     template<typename type>
-    void addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const unsigned timestep, const std::string name);
+    void addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const size_t timestep, const std::string name);
 
 
 
@@ -194,7 +194,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellVecToTimestep(const type datax[], const type datay[], const type dataz[], const int length, const unsigned timestep, std::string name);
+    void addCellVecToTimestep(const type datax[], const type datay[], const type dataz[], const size_t length, const size_t timestep, std::string name);
 
 ///\brief	Fuegt vektorwertige Punktdaten zu einem Zeitschritt hinzu.
 ///         Die Daten werden in der Datei als float abgespeichert.
@@ -207,7 +207,7 @@ public:
 ///@param   name        Name der Daten
 
     template<typename type>
-    void addCellVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const unsigned timestep, const std::string name);
+    void addCellVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const size_t timestep, const std::string name);
 
 
 ///\brief	Fuegt vektorwertige Punktdaten zu allen Zeitschritten hinzu.
@@ -221,7 +221,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addPointVecToAll(const type datax[], const type datay[], const type dataz[], int length, std::string name);
+    void addPointVecToAll(const type datax[], const type datay[], const type dataz[], size_t length, std::string name);
 
 ///\brief	Fuegt vektorwertige Punktdaten zu allen Zeitschritt hinzu.
 ///         Die Daten werden in der Datei als float abgespeichert.
@@ -248,7 +248,7 @@ public:
 ///@param   name    Name der Daten
 
     template<typename type>
-    void addCellVecToAll(const type datax[], const type datay[], const type dataz[], int length, std::string name);
+    void addCellVecToAll(const type datax[], const type datay[], const type dataz[], size_t length, std::string name);
 
 
 ///\brief	Fuegt vektorwertige Zelldaten zu allen Zeitschritt hinzu.
