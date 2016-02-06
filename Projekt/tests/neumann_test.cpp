@@ -15,14 +15,14 @@ double bdry(int vtx_global)
 int neumann_demo()
 {
 	const int nx = 50, ny = 50, nz = 50;
-	const float h = 0.1;
+	const float h = 0.01;
 	// diskretisieren
 	//std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
 	
 	// assemblieren
 	auto lgs = Icarus::assemble_neumann<double>(nx, ny, nz, h, bdry);
 	
-	// lösen
+	// lï¿½sen
 	size_t n = lgs.first.get_dim_global();
 	Icarus::SlicedVector<double> sol(n);
 	sol.clear();
