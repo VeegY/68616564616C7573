@@ -2,7 +2,40 @@
 #include <cmath>
 #include <stdlib.h>
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 
+void diagonal_float(float *data, int *indices, float fvec, int dim_local, int max_row_length)
+{
+    srand(static_cast <unsigned> (time(0)));
+    int diag[7];
+    diag[0] = -floor(pow(dim_local, (2 / 3)));
+    diag[1] = -floor(pow(dim_local, (1 / 3)));
+    diag[2] = -1;
+    diag[3] = 0;
+    diag[4] = 1;
+    diag[5] = floor(pow(dim_local, (1 / 3)));
+    diag[6] = floor(pow(dim_local, (2 / 3)));
+
+
+    for (int i = 0; i < dim_local;i++)
+    {
+        //for (int j = 0; j < max_row_length; j++)
+        //{
+            for (int d = 0; d < 7; d++)
+            {
+                float value = 0;
+                if (diag[d] + i > 0)
+                {
+                    value = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
+                    indices[d*dim_local + j] = diag[d];
+                }
+                data[d*dim_local + j] = value;
+            }
+        //}
+    }
+
+}
 void random_ints(int *data,int *indices, int* fvec, int dim)
 {
 	for (int i = 0; i < dim;i++)
@@ -34,7 +67,7 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
     }
 }
 
-bool check_result(int *result, int *datah, int *indicesh, int *fvech, int dim)
+bool check_result(float *result, float *datah, int *indicesh, float *fvech, int dim)
 {
     //bool check = true;
     for (int i = 0; i < dim; i++)
@@ -52,14 +85,14 @@ bool check_result(int *result, int *datah, int *indicesh, int *fvech, int dim)
     return true;
 }
 
-void set_values(int *datah, int *indicesh, int *fvech, int *datag, int *indicesg, int *fvecg, int dim)
+void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *indicesg, float *fvecg, int dim_local, int max_row_length)
 {
-	for (int i = 0; i < dim; i++)
+	for (int i = 0; i < max_row_length; i++)
 	{
-		for (int j = 0; j < dim; j++)
+		for (int j = 0; j < dim_local; j++)
 		{
-			datag[i*dim + j] = datah[i*dim + j];
-			indicesg[i*dim + j] = indicesh[i*dim + j];
+			datag[i*dim_local + j] = datah[i*dim_local + j];
+			indicesg[i*dim_local + j] = indicesh[i*dim_local + j];
 		}
 		fvecg[i] = fvech[i];
 	}

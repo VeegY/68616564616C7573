@@ -5,6 +5,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cmath>
+#include "include/timer.hpp"
 
 //KERNEL
 template<typename type>

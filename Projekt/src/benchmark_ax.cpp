@@ -8,7 +8,8 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim 64
+#define dim_local 64
+#define max_row_length 7
 #define runs 1
 
 void print_p();
@@ -35,61 +36,42 @@ int main(int argc, char* argv[])
 {
 
     cout << "DIM = " << dim << " - RUNS = " << runs << "\n";
-    float *unified_kernel_time = new float[runs];
-    float *unified_overall_time = new float[runs];
-    float *zero_kernel_time = new float[runs];
-    float *zero_overall_time = new float[runs];
+
 
 //Generiere Data/Indices Int-Array sowie fvec Int Array
-    int *data_host = new int[dim*dim];
-    int *indices_host = new int[dim*dim];
-    int *fvec_host = new int[dim];
+    float *data_host = new int[dim*max_row_length];
+    int *indices_host = new int[dim*max_row_length];
+    float *fvec_host = new int[dim];
 
-    random_ints(data_host, indices_host, fvec_host, dim);
+    diagonal_float(data_host, indices_host, fvec_host, dim);
 
-
-    Timer timer_kernel;
     Timer timer_overall;
 
 //================================================================================================/
 //										Unified Kernel
 //================================================================================================/
-for(int r = 0;r<runs;r++)
-{
-    //Initialisiere Timer und Pointer
+    
     timer_overall.start();
 
-    int *data_unified = NULL;
-    int *fvec_unified = NULL;
-    int *result_unified = NULL;
-    int *indices_unified = NULL;
+    for(int r = 0;r<runs;r++)
+{
 
+    //Pointer
+    float *data_unified = NULL;
+    float *fvec_unified = NULL;
+    float *result_unified = NULL;
+    int *indices_unified = NULL;
 
     //Setze Pointer als UNIFIED Pointer mit bestimmter Groesze und setze Daten
     alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, dim, dim, dim);
     set_values(data_host,indices_host,fvec_host,data_unified,indices_unified,fvec_unified, dim);
 
 
-    //Kernel Zeit und Kernel starten
-    timer_kernel.start();
+    //Kernel
     mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, dim, dim, dim);
 
 
-    //Messe Zeiten
-    float elapsed_k = timer_kernel.stop();
-    float elapsed_o = timer_overall.stop();
-    unified_kernel_time[r] = elapsed_k;
-    unified_overall_time[r] = elapsed_o;
-
-    /*//TIME
-    float elapsed_unified_kernel = timer_unified_kernel.stop();
-    float elapsed_unfified_overall = timer_unified_overall.stop();
-    cout << "KERNEL TIME: " << elapsed_unified_kernel * 1000 << "\n";
-    cout << "OVERALL TIMER: " << elapsed_unfified_overall * 1000 << "\n\n";*/
-
-
     //Ein Ergebnis Check pro Schleife
-    // print_stuff(data_unified, indices_unified, fvec_unified,result_unified, dim);
     if(r==0)
     {
       if(check_result(result_unified, data_host, indices_host, fvec_host, dim))
@@ -104,10 +86,11 @@ for(int r = 0;r<runs;r++)
     cleanup(data_unified, fvec_unified, result_unified, indices_unified);
 
 }
+    float elapsed_unified = timer_overall.stop();
 //================================================================================================/
 //										Zero Copy Kernel
 //================================================================================================/
-for(int r = 0;r<runs;r++)
+/*for(int r = 0;r<runs;r++)
 {
     //Initialisiere Timer und Pointer
     timer_overall.start();
@@ -155,9 +138,9 @@ for(int r = 0;r<runs;r++)
     cleanup(data_zero, fvec_zero, result_zero, indices_zero);
 
 }
-//================================================================================================/
+//================================================================================================/*/
 
-    print_time(unified_kernel_time, unified_overall_time,zero_kernel_time,zero_overall_time,runs);
+    //print_time(unified_kernel_time, unified_overall_time,zero_kernel_time,zero_overall_time,runs);
 
 
     delete[] data_host;
