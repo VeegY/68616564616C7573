@@ -15,11 +15,11 @@ int fullvectortest()
     double r = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 	const size_t N=100000;
 	const int randintmax;
-	FullVector<double> vec1(N), vec2(N), vec4(N);
-	FullVector<double> vecint1(N), vecint2(N), vecint3(N);
+	Icarus::FullVector<double> vec1(N), vec2(N), vec4(N);
+	Icarus::FullVector<double> vecint1(N), vecint2(N), vecint3(N);
 	if (vec1.get_dim())
 
-	double constdouble = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+	double constdouble (static_cast <double> (rand()) / static_cast <double> (RAND_MAX));
 	vec4.fill_const(constdouble);
 	for (size_t i(0); i<N; i++)
     {
@@ -27,7 +27,7 @@ int fullvectortest()
         int sign=2*(rand()%2)-1;
         int randint=rand()%randintmax;
         vec1[i]=r;
-        vecint1[i]=sign*randint();
+        vecint1[i]=sign*randint;
     }
     FullVector<double> vec3(vec1); //test copy constructor
 	vec2=vec1;
