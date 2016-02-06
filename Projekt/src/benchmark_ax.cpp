@@ -16,7 +16,7 @@ using namespace std;
 void print_p();
 
 template<typename Scalar>
-void performance(int max_row_length, int dim_local, float time, Scalar schalter);
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, Scalar schalter);
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -88,6 +88,8 @@ int main(int argc, char* argv[])
 
     }
         float elapsed_unified = timer_overall.stop();
+        float schalter = 0;
+        performance(maxrowlength, dimlocal, 1.0, 1.0, schalter);
 //================================================================================================/
 //										Zero Copy Kernel
 //================================================================================================/

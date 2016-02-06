@@ -30,7 +30,7 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 
 //CALCULATING MEMORY BANDWITH
 template<typename type>
-void performance(int max_row_length, int dim_local, float time, type schalter)
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, type schalter)
 {
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
@@ -41,11 +41,34 @@ void performance(int max_row_length, int dim_local, float time, type schalter)
     bRead += max_row_length*dim_local*sizeof(int);  //indices-Array
     bRead += max_row_length*dim_local*sizeof(type); //fvec-Array
     bWrite += dim_local*sizeof(type);               //result-Array
+
+    printf("===============================================\n");
+    printf("                PERFORMANCE\n");
+    printf("===============================================\n");
+    printf("-----------------------------------------------\n");
+    printf("                UNIFIED_MERMORY\n\033[0;47;1;36m");
+    printf("-----------------------------------------------\n");
+    printf("Kernel Runtime:\t\tms\n");
+    printf("Overall Runtime:\t\tms\n");
+    printf("Bandwith(theoretical):\t\txxx/(14.9)(GB/s)\n");
+    printf("Flops(Theoretcical):\t\txxx/(326)(GFLOPS/s\n");
+    printf("-----------------------------------------------\n");
+    printf("-----------------------------------------------\n");
+    printf("                ZERO_COPY\n\033[0;47;1;36m");
+    printf("-----------------------------------------------\n");
+    printf("Kernel Runtime:\t\tms\n");
+    printf("Overall Runtime:\t\tms\n");
+    printf("Bandwith(theoretical):\t\txxx/(14.9)(GB/s)\n");
+    printf("Flops(Theoretcical):\t\txxx/(326)(GFLOPS/s\n");
+    printf("-----------------------------------------------\n");
+
+
+
     
 }
-template void performance<int>(int dim_local, int max_row_length, float time, int schalter);
-template void performance<float>(int dim_local, int max_row_length, float time, float schalter);
-template void performance<double>(int dim_local, int max_row_length, float time, double schalter);
+template void performance<int>(int dim_local, int max_row_length, float time_ku, float time_uo, int schalter);
+template void performance<float>(int dim_local, int max_row_length, float time_ku, float time_uo, float schalter);
+template void performance<double>(int dim_local, int max_row_length, float time_ku, float time_uo, double schalter);
 
 
 //PROPERTIES OF TEGRA K1
