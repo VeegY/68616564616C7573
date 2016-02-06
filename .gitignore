@@ -4,6 +4,5 @@
 *~
 # ignoriert alle Dateien im build/ Verzeichnis nicht aber
 build/
-Dokumentation/
-!Dokumentation/doxygen_config
-
+documentation/
+!documentation/doxygen_config

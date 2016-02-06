@@ -2,7 +2,7 @@ namespace Icarus
 {
 
 template<typename type>
-void vtkWriter::addPointDataToTimestep(const type data[], const int length, const unsigned timestep, std::string name)
+void vtkWriter::addPointDataToTimestep(const type data[], const size_t length, const size_t timestep, std::string name)
 {
     if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
@@ -22,7 +22,7 @@ void vtkWriter::addPointDataToTimestep(const type data[], const int length, cons
                 }
                 file << "SCALARS " << name <<" float"<<std::endl;
                 file << "LOOKUP_TABLE default" << std::endl;
-                for (int i=0; i<_points; ++i)
+                for (size_t i=0; i<_points; ++i)
                 {
                     file << static_cast<float>(data[i])<<std::endl;
                 }
@@ -41,7 +41,7 @@ void vtkWriter::addPointDataToTimestep(const type data[], const int length, cons
 }
 
 template<typename type>
-void vtkWriter::addPointDataToTimestep(const FullVector<type>& data, const unsigned timestep, const std::string name)
+void vtkWriter::addPointDataToTimestep(const FullVector<type>& data, const size_t timestep, const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
@@ -61,7 +61,7 @@ void vtkWriter::addPointDataToTimestep(const FullVector<type>& data, const unsig
                 }
                 file << "SCALARS " << name <<" float"<<std::endl;
                 file << "LOOKUP_TABLE default" << std::endl;
-                for (int i=0; i<_points; ++i)
+                for (size_t i=0; i<_points; ++i)
                 {
                     file << static_cast<float>(data[i])<<std::endl;
                 }
@@ -80,12 +80,12 @@ void vtkWriter::addPointDataToTimestep(const FullVector<type>& data, const unsig
 }
 
 template<typename type>
-void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const unsigned timestep, const std::string name)
+void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullVector<type>& datay, const FullVector<type>& dataz, const size_t timestep, const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
 	else
 	{
-		if (datax.get_dim() == _points || datax.get_dim() == _points || datax.get_dim() == _points)
+		if (datax.get_dim() == _points && datay.get_dim() == _points && dataz.get_dim() == _points)
 		{
 			std::ofstream file;
 			std::string hfname(_filename);
@@ -98,9 +98,9 @@ void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullV
 				{
 					file << "POINT_DATA " << _points << std::endl;
 				}
-				file << "SCALARS " << name << " float" << std::endl;
+				file << "VECTORS " << name << " float" << std::endl;
 				file << "LOOKUP_TABLE default" << std::endl;
-				for (int i = 0; i < _points; ++i)
+				for (size_t i = 0; i < _points; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
 				}
@@ -120,8 +120,8 @@ void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullV
 
 template<typename type>
 void vtkWriter::addPointVecToTimestep(const type datax[], const type datay[],
-                                      const type dataz[], const int length,
-                                      const unsigned timestep, std::string name)
+                                      const type dataz[], const size_t length,
+                                      const size_t timestep, std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
 	else
@@ -139,9 +139,9 @@ void vtkWriter::addPointVecToTimestep(const type datax[], const type datay[],
 				{
 					file << "POINT_DATA " << _points << std::endl;
 				}
-				file << "SCALARS " << name << " float" << std::endl;
+				file << "VECTORS " << name << " float" << std::endl;
 				file << "LOOKUP_TABLE default" << std::endl;
-				for (int i = 0; i < _points; ++i)
+				for (size_t i = 0; i < _points; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
 				}
@@ -163,7 +163,7 @@ void vtkWriter::addPointVecToTimestep(const type datax[], const type datay[],
 
 template<typename type>
 void vtkWriter::addCellDataToTimestep(const FullVector<type>& data,
-                                       const unsigned timestep, const std::string name)
+                                       const size_t timestep, const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
@@ -179,18 +179,18 @@ void vtkWriter::addCellDataToTimestep(const FullVector<type>& data,
             {
                 if (_cell_data_written_last[timestep]==false)
                 {
-                    file << "CELL_DATA " << _points <<std::endl;
+                    file << "CELL_DATA " << _cells <<std::endl;
                 }
                 file << "SCALARS " << name <<" float"<<std::endl;
                 file << "LOOKUP_TABLE default" << std::endl;
-                for (int i=0; i<_cells; ++i)
+                for (size_t i=0; i<_cells; ++i)
                 {
                     file << static_cast<float>(data[i])<<std::endl;
                 }
                 file << std::endl;
                 file.close();
-                _point_data_written_last[timestep]=true;
-                _cell_data_written_last[timestep]=false;
+                _point_data_written_last[timestep]=false;
+                _cell_data_written_last[timestep]=true;
             }
             else LOG_ERROR("Unable to open file.");
         }
@@ -202,8 +202,8 @@ void vtkWriter::addCellDataToTimestep(const FullVector<type>& data,
 }
 
 template<typename type>
-void vtkWriter::addCellDataToTimestep(const type data[], const int length,
-                                   const unsigned timestep, const std::string name)
+void vtkWriter::addCellDataToTimestep(const type data[], const size_t length,
+                                   const size_t timestep, const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
     else
@@ -219,11 +219,11 @@ void vtkWriter::addCellDataToTimestep(const type data[], const int length,
             {
                 if (_cell_data_written_last[timestep]==false)
                 {
-                    file << "CELL_DATA " << _points <<std::endl;
+                    file << "CELL_DATA " << _cells <<std::endl;
                 }
                 file << "SCALARS " << name <<" float"<<std::endl;
                 file << "LOOKUP_TABLE default" << std::endl;
-                for (int i=0; i<_cells; ++i)
+                for (size_t i=0; i<_cells; ++i)
                 {
                     file << static_cast<float>(data[i])<<std::endl;
                 }
@@ -245,13 +245,13 @@ template<typename type>
 void vtkWriter::addCellVecToTimestep(const FullVector<type>& datax,
                                       const FullVector<type>& datay,
                                       const FullVector<type>& dataz,
-                                      const unsigned timestep,
+                                      const size_t timestep,
                                       const std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
 	else
 	{
-		if (datax.get_dim() == _cells || datax.get_dim() == _cells || datax.get_dim() == _cells)
+		if (datax.get_dim() == _cells && datay.get_dim() == _cells && dataz.get_dim() == _cells)
 		{
 			std::ofstream file;
 			std::string hfname(_filename);
@@ -262,11 +262,11 @@ void vtkWriter::addCellVecToTimestep(const FullVector<type>& datax,
 			{
 				if (_cell_data_written_last[timestep] == false)
 				{
-					file << "POINT_DATA " << _cells << std::endl;
+					file << "CELL_DATA " << _cells << std::endl;
 				}
-				file << "SCALARS " << name << " float" << std::endl;
+				file << "VECTORS " << name << " float" << std::endl;
 				file << "LOOKUP_TABLE default" << std::endl;
-				for (int i = 0; i < _cells; ++i)
+				for (size_t i = 0; i < _cells; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
 				}
@@ -286,8 +286,8 @@ void vtkWriter::addCellVecToTimestep(const FullVector<type>& datax,
 
 template<typename type>
 void vtkWriter::addCellVecToTimestep(const type datax[], const type datay[],
-                                      const type dataz[], const int length,
-                                      const unsigned timestep, std::string name)
+                                      const type dataz[], const size_t length,
+                                      const size_t timestep, std::string name)
 {
 	if (0 > timestep || timestep >= _tsteps) LOG_ERROR("invalid timestep");
 	else
@@ -305,9 +305,9 @@ void vtkWriter::addCellVecToTimestep(const type datax[], const type datay[],
 				{
 					file << "CELL_DATA " << _cells << std::endl;
 				}
-				file << "SCALARS " << name << " float" << std::endl;
+				file << "VECTORS " << name << " float" << std::endl;
 				file << "LOOKUP_TABLE default" << std::endl;
-				for (int i = 0; i < _cells; ++i)
+				for (size_t i = 0; i < _cells; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
 				}
@@ -330,9 +330,9 @@ void vtkWriter::addCellVecToTimestep(const type datax[], const type datay[],
 
 template<typename type>
 void vtkWriter::addPointDataToAll(const type data[],
-                                  const int length, std::string name)
+                                  const size_t length, std::string name)
 {
-    for (unsigned i(0); i<_tsteps; ++i )
+    for (size_t i(0); i<_tsteps; ++i )
     {
         addPointDataToTimestep(data, length, i, name);
     }
@@ -343,7 +343,7 @@ template<typename type>
 void vtkWriter::addPointDataToAll(const FullVector<type>& data,
                                   const std::string name)
 {
-    for (unsigned i(0); i<_tsteps; ++i)
+    for (size_t i(0); i<_tsteps; ++i)
     {
         addPointDataToTimestep(data, i, name);
     }
@@ -352,10 +352,10 @@ void vtkWriter::addPointDataToAll(const FullVector<type>& data,
 
 template<typename type>
 void vtkWriter::addCellDataToAll(const type data[],
-                                 const int length,
+                                 const size_t length,
                                  std::string name)
 {
-    for (unsigned i(0); i<_tsteps; ++i )
+    for (size_t i(0); i<_tsteps; ++i )
     {
         addCellDataToTimestep(data, length, i, name);
     }
@@ -366,7 +366,7 @@ template<typename type>
 void vtkWriter::addCellDataToAll(const FullVector<type>& data,
                                  const std::string name)
 {
-    for (unsigned i(0); i<_tsteps; ++i)
+    for (size_t i(0); i<_tsteps; ++i)
     {
         addCellDataToTimestep(data, i, name);
     }
@@ -380,7 +380,7 @@ void vtkWriter::addPointVecToAll(const FullVector<type>& datax,
                                 const std::string name)
 
 {
-    for (unsigned i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addPointVecToTimestep(datax, datay, dataz, i, name);
     }
@@ -391,10 +391,10 @@ template<typename type>
 void vtkWriter::addPointVecToAll(const type datax[],
                                 const type datay[],
                                 const type dataz[],
-                                int length,
+                                size_t length,
                                 std::string name)
 {
-    for (unsigned i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addPointVecToTimestep(datax, datay, dataz, length, i, name);
     }
@@ -408,7 +408,7 @@ void vtkWriter::addCellVecToAll(const FullVector<type>& datax,
                                 const std::string name)
 
 {
-    for (unsigned i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addCellVecToTimestep(datax, datay, dataz, i, name);
     }
@@ -419,10 +419,10 @@ template<typename type>
 void vtkWriter::addCellVecToAll(const type datax[],
                                 const type datay[],
                                 const type dataz[],
-                                int length,
+                                size_t length,
                                 std::string name)
 {
-    for (unsigned i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addCellVecToTimestep(datax, datay, dataz, length, i, name);
     }

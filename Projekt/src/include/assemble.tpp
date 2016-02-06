@@ -975,7 +975,7 @@ namespace Icarus
 					}
 				}
 
-				else if (i % nx*ny <= nx) //vordere Seite, aber nicht Boden oder Deckel
+				else if (i % (nx*ny) <= nx) //vordere Seite, aber nicht Boden oder Deckel
 				{
 					if (i % nx == 1) //linke Kante
 					{
@@ -1119,7 +1119,7 @@ namespace Icarus
 					}
 				}
 
-				else if (i % nx*ny > nx*(ny - 1)) //hintere Seite, aber nicht Boden oder Deckel
+				else if (i % (nx*ny) > nx*(ny - 1)) //hintere Seite, aber nicht Boden oder Deckel
 				{
 					if (i % nx == 1) //linke Kante
 					{
