@@ -8,9 +8,9 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dim_local 64
-#define dim_fvec 64
-#define max_row_length 7
+#define dimlocal 64
+#define dimfvec 64
+#define maxrowlength 7
 #define runs 1
 
 void print_p();
@@ -42,15 +42,15 @@ void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int metho
 int main(int argc, char* argv[])
 {
 
-    cout << "DIM = " << dim << " - RUNS = " << runs << "\n";
+    cout << "DIM = " << dimlocal << " - RUNS = " << runs << "\n";
 
 
 //Generiere Data/Indices Int-Array sowie fvec Int Array
-    float *data_host = new int[dim*max_row_length];
-    int *indices_host = new int[dim*max_row_length];
-    float *fvec_host = new int[dim];
+    float *data_host = new float[dimlocal*maxrowlength];
+    int *indices_host = new int[dimlocal*maxrowlength];
+    float *fvec_host = new float[dimfvec];
 
-    diagonal_float(data_host, indices_host, fvec_host, dim);
+    diagonal_float(data_host, indices_host, fvec_host, dimlocal);
 
     Timer timer_overall;
 
@@ -66,10 +66,10 @@ int main(int argc, char* argv[])
         float *result_unified = NULL;
         int *indices_unified = NULL;
 
-        alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, max_row_length, dim_local, dim_fvec);
-        set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, max_row_length, dim_local);
+        alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
+        set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal);
 
-        mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, max_row_length, dim_local, dim_fvec);
+        mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec);
         
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
