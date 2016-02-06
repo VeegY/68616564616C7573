@@ -30,8 +30,8 @@ public:
 private:
     RealType _tol;
     const MatrixType &_A;
-    const MatrixType *_K1inv, *_K2inv;
     const VectorType &_b;
+    const MatrixType *_K1inv, *_K2inv;
 
 public:
     /// \brief  Anzahl der Iterationen, nach der abgebrochen wird, wenn die Toleranz nicht

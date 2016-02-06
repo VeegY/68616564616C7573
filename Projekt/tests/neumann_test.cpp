@@ -8,21 +8,24 @@
 
 double bdry(int vtx_global)
 {
-	if (vtx_global < 100) return 100;
+	if (vtx_global < 10) return 100;
 	return 0.0;
 }
 
 int neumann_demo()
 {
-	const int nx = 50, ny = 50, nz = 50;
+	const int nx = 10, ny = 10, nz = 10;
 	const float h = 0.1;
 	// diskretisieren
 	//std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
 	
 	// assemblieren
 	auto lgs = Icarus::assemble_neumann<double>(nx, ny, nz, h, bdry);
+	//ausgabe der Matrix:
+	std::cout << "Die Matrix A:" << std::endl;
+	Icarus::print_sliced_object(lgs.first);
 	
-	// lösen
+	// lï¿½sen
 	size_t n = lgs.first.get_dim_global();
 	Icarus::SlicedVector<double> sol(n);
 	sol.clear();

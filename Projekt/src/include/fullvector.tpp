@@ -22,10 +22,14 @@ namespace Icarus
 
 
 template<typename Scalar>
-FullVector<Scalar>::FullVector(size_t dim) :
+FullVector<Scalar>::FullVector(size_t dim, MPI_Comm my_comm) :
+    _my_comm(my_comm),
     _data(nullptr),
     _dim(dim)
 {
+    MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
+    MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
+    
     try
     {
         _data = new Scalar[_dim];
@@ -38,9 +42,9 @@ FullVector<Scalar>::FullVector(size_t dim) :
 
 template<typename Scalar>
 FullVector<Scalar>::FullVector(const SlicedVector<Scalar>& vec) :
-    _dim(vec.get_dim_global()),
+	_my_comm(vec.get_comm()),
     _data(nullptr),
-	_my_comm(vec.get_comm())
+    _dim(vec.get_dim_global())
 {
     try
     {

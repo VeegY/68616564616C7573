@@ -42,3 +42,8 @@ int poisson_demo()
 	MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
 	return 0;
 }
+
+int main()
+{
+    return poisson_demo();
+}

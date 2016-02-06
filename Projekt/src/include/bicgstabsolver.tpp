@@ -13,9 +13,9 @@ BiCgStabSolver<MatrixType>::BiCgStabSolver(
         RealType tol,
         const MatrixType* K1inv,
         const MatrixType* K2inv) :
+    _tol(tol),
     _A(A),
     _b(b),
-    _tol(tol),
     _K1inv(K1inv),
     _K2inv(K2inv)
 {
