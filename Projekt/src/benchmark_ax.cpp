@@ -11,12 +11,12 @@ using namespace std;
 #define dimlocal 64
 #define dimfvec 64
 #define maxrowlength 7
-#define runs 1
+#define iteration 1
 
 void print_p();
 
 template<typename Scalar>
-void performance(int max_row_length, int dim_local, float time, type schalter);
+void performance(int max_row_length, int dim_local, float time, Scalar schalter);
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -42,7 +42,7 @@ void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int metho
 int main(int argc, char* argv[])
 {
 
-    cout << "DIM = " << dimlocal << " - RUNS = " << runs << "\n";
+    cout << "DIM = " << dimlocal << " - RUNS = " << iteration << "\n";
 
 
 //Generiere Data/Indices Int-Array sowie fvec Int Array
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     int *indices_host = new int[dimlocal*maxrowlength];
     float *fvec_host = new float[dimfvec];
 
-    diagonal_float(data_host, indices_host, fvec_host, dimlocal);
+    diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal);
 
     Timer timer_overall;
 
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 //================================================================================================/
     
     timer_overall.start();
-    for(int r = 0;r<runs;r++)
+    for(int r = 0;r<iteration;r++)
     {
         float *data_unified = NULL;
         float *fvec_unified = NULL;
