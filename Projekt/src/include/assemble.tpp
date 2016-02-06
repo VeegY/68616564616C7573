@@ -110,7 +110,7 @@ namespace Icarus
 					if (i == 1) //vorderer unterer linker Eckpunkt
 					{	
 						//Dirichlet Randwert in der vorderen unteren linken Ecke
-						A.sequential_fill(0, 1)
+						A.sequential_fill(0, 1);
 						
 						index[0] = vtx_global;
 						index[1] = vtx_global + 1;
@@ -1380,7 +1380,7 @@ namespace Icarus
 					//keine RB
 				}
 
-				if (i=/1) {for (int j=0; j<7; j++) A.sequential_fill(index[j], wert[j]);}
+				if (i!=1) {for (int j=0; j<7; j++) A.sequential_fill(index[j], wert[j]);}
 				A.end_of_row();
 
 				rhs.set_local(vtx_global, h*h*bdry(vtx_global));

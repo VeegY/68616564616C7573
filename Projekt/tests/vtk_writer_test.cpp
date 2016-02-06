@@ -1,7 +1,7 @@
-#include "../include/fullvector.hpp"
-#include "../include/vtkwriter.hpp"
+#include "../src/include/fullvector.hpp"
+#include "../src/include/vtkwriter.hpp"
 /*
-*test für den vtk writer
+*test fuer den vtk writer
 *ausgabe im ordner out (muss existieren)
 *KEIN unit-test
 *

@@ -9,7 +9,7 @@
 */
 
 #define LOGGING_LEVEL 3
-#include "include/logger.hpp"
+#include "../src/include/logger.hpp"
 #include <iostream>
 
 int logger_test()

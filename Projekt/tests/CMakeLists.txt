@@ -1,27 +1,28 @@
-cmake_minimum_required(VERSION 2.6)
-project(stuprotm1516)
-
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+PROJECT(stuprotm1516)
 #========================================================================
 #               Executables         
 #========================================================================
 
-FILE(GLOB SOURCES "*.cu" "*.cpp")# "*.c" "*.h" "*.hpp") # adding all source files
-SET(SRCFILES ${SOURCES})        # there must be a
-ADD_LIBRARY(SRCLIB ${SRCFILES}) # more compact way
-FILE(GLOB DEMO "*_demo.cpp")
-CUDA_ADD_EXECUTABLE(icarus ${DEMO})
-TARGET_LINK_LIBRARIES(icarus SRCLIB ${MPI_LIBRARIES})
+FILE(GLOB UNIT_TESTS "*_test.cpp")
 
 
 #========================================================================
 #               Custom_Target/Unit_Test
 #========================================================================
 
-#enables make code
-add_custom_target(
-     code ALL
-     DEPENDS icarus
-     )
+ENABLE_TESTING() # sollte eig nicht gebraucht werden, wird es aber wohl doch
+#INCLUDE(CTest)
+
+# alle Testfunktionen werden ctest "bereitgestellt"
+FOREACH(testpath ${UNIT_TESTS})
+    # nicht unbedingt optimal, aber es funktioniert fuers erste
+    string(REGEX REPLACE "([^ ]*)/tests/" "" filename ${testpath})
+    string(REPLACE ".cpp" "" testname ${filename})
+    add_executable(${testname} ${filename})
+    TARGET_LINK_LIBRARIES(${testname} SRCLIB ${MPI_LIBRARIES})
+    add_test(${testname} ${testname})
+ENDFOREACH(testpath)
 
 
 #========================================================================
@@ -30,7 +31,6 @@ add_custom_target(
 
 LIST(APPEND CMAKE_CXX_FLAGS "-std=c++11 -O3 -ffast-math -Wall")
 #-I/usr/local/include -pthread -L/usr/local/lib -lmpi")
-
 
 LIST(APPEND CUDA_NVCC_FLAGS --compiler-options -fno-strict-aliasing -lineinfo -use_fast_math -Xptxas -dlcm=cg)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
