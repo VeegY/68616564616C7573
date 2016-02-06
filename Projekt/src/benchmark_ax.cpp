@@ -67,7 +67,8 @@ int main(int argc, char* argv[])
         int *indices_unified = NULL;
 
         alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, max_row_length, dim_local, dim_fvec);
-        set_values(data_host,indices_host,fvec_host,data_unified,indices_unified,fvec_unified, max_row_length, dim_local);
+        set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, max_row_length, dim_local);
+
         mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, max_row_length, dim_local, dim_fvec);
         
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
