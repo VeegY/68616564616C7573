@@ -5,7 +5,7 @@
 #include <ctime>
 #include <cstdlib>
 
-void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, int dim_local)
+void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, int dim_local, int dim_fvec)
 {
     srand(static_cast <unsigned> (time(0)));
     int diag[7];
@@ -20,10 +20,10 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
 
     for (int i = 0; i < dim_local;i++)
     {
+        int offset = 0;
         for (int j = 0; j < max_row_length; j++)
         {
             float value = 0;
-            int offset = 0;
             
             if (diag[j] >= 0 && diag [j] < dim_local);
             {
@@ -32,7 +32,7 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
                 indices[i*max_row_length + offset] = diag[j];
                 offset++;
             }
-            diag[j] + 1;
+            diag[j] +=  1;
 
         }
         for (int off = 6 - offset; off > 1; off--)
