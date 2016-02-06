@@ -30,7 +30,7 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 
 //CALCULATING MEMORY BANDWITH
 template<typename type>
-void bandwith(int max_row_length, int dim_local, float time)
+void performance(int max_row_length, int dim_local, float time, type schalter)
 {
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
@@ -43,9 +43,9 @@ void bandwith(int max_row_length, int dim_local, float time)
     bWrite += dim_local*sizeof(type);               //result-Array
     
 }
-template void bandwith<int>(int dim_local, int max_row_length, float time);
-template void bandwith<float>(int dim_local, int max_row_length, float time);
-template void bandwith<double>(int dim_local, int max_row_length, float time);
+template void performance<int>(int dim_local, int max_row_length, float time, int schalter);
+template void performance<float>(int dim_local, int max_row_length, float time, float schalter);
+template void performance<double>(int dim_local, int max_row_length, float time, double schalter);
 
 
 //PROPERTIES OF TEGRA K1
@@ -121,33 +121,53 @@ template void alloc_zero<int>(int **data, int **fvec, int **result, int **indice
 template void alloc_zero<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 template void alloc_zero<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 
+//=============================================================================
+//                          UNIFIED KERNEL FUNCTIONS
+//=============================================================================
 
-//KERNEL CALL WITH UNIFIED MEMORY (NEED TO CALL ALLOC_UNIFIED BEFORE)
+//GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
-float mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
+float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
     Timer timer;
+    
     int num_blocks = ceil((double)dim_local/1024);
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
+    
     timer.start();
     for (int i=0;i<runs;++i)
     {
         gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
     }
-    cudaDeviceSynchronize();
     float ellapsedTime = timer.stop();
     
-    return (ellapsedTime/50);
-
+    cudaDeviceSynchronize();
+    return (ellapsedTime/runs);
 }
-template void mult_vec_unified<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec);
-template void mult_vec_unified<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
-template void mult_vec_unified<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
+template float mult_vec_unified_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
+template float mult_vec_unified_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
+template float mult_vec_unified_time<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
 
+
+//GENERATING KERNEL TIME UNIFIED MEMORY
+template<typename Scalar>
+void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
+{
+    gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
+    cudaDeviceSynchronize();
+}
+template float mult_vec_unified<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec);
+template float mult_vec_unified<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
+template float mult_vec_unified<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
+
+
+//=============================================================================
+//                              ZERO KERNEL FUNCTIONS
+//=============================================================================
 
 //KERNE CALL WITH ZERO COPY (NEED TO CALL ALLOC_ZERO BEFORE)
 template<typename Scalar>
-float mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
+float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
     Timer timer;
     Scalar *d_data, *d_fvec, *d_result;
@@ -160,6 +180,7 @@ float mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, in
 
     int num_blocks = ceil((double)dim_local/1024);
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
+
     timer.start();
     for (int i=0;i<runs;++i)
     {
@@ -168,23 +189,66 @@ float mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, in
     cudaDeviceSynchronize();
     float ellapsedTime = timer.stop();
     
-    return (ellapsedTime/50);
+    return (ellapsedTime/runs);
+}
+template void mult_vec_zero_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec);
+template void mult_vec_zero_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
+template void mult_vec_zero_time<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
+
+
+template<typename Scalar>
+float mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
+{
+    Scalar *d_data, *d_fvec, *d_result;
+    int *d_indices;
+
+    cudaHostGetDevicePointer((void **)&d_data,(void *)data, 0);
+    cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
+    cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
+    cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
+
+    int num_blocks = ceil((double)dim_local/1024);
+    int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
+
+    gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+    cudaDeviceSynchronize();
 }
 template void mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec);
 template void mult_vec_zero<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
 template void mult_vec_zero<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
 
+
+//=============================================================================
+//                              CLEANUP FUNCTIONS
+//=============================================================================
 template <typename Scalar>
-void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices)
+void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method)
 {
-    cudaFreeHost(data);
-    cudaFreeHost(fvec);
-    cudaFreeHost(result);
-    cudaFreeHost(indices);
+    switch(method)
+    {
+        case(0):
+            cudaFree(data);
+            cudaFree(fvec);
+            cudaFree(result);
+            cudaFree(indices);
+            break;
+        case(1):
+            cudaFreeHost(data);
+            cudaFreeHost(fvec);
+            cudaFreeHost(result);
+            cudaFreeHost(indices);
+            break;
+        case(2):
+            delete[] data;
+            delete[] fvec;
+            delete[] result;
+            delete[] indices;
+            break;
+    }
 }
-template void cleanup<int>(int *data, int *fvec, int *result, int *indices);
-template void cleanup<float>(float *data, float *fvec, float *result, int *indices);
-template void cleanup<double>(double *data, double *fvec, double *result, int *indices);
+template void cleanup<int>(int *data, int *fvec, int *result, int *indices, int method);
+template void cleanup<float>(float *data, float *fvec, float *result, int *indices, int method);
+template void cleanup<double>(double *data, double *fvec, double *result, int *indices, int method);
 
 
 template <typename Scalar>

@@ -9,13 +9,14 @@
 #include "include/timer.hpp"
 using namespace std;
 #define dim_local 64
+#define dim_fvec 64
 #define max_row_length 7
 #define runs 1
 
 void print_p();
 
-//?template
-void bandwith(int max_row_length, int dim_local, float time);
+template<typename Scalar>
+void performance(int max_row_length, int dim_local, float time, type schalter);
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -24,13 +25,19 @@ template<typename Scalar>
 void alloc_zero(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 
 template<typename Scalar>
+void mult_vec_unified_time(Scalar* data, Scalar* fvec, Scalar* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
+
+template<typename Scalar>
+void mult_vec_zero_time(Scalar* data, Scalar* fvec, Scalar* result, int* inices, int max_row_length, int dim_local, int dim_fvec, int runs);
+
+template<typename Scalar>
 void mult_vec_unified(Scalar* data, Scalar* fvec, Scalar* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
 
 template<typename Scalar>
 void mult_vec_zero(Scalar* data, Scalar* fvec, Scalar* result, int* inices, int max_row_length, int dim_local, int dim_fvec);
 
 template <typename Scalar>
-void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices);
+void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
 
 int main(int argc, char* argv[])
 {
@@ -52,41 +59,23 @@ int main(int argc, char* argv[])
 //================================================================================================/
     
     timer_overall.start();
-
     for(int r = 0;r<runs;r++)
-{
-
-    //Pointer
-    float *data_unified = NULL;
-    float *fvec_unified = NULL;
-    float *result_unified = NULL;
-    int *indices_unified = NULL;
-
-    //Setze Pointer als UNIFIED Pointer mit bestimmter Groesze und setze Daten
-    alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, dim, dim, dim);
-    set_values(data_host,indices_host,fvec_host,data_unified,indices_unified,fvec_unified, dim);
-
-
-    //Kernel
-    mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, dim, dim, dim);
-
-
-    //Ein Ergebnis Check pro Schleife
-    if(r==0)
     {
-      if(check_result(result_unified, data_host, indices_host, fvec_host, dim))
-      {
-          cout << "*U_CORRECT*\n";
-      }
-      else{cout << "*U_FALSE*\n";}
+        float *data_unified = NULL;
+        float *fvec_unified = NULL;
+        float *result_unified = NULL;
+        int *indices_unified = NULL;
+
+        alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, max_row_length, dim_local, dim_fvec);
+        set_values(data_host,indices_host,fvec_host,data_unified,indices_unified,fvec_unified, max_row_length, dim_local);
+        mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, max_row_length, dim_local, dim_fvec);
+        
+        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
+        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
+        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+
     }
-
-
-    //Aufraumen und Speicher freigebene
-    cleanup(data_unified, fvec_unified, result_unified, indices_unified);
-
-}
-    float elapsed_unified = timer_overall.stop();
+        float elapsed_unified = timer_overall.stop();
 //================================================================================================/
 //										Zero Copy Kernel
 //================================================================================================/

@@ -5,7 +5,7 @@
 #include <ctime>
 #include <cstdlib>
 
-void diagonal_float(float *data, int *indices, float fvec, int dim_local, int max_row_length)
+void diagonal_float(float *data, int *indices, float fvec, int max_row_length, int dim_local)
 {
     srand(static_cast <unsigned> (time(0)));
     int diag[7];
@@ -85,7 +85,7 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
     return true;
 }
 
-void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *indicesg, float *fvecg, int dim_local, int max_row_length)
+void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *indicesg, float *fvecg, int max_row_length, int dim_local)
 {
 	for (int i = 0; i < max_row_length; i++)
 	{
