@@ -26,15 +26,40 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
     }
 }
 
+
+//CALCULATING MEMORY BANDWITH
+template<typename type>
+void bandwith(int max_row_length, int dim_local, float time)
+{
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop,0);
+
+    //===Immer selbstständig updaten wenn sich der Kernel ändert===//           
+    int bRead = 0, bWrite = 0;
+    bRead += max_row_length*dim_local*sizeof(type); //data-Array
+    bRead += max_row_length*dim_local*sizeof(int);  //indices-Array
+    bRead += max_row_length*dim_local*sizeof(type); //fvec-Array
+    bWrite += dim_local*sizeof(type);               //result-Array
+    
+}
+template void bandwith<int>(int dim_local, int max_row_length, float time);
+template void bandwith<float>(int dim_local, int max_row_length, float time);
+template void bandwith<double>(int dim_local, int max_row_length, float time);
+
+
 //PROPERTIES OF TEGRA K1
 void print_p()
 {
 
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
-
-    printf("Max Threads Per Block: %i\n", prop.maxThreadsPerBlock);
-    printf("Max Grid Size: %ix%ix%i\n", prop.maxGridSize[0],prop.maxGridSize[1],prop.maxGridSize[2]);
+    
+    printf("==============================\nDevice name: %s\n------------------------------\n", prop.name);
+    printf("Memory Clock Rate (KHz): %d\n",prop.memoryClockRate);
+    printf("Memory Bus Width (bits): %d\n",prop.memoryBusWidth);
+    printf("Peak Memory Bandwidth (GB/s): %f\n==============================\n",2.0*prop.memoryClockRate*(prop.memoryBusWidth/8)/1.0e6);
+    //printf("Max Threads Per Block: %i\n", prop.maxThreadsPerBlock);
+    //printf("Max Grid Size: %ix%ix%i\n", prop.maxGridSize[0],prop.maxGridSize[1],prop.maxGridSize[2]);
 
 }
 
