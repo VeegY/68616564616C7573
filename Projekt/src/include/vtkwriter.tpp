@@ -380,7 +380,7 @@ void vtkWriter::addPointVecToAll(const FullVector<type>& datax,
                                 const std::string name)
 
 {
-    for (size_t i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addPointVecToTimestep(datax, datay, dataz, i, name);
     }
@@ -394,7 +394,7 @@ void vtkWriter::addPointVecToAll(const type datax[],
                                 size_t length,
                                 std::string name)
 {
-    for (size_t i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addPointVecToTimestep(datax, datay, dataz, length, i, name);
     }
@@ -408,7 +408,7 @@ void vtkWriter::addCellVecToAll(const FullVector<type>& datax,
                                 const std::string name)
 
 {
-    for (size_t i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addCellVecToTimestep(datax, datay, dataz, i, name);
     }
@@ -422,7 +422,7 @@ void vtkWriter::addCellVecToAll(const type datax[],
                                 size_t length,
                                 std::string name)
 {
-    for (size_t i(0); i<=_tsteps; i++)
+    for (size_t i(0); i<_tsteps; i++)
     {
         addCellVecToTimestep(datax, datay, dataz, length, i, name);
     }

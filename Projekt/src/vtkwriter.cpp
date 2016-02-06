@@ -24,7 +24,7 @@ namespace Icarus
 			hfname = _filename;
 			hfname.append(".vtk.");
 			hfname.append(std::to_string(i));
-			file.open(hfname.c_str(), std::ios::out | std::ios::trunc);
+			file.open(hfname, std::ios::out | std::ios::trunc);
 			if (file.is_open())
 			{
 				file << "# vtk DataFile Version 3.0\n";
@@ -38,7 +38,7 @@ namespace Icarus
 		}
 	}
 
-	vtkWriter::vtkWriter(std::string filename, std::string title, size_t xdim, size_t ydim, size_t zdim, double h, unsigned size_t timesteps):
+	vtkWriter::vtkWriter(std::string filename, std::string title, size_t xdim, size_t ydim, size_t zdim, double h, size_t timesteps):
     _filename(filename),
     _title(title),
     _tsteps(timesteps),
@@ -59,7 +59,7 @@ namespace Icarus
             hfname=_filename;
             hfname.append(".vtk.");
             hfname.append(std::to_string(i));
-            file.open(hfname.c_str(), std::ios::out | std::ios::trunc );
+            file.open(hfname, std::ios::out | std::ios::trunc );
             if (file.is_open())
             {
                 file << "# vtk DataFile Version 3.0\n";
