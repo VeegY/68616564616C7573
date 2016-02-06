@@ -21,6 +21,9 @@ int neumann_demo()
 	
 	// assemblieren
 	auto lgs = Icarus::assemble_neumann<double>(nx, ny, nz, h, bdry);
+	//ausgabe der Matrix:
+	std::cout << "Die Matrix A:" << endl;
+	Icarus::print_sliced_object(lsg.first);
 	
 	// l�sen
 	size_t n = lgs.first.get_dim_global();
