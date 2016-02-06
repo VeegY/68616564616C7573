@@ -14,11 +14,12 @@ int fullvectortest()
     srand (static_cast <unsigned> (time(0)));
     double r = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 	const size_t N=100000;
-	const int randintmax;
+	const int randintmax(100);
 	Icarus::FullVector<double> vec1(N), vec2(N), vec4(N);
 	Icarus::FullVector<double> vecint1(N), vecint2(N), vecint3(N);
-	if (vec1.get_dim())
-
+	if (vec1.get_dim()=N){
+        LOG_ERROR("get_dim failed");
+	}
 	double constdouble (static_cast <double> (rand()) / static_cast <double> (RAND_MAX));
 	vec4.fill_const(constdouble);
 	for (size_t i(0); i<N; i++)
@@ -48,7 +49,7 @@ int fullvectortest()
     }
 
     //check artihmetic operations
-    int randint=rand()%randintmax
+    int randint=rand()%randintmax;
     int maxnorm(0), l2norm2(0);
     vecint2=vecint1;
     vecint2.scal(randint);
