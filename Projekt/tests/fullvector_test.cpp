@@ -4,8 +4,7 @@
 #include <ctime>
 #include <cmath>
 /*
-*test fuer den vtk writer
-*ausgabe im ordner out (muss existieren)
+*test fuer fullvector
 *KEIN unit-test
 *
 */
@@ -55,26 +54,26 @@ int fullvectortest()
     for (size_t i(0); i<N; i++)
     {
         l2norm2+=vec6[i]*vec6[i];
-        if (abs(vec6[i]) > maxnorm )
+        if (std::abs(vec6[i]) > maxnorm )
         {
             maxnorm=std::abs(vec6[i]);
         }
         if (vec7[i]!=randdouble*vec6[i])
         {
-             LOG_DEBUG("scal failed ; value: ",vec7[i], "  reference value: ", randdouble*vec6[i]);
+             LOG_ERROR("scal failed ; value: ",vec7[i], "  reference value: ", randdouble*vec6[i]);
         }
         if (vec8[i]!=vec6[i]+randdouble*vec7[i])
         {
-             LOG_DEBUG("axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
+             LOG_ERROR"axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
         }
     }
     if (maxnorm!=vec6.maxnorm())
     {
-        LOG_DEBUG("maxnorm failed; value: ",vec6.maxnorm(), "  refernce value: ", maxnorm);
+        LOG_ERROR("maxnorm failed; value: ",vec6.maxnorm(), "  reference value: ", maxnorm);
     }
     if (l2norm2!=vec6.l2norm2())
     {
-        LOG_DEBUG("L2norm2 failed; value: ",vec6.l2norm2(), "  refernce value: ", l2norm2);
+        LOG_DEBUG("L2norm2 failed; value: ",vec6.l2norm2(), "  reference value: ", l2norm2);
     }
     return 0;
 }
