@@ -57,15 +57,15 @@ int fullvectortest()
         l2norm2+=vec6[i]*vec6[i];
         if (abs(vec6[i]) > maxnorm )
         {
-            maxnorm=abs(vec6[i]);
+            maxnorm=std::abs(vec6[i]);
         }
         if (vec7[i]!=randdouble*vec6[i])
         {
-             LOG_DEBUG("scal failed ; value: ",vec7[i], "  refernce value: ", randdouble*vec6[i]);
+             LOG_DEBUG("scal failed ; value: ",vec7[i], "  reference value: ", randdouble*vec6[i]);
         }
-        if (vec8[i]!=randdouble*vec6[i]+vec7[i])
+        if (vec8[i]!=vec6[i]+randdouble*vec7[i])
         {
-             LOG_DEBUG("axpy failed; value: ",vec8[i], "  refernce value: ", randdouble*vec6[i]+vec7[i]);
+             LOG_DEBUG("axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
         }
     }
     if (maxnorm!=vec6.maxnorm())
