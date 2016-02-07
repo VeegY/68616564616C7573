@@ -332,7 +332,7 @@ DistEllpackMatrix<Scalar>::precond_equi() const
     {
         val = 0;
         for(size_t j=0; j<_max_row_length; j++)
-            val += _data[j*_dim_local + i];
+            val += ScalarTraits<Scalar>::abs(_data[j*_dim_local + i]);
         Kinv.sequential_fill(i, 1./val);
         Kinv.end_of_row();
     }
@@ -347,7 +347,7 @@ DistEllpackMatrix<Scalar>::precond_jacobi() const
     size_t fron = first_row_on_node();
     Scalar val;
 
-    Kinv.prepare_sequential_fill();
+    Kinv.prepare_sequential_fill(1);
 
     for(size_t i=0; i<_dim_local; i++)
     {

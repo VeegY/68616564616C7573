@@ -64,7 +64,7 @@ int fullvectortest()
         }
         if (vec8[i]!=vec6[i]+randdouble*vec7[i])
         {
-             LOG_ERROR"axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
+             LOG_ERROR("axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
         }
     }
     if (maxnorm!=vec6.maxnorm())
