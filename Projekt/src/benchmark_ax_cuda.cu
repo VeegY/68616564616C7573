@@ -7,6 +7,8 @@
 #include <cmath>
 #include "include/timer.hpp"
 
+template <typename Scalar>
+void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
 //KERNEL
 template<typename type>
 __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length, int dim_local)
