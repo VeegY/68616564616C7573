@@ -167,9 +167,10 @@ float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *ind
     for (int i = 0; i < runs; i++)
     {
         gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
+        cudaDeviceSynchronize();
     }
     float elapsedTime = timer.stop();
-    cudaDeviceSynchronize();
+    
     return (elapsedTime / (float)runs);
 }
 template float mult_vec_unified_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
@@ -216,9 +217,10 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     for (int i=0;i<runs;++i)
     {
         gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+        cudaDeviceSynchronize();
     }
     float elapsedTime = timer.stop();
-    cudaDeviceSynchronize();
+    
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
 
     return (elapsedTime/(float)runs);
