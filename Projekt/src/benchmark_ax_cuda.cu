@@ -57,16 +57,16 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1.0e3);
-    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes/ ((time_ku*1.0e-3)*1.0e9));
-    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", (flop / 1.0e9) / time_ku);
+    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / ((time_ku*1.0e-3)*1.0e9));
+    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / ((time_ku*1.0e-3)*1.0e9));
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
     printf("                ZERO_COPY\n");
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_kz);
     printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1.0e3);
-    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", (bytes / 1.0e9) / time_kz);
-    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", (flop / 1.0e9) / time_kz);
+    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / ((time_kz*1.0e-3)*1.0e9));
+    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / ((time_kz*1.0e-3)*1.0e9));
     printf("-----------------------------------------------\n");
 
 
