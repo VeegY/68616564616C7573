@@ -204,7 +204,7 @@ template<typename Scalar>
 float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
     cudaEvent_t start, stop;
-    cudeEventCreate(&start);
+    cudaEventCreate(&start);
     cudaEventCreate(&stop);
     Timer timer;
 
@@ -234,7 +234,7 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     
     cudaEventSynchronize(stop);
     float milliseconds = 0;
-    cudaEventEllapsedTime(&milliseconds, start, stop);
+    cudaEventElapsedTime(&milliseconds, start, stop);
     printf("CUDA: %f ----- TIMER: %f\n", milliseconds / runs, elapsedTime / runs);
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
     return (elapsedTime/(float)runs);
