@@ -84,12 +84,12 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
     //bool check = true;
     for (int i = 0; i < dim_local; i++)
     {
-        double value = 0.0;
+        float value = 0.0;
         for (int j = 0; j < max_row_length; j++)
         {
             value += datah[i+dim_local*j] * fvech[indicesh[i+dim_local*j]];
         }
-        std::cout << value << std::endl;
+        printf("%f\n", value);
         if (abs(value - result[i]) >= 1)
         {
             return false;
