@@ -16,16 +16,6 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
     diag[4] = 1;
     diag[5] = floor(pow(dim_local, (1.0/3.0)));
     diag[6] = floor(pow(dim_local, (2.0/3.0)));
-    
-    std::cout << diag[0] << "\n";    
-    std::cout << diag[1] << "\n";    
-    std::cout << diag[2] << std::endl;   
-    std::cout << diag[3] << std::endl;    
-    std::cout << diag[4] << std::endl;    
-    std::cout << diag[5] << std::endl;    
-    std::cout << diag[6] << std::endl;    
-    
-    std::cout << dim_local << std::endl;    
 
     for (int i = 0; i < dim_local;i++)
     {

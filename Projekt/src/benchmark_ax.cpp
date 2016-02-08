@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
-    print_stuff(data_host, indices_host, fvec_host, result_host, maxrowlength, dimlocal, dimfvec);
+   
 
     Timer timer_overall;
 
@@ -81,8 +81,10 @@ int main(int argc, char* argv[])
         
         
         float schalter = 0;
-        performance(maxrowlength, dimlocal, 1.0, 1.0, schalter);
+        //performance(maxrowlength, dimlocal, 1.0, 1.0, schalter);
         //print_stuff(data_unified, indices_unified, fvec_unified, result_unified, maxrowlength, dimlocal, dimfvec);
+
+        print_stuff(data_host, indices_host, fvec_host, result_unified, maxrowlength, dimlocal, dimfvec);
 
         if (r == 0)
         {
