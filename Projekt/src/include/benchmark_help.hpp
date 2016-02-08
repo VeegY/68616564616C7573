@@ -84,7 +84,7 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
     //bool check = true;
     for (int i = 0; i < dim_local; i++)
     {
-        float value = 0;
+        double value = 0.0;
         for (int j = 0; j < max_row_length; j++)
         {
             value += datah[i+dim_local*j] * fvech[indicesh[i+dim_local*j]];
