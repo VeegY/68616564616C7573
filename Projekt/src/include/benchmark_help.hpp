@@ -79,9 +79,9 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
     }
 }
 
-bool check_result(float *result, float *datah, int *indicesh, float *fvech, int max_row_length, int dim_local)
+void check_result(float *result, float *datah, int *indicesh, float *fvech, int max_row_length, int dim_local, char a)
 {
-    //bool check = true;
+    bool check = true;
     for (int i = 0; i < dim_local; i++)
     {
         float value = 0.0;
@@ -90,13 +90,16 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
             value += datah[i+dim_local*j] * fvech[indicesh[i+dim_local*j]];
         }
         float diff = value - result[i];
-        printf("%f -- %f\n",diff, 1.0e-2);
         if (diff > 1.0e-2 || diff < -1.0e-2)
         {
-            return false;
+            check = false;
         }
     }
-    return true;
+    if(check)
+    {
+        printf("%c_Kernel outcome true\n", a);
+    }
+    else printf("%c_Kernel outcome false\n", a);
 }
 
 void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *indicesg, float *fvecg, int max_row_length, int dim_local, int dim_fvec)

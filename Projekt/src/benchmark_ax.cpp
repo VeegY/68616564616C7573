@@ -41,9 +41,7 @@ void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int metho
 
 int main(int argc, char* argv[])
 {
-
     cout << "DIM = " << dimlocal << " - RUNS = " << iteration << "\n";
-
 
 //Generiere Data/Indices Int-Array sowie fvec Int Array
     float *data_host = new float[dimlocal*maxrowlength];
@@ -53,14 +51,15 @@ int main(int argc, char* argv[])
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
-   
-
     Timer timer_overall;
 
 //================================================================================================/
 //										Unified Kernel
 //================================================================================================/
-    
+//------------------------------------------------------------------------------------------------/
+//                                   Overall - Zeitmessung
+//------------------------------------------------------------------------------------------------/
+   
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
     {
@@ -69,39 +68,38 @@ int main(int argc, char* argv[])
         float *result_unified = NULL;
         int *indices_unified = NULL;
         
-        std::cout <<" ALLOC\n";
         alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
-
-        std::cout <<" SET\n";
         set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
         
-        std::cout << " KERNEL\n";
         mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec);
-        std::cout << " KERNEL END \n";
-        
-        
-        float schalter = 0;
-        //performance(maxrowlength, dimlocal, 1.0, 1.0, schalter);
-        //print_stuff(data_unified, indices_unified, fvec_unified, result_unified, maxrowlength, dimlocal, dimfvec);
 
-        print_stuff(data_host, indices_host, fvec_host, result_unified, maxrowlength, dimlocal, dimfvec);
-
-        if (r == 0)
-        {
-            if (check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal))
-            {
-                cout << "*U_CORRECT*\n";
-            }
-            else { cout << "*U_FALSE*\n"; }
-        }
+        //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
         //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
         //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
-        std::cout << " CLEANUP END\n ";
-
     }
-        float elapsed_unified = timer_overall.stop();
-        
+    float elapsed_unified_overall = timer_overall.stop();
+
+//------------------------------------------------------------------------------------------------/
+//                                   Kernel - Zeitmessung
+//------------------------------------------------------------------------------------------------/
+    float *data_unified = NULL;
+    float *fvec_unified = NULL;
+    float *result_unified = NULL;
+    int *indices_unified = NULL;
+
+    alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
+    set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
+
+    float elapsed_unified_kernel =
+        mult_vec_unified_timedata_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
+
+    //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
+    cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
+    //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
+    //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+    check_result(result_zero, data_host, indices_host, fvec_host, maxrowlength, dimlocal, "U");
+
 //================================================================================================/
 //										Zero Copy Kernel
 //================================================================================================/
