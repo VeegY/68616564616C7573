@@ -9,6 +9,7 @@
 
 template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
+
 //KERNEL
 template<typename type>
 __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length, int dim_local)
@@ -202,7 +203,11 @@ template void mult_vec_unified<double>(double* data, double* fvec, double* restu
 template<typename Scalar>
 float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
+    cudaEvent_t start, stop;
+    cudeEventCreate(&start);
+    cudaEventCreate(&stop);
     Timer timer;
+
     Scalar *d_data, *d_fvec, *d_result;
     int *d_indices;
 
@@ -214,7 +219,9 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     int num_blocks = ceil((double)dim_local/1024);
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
 
+    cudaEventRecord(start);
     timer.start();
+
     for (int i=0;i<runs;i++)
     {
         gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
@@ -222,7 +229,13 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     }
     cudaDeviceSynchronize();
     
+    cudaEventRecord(stop);
     float elapsedTime = timer.stop();
+    
+    cudaEventSynchronize(stop);
+    float milliseconds = 0;
+    cudaEventEllapsedTime(&milliseconds, start, stop);
+    printf("CUDA: %f ----- TIMER: %f\n", milliseconds / runs, elapsedTime / runs);
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
     return (elapsedTime/(float)runs);
 }
