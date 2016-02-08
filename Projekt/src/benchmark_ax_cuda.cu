@@ -64,6 +64,9 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_kz*1000);
     printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1000);
+
+    printf("%f  %f", time_kz, time_ku);
+
     printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", (bytes / 1.0e9) / time_kz);
     printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", (flop / 1.0e9) / time_kz);
     printf("-----------------------------------------------\n");
@@ -171,7 +174,7 @@ float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *ind
     float elapsedTime = timer.stop();
     cudaDeviceSynchronize();
     
-    return (elapsedTime/runs);
+    return (elapsedTime / (float)runs);
 }
 template float mult_vec_unified_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
 template float mult_vec_unified_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
@@ -222,7 +225,7 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     cudaDeviceSynchronize();
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
 
-    return (elapsedTime/runs);
+    return (elapsedTime/(float)runs);
 }
 template float mult_vec_zero_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec, int runs);
 template float mult_vec_zero_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
