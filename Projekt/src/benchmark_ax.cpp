@@ -47,7 +47,6 @@ int main(int argc, char* argv[])
     float *data_host = new float[dimlocal*maxrowlength];
     int *indices_host = new int[dimlocal*maxrowlength];
     float *fvec_host = new float[dimfvec];
-    float *result_host = new float[dimlocal];
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
@@ -91,7 +90,7 @@ int main(int argc, char* argv[])
     alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
     set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
 
-    float elapsed_unified_kernel =
+    float elapsed_zero_kernel =
         mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
 
     check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'u');
@@ -105,57 +104,51 @@ int main(int argc, char* argv[])
 //================================================================================================/
 //										Zero Copy Kernel
 //================================================================================================/
-/*for(int r = 0;r<runs;r++)
-{
-    //Initialisiere Timer und Pointer
-    timer_overall.start();
+//------------------------------------------------------------------------------------------------/
+//                                   Overall - Zeitmessung
+//------------------------------------------------------------------------------------------------/
 
-    int *data_zero = NULL;
-    int *fvec_zero = NULL;
-    int *result_zero = NULL;
+    timer_overall.start();
+    for (int r = 0; r<iteration; r++)
+    {
+        float *data_zero = NULL;
+        float *fvec_zero = NULL;
+        float *result_zero = NULL;
+        int *indices_zero = NULL;
+
+        alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, maxrowlength, dimlocal, dimfvec);
+        set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, maxrowlength, dimlocal, dimfvec);
+
+        mult_vec_zero(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec);
+
+        //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
+        //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 0);
+        cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
+        //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
+    }
+    float elapsed_zero_overall = timer_overall.stop();
+
+//------------------------------------------------------------------------------------------------/
+//                                   Kernel - Zeitmessung
+//------------------------------------------------------------------------------------------------/
+    float *data_zero= NULL;
+    float *fvec_zero = NULL;
+    float *result_zero = NULL;
     int *indices_zero = NULL;
 
+    alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, maxrowlength, dimlocal, dimfvec);
+    set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, maxrowlength, dimlocal, dimfvec);
 
-    //Setze Pointer als ZERO_COPY Pointer fest und fuelle mit Daten
-    alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, dim, dim, dim);
-    set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, dim);
+    
+    float elapsed_unified_kernel =
+        mult_vec_zero_time(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec, iteration);
 
+    check_result(result_zero, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'z');
 
-    //Starte Kernel Stoppuhr und Kernel
-    timer_kernel.start();
-    mult_vec_zero(data_zero, fvec_zero, result_zero, indices_zero, dim, dim, dim);
-
-
-    //Messe Zeiten
-    zero_kernel_time[r] = timer_kernel.stop();
-    zero_overall_time[r] = timer_overall.stop();
-
-
-    //Alte Zeitmessung
-    //float elapsed_zero_kernel = timer_zero_kernel.stop();
-    //float elapsed_zero_overall = timer_zero_overall.stop();
-    //cout << "KERNEL TIME: " << elapsed_zero_kernel * 1000 << "\n";
-    //cout << "OVERALL TIMER: " << elapsed_zero_overall * 1000 << "\n\n";
-
-
-    //Ein Ergebnis Check insgesamt
-    if(r==0)
-    {
-      if(check_result(result_zero, data_host, indices_host, fvec_host, dim))
-      {
-          cout << "*Z_CORRECT*\n";
-      }
-          else{cout << "*Z_FALSE*\n";}
-    }
-
-
-    //Aufraeumen
-    cleanup(data_zero, fvec_zero, result_zero, indices_zero);
-
-}
-//================================================================================================/*/
-
-    //print_time(unified_kernel_time, unified_overall_time,zero_kernel_time,zero_overall_time,runs);
+    //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
+    //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 0);
+    cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
+    //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
 
 
     delete[] data_host;
