@@ -54,18 +54,18 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("-----------------------------------------------\n");
     printf("                UNIFIED_MERMORY\n");
     printf("-----------------------------------------------\n");
-    printf("Kernel Runtime:\t\t%fms\n",time_ku*1000);
-    printf("Overall Runtime:\t\t%fms\n",time_ou*1000);
-    printf("Bandwith(theoretical):\t\txxx/(14.9)(GB/s)\n");
-    printf("Flops(Theoretcical):\t\txxx/(326)(GFLOPS/s\n");
+    printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku*1000);
+    printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1000);
+    printf("Bandwith(theoretical):\t\t%f/(14.9)(GB/s)\n",time_ku);
+    printf("Flops(Theoretcical):\t\t%f/(326)(GFLOPS/s)\n", (float)flops/time_ku);
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
     printf("                ZERO_COPY\n");
     printf("-----------------------------------------------\n");
-    printf("Kernel Runtime:\t\t%fms\n",time_kz*1000);
-    printf("Overall Runtime:\t\t%fms\n",time_oz*1000);
-    printf("Bandwith(theoretical):\t\txxx/(14.9)(GB/s)\n");
-    printf("Flops(Theoretcical):\t\txxx/(326)(GFLOPS/s\n");
+    printf("Kernel Runtime:\t\t\t%f(ms)\n",time_kz*1000);
+    printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1000);
+    printf("Bandwith(theoretical):\t\t%f/(14.9)(GB/s)\n",time_kz);
+    printf("Flops(Theoretcical):\t\t%f/(326)(GFLOPS/s)\n",(float)flops/time_kz);
     printf("-----------------------------------------------\n");
 
 
