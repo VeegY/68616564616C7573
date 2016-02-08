@@ -90,6 +90,8 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
             value += datah[i+dim_local*j] * fvech[indicesh[i+dim_local*j]];
         }
         printf("%f\n", value);
+        printf("%f\n", result[i]);
+        printf("%f\n\n", abs(value - result[i]);
         if (abs(value - result[i]) >= 1)
         {
             return false;
