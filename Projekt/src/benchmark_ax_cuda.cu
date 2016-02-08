@@ -30,10 +30,12 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 
 //CALCULATING MEMORY BANDWITH
 template<typename type>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, type schalter)
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter)
 {
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
+    //===#FLOP=====================================================//
+    unsigned int flop = 2 * max_row_length*dim_local - dim_local;
 
     //===Immer selbstständig updaten wenn sich der Kernel ändert===//           
     int bRead = 0, bWrite = 0;
@@ -42,22 +44,24 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     bRead += max_row_length*dim_local*sizeof(type); //fvec-Array
     bWrite += dim_local*sizeof(type);               //result-Array
 
+
     printf("===============================================\n");
     printf("                PERFORMANCE\n");
+    printf("          DIM = %i ~~ %i Iterations\n", dim_local, runs);
     printf("===============================================\n");
     printf("-----------------------------------------------\n");
     printf("                UNIFIED_MERMORY\n");
     printf("-----------------------------------------------\n");
-    printf("Kernel Runtime:\t\tms\n");
-    printf("Overall Runtime:\t\tms\n");
+    printf("Kernel Runtime:\t\t%fms\n",time_ku*1000);
+    printf("Overall Runtime:\t\t%fms\n",time_ou*1000);
     printf("Bandwith(theoretical):\t\txxx/(14.9)(GB/s)\n");
     printf("Flops(Theoretcical):\t\txxx/(326)(GFLOPS/s\n");
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
     printf("                ZERO_COPY\n");
     printf("-----------------------------------------------\n");
-    printf("Kernel Runtime:\t\tms\n");
-    printf("Overall Runtime:\t\tms\n");
+    printf("Kernel Runtime:\t\t%fms\n",time_kz*1000);
+    printf("Overall Runtime:\t\t%fms\n",time_oz*1000);
     printf("Bandwith(theoretical):\t\txxx/(14.9)(GB/s)\n");
     printf("Flops(Theoretcical):\t\txxx/(326)(GFLOPS/s\n");
     printf("-----------------------------------------------\n");
@@ -214,6 +218,7 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     }
     float elapsedTime = timer.stop();
     cudaDeviceSynchronize();
+    cleanup(d_data, d_fvec, d_result, d_indices, 0);
 
     return (elapsedTime/runs);
 }
@@ -238,6 +243,7 @@ void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int
 
     gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
     cudaDeviceSynchronize();
+    cleanup(d_data, d_fvec, d_result, d_indices, 0);
 }
 template void mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec);
 template void mult_vec_zero<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);

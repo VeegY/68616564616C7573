@@ -16,7 +16,7 @@ using namespace std;
 void print_p();
 
 template<typename Scalar>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, Scalar schalter);
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, Scalar schalter);
 
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
@@ -41,7 +41,6 @@ void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int metho
 
 int main(int argc, char* argv[])
 {
-    cout << "DIM = " << dimlocal << " - RUNS = " << iteration << "\n";
 
 //Generiere Data/Indices Int-Array sowie fvec Int Array
     float *data_host = new float[dimlocal*maxrowlength];
@@ -77,7 +76,7 @@ int main(int argc, char* argv[])
         //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
         //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
     }
-    float elapsed_unified_overall = timer_overall.stop();
+    float elapsed_unified_overall = timer_overall.stop() / (float)iteration;
 
 //------------------------------------------------------------------------------------------------/
 //                                   Kernel - Zeitmessung
@@ -90,7 +89,7 @@ int main(int argc, char* argv[])
     alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
     set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
 
-    float elapsed_zero_kernel =
+    float elapsed_unified_kernel =
         mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
 
     check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'u');
@@ -126,7 +125,7 @@ int main(int argc, char* argv[])
         cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
         //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
     }
-    float elapsed_zero_overall = timer_overall.stop();
+    float elapsed_zero_overall = timer_overall.stop()/(float) iteration;
 
 //------------------------------------------------------------------------------------------------/
 //                                   Kernel - Zeitmessung
@@ -139,8 +138,7 @@ int main(int argc, char* argv[])
     alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, maxrowlength, dimlocal, dimfvec);
     set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, maxrowlength, dimlocal, dimfvec);
 
-    
-    float elapsed_unified_kernel =
+    float elapsed_zero_kernel =
         mult_vec_zero_time(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec, iteration);
 
     check_result(result_zero, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'z');
@@ -150,6 +148,8 @@ int main(int argc, char* argv[])
     cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
     //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
 
+    float schalter = 0.0;
+    performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
 
     delete[] data_host;
     delete[] indices_host;
