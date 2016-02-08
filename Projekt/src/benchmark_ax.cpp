@@ -8,10 +8,10 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dimlocal 8192
-#define dimfvec 8192
+#define dimlocal 16384
+#define dimfvec 16384
 #define maxrowlength 7
-#define iteration 100
+#define iteration 1000
 
 void print_p();
 
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 
     float elapsed_unified_kernel =
         mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
-    printf("%f\n", elapsed_unified_kernel);
+ 
     check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'u');
 
     //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 
     float elapsed_zero_kernel =
         mult_vec_zero_time(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec, iteration);
-    printf("%f\n", elapsed_zero_kernel);
+
     check_result(result_zero, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'z');
 
     //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
