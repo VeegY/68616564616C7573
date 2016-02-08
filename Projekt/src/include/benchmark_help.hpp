@@ -91,7 +91,7 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
         }
         printf("%f\n", value);
         printf("%f\n", result[i]);
-        printf("%f\n\n", abs(value - result[i]);
+        printf("%f\n\n", abs(value - result[i]));
         if (abs(value - result[i]) >= 1)
         {
             return false;
