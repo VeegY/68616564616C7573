@@ -79,10 +79,7 @@ int main(int argc, char* argv[])
         mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec);
         std::cout << " KERNEL END \n";
         
-        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
-        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
-        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
-        std::cout << " CLEANUP END\n ";
+        
         float schalter = 0;
         performance(maxrowlength, dimlocal, 1.0, 1.0, schalter);
         //print_stuff(data_unified, indices_unified, fvec_unified, result_unified, maxrowlength, dimlocal, dimfvec);
@@ -95,6 +92,10 @@ int main(int argc, char* argv[])
             }
             else { cout << "*U_FALSE*\n"; }
         }
+        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
+        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
+        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+        std::cout << " CLEANUP END\n ";
 
     }
         float elapsed_unified = timer_overall.stop();
