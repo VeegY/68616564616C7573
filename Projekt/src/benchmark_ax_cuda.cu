@@ -57,7 +57,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1000);
-    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes/ ((time_ku*1.0e-4)*1.0e9);
+    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes/ ((time_ku*1.0e-4)*1.0e9));
     printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", (flop / 1.0e9) / time_ku);
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
@@ -235,7 +235,7 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
-    float elapsedTimes = 0;
+    float elapsedTime = 0;
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
