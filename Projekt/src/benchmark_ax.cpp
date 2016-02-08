@@ -87,6 +87,15 @@ int main(int argc, char* argv[])
         performance(maxrowlength, dimlocal, 1.0, 1.0, schalter);
         //print_stuff(data_unified, indices_unified, fvec_unified, result_unified, maxrowlength, dimlocal, dimfvec);
 
+        if (r == 0)
+        {
+            if (check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal))
+            {
+                cout << "*U_CORRECT*\n";
+            }
+            else { cout << "*U_FALSE*\n"; }
+        }
+
     }
         float elapsed_unified = timer_overall.stop();
         

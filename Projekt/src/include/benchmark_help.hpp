@@ -89,15 +89,15 @@ void random_ints(int *data,int *indices, int* fvec, int dim)
     }
 }
 
-bool check_result(float *result, float *datah, int *indicesh, float *fvech, int dim)
+bool check_result(float *result, float *datah, int *indicesh, float *fvech, int max_row_length, int dim_local)
 {
     //bool check = true;
-    for (int i = 0; i < dim; i++)
+    for (int i = 0; i < dim_local; i++)
     {
         int value = 0;
-        for (int j = 0; j < dim; j++)
+        for (int j = 0; j < max_row_length; j++)
         {
-            value += datah[j*dim+i] * fvech[indicesh[j*dim+i]];
+            value += datah[i+dim_local*j] * fvech[indicesh[i+dim_local*j]];
         }
         if (value != result[i])
         {

@@ -46,7 +46,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("                PERFORMANCE\n");
     printf("===============================================\n");
     printf("-----------------------------------------------\n");
-    printf("                UNIFIED_MERMORY\n\033[0;47;1;36m");
+    printf("                UNIFIED_MERMORY\n");
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\tms\n");
     printf("Overall Runtime:\t\tms\n");
@@ -54,7 +54,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("Flops(Theoretcical):\t\txxx/(326)(GFLOPS/s\n");
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
-    printf("                ZERO_COPY\n\033[0;47;1;36m");
+    printf("                ZERO_COPY\n");
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\tms\n");
     printf("Overall Runtime:\t\tms\n");
