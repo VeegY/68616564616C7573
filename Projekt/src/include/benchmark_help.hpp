@@ -89,6 +89,7 @@ bool check_result(float *result, float *datah, int *indicesh, float *fvech, int 
         {
             value += datah[i+dim_local*j] * fvech[indicesh[i+dim_local*j]];
         }
+        std::cout << value << std::endl;
         if (value != result[i])
         {
             return false;
