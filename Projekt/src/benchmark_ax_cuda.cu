@@ -40,12 +40,12 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     unsigned int flop = 2 * max_row_length*dim_local - dim_local;
 
     //===Immer selbstständig updaten wenn sich der Kernel ändert===//           
-    int bRead = 0, bWrite = 0;
+    int bRead = 0, bWrite = 0, bytes;
     bRead += max_row_length*dim_local*sizeof(type); //data-Array
     bRead += max_row_length*dim_local*sizeof(int);  //indices-Array
     bRead += max_row_length*dim_local*sizeof(type); //fvec-Array
     bWrite += dim_local*sizeof(type);               //result-Array
-
+    bytes = bRead + bWrite;
 
     printf("===============================================\n");
     printf("                PERFORMANCE\n");
@@ -56,16 +56,16 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku*1000);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1000);
-    printf("Bandwith(theoretical):\t\t%f/(14.9)(GB/s)\n",time_ku);
-    printf("Flops(Theoretcical):\t\t%f/(326)(GFLOPS/s)\n", (float)flop/time_ku);
+    printf("Bandwith(theoretical):\t\t%f(14.9)(GB/s)\n",(bytes/1.0e9)/time_ku);
+    printf("Flops(theoretcical):\t\t%f(326)(GFLOPS/s)\n", ((float)flop/time_ku)) / 1.0e9);
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
     printf("                ZERO_COPY\n");
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_kz*1000);
     printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1000);
-    printf("Bandwith(theoretical):\t\t%f/(14.9)(GB/s)\n",time_kz);
-    printf("Flops(Theoretcical):\t\t%f/(326)(GFLOPS/s)\n",(float)flop/time_kz);
+    printf("Bandwith(theoretical):\t\t%f(14.9)(GB/s)\n", (bytes / 1.0e9) / time_kz);
+    printf("Flops(Theoretcical):\t\t%f(326)(GFLOPS/s)\n", ((float)flop/time_kz)) / 1.0e9);
     printf("-----------------------------------------------\n");
 
 
