@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
     float elapsed_unified_kernel =
         mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
 
-    check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, "U");
+    check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'u');
 
     //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
     cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
