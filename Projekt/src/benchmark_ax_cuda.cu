@@ -176,8 +176,8 @@ float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *ind
     
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
-    float elapsedTimes = 0;
-    cudaEventElapsedTime(&milliseconds, start, stop);
+    float elapsedTime = 0;
+    cudaEventElapsedTime(&elapsedTime, start, stop);
 
     return (elapsedTime / (float)runs);
 }
@@ -236,7 +236,7 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
     float elapsedTimes = 0;
-    cudaEventElapsedTime(&milliseconds, start, stop);
+    cudaEventElapsedTime(&elapsedTime, start, stop);
 
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
     return (elapsedTime/(float)runs);
