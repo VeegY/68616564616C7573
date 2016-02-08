@@ -158,7 +158,7 @@ float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *ind
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
     
     timer.start();
-    for (int i=0;i<runsi++)
+    for (int i = 0; i < runs; i++)
     {
         gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
     }
