@@ -137,7 +137,7 @@ void print_stuff(float *data, int *indices, float *fvec, float *result,  int max
 	{
 		for (int j = 0; j < max_row_length; j++)
 		{
-			printf("%f:%i - ", data[max_row_length*i+j], indices[max_row_length*i+j]);
+			printf("%f:%i - ", data[dim_local*j+i], indices[dim_local*j+i]);
 		}
 		printf(" --- vec: %f ~~~> Result: %f\n", fvec[i],result[i]);
 	}
