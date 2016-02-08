@@ -8,10 +8,10 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
-#define dimlocal 65536
-#define dimfvec 65536
+#define dimlocal 262144
+#define dimfvec 262144
 #define maxrowlength 7
-#define iteration 1000
+#define iteration 200
 
 void print_p();
 
