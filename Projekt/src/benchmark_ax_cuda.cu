@@ -38,7 +38,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
     //===#FLOP=====================================================//
-    unsigned int flop = 7 * dim_local - 2 - 2 * (floor(pow(dim_local, (1.0 / 3.0)))) - 2 * (floor(pow(dim_local, (2.0 / 3.0)))); //Number of Elements
+    unsigned long long int flop = 7 * dim_local - 2 - 2 * (floor(pow(dim_local, (1.0 / 3.0)))) - 2 * (floor(pow(dim_local, (2.0 / 3.0)))); //Number of Elements
     flop *= 2;
 
     //===Immer selbstständig updaten wenn sich der Kernel ändert===//           
