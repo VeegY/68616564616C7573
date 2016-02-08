@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
     //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 0);
     cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
     //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
-
+    print_p();
     float schalter = 0.0;
     performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
 

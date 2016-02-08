@@ -55,16 +55,16 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("-----------------------------------------------\n");
     printf("                UNIFIED_MERMORY\n");
     printf("-----------------------------------------------\n");
-    printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku*1000);
+    printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1000);
-    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n",(bytes / 1.0e9) / time_ku);
+    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes/ ((time_ku*1.0e-4)*1.0e9);
     printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", (flop / 1.0e9) / time_ku);
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
     printf("                ZERO_COPY\n");
     printf("-----------------------------------------------\n");
-    printf("Kernel Runtime:\t\t\t%f(ms)\n",time_kz*1000);
-    printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1000);
+    printf("Kernel Runtime:\t\t\t%f(ms)\n",time_kz);
+    printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1.0e4);
     printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", (bytes / 1.0e9) / time_kz);
     printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", (flop / 1.0e9) / time_kz);
     printf("-----------------------------------------------\n");
@@ -159,12 +159,14 @@ template void alloc_zero<double>(double **data, double **fvec, double **result, 
 template<typename Scalar>
 float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
-    Timer timer;
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
     
     int num_blocks = ceil((double)dim_local/1024);
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
     
-    timer.start();
+    cudaEventRecord(start);
     for (int i = 0; i < runs; i++)
     {
         gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
@@ -172,7 +174,11 @@ float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *ind
     }
     cudaDeviceSynchronize();
     
-    float elapsedTime = timer.stop();
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    float elapsedTimes = 0;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+
     return (elapsedTime / (float)runs);
 }
 template float mult_vec_unified_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
@@ -206,7 +212,6 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
-    Timer timer;
 
     Scalar *d_data, *d_fvec, *d_result;
     int *d_indices;
@@ -220,7 +225,6 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
 
     cudaEventRecord(start);
-    timer.start();
 
     for (int i=0;i<runs;i++)
     {
@@ -230,12 +234,10 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     cudaDeviceSynchronize();
     
     cudaEventRecord(stop);
-    float elapsedTime = timer.stop();
-    
     cudaEventSynchronize(stop);
-    float milliseconds = 0;
+    float elapsedTimes = 0;
     cudaEventElapsedTime(&milliseconds, start, stop);
-    printf("CUDA: %f ----- TIMER: %f\n", milliseconds / runs, elapsedTime / runs);
+
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
     return (elapsedTime/(float)runs);
 }
