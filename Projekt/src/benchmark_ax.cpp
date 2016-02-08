@@ -92,13 +92,15 @@ int main(int argc, char* argv[])
     set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
 
     float elapsed_unified_kernel =
-        mult_vec_unified_timedata_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
+        mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
+
+    check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, "U");
 
     //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
     cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
     //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
     //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
-    check_result(result_zero, data_host, indices_host, fvec_host, maxrowlength, dimlocal, "U");
+    
 
 //================================================================================================/
 //										Zero Copy Kernel
