@@ -70,9 +70,9 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 
     
 }
-template void performance<int>(int dim_local, int max_row_length, float time_ku, float time_uo, int schalter);
-template void performance<float>(int dim_local, int max_row_length, float time_ku, float time_uo, float schalter);
-template void performance<double>(int dim_local, int max_row_length, float time_ku, float time_uo, double schalter);
+template void performance<int>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter);
+template void performance<float>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter);
+template void performance<double>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter);
 
 
 //PROPERTIES OF TEGRA K1
