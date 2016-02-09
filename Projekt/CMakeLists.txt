@@ -39,3 +39,5 @@ INCLUDE(CTest) # beinhaltet enable_testing()
 
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(tests)
+
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/out)
