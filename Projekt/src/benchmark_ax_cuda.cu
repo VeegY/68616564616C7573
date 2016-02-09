@@ -43,17 +43,15 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 {
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
-    //===#FLOP=====================================================//
-    unsigned long long int flop = 7 * dim_local - 2 - 2 * (floor(pow(dim_local, (1.0 / 3.0)))) - 2 * (floor(pow(dim_local, (2.0 / 3.0)))); //Number of Elements
-    flop *= 2;
 
-    //===Immer selbstständig updaten wenn sich der Kernel ändert===//           
-    int bRead = 0, bWrite = 0, bytes;
-    bRead += max_row_length*dim_local*sizeof(type); //data-Array
-    bRead += max_row_length*dim_local*sizeof(int);  //indices-Array
-    bRead += max_row_length*dim_local*sizeof(type); //fvec-Array
-    bWrite += dim_local*sizeof(type);               //result-Array
-    bytes = bRead + bWrite;
+    //===#ELEMENTS IN THE MATRIX===================================//
+    unsigned long long int elements = 7 * dim_local - 2 - 2 * (floor(pow(dim_local, (1.0 / 3.0)))) - 2 * (floor(pow(dim_local, (2.0 / 3.0))));
+
+    //===#FLOP=====================================================//
+    unsigned long long int flop = 2 * elements;
+
+    //==#BYTES=====================================================//           
+    int bytes = elements*(sizeof(type) + sizeof(int)) + 2*(sizeof(type)*dim_local);// Elements(Data+Indices) + Fvec Read und Result Write
 
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
