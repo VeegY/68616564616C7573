@@ -54,7 +54,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("          DIM = %i ~~ %i Iterations\n", dim_local, runs);
     printf("===============================================\n");
     printf("-----------------------------------------------\n");
-    printf("                UNIFIED_MERMORY\n");
+    printf("\033[31                UNIFIED_MERMORY\n");
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1.0e3);

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#define RESET "\033[0m"
 
 void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, int dim_local, int dim_fvec)
 {
@@ -97,7 +98,7 @@ void check_result(float *result, float *datah, int *indicesh, float *fvech, int 
     }
     if(check)
     {
-        printf("%c_Kernel outcome true\n", a);
+        printf("%c_Kernel outcome true\n" RESET, a);
     }
     else printf("%c_Kernel outcome false\n", a);
 }
