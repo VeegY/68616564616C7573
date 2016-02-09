@@ -54,7 +54,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("          DIM = %i ~~ %i Iterations\n", dim_local, runs);
     printf("===============================================\n");
     printf("-----------------------------------------------\n");
-    printf("\e[31m                UNIFIED_MERMORY\n");
+    printf("\e[31;1m                UNIFIED_MERMORY\n");
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1.0e3);
@@ -62,7 +62,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / ((time_ku*1.0e-3)*1.0e9));
     printf("-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
-    printf("\x1b[32m                ZERO_COPY\n");
+    printf("\x1b[31m                ZERO_COPY\n");
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_kz);
     printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1.0e3);
