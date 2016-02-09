@@ -10,7 +10,7 @@
 #define RED "\e[31m"
 #define GREEN "\e[32m"
 #define BLUE "\e[34m"
-#define FANCY "\e[35;40;1m"
+#define FANCY "\e[35;1;40m"
 
 template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
