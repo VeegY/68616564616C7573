@@ -98,6 +98,7 @@ void check_result(float *result, float *datah, int *indicesh, float *fvech, int 
             check = false;
         }
     }
+    check = false;
     if(check)
     {
         printf(GREEN "%c_Kernel outcome true\n" RESET, a);

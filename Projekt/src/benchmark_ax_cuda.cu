@@ -7,8 +7,8 @@
 #include <cmath>
 #include "include/timer.hpp"
 #define RESET "\e[0m"
-#define BLUE "\e[34m;1m"
-#define CYAN "\e[36m;1m"
+#define BLUE "\e[34;1m"
+#define CYAN "\e[36;1m"
 #define GREY "\e[30;1m"
 #define MAGENTA "\e[35;1m"
 
