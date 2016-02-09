@@ -10,7 +10,8 @@
 #define RED "\e[31m"
 #define GREEN "\e[32m"
 #define BLUE "\e[34m"
-#define FANCY "\e[35;1;40m"
+#define FANCY "\e[35m"
+#define BLACK "\e[40m"
 
 template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
@@ -59,7 +60,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("          DIM = %i ~~ %i Iterations\n", dim_local, runs);
     printf("===============================================\n");
     printf("-----------------------------------------------\n");
-    printf(FANCY "                UNIFIED_MERMORY\n" RESET);
+    printf(FANCY BLACK"                UNIFIED_MERMORY\n" RESET);
     printf("-----------------------------------------------\n");
     printf("Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1.0e3);
