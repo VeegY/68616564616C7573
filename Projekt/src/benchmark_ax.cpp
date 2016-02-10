@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
 //                                   Overall - Zeitmessung
 //------------------------------------------------------------------------------------------------/
-   
+ /*
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
     {
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
     cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
     //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
     //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
-    
+*/  
 
 //================================================================================================/
 //										Zero Copy Kernel
@@ -152,8 +152,8 @@ int main(int argc, char* argv[])
 //================================================================================================/
     
     print_p();
-    float schalter = 0.0;
-    performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
+    //float schalter = 0.0;
+    //performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
 
     delete[] data_host;
     delete[] indices_host;
