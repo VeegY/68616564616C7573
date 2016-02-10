@@ -58,8 +58,8 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf("          DIM = %i ~~ %i Iterations\n", dim_local, runs);
-    printf("                 %.2fGB/2GB DRAM used\n", storage / 1.0e9);
+    printf("        DIM = %i ~~ %i Iterations\n", dim_local, runs);
+    printf("            %.2fGB/2GB DRAM used\n", storage / 1.0e9);
     printf(GREY "===============================================\n");
     printf("-----------------------------------------------\n");
     printf(CYAN "                UNIFIED_MERMORY\n");
