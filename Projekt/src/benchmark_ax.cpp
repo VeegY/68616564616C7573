@@ -41,8 +41,7 @@ void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int metho
 
 int main(int argc, char* argv[])
 {
-
-//Generiere Data/Indices Int-Array sowie fvec Int Array
+    //Generiere Data/Indices Int-Array sowie fvec Int Array
     float *data_host = new float[dimlocal*maxrowlength];
     int *indices_host = new int[dimlocal*maxrowlength];
     float *fvec_host = new float[dimfvec];

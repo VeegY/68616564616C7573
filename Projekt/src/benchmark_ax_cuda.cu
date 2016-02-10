@@ -47,7 +47,10 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     //===#ELEMENTS IN THE MATRIX===================================//
     unsigned long long int elements = 7 * dim_local - 2 - 2 * (floor(pow(dim_local, (1.0 / 3.0)))) - 2 * (floor(pow(dim_local, (2.0 / 3.0))));
 
-    //===#FLOP=====================================================//
+    //==='DISK STORAGE~============================================//
+    unsigned long long int storage = sizeof(type)*(2 * dim_local + dim_local*max_row_length) + sizeof(int)*dim_local*max_row_length;
+    
+        //===#FLOP=====================================================//
     unsigned long long int flop = 2 * elements;
 
     //==#BYTES=====================================================//           
@@ -56,22 +59,23 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
     printf("          DIM = %i ~~ %i Iterations\n", dim_local, runs);
+    printf("                 %.2fGB/2GB Storage used\n", storage / 1.0e9);
     printf(GREY "===============================================\n");
     printf("-----------------------------------------------\n");
     printf(CYAN "                UNIFIED_MERMORY\n");
     printf(GREY "-----------------------------------------------\n");
     printf(CYAN "Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1.0e3);
-    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / ((time_ku*1.0e-3)*1.0e9));
-    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / ((time_ku*1.0e-3)*1.0e9));
+    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (time_ku*1.0e6));
+    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / (time_ku*1.0e6));
     printf(GREY "-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
     printf(BLUE "                ZERO_COPY\n");
     printf(GREY "-----------------------------------------------\n");
     printf(BLUE "Kernel Runtime:\t\t\t%f(ms)\n",time_kz);
     printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1.0e3);
-    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / ((time_kz*1.0e-3)*1.0e9));
-    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / ((time_kz*1.0e-3)*1.0e9));
+    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (time_kz*1.0e6));
+    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / (time_kz*1.0e6));
     printf(GREY "-----------------------------------------------\n" RESET);
 
 
