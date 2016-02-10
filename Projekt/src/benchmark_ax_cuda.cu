@@ -188,7 +188,7 @@ float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *ind
 
     cudaEventDestroy(start_unified);
     cudaEventDestroy(stop_unified);
-    //cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
     return (elapsedTime_unified / (float)runs);
 }
 template float mult_vec_unified_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
@@ -248,7 +248,7 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
 
     cudaEventDestroy(start_zero);
     cudaEventDestroy(stop_zero);
-    //cudaDeviceSynchronize();
+    cudaDeviceSynchronize();
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
     return (elapsedTime_zero /(float)runs);
 }

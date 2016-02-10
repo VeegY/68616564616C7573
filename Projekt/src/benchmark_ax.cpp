@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
         //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
         cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
         //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
-        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
     }
     float elapsed_unified_overall = timer_overall.stop() / (float)iteration;
 
