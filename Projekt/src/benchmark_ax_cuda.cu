@@ -164,27 +164,28 @@ template void alloc_zero<double>(double **data, double **fvec, double **result, 
 template<typename Scalar>
 float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
-    cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
+    cudaEvent_t start_unified, stop_unified;
+    cudaEventCreate(&start_unified);
+    cudaEventCreate(&stop_unified);
     
     int num_blocks = ceil((double)dim_local/1024);
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
     
-    cudaEventRecord(start);
+    cudaEventRecord(start_unified);
     for (int i = 0; i < runs; i++)
     {
         gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
         
     }
-    cudaDeviceSynchronize();
+    cudaEventRecord(stop_unified);
     
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float elapsedTime = 0;
-    cudaEventElapsedTime(&elapsedTime, start, stop);
+    cudaEventSynchronize(stop_unified);
+    float elapsedTime_unified = 0.0;
+    cudaEventElapsedTime(&elapsedTime_unified, start_unified, stop_unified);
 
-    return (elapsedTime / (float)runs);
+    cudaEventDestroy(&start_unified);
+    cudaEventDestroy(&stop_unified);
+    return (elapsedTime_unified / (float)runs);
 }
 template float mult_vec_unified_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
 template float mult_vec_unified_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
@@ -214,9 +215,9 @@ template void mult_vec_unified<double>(double* data, double* fvec, double* restu
 template<typename Scalar>
 float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
-    cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
+    cudaEvent_t start_zero, stop_zero;
+    cudaEventCreate(&start_zero);
+    cudaEventCreate(&stop_zero);
 
     Scalar *d_data, *d_fvec, *d_result;
     int *d_indices;
@@ -229,22 +230,22 @@ float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indice
     int num_blocks = ceil((double)dim_local/1024);
     int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
 
-    cudaEventRecord(start);
-
+    cudaEventRecord(start_zero);
     for (int i=0;i<runs;i++)
     {
         gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
    
     }
-    cudaDeviceSynchronize();
-    
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float elapsedTime = 0;
-    cudaEventElapsedTime(&elapsedTime, start, stop);
+    cudaEventRecord(stop_zero);
 
+    cudaEventSynchronize(stop_zero);
+    float elapsedTime_zero = 0.0;
+    cudaEventElapsedTime(&elapsedTime_zero, start_zero, stop_zero);
+
+    cudaEventDestroy(&start_zero);
+    cudaEventDestroy(&stop_zero);
     cleanup(d_data, d_fvec, d_result, d_indices, 0);
-    return (elapsedTime/(float)runs);
+    return (elapsedTime_zero /(float)runs);
 }
 template float mult_vec_zero_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec, int runs);
 template float mult_vec_zero_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
