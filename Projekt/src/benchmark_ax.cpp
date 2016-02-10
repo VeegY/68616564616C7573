@@ -150,10 +150,10 @@ int main(int argc, char* argv[])
 //================================================================================================/
 //                                         Evaluieren
 //================================================================================================/
-    
+    float elapsed_unified_kernel = 1.0, elapsed_unified_overall = 1.0;
     print_p();
-    //float schalter = 0.0;
-    //performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
+    float schalter = 0.0;
+    performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
 
     delete[] data_host;
     delete[] indices_host;
