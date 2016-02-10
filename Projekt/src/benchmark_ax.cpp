@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
 //                                         Evaluieren
 //================================================================================================/
     
-    //print_p();
+    print_p();
     float schalter = 0.0;
     performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
 
