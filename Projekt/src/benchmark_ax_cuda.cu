@@ -55,7 +55,6 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 
     //==#BYTES=====================================================//           
     int bytes = elements*(sizeof(type) + sizeof(int)) + 2*(sizeof(type)*dim_local);// Elements(Data+Indices) + Fvec Read und Result Write
-    printf("%i  %i\n", sizeof(int), sizeof(type));
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
     printf("        DIM = %i ~~ %i Iterations\n", dim_local, runs);
@@ -67,7 +66,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf(CYAN "Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1.0e3);
     printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (time_ku*1.0e6));
-    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / (time_ku*1.0e6));
+    printf("Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop  / (time_ku*1.0e6));
     printf(GREY "-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
     printf(BLUE "                ZERO_COPY\n");
@@ -75,7 +74,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf(BLUE "Kernel Runtime:\t\t\t%f(ms)\n",time_kz);
     printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1.0e3);
     printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (time_kz*1.0e6));
-    printf("Flops(th. Peak):\t\t%.2f(326)(GFLOPS/s)\n", flop  / (time_kz*1.0e6));
+    printf("Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop  / (time_kz*1.0e6));
     printf(GREY "-----------------------------------------------\n" RESET);
 
 
