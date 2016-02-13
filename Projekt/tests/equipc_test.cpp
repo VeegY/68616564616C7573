@@ -1,9 +1,9 @@
 #include "../src/include/fullvector.hpp"
-#include "../src/include/vtkwriter.hpp"
+#include "../src/include/distellpackmatrix.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-#include <numeric_limits>
+#include <limits>
 /*
 *test fuer distellpackmatrix
 *KEIN unit-test
@@ -42,7 +42,7 @@ int equipc_test()
     Icarus::SlicedVector<double> rhs(N);
     for (size_t i(0); i < N; i++)
     {
-        testvec.set_global(i, 1.0);
+        rhs.set_global(i, 1.0);
     }
     mat1.mult_vec(rhs, rhs);
     equi.mult_vec(rhs, rhs);
@@ -50,8 +50,8 @@ int equipc_test()
     checktol = std::numeric_limits<double>::epsilon() * 10.0;
     for (size_t i(0); i < N; i++)
     {
-        if (std::abs(testvec.get_global(i) - 1.0) < checktol) 
-            LOG_ERROR("equi pc failed; difference to 1.0: ", std::abs(testvec.get_global(i) - 1.0));
+        if (std::abs(rhs.get_global(i) - 1.0) < checktol) 
+            LOG_ERROR("equi pc failed; difference to 1.0: ", std::abs(rhs.get_global(i) - 1.0));
     }
     return 0;
 }
