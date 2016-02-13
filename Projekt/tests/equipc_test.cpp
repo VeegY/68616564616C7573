@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <numeric_limits>
 /*
 *test fuer distellpackmatrix
 *KEIN unit-test
@@ -43,12 +44,17 @@ int equipc_test()
     {
         testvec.set_global(i, 1.0);
     }
-
-
-
-
-
-    
+    Icarus::FullVector<double> rhs(testvec);
+    mat1.mult_vec(rhs, testvec);
+    Icarus::FullVector<double> rhs2(testvec);
+    equi.mult_vec(rhs2, testvec);
+    double checktol;
+    checktol = std::numeric_limits<double>::epsilon() * 10.0;
+    for (size_t i(0); i < N; i++)
+    {
+        if (std::abs(testvec.get_global(i) - 1.0) < checktol) LOG_ERROR("equi pc failed; difference to 1.0: ", std::abs(testvec.get_global(i) - 1.0);
+    }
+    return 0;
 }
 
 int main()
