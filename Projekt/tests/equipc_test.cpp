@@ -35,24 +35,23 @@ int equipc_test()
         }
         mat1.end_of_row();
     }
-    if (!mat.is_filled()) LOG_ERROR("Filling of random Matrix failed");
+    if (!mat1.is_filled()) LOG_ERROR("filling of random Matrix failed");
     equi = mat1.precond_equi();
 
     //initialize testvector
-    Icarus::SlicedVector<double> testvec(N);
+    Icarus::SlicedVector<double> rhs(N);
     for (size_t i(0); i < N; i++)
     {
         testvec.set_global(i, 1.0);
     }
-    Icarus::FullVector<double> rhs(testvec);
-    mat1.mult_vec(rhs, testvec);
-    Icarus::FullVector<double> rhs2(testvec);
-    equi.mult_vec(rhs2, testvec);
+    mat1.mult_vec(rhs, rhs);
+    equi.mult_vec(rhs, rhs);
     double checktol;
     checktol = std::numeric_limits<double>::epsilon() * 10.0;
     for (size_t i(0); i < N; i++)
     {
-        if (std::abs(testvec.get_global(i) - 1.0) < checktol) LOG_ERROR("equi pc failed; difference to 1.0: ", std::abs(testvec.get_global(i) - 1.0);
+        if (std::abs(testvec.get_global(i) - 1.0) < checktol) 
+            LOG_ERROR("equi pc failed; difference to 1.0: ", std::abs(testvec.get_global(i) - 1.0));
     }
     return 0;
 }
