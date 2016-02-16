@@ -8,13 +8,23 @@ int h=1;
 int z=Nx*Ny;
 int y=Nx;
 
-#include "assemblyMatrixRow.hpp"
-#include "assemblyRHSLoad.hpp"
-#include "assemblyRHSNeumann.hpp"
+//TODO: wieder loeschen
+#define Dirichlet true
+#define Neumann true
+//TODO: wieder loeschen
 
 
-int main() {
+#include "include/assemblyMatrixRow.hpp"
+#include "include/assemblyRHSLoad.hpp"
+#include "include/assemblyRHSNeumann.hpp"
+#include "include/distellpackmatrix.hpp"
 
+namespace Icarus
+{
+
+int nomain() {
+
+DistEllpackMatrix<double> Matrix(Nx*Ny*Nz);
 
 int i;
 std::vector<int> e(1);
@@ -23,7 +33,13 @@ std::vector<double> RHS(Nx*Ny*Nz);
 
 //Ecke 1
 i=0;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
    e[0]=i; A[0]=0;
@@ -41,7 +57,13 @@ else
 
 //Ecke 2
 i=y-1;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
    e[0]=i-1; A[0]=1;
@@ -59,7 +81,13 @@ else
 
 //Ecke 3
 i= z-1;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
    e[0]=i-1-y; A[0]=2;
@@ -77,7 +105,13 @@ else
 
 //Ecke 4
 i=(Ny-1)*y;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
    e[0]=i-y; A[0]=3;
@@ -95,7 +129,13 @@ else
 
 //Ecke 5
 i=(Nz-1)*z;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
    e[0]=i-z; A[0]=4;
@@ -113,10 +153,16 @@ else
 
 //Ecke 6
 i=(Nz-1)*z+y-1;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
-   e[0]=i-x-z; A[0]=5;
+   e[0]=i-x-z; A[0]=5;  //TODO TOCHECK: sicher, dass da ein x hinkommt? kompiliert so nicht. vielleicht ist ein y gewollt?
    Matrix.setZeile(i, assemblyMatrixRow(e, A));
    RHS[i] = assemblyRHSLoad(e, A);
    if(Neumann){
@@ -131,7 +177,13 @@ else
 
 //Ecke 7
 i=Nx*Ny*Nz -1;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
    e[0]=i-1-y-z; A[0]=6;
@@ -149,7 +201,13 @@ else
 
 //Ecke 8
 i=(z-1)*y;
-if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+if(Dirichlet)
+{
+    Matrix.prepare_sequential_fill(1);
+    Matrix.sequential_fill(i, 1.0);
+    Matrix.end_of_row();
+    RHS[i]= 999999;
+}
 else
 {
    e[0]=i-y-z; A[0]=7;
@@ -171,7 +229,13 @@ A.resize(2);
 //Kante 1:
 for(int j=1; j<Nx-1;j++){
    i=j;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-1; A[0]=1;
@@ -192,7 +256,13 @@ for(int j=1; j<Nx-1;j++){
 //Kante 2:
 for(int j=1; j<Nx-1; j++){
    i=(Ny-1)*y + j;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-y -1; A[0]=2;
@@ -213,7 +283,13 @@ for(int j=1; j<Nx-1; j++){
 //Kante 3:
 for(int j=1; j<Nx-1; j++){
    i=(z-1)*y + j;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-y-z -1; A[0]=6;
@@ -234,7 +310,13 @@ for(int j=1; j<Nx-1; j++){
 //Kante 4:
 for(int j=1; j<Nx-1; j++){
    i=(Nz-1)*z + j;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-z -1; A[0]=5;
@@ -255,7 +337,13 @@ for(int j=1; j<Nx-1; j++){
 //Kante 5:
 for(int j=1; j<Ny-1; j++){
    i= j*y;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-y; A[0]=3;
@@ -276,7 +364,13 @@ for(int j=1; j<Ny-1; j++){
 //Kante 6:
 for(int j=1; j<Ny-1; j++){
    i=(y-1) + j*y;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-1 -y; A[0]=2;
@@ -297,7 +391,13 @@ for(int j=1; j<Ny-1; j++){
 //Kante 7:
 for(int j=1; j<Ny-1; j++){
    i=(Nz-1)*z+y-1 + j*y;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-1-z -y; A[0]=6;
@@ -318,7 +418,13 @@ for(int j=1; j<Ny-1; j++){
 //Kante 8:
 for(int j=1; j<Nz-1; j++){
    i= j*z;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i -z; A[0]=4;
@@ -339,7 +445,13 @@ for(int j=1; j<Nz-1; j++){
 //Kante 9:
 for(int j=1; j<Ny-1; j++){
    i=(Nz-1)*z + j*y;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-z -y; A[0]=7;
@@ -360,7 +472,13 @@ for(int j=1; j<Ny-1; j++){
 //Kante 10:
 for(int j=1; j<Ny-1; j++){
    i=y-1 + j*z;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-1 -z; A[0]=5;
@@ -381,7 +499,13 @@ for(int j=1; j<Ny-1; j++){
 //Kante 11:
 for(int j=1; j<Ny-1; j++){
    i=y-1 + j*z;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-1 -z; A[0]=5;
@@ -402,7 +526,13 @@ for(int j=1; j<Ny-1; j++){
 //Kante 12:
 for(int j=1; j<Ny-1; j++){
    i=z-y + j*z;
-   if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+    if(Dirichlet)
+    {
+        Matrix.prepare_sequential_fill(1);
+        Matrix.sequential_fill(i, 1.0);
+        Matrix.end_of_row();
+        RHS[i]= 999999;
+    }
    else
    {
       e[0]=i-y -z; A[0]=7;
@@ -427,7 +557,13 @@ A.resize(4);
 for(int j=1; j<Nx-1; j++){
    for(int k=1; k<Ny-1; k++){
       i = j + k*y;
-      if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+        if(Dirichlet)
+        {
+            Matrix.prepare_sequential_fill(1);
+            Matrix.sequential_fill(i, 1.0);
+            Matrix.end_of_row();
+            RHS[i]= 999999;
+        }
       else
       {
          e[0]=i -y-1; A[0]=2;
@@ -451,7 +587,13 @@ for(int j=1; j<Nx-1; j++){
 for(int j=1; j<Nx-1; j++){
    for(int k=1; k<Ny-1; k++){
       i = (Nz-1)*z + j + k*y;
-      if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+        if(Dirichlet)
+        {
+            Matrix.prepare_sequential_fill(1);
+            Matrix.sequential_fill(i, 1.0);
+            Matrix.end_of_row();
+            RHS[i]= 999999;
+        }
       else
       {
          e[0]=i -y-1 -z; A[0]=6;
@@ -475,7 +617,13 @@ for(int j=1; j<Nx-1; j++){
 for(int j=1; j<Nx-1; j++){
    for(int k=1; k<Nz-1; k++){
       i = j + k*z;
-      if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+        if(Dirichlet)
+        {
+            Matrix.prepare_sequential_fill(1);
+            Matrix.sequential_fill(i, 1.0);
+            Matrix.end_of_row();
+            RHS[i]= 999999;
+        }
       else
       {
          e[0]=i -1-z; A[0]=5;
@@ -499,7 +647,13 @@ for(int j=1; j<Nx-1; j++){
 for(int j=1; j<Nx-1; j++){
    for(int k=1; k<Nz-1; k++){
       i = (Ny-1)*y + j + k*z;
-      if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+        if(Dirichlet)
+        {
+            Matrix.prepare_sequential_fill(1);
+            Matrix.sequential_fill(i, 1.0);
+            Matrix.end_of_row();
+            RHS[i]= 999999;
+        }
       else
       {
          e[0]=i -1-z -y; A[0]=6;
@@ -523,7 +677,13 @@ for(int j=1; j<Nx-1; j++){
 for(int j=1; j<Ny-1; j++){
    for(int k=1; k<Nz-1; k++){
       i = j*y + k*z;
-      if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+        if(Dirichlet)
+        {
+            Matrix.prepare_sequential_fill(1);
+            Matrix.sequential_fill(i, 1.0);
+            Matrix.end_of_row();
+            RHS[i]= 999999;
+        }
       else
       {
          e[0]=i -y-z; A[0]=7;
@@ -547,7 +707,13 @@ for(int j=1; j<Ny-1; j++){
 for(int j=1; j<Ny-1; j++){
    for(int k=1; k<Nz-1; k++){
       i = (Nx-1) + j*y + k*z;
-      if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+        if(Dirichlet)
+        {
+            Matrix.prepare_sequential_fill(1);
+            Matrix.sequential_fill(i, 1.0);
+            Matrix.end_of_row();
+            RHS[i]= 999999;
+        }
       else
       {
          e[0]=i -y-z -1; A[0]=6;
@@ -575,7 +741,13 @@ for(int j=1; j<Nx-1; j++){
    for(int k=1; k<Ny-1; k++){
       for(int l=1; l<Nz-1; l++){
          i= j + k*y + l*z;
-         if(Dirichlet){Matrix.set(i,i,1); RHS[i]= 999999;}
+            if(Dirichlet)
+            {
+                Matrix.prepare_sequential_fill(1);
+                Matrix.sequential_fill(i, 1.0);
+                Matrix.end_of_row();
+                RHS[i]= 999999;
+            }
          else
          {
             e[0]=i -1-y-z; A[0]=6;
@@ -595,5 +767,8 @@ for(int j=1; j<Nx-1; j++){
    }
 }
 
-//ende von main
-}
+return 0;
+
+}//nomain()
+
+}//namespace Icarus

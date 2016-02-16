@@ -1,4 +1,12 @@
+#ifndef __ASSEMBLYMATRIXROW_HPP_
+#define __ASSEMBLYMATRIXROW_HPP_
+
 #include <vector>
+#include "quadratur.hpp"
+#include "basis.hpp"
+
+namespace Icarus
+{
 
 void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A)
 {
@@ -24,9 +32,11 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A)
          //Quadratur
          zwsp = 0;
          for(int q = 0; q<nqp; q++){
-            grad_Basis1 = evaluate_gradient_Basis(e[i], A[i], X[q], Y[q], Z[q]);
-            grad_Basis2 = evaluate_gradient_Basis(e[i], B, X[q], Y[q], Z[q]);
-            zwsp += grad_Basis1.dot(grad_Basis2) * weigth[q];
+            grad_Basis1 = evaluate_gradient_Basis3d(e[i], A[i], X[q], Y[q], Z[q]);
+            grad_Basis2 = evaluate_gradient_Basis3d(e[i], B, X[q], Y[q], Z[q]);
+            //zwsp += grad_Basis1.dot(grad_Basis2) * weight[q];
+            zwsp += (grad_Basis1[0]*grad_Basis2[0] + grad_Basis1[1]*grad_Basis2[1]
+                + grad_Basis1[2]*grad_Basis2[2]) * weight[q];   //TODO woher kommen die Gewichte??
          }
 
          int j=0;
@@ -50,3 +60,7 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A)
    //Zeile zu value und column
 
 }
+
+}//namespace Icarus
+
+#endif

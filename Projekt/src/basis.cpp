@@ -1,4 +1,4 @@
-#include "basis.hpp"
+#include "include/basis.hpp"
 
 namespace Icarus
 {
@@ -31,7 +31,7 @@ namespace Icarus
                     break;
             case 7: zwsp = ((x0 + h - X) / h) * ((y0 - Y) / -h) * ((z0 - Z) / -h);
                     break;
-            default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+            default: zwsp = 0.0; std::cout << "Fehler: kein lokaler Knoten" << std::endl;
         }
         return zwsp;
     }
@@ -82,7 +82,7 @@ namespace Icarus
                     zwsp[1] = (1/h) * ((x0 + h - X) / h) * ((z0 - Z) / -h);
                     zwsp[2] = (1/h) * ((x0 + h - X) / h) * ((y0 - Y) / -h);
                     break;
-            default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+            default: zwsp = {0.0, 0.0, 0.0}; std::cout << "Fehler: kein lokaler Knoten" << std::endl;
         }
         return zwsp;
     }
@@ -151,8 +151,9 @@ namespace Icarus
                         zwsp = ((y0 + h - R1) / h) * ((z0 - R2) / -h);
                     }
                     break;
-            default: std::cout << "Fehler: keine gültige Ebene" << std::endl;
+            default: zwsp = 0.0; std::cout << "Fehler: keine gültige Ebene" << std::endl;
         }
         return zwsp;
     }
-}
+
+}//namespace Icarus
