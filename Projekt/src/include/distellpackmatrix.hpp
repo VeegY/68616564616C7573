@@ -18,13 +18,13 @@ class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar>>
 {
     friend class Matrix<DistEllpackMatrix<Scalar>>;
 
-	// MPI Eigenschaften
-	MPI_Comm _my_comm;
-	int _my_rank, _num_nodes;
+    // MPI Eigenschaften
+    MPI_Comm _my_comm;
+    int _my_rank, _num_nodes;
 
     // Mit PAD wird das padding durchgeführt
     static const int PAD = 0;
-	
+    
     size_t _dim_global, _dim_local, _dim_local_nopad, _max_row_length;
 
     size_t * _indices;
@@ -43,15 +43,15 @@ public:
 
     ~DistEllpackMatrix();
 
-	DistEllpackMatrix(DistEllpackMatrix&& other);
+    DistEllpackMatrix(DistEllpackMatrix&& other);
 
-	DistEllpackMatrix(const DistEllpackMatrix& other);
+    DistEllpackMatrix(const DistEllpackMatrix& other);
 
-	DistEllpackMatrix& operator=(DistEllpackMatrix&& other);
+    DistEllpackMatrix& operator=(DistEllpackMatrix&& other);
 
-	DistEllpackMatrix& operator=(const DistEllpackMatrix& other);
+    DistEllpackMatrix& operator=(const DistEllpackMatrix& other);
 
-	MPI_Comm get_comm() const { return _my_comm; }
+    MPI_Comm get_comm() const { return _my_comm; }
 
     size_t get_dim_local() const { return _dim_local; }
 

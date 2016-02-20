@@ -32,9 +32,9 @@ class SlicedVector : public Vector<SlicedVector<Scalar>>
 {
     friend class Vector<SlicedVector<Scalar>>;
 
-	// mpi umgebung
-	MPI_Comm _my_comm;
-	int _my_rank, _num_nodes;
+    // mpi umgebung
+    MPI_Comm _my_comm;
+    int _my_rank, _num_nodes;
 
     size_t _dim_global, _dim_local, _dim_local_nopad, _dim_local_last;
     Scalar* _data;
@@ -65,11 +65,11 @@ public:
 
     size_t get_dim_local_nopad() const {return _dim_local_nopad;}
 
-	size_t get_dim_local_last() const { return _dim_local_last; }
+    size_t get_dim_local_last() const { return _dim_local_last; }
 
-	MPI_Comm get_comm() const { return _my_comm; }
+    MPI_Comm get_comm() const { return _my_comm; }
 
-	void print_local_data(std::ostream& out) const;
+    void print_local_data(std::ostream& out) const;
 
     void set_local(size_t pos, const Scalar& val)
     {

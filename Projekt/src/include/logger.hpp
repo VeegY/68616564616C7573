@@ -42,7 +42,7 @@
 
 namespace Icarus
 {
-   // interface
+    // interface
     class LogPolicy : public NonCopyable
     {
     public:

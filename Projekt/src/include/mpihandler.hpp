@@ -37,7 +37,7 @@ namespace Icarus
     {
         int _n_procs, _my_rank;
 
-    public:       
+    public:
 
         int get_n_procs() const { return _n_procs; }
 

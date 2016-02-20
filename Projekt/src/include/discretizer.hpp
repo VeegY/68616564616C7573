@@ -22,13 +22,13 @@ class Face
 public:
     Face(int num_vertices, std::vector<int>& id_vertices,
         std::vector<Vertex>& vertices, Vertex normal);
-    
+
     bool pointInsideYz(Vertex point);
-    
+
     Vertex get_vertex(int local_id) { return _vertices[local_id]; }
-    
+
     Vertex get_normal() { return _normal; }
-    
+
 private:
     int _num_vertices;
     std::vector<Vertex> _vertices;
@@ -43,18 +43,18 @@ class Object
 {
 public:
     Object(std::string name);
-    
+
     void set_vertex(float x, float y, float z);
-    
+
     void set_normal(float x, float y, float z);
-    
+
     void set_face(int num_vertices, std::vector<int>& id_vertices, int local_id_normal);
-    
-	/**
-	* \returns Gibt 'o' zurück, wenn sich der Punkt im Objekt befindet, sonst 'a'.
-	*/
+
+    /**
+    * \returns Gibt 'o' zurück, wenn sich der Punkt im Objekt befindet, sonst 'a'.
+    */
     char pointInside(Vertex point);
-    
+
 private:
     std::string _name;
     int _num_vertices;
@@ -66,8 +66,8 @@ private:
 
 /***
  * \returns Gibt für jeden Gitterpunkt 'a' (Frei), 'o' (innerhalb von Objekt)
- *			oder 'b' (Rand des Gesamtgebietes) zurück. Die Indizes werden von
- *			innen nach außen als x,y,z linear abgerollt.
+ *          oder 'b' (Rand des Gesamtgebietes) zurück. Die Indizes werden von
+ *          innen nach außen als x,y,z linear abgerollt.
  */
 std::vector<char> discretizer(std::string inputFile,
     float h, int nx, int ny, int nz);
