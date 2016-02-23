@@ -93,7 +93,7 @@ DistEllpackMatrix<Scalar>&
 DistEllpackMatrix<Scalar>::operator=(DistEllpackMatrix&& other)
 {
 	// selbst
-	if (this == &other) return this;
+	if (this == &other) return *this;
 
 	// fremd
 	_my_comm = other._my_comm;
@@ -109,7 +109,7 @@ DistEllpackMatrix<Scalar>::operator=(DistEllpackMatrix&& other)
 	other._indices = nullptr;
 	other._data = nullptr;
 
-	return this;
+	return *this;
 }
 
 template <typename Scalar>
@@ -117,7 +117,7 @@ DistEllpackMatrix<Scalar>&
 DistEllpackMatrix<Scalar>::operator=(const DistEllpackMatrix& other)
 {
 	// selbst
-	if (this == &other) return this;
+	if (this == &other) return *this;
 
 	// fremd
 	if (_indices) delete[] _indices;
@@ -146,7 +146,7 @@ DistEllpackMatrix<Scalar>::operator=(const DistEllpackMatrix& other)
 		_data[i] = other._data[i];
 	}
 
-	return this;
+	return *this;
 }
 
 
