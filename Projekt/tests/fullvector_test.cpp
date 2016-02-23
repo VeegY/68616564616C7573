@@ -78,9 +78,9 @@ int fullvectortest()
         LOG_ERROR("L2norm2 failed; value: ",vec6.l2norm2(), "  reference value: ", l2norm2, "  difference: ",l2norm2-vec6.l2norm2());
     }
     double l2norm=std::sqrt(l2norm2);
-    if (std::abs(l2norm-vec6.l2norm())>=checktol*10*std::abs(l2norm+vec6.l2norm()))
+    if (std::abs(l2norm-vec6.l2norm())>=checktol*100*std::abs(l2norm+vec6.l2norm()))
     {
-        LOG_ERROR("L2norm failed; value: ",vec6.l2norm(), "  reference value: ", l2norm, "  difference: ",l2norm2-vec6.l2norm());
+        LOG_ERROR("L2norm failed; value: ",vec6.l2norm(), "  reference value: ", l2norm, "  difference: ",l2norm-vec6.l2norm());
     }
     return 0;
 }
