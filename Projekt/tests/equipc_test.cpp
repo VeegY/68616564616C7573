@@ -13,10 +13,10 @@ int equipc_test()
 {
     const size_t N = 1000;
     const size_t maxrow = 10;
-    //create random matrix 
+    //create random matrix
     srand(static_cast <unsigned> (time(0)));
     Icarus::DistEllpackMatrix<double> mat1(N), equi(N);
-    
+
     //fill mat1 randomly;
     size_t fron, lron;
     fron = mat1.first_row_on_node();
@@ -50,7 +50,7 @@ int equipc_test()
     checktol = std::numeric_limits<double>::epsilon() * 10.0;
     for (size_t i(0); i < N; i++)
     {
-        if (std::abs(rhs.get_global(i) - 1.0) < checktol) 
+        if (std::abs(rhs.get_global(i) - 1.0) > checktol)
             LOG_ERROR("equi pc failed; difference to 1.0: ", std::abs(rhs.get_global(i) - 1.0));
     }
     return 0;
