@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <limits>
 /*
 *test fuer fullvector
 *KEIN unit-test
@@ -67,13 +68,19 @@ int fullvectortest()
              LOG_ERROR("axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
         }
     }
+    double checktol = std::numeric_limits<double>::epsilon();
     if (maxnorm!=vec6.maxnorm())
     {
         LOG_ERROR("maxnorm failed; value: ",vec6.maxnorm(), "  reference value: ", maxnorm);
     }
-    if (l2norm2!=vec6.l2norm2())
+    if (std::abs(l2norm2-vec6.l2norm2())>=checktol*100*std::abs(l2norm2+vec6.l2norm2()))
     {
-        LOG_DEBUG("L2norm2 failed; value: ",vec6.l2norm2(), "  reference value: ", l2norm2);
+        LOG_ERROR("L2norm2 failed; value: ",vec6.l2norm2(), "  reference value: ", l2norm2, "  difference: ",l2norm2-vec6.l2norm2());
+    }
+    double l2norm=std::sqrt(l2norm2);
+    if (std::abs(l2norm-vec6.l2norm())>=checktol*10*std::abs(l2norm+vec6.l2norm()))
+    {
+        LOG_ERROR("L2norm failed; value: ",vec6.l2norm(), "  reference value: ", l2norm, "  difference: ",l2norm2-vec6.l2norm());
     }
     return 0;
 }
