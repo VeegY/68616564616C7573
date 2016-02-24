@@ -12,6 +12,8 @@
 #define GREY "\e[30;1m"
 #define MAGENTA "\e[35;1m"
 
+template <typename Scalar>
+float profile_cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
 
 template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
