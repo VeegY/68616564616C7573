@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "include/benchmark_help.hpp"
+#include "include/profile_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
 #define dimlocal 16384
