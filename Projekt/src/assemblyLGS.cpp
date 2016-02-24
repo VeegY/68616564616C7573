@@ -168,7 +168,7 @@ int nomain()
     }
     else
     {
-        e[0]=i-x-z; A[0]=5;  //TODO TOCHECK: sicher, dass da ein x hinkommt? kompiliert so nicht. vielleicht ist ein y gewollt?
+        e[0]=i-1-z; A[0]=5;
         Matrix.setZeile(i, assemblyMatrixRow(e, A));
         RHS[i] = assemblyRHSLoad(e, A);
         if(Neumann)

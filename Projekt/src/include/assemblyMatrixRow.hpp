@@ -22,11 +22,25 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A)
 
     a[0]=0; a[1]=1; a[2]= 1+y; a[3]=y; a[4]= z; a[5]=1+z; a[6]= 1+y+z; a[7]=y+z;
 
+    //TODO TOCHECK changed 02-24-16
+    std::vector<double> X(27), Y(27), Z(27), weight(27);
+    double aa(sqrt(0.6));
+    std::vector<double> ax{-aa, -aa, -aa, -aa, -aa, -aa, -aa, -aa, -aa, 0, 0, 0, 0, 0, 0, 0, 0, 0, aa, aa, aa, aa, aa, aa, aa, aa, aa};  //x-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
+    std::vector<double> ay{-aa, -aa, -aa, 0.5, 0, 0, aa, aa, aa, -aa, -aa, -aa, 0, 0, 0, aa, aa, aa, -aa, -aa, -aa, 0, 0, 0.25, aa, aa, aa}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
+    std::vector<double> az{-aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa};   //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
+    std::vector<double> trans(27);
+    //TODO TOCHECK changed 02-24-16
+
     //Schleife ueber alle Elemente
     for(int i = 0; i < n; i++)
     {
         //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
-        get_quadrature_xpoints(e[i], X, h);
+        //TODO TOCHECK changed 02-24-16
+        X = get_quadrature_xpoints(e[i], h, ax, trans);
+        Y = get_quadrature_xpoints(e[i], h, ay, trans);
+        Z = get_quadrature_xpoints(e[i], h, az, trans);
+        //TODO TOCHECK changed 02-24-16
+
         int nqp = X.size();
         //Schleife ueber alle Ecken von e
         for(int B = 0; B < 8; B++)
