@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
     //                                  Unified Memory
     //------------------------------------------------------------------------------------------------/
 
-    for (int p = 0; p < 100; p++)
+    for (int p = 0; p < iteration; p++)
     {
         float *data_unified = NULL;
         float *fvec_unified = NULL;
@@ -225,7 +225,7 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
 //                                  Zero Copy
 //------------------------------------------------------------------------------------------------/
-    for (int q = 0; q < 100; q++)
+    for (int q = 0; q < iteration; q++)
     {
         float *data_zero = NULL;
         float *fvec_zero = NULL;
@@ -256,7 +256,7 @@ int main(int argc, char* argv[])
 
     for (int k = 0; k < 10; k++)
     {
-        profile[k] = profile[k]/100;
+        profile[k] = profile[k]/iteration;
     }
 
     for (int i = 0; i < 10; i++)
