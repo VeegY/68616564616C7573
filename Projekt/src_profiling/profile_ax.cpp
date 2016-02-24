@@ -59,7 +59,7 @@ template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
 
 template <typename Scalar>
-float profile_cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method)
+float profile_cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
 
 
 
