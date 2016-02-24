@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
     //================================================================================================/
 
     Timer set_val_unified, set_val_zero;
-    float *profile = new profile[10];
+    float *profile = new float[10];
     for (int k = 0; k < 10; k++)
     {
         profile[k] = 0.0;
@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
     //===============================//
 
     //===============================//PROFILE TIME [2] ~ kernel
-    profile[2] += mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
+    profile[2] += mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
     //===============================//
 
 
