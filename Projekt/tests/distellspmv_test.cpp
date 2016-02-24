@@ -1,3 +1,4 @@
+#include "../src/include/fullvector.hpp"
 #include "../src/include/slicedvector.hpp"
 #include "../src/include/distellpackmatrix.hpp"
 #include <cstdlib>
@@ -5,17 +6,16 @@
 #include <cmath>
 #include <limits>
 /*
-*test fuer Aequilibrierungs-Vorkonditionierer
+*test fuer Matrix-Vector Multiplikation im distELLPack Format
 *
 */
-int equipc_test()
+int distEllSpmv_test(const size_t N, const size_t maxrow)
 {
-    const size_t N = 1000;
-    const size_t maxrow = 10;
     //create random matrix
     srand(static_cast <unsigned> (time(0)));
-    Icarus::DistEllpackMatrix<double> mat1(N), equi(N);
-
+    Icarus::DistEllpackMatrix<double> mat1(N);
+    Icarus::FullVector<double> res(N);
+    Icarus::SlicedVector<double> rhs(N);
     //fill mat1 randomly;
     size_t fron, lron;
     fron = mat1.first_row_on_node();
@@ -25,37 +25,33 @@ int equipc_test()
     mat1.prepare_sequential_fill(maxrow);
     for (size_t i(fron); i <= lron; i++)
     {
+        rhs.set_global(i, (1/N)*(i+1));
         rowlen = rand() % maxrow;
         for (size_t j(0); j <= rowlen; j++)
         {
             val = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);  //all values positive
             colind = rand() % N;
             mat1.sequential_fill(colind, val);
+
+            res[i]+=(1/N)*(i+1)*val;
         }
         mat1.end_of_row();
     }
-    if (!mat1.is_filled()) LOG_ERROR("filling of random Matrix failed");
-    equi = mat1.precond_equi();
-
-    //initialize testvector
-    Icarus::SlicedVector<double> rhs(N);
+    if (!mat1.is_filled()) LOG_ERROR("filling of right hand side and/or random Matrix failed");
+    mat1.mult_vec(rhs, rhs);
+    double checktol;
+    checktol = std::numeric_limits<double>::epsilon() * maxrow;
     for (size_t i(fron); i <= lron; i++)
     {
-        rhs.set_global(i, 1.0);
-    }
-    mat1.mult_vec(rhs, rhs);
-    equi.mult_vec(rhs, rhs);
-    double checktol;
-    checktol = std::numeric_limits<double>::epsilon() * 10.0;
-    for (size_t i(fron); i < lron; i++)
-    {
-        if (std::abs(rhs.get_global(i) - 1.0) > checktol)
-            LOG_ERROR("equi pc failed; difference to 1.0: ", std::abs(rhs.get_global(i) - 1.0));
+        if (std::abs(rhs.get_global(i) - res[i]) > checktol)
+            LOG_ERROR("spmv failed, result: ", rhs.get_global(i),
+                      " ;  reference value: ", res[i], "  ; differnce: ",
+                       std::abs(rhs.get_global(i) - res[i]));
     }
     return 0;
 }
 
 int main()
 {
-    return equipc_test();
+    return distEllSpmv_test(100000, 30);
 }
