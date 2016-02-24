@@ -1412,7 +1412,7 @@ namespace Icarus
 		
 		
 		
-		
+	/*	
 			template<typename Scalar>
 	std::pair < DistEllpackMatrix<Scalar>,
 		SlicedVector < Scalar >>
@@ -1625,7 +1625,7 @@ namespace Icarus
 			//noch gefuellt werden muessen
 
 			
-			
+			/*
 			for (size_t vtx_global = fron; vtx_global <= lron; vtx_global++)
 			{
 				std::vector<int> index = { 0, 0, 0, 0, 0, 0, 0 };
@@ -2827,4 +2827,5 @@ namespace Icarus
 			}
 			return { A, rhs };
 		}
+		*/
 }
