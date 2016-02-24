@@ -11,7 +11,7 @@ using namespace std;
 #define dimlocal 16384
 #define dimfvec 16384
 #define maxrowlength 7
-#define iteration 1
+#define iteration 1000
 
 void print_p();
 
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
-    /*Timer timer_overall;
+    Timer timer_overall;
 
 //================================================================================================/
 //										Unified Kernel
@@ -174,11 +174,10 @@ int main(int argc, char* argv[])
 //================================================================================================/
 //                                         Evaluieren
 //================================================================================================/
-    float elapsed_unified_kernel = 1.0, elapsed_unified_overall = 1.0;
     print_p();
     float schalter = 0.0;
     performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
-    */
+    
 
     //================================================================================================/
     //                                  Profile
@@ -190,71 +189,76 @@ int main(int argc, char* argv[])
     {
         profile[k] = 0.0;
     }
-
+    
     //------------------------------------------------------------------------------------------------/
     //                                  Unified Memory
     //------------------------------------------------------------------------------------------------/
-    float *data_unified = NULL;
-    float *fvec_unified = NULL;
-    float *result_unified = NULL;
-    int *indices_unified = NULL;
 
-    //===============================//PROFILE TIME [0] ~ allocation
-    profile[0] += profile_alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
-    //===============================//
+    for (int p = 0; p < iteration; p++)
+    {
+        float *data_unified = NULL;
+        float *fvec_unified = NULL;
+        float *result_unified = NULL;
+        int *indices_unified = NULL;
 
-    //===============================//PROFILE TIME [1] ~ set_values
-    set_val_unified.start();
-    set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
-    profile[1] += set_val_unified.stop();
-    //===============================//
+        //===============================//PROFILE TIME [0] ~ allocation
+        profile[0] += profile_alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
+        //===============================//
 
-    //===============================//PROFILE TIME [2] ~ kernel
-    profile[2] += mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
-    //===============================//
+        //===============================//PROFILE TIME [1] ~ set_values
+        set_val_unified.start();
+        set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
+        profile[1] += set_val_unified.stop();
+        //===============================//
 
+        //===============================//PROFILE TIME [2] ~ kernel
+        profile[2] += mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
+        //===============================//
 
-    check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'u');
-
-    //===============================//PROFILE TIME [3] ~ cleanup
-    //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
-    profile[3] += profile_cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
-    //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
-    //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
-
+        //===============================//PROFILE TIME [3] ~ cleanup
+        //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
+        profile[3] += profile_cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
+        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
+        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+    }
 
 //------------------------------------------------------------------------------------------------/
 //                                  Zero Copy
 //------------------------------------------------------------------------------------------------/
+    for (int q = 0; q < iteration; q++)
+    {
+        float *data_zero = NULL;
+        float *fvec_zero = NULL;
+        float *result_zero = NULL;
+        int *indices_zero = NULL;
 
-    float *data_zero = NULL;
-    float *fvec_zero = NULL;
-    float *result_zero = NULL;
-    int *indices_zero = NULL;
+        //===============================//PROFILE TIME [4] ~ allocate
+        profile[4] += profile_alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, maxrowlength, dimlocal, dimfvec);
+        //===============================//
 
-    //===============================//PROFILE TIME [4] ~ allocate
-    profile[4] += profile_alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, maxrowlength, dimlocal, dimfvec);
-    //===============================//
+        //===============================//PROFILE TIME [5] ~ set_values
+        set_val_zero.start();
+        set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, maxrowlength, dimlocal, dimfvec);
+        profile[5] += set_val_zero.stop()*1.0e3;
+        //===============================//
 
-    //===============================//PROFILE TIME [5] ~ set_values
-    set_val_zero.start();
-    set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, maxrowlength, dimlocal, dimfvec);
-    profile[5] += set_val_zero.stop()*1.0e3;
-    //===============================//
+        //===============================//PROFILE TIME [6] - PROFILE TIME [8] ~ gethostpointer ~ kernel ~ cleanup
+        profile_mult_vec_zero(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec, iteration, profile);
+        //===============================//
 
-    //===============================//PROFILE TIME [6] - PROFILE TIME [8] ~ gethostpointer ~ kernel ~ cleanup
-    profile_mult_vec_zero(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec, iteration, profile);
-    //===============================//
+        //===============================//PROFILE TIME [9] ~ cleanup
+        //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
+        //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 0);
+        profile[9] += profile_cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
+        //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
+        //===============================//
+    }
 
-    check_result(result_zero, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'z');
+    for (int k = 0; k < 10; k++)
+    {
+        profile[k] /= iteration;
+    }
 
-    //===============================//PROFILE TIME [9] ~ cleanup
-    //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
-    //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 0);
-    profile[9] += profile_cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
-    //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
-    //===============================//
-    
     for (int i = 0; i < 10; i++)
     {
         printf("profile %i: %fms\n", i, profile[i]/iteration);
