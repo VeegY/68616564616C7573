@@ -208,11 +208,11 @@ int main(int argc, char* argv[])
         //===============================//PROFILE TIME [1] ~ set_values
         set_val_unified.start();
         set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
-        profile[1] += set_val_unified.stop();
+        profile[1] += set_val_unified.stop()*1.0e3;
         //===============================//
 
         //===============================//PROFILE TIME [2] ~ kernel
-        profile[2] += mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
+        profile[2] += mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, 1);
         //===============================//
 
         //===============================//PROFILE TIME [3] ~ cleanup
@@ -256,7 +256,7 @@ int main(int argc, char* argv[])
 
     for (int k = 0; k < 10; k++)
     {
-        profile[k] /= 100;
+        profile[k] = profile[k]/100;
     }
 
     for (int i = 0; i < 10; i++)
