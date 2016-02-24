@@ -102,7 +102,13 @@ void print_p()
 
 }
 
-//ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY
+//================================================================================================/
+//										Allocation
+//================================================================================================/
+
+//------------------------------------------------------------------------------------------------/
+//                              allocation of memory in unified state
+//------------------------------------------------------------------------------------------------/
 template<typename Scalar>
 void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local,int dim_fvec)
 {
@@ -116,8 +122,42 @@ template void alloc_unified<float>(float **data, float **fvec, float **result, i
 template void alloc_unified<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 
 
-//ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY for DistEllpack
+//------------------------------------------------------------------------------------------------/
+//                                   timed allocation of memory in unified state
+//------------------------------------------------------------------------------------------------/
 template<typename Scalar>
+float profile_alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec)
+{
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    float elapsedTime = 0.0;
+
+    //===============================//
+    cudaEventRecord(start);
+    cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*max_row_length);
+    cudaMallocManaged((void **)fvec, sizeof(Scalar)*dim_fvec);
+    cudaMallocManaged((void **)result, sizeof(Scalar)*dim_local);
+    cudaMallocManaged((void **)indices, sizeof(int)*dim_local*max_row_length);
+    cudaEventRecord(stop);
+    //===============================//
+
+    cudaEventSynchronize(stop);
+    cudaEventElapsedTime(&elapsedTime, start, stop);
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+    cudaDeviceSynchronize();
+    return elapsedTime;
+
+}
+template float profile_alloc_unified<int>(int **data, int **fvec, int **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+template float profile_alloc_unified<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+template float frofile_alloc_unified<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+
+
+
+/*template<typename Scalar>
 void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local)
 {
     cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*max_row_length);
@@ -126,6 +166,7 @@ void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_lo
 template void alloc_unifiedD<int>(int **data, int **indices, int max_row_length, int dim_local);
 template void alloc_unifiedD<float>(float **data, int **indices, int max_row_length, int dim_local);
 template void alloc_unifiedD<double>(double **data, int **indices, int max_row_length, int dim_local);
+
 
 // ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY FOR SLICEDVECTOR
 template<typename Scalar>
@@ -136,9 +177,11 @@ void alloc_unifiedV(Scalar **fvec, int dim_fvec)
 template void alloc_unifiedV<int>(int **fvec, int dim_fvec);
 template void alloc_unifiedV<float>(float **fvec, int dim_fvec);
 template void alloc_unifiedV<double>(double **fvec, int dim_fvec);
+*/
 
-
-//ALLOCATE MEMORY FUNCTION FOR ZERO COPY 
+//------------------------------------------------------------------------------------------------/
+//                                 allocation of memory with zero copy
+//------------------------------------------------------------------------------------------------/
 template<typename Scalar>
 void alloc_zero(Scalar **data, Scalar **fvec, Scalar **result, int ** indices, int max_row_length, int dim_local, int dim_fvec)
 {
@@ -159,11 +202,53 @@ template void alloc_zero<int>(int **data, int **fvec, int **result, int **indice
 template void alloc_zero<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 template void alloc_zero<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 
-//=============================================================================
-//                          UNIFIED KERNEL FUNCTIONS
-//=============================================================================
 
-//GENERATING KERNEL TIME UNIFIED MEMORY
+//------------------------------------------------------------------------------------------------/
+//                                   timed allocation of memory with zero copy
+//------------------------------------------------------------------------------------------------/
+template<typename Scalar>
+float profile_alloc_zero(Scalar **data, Scalar **fvec, Scalar **result, int ** indices, int max_row_length, int dim_local, int dim_fvec)
+{
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    float elapsedTime = 0.0;
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, 0);
+
+    if (prop.canMapHostMemory)
+    {
+        cudaSetDeviceFlags(cudaDeviceMapHost);
+        
+        //===============================//
+        cudaEventRecord(start);
+        cudaHostAlloc((void **)data, sizeof(Scalar)*max_row_length*dim_local, cudaHostAllocMapped);
+        cudaHostAlloc((void **)fvec, sizeof(Scalar)*dim_fvec, cudaHostAllocMapped);
+        cudaHostAlloc((void **)result, sizeof(Scalar)*dim_local, cudaHostAllocMapped);
+        cudaHostAlloc((void **)indices, sizeof(int)*max_row_length*dim_local, cudaHostAllocMapped);
+        cudaEventRecord(stop);
+        //===============================//
+    }
+    
+    cudaEventSynchronize(stop);
+    cudaEventElapsedTime(&elapsedTime, start, stop);
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+    cudaDeviceSynchronize();
+    return elapsedTime;
+}
+template float profile_alloc_zero<int>(int **data, int **fvec, int **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+template float profile_alloc_zero<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+template float profile_alloc_zero<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+
+
+//=============================================================================
+//                          KERNEL FUNCTIONS
+//=============================================================================
+//------------------------------------------------------------------------------------------------/
+//                     timed unified memory kernel
+//------------------------------------------------------------------------------------------------/
 template<typename Scalar>
 float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
@@ -196,7 +281,9 @@ template float mult_vec_unified_time<float>(float* data, float* fvec, float* res
 template float mult_vec_unified_time<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
 
 
-//GENERATING KERNEL TIME UNIFIED MEMORY
+//------------------------------------------------------------------------------------------------/
+//                      unified memory kernel
+//------------------------------------------------------------------------------------------------/
 template<typename Scalar>
 void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
@@ -211,11 +298,67 @@ template void mult_vec_unified<float>(float* data, float* fvec, float* result, i
 template void mult_vec_unified<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
 
 
-//=============================================================================
-//                              ZERO KERNEL FUNCTIONS
-//=============================================================================
+//------------------------------------------------------------------------------------------------/
+//                     profiling version of zero copy kernel
+//------------------------------------------------------------------------------------------------/
+template<typename Scalar>
+void profile_mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, float *profile)
+{
+    cudaEvent_t start_kernel, stop_kernel, start_pointer, stop_pointer;
+    cudaEventCreate(&start_kernel);
+    cudaEventCreate(&stop_kernel);
+    cudaEventCreate(&start_pointer);
+    cudaEventCreate(&stop_pointer);
+    float elapsedTime_kernel = 0.0, elapsedTime_pointer = 0.0, elapsedTime_cleanup = 0.0;
 
-//KERNE CALL WITH ZERO COPY (NEED TO CALL ALLOC_ZERO BEFORE)
+    Scalar *d_data, *d_fvec, *d_result;
+    int *d_indices;
+
+    //===============================//
+    cudaEventRecord(start_pointer);
+    cudaHostGetDevicePointer((void **)&d_data, (void *)data, 0);
+    cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
+    cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
+    cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
+    cudaEventRecord(stop_pointer);
+    //===============================//
+
+    cudaEventSynchronize(stop_pointer);
+    cudaEventElapsedTime(&elapsedTime_pointer, start_pointer, stop_pointer);
+
+
+    int num_blocks = ceil((double)dim_local / 1024);
+    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
+
+    //===============================//
+    cudaEventRecord(start_kernel);
+    gpu_ax << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+    cudaEventRecord(stop_kernel);
+    //===============================//
+
+    cudaEventSynchronize(stop_kernel);
+    cudaEventElapsedTime(&elapsedTime_kernel, start_kernel, stop_kernel);
+
+    cudaEventDestroy(start_kernel);
+    cudaEventDestroy(stop_kernel);
+    cudaEventDestroy(start_pointer);
+    cudaEventDestroy(stop_pointer);
+    cudaDeviceSynchronize();
+
+    elapsedTime_cleanup = profile_cleanup(d_data, d_fvec, d_result, d_indices, 0);
+    
+    profile[6] += elapsedTime_pointer;
+    profile[7] += elapsedTime_kernel;
+    profile[8] += elapsedTime_cleanup;
+
+}
+template void profile_mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec, int runs, float *profile);
+template void profile_mult_vec_zero<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, float *profile);
+template void profile_mult_vec_zero<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, float *profile);
+
+//------------------------------------------------------------------------------------------------/
+//                     timed zero copy kernel
+//------------------------------------------------------------------------------------------------/
 template<typename Scalar>
 float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
 {
@@ -257,6 +400,9 @@ template float mult_vec_zero_time<float>(float* data, float* fvec, float* result
 template float mult_vec_zero_time<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
 
 
+//------------------------------------------------------------------------------------------------/
+//                     zero copy kernel
+//------------------------------------------------------------------------------------------------/
 template<typename Scalar>
 void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
@@ -283,36 +429,101 @@ template void mult_vec_zero<double>(double* data, double* fvec, double* restult,
 //=============================================================================
 //                              CLEANUP FUNCTIONS
 //=============================================================================
+//------------------------------------------------------------------------------------------------/
+//                     profile version of cleanup
+//------------------------------------------------------------------------------------------------/
 template <typename Scalar>
-void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method)
+float profile_cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method)
 {
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    Timer timer;
+    float elapsedTime = 0.0;
+
     switch(method)
     {
-        case(0):
+        case(0) :
+            //=======================//
+            cudaEventRecord(start);
             cudaFree(data);
             cudaFree(fvec);
             cudaFree(result);
             cudaFree(indices);
+            cudaEventRecord(stop);
+            //=======================//
+
+            cudaEventSynchronize(stop);
+            cudaEventElapsedTime(&elapsedTime, start, stop);
             break;
-        case(1):
+
+        case(1) :
+            //=======================//
+            cudaEventRecord(start);
             cudaFreeHost(data);
             cudaFreeHost(fvec);
             cudaFreeHost(result);
             cudaFreeHost(indices);
+            cudaEventRecord(stop);
+            //=======================//
+
+            cudaEventSynchronize(stop);
+            cudaEventElapsedTime(&elapsedTime, start, stop);
             break;
-        case(2):
+
+        case(2) :
+            //=======================//
+            timer.start();
             delete[] data;
             delete[] fvec;
             delete[] result;
             delete[] indices;
+            elapsedTime = timer.stop()*1.0e3;
+            //=======================//
+            
             break;
+    }
+    cudaEventDestroy(start_zero);
+    cudaEventDestroy(stop_zero);
+    return elapsedTime;
+}
+template float profile_cleanup<int>(int *data, int *fvec, int *result, int *indices, int method);
+template float profile_cleanup<float>(float *data, float *fvec, float *result, int *indices, int method);
+template float profile_cleanup<double>(double *data, double *fvec, double *result, int *indices, int method);
+
+
+//------------------------------------------------------------------------------------------------/
+//                    standart version of cleanup
+//------------------------------------------------------------------------------------------------/
+template <typename Scalar>
+void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method)
+{
+    switch (method)
+    {
+    case(0) :
+        cudaFree(data);
+        cudaFree(fvec);
+        cudaFree(result);
+        cudaFree(indices);
+        break;
+    case(1) :
+        cudaFreeHost(data);
+        cudaFreeHost(fvec);
+        cudaFreeHost(result);
+        cudaFreeHost(indices);
+        break;
+    case(2) :
+        delete[] data;
+        delete[] fvec;
+        delete[] result;
+        delete[] indices;
+        break;
     }
 }
 template void cleanup<int>(int *data, int *fvec, int *result, int *indices, int method);
 template void cleanup<float>(float *data, float *fvec, float *result, int *indices, int method);
 template void cleanup<double>(double *data, double *fvec, double *result, int *indices, int method);
-
-
+/*
 template <typename Scalar>
 void cleanupgpu(Scalar *data)
 {   
@@ -321,3 +532,4 @@ void cleanupgpu(Scalar *data)
 template void cleanupgpu<int>(int *data);
 template void cleanupgpu<float>(float *data);
 template void cleanupgpu<double>(double *data);
+*/
