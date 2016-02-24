@@ -153,7 +153,7 @@ float profile_alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int *
 }
 template float profile_alloc_unified<int>(int **data, int **fvec, int **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 template float profile_alloc_unified<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
-template float frofile_alloc_unified<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+template float profile_alloc_unified<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
 
 
 
@@ -483,8 +483,8 @@ float profile_cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, 
             
             break;
     }
-    cudaEventDestroy(start_zero);
-    cudaEventDestroy(stop_zero);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
     return elapsedTime;
 }
 template float profile_cleanup<int>(int *data, int *fvec, int *result, int *indices, int method);
