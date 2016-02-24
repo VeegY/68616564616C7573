@@ -32,6 +32,9 @@ int nomain()
     std::vector<int> A(1);
     std::vector<double> RHS(Nx*Ny*Nz);
 
+    std::vector<int> column(27);
+    std::vector<double> value(27);
+
     //Ecke 1
     i=0;
     if(Dirichlet)
@@ -44,7 +47,13 @@ int nomain()
     else
     {
         e[0]=i; A[0]=0;
-        Matrix.setZeile(i, assemblyMatrixRow(e, A));
+        //Matrix.setZeile(i, assemblyMatrixRow(e, A));
+        //TODO Zeile i befuellen nicht die naechste
+        assemblyMatrixRow(e, A, column, value);
+        Matrix.prepare_sequential_fill(27);
+        for (int k(0); k<27; ++k)
+            Matrix.sequential_fill(column[k], value[k]);
+        Matrix.end_of_row();
         RHS[i] = assemblyRHSLoad(e, A);
         if(Neumann)
         {
@@ -69,7 +78,12 @@ int nomain()
     else
     {
         e[0]=i-1; A[0]=1;
-        Matrix.setZeile(i, assemblyMatrixRow(e, A));
+        //TODO Zeile i befuellen nicht die naechste
+        assemblyMatrixRow(e, A, column, value);
+        Matrix.prepare_sequential_fill(27);
+        for (int k(0); k<27; ++k)
+            Matrix.sequential_fill(column[k], value[k]);
+        Matrix.end_of_row();
         RHS[i] = assemblyRHSLoad(e, A);
         if(Neumann)
         {

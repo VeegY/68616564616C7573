@@ -8,12 +8,14 @@
 namespace Icarus
 {
 
-void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A)
+void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value)
 {
     int n = e.size();
     std::vector<int> a(8);
-    std::vector<double> value(27);
-    std::vector<int> column(27);
+    //std::vector<double> value(27);
+    //std::vector<int> column(27);
+    column.resize(27);
+    value.resize(27);
     std::vector<double> grad_Basis1(3);
     std::vector<double> grad_Basis2(3);
     //std::vector<double> Zeile(Nx*Ny*Nz);
@@ -29,6 +31,7 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A)
     std::vector<double> ay{-aa, -aa, -aa, 0.5, 0, 0, aa, aa, aa, -aa, -aa, -aa, 0, 0, 0, aa, aa, aa, -aa, -aa, -aa, 0, 0, 0.25, aa, aa, aa}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
     std::vector<double> az{-aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa};   //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
     std::vector<double> trans(27);
+    //TODO getweight fehlt noch
     //TODO TOCHECK changed 02-24-16
 
     //Schleife ueber alle Elemente
@@ -53,7 +56,7 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A)
                 grad_Basis2 = evaluate_gradient_Basis3d(e[i], B, X[q], Y[q], Z[q]);
                 //zwsp += grad_Basis1.dot(grad_Basis2) * weight[q];
                 zwsp += (grad_Basis1[0]*grad_Basis2[0] + grad_Basis1[1]*grad_Basis2[1]
-                    + grad_Basis1[2]*grad_Basis2[2]) * weight[q];   //TODO woher kommen die Gewichte??
+                    + grad_Basis1[2]*grad_Basis2[2]) * weight[q];
             }
 
             int j=0;
