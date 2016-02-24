@@ -9,7 +9,7 @@
 *test fuer Matrix-Vector Multiplikation im distELLPack Format
 *
 */
-int disEllSpmv_test(const size_t N, const size_t maxrow)
+int distEllSpmv_test(const size_t N, const size_t maxrow)
 {
     //create random matrix
     srand(static_cast <unsigned> (time(0)));
@@ -25,7 +25,7 @@ int disEllSpmv_test(const size_t N, const size_t maxrow)
     mat1.prepare_sequential_fill(maxrow);
     for (size_t i(fron); i <= lron; i++)
     {
-        rhs.set_global(i, (1/N)*(i+1);
+        rhs.set_global(i, (1/N)*(i+1));
         rowlen = rand() % maxrow;
         for (size_t j(0); j <= rowlen; j++)
         {
