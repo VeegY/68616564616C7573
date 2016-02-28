@@ -47,19 +47,19 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     string second;
     string method;
     
-    if (method == 0)
+    if (meth == 0)
     {
         method = "Unified Memory vs Zero Copy";
         first = "Unified Memory";
         second = "Zero Copy";
     }
-    if (method == 1)
+    if (meth == 1)
     {
         method = "Kernel vs Kernel";
         first = "Kernel Version: " + ver_first;
         second = "Kernel Version: " + ver_second;
     }
-    if (method == 2)
+    if (meth == 2)
     {
         method = "Kernel vs CPU";
         first = "Kernel Version: " + ver_first;
@@ -82,7 +82,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     int bytes = elements*(sizeof(type) + sizeof(int)) + 2*(sizeof(type)*dim_local);// Elements(Data+Indices) + Fvec Read und Result Write
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf("                   " + method + "\n");
+    printf("                   %s\n", method);
     printf("        DIM = %i ~~ %i Iterations\n", dim_local, runs);
     printf("            %.2fGB/2GB DRAM used\n", storage / 1.0e9);
     printf(GREY "===============================================\n");
