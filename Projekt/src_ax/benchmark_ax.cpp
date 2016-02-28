@@ -35,7 +35,10 @@ template<typename type>
 void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);
 
 template<typename Scalar>
-void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
+void gpu_ax_overall(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int version, int mem_option);
+
+template<typename Scalar>
+float gpu_ax_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
 
 template<typename Scalar>
 void allocation(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec, int mem_option);
@@ -54,7 +57,7 @@ int main(int argc, char* argv[])
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
-    Timer timer_overall, timer_set_value, timer_kernel;
+    Timer timer_overall;
 
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
@@ -74,7 +77,7 @@ int main(int argc, char* argv[])
 
         allocation(&data_first, &fvec_first, &result_first, &indices_first, maxrowlength, dimlocal, dimfvec, memory_option);
         set_values(data_host, indices_host, fvec_host, data_first, indices_first, fvec_first, maxrowlength, dimlocal, dimfvec);
-        gpu_ax_call(data_first, fvec_first, result_first, indices_first, maxrowlength, dimlocal, dimfvec, (int)1, version_first, memory_option);
+        gpu_ax_overall(data_first, fvec_first, result_first, indices_first, maxrowlength, dimlocal, dimfvec, version_first, memory_option);
         cleanup(data_first, fvec_first, result_first, indices_first, memory_option);
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
@@ -96,7 +99,7 @@ int main(int argc, char* argv[])
         {
             allocation(&data_second, &fvec_second, &result_second, &indices_second, maxrowlength, dimlocal, dimfvec, memory_option);
             set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
-            gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, (int)1, version_second, memory_option);
+            gpu_ax_overall(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, version_second, memory_option);
             cleanup(data_second, fvec_second, result_second, indices_second, memory_option);
         }
         else//CPU Zeitmessung
@@ -123,9 +126,8 @@ int main(int argc, char* argv[])
     set_values(data_host, indices_host, fvec_host, data_first, indices_first, fvec_first, maxrowlength, dimlocal, dimfvec);
 
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
-    timer_kernel.start();
-    gpu_ax_call(data_first, fvec_first, result_first, indices_first, maxrowlength, dimlocal, dimfvec, iteration, version_first, memory_option);
-    float elapsed_first_kernel = (timer_kernel.stop()*1.0e3) / iteration;
+    float elapsed_first_kernel = 
+        gpu_ax_time(data_first, fvec_first, result_first, indices_first, maxrowlength, dimlocal, dimfvec, iteration, version_first, memory_option);
     //=========================================//
 
     cleanup(data_first, fvec_first, result_first, indices_first, memory_option);
@@ -147,9 +149,8 @@ int main(int argc, char* argv[])
         set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
         
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
-        timer_kernel.start();
-        gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, iteration, version_second, memory_option);
-        elapsed_second_kernel = (timer_kernel.stop()*1.0e3)/iteration;
+        elapsed_second_kernel =
+            gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, iteration, version_second, memory_option);
         //=========================================//
         
         cleanup(data_second, fvec_second, result_second, indices_second, memory_option);

@@ -165,42 +165,87 @@ template void allocation<double>(double **data, double **fvec, double **result, 
 //=============================================================================
 //                          KERNEL
 //=============================================================================
-
-/*template<typename Scalar>
-float gpu_axaa(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs,)
+template<typename Scalar>
+float gpu_ax_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option)
 {
-    cudaEvent_t start_unified, stop_unified;
-    cudaEventCreate(&start_unified);
-    cudaEventCreate(&stop_unified);
-    
-    int num_blocks = ceil((double)dim_local/1024);
-    int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
-    
-    cudaEventRecord(start_unified);
-    for (int i = 0; i < runs; i++)
-    {
-        gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
-        
-    }
-    cudaEventRecord(stop_unified);
-    
-    cudaEventSynchronize(stop_unified);
-    float elapsedTime_unified = 0.0;
-    cudaEventElapsedTime(&elapsedTime_unified, start_unified, stop_unified);
+    Timer timer;
+    float elapsed_time = 0.0;
+    int num_blocks = ceil((double)dim_local / 1024);
+    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
 
-    cudaEventDestroy(start_unified);
-    cudaEventDestroy(stop_unified);
-    cudaDeviceSynchronize();
-    return (elapsedTime_unified / (float)runs);
+    switch (version)
+    {
+    case(0) :               //kernel_standart
+        if (mem_option == 0)
+        {
+            //=================================//
+            timer.start();
+            for (int i = 0; i < runs; i++)
+            {
+                gpu_ax << <num_blocks, num_threads >> >(data, fvec, result, indices, max_row_length, dim_local);
+            }
+            cudaDeviceSynchronize();
+            elapsed_time = timer.stop()*1.0e3;
+            //=================================//
+        }
+        else if (mem_option == 1)
+        {
+            Scalar *d_data, *d_fvec, *d_result;
+            int *d_indices;
+
+            cudaHostGetDevicePointer((void **)&d_data, (void *)data, 0);
+            cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
+            cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
+            cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
+
+            //=================================//
+            timer.start();
+            for (int i = 0; i < runs; i++)
+            {
+                gpu_ax << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+            }
+            cudaDeviceSynchronize();
+            elapsed_time = timer.stop()*1.0e3;
+            //=================================//
+            
+        }
+        break;
+
+    case(1) :   //kernel_shared(NUR ALS BEISPIEL)
+                /*//=================================//
+                timer.start();
+                for (int i = 0; i < runs; i++)
+                {
+                        kernel_shared<<<>>>
+                }
+                cudaDeviceSynchronize();
+                elapsed_time = timer.stop();
+                //=================================//*/
+        break;
+
+    case(2) :   //kernel_advanced(NUR ALS BEISPIEL)
+                /*//=================================//
+                timer.start();
+                for (int i = 0; i < runs; i++)
+                {
+                        kernel_advanced<<<>>>
+                }
+                cudaDeviceSynchronize();
+                elapsed_time = timer.stop();
+                //=================================//*/
+        break;
+    }
+    return elapsed_time / runs;
 }
-template float gpu_axaa<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
-template float gpu_axaa<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
-template float gpu_axaa<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
-*/
+template float gpu_ax_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
+template float gpu_ax_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
+template float gpu_ax_time<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
+
+
 
 //GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
-void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option)
+void gpu_ax_overall(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int version, int mem_option)
 {
     int num_blocks = ceil((double)dim_local / 1024);
     int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
@@ -210,10 +255,7 @@ void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int m
     case(0) :               //kernel_standart
         if(mem_option == 0)
         {
-            for (int i = 0; i < runs; i++)
-            {
-                gpu_ax <<<num_blocks, num_threads >>>(data, fvec, result, indices, max_row_length, dim_local);
-            }
+            gpu_ax <<<num_blocks, num_threads >>>(data, fvec, result, indices, max_row_length, dim_local);
         }
         else if(mem_option == 1)
         {
@@ -224,33 +266,24 @@ void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int m
             cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
-
-            for (int i = 0; i<runs; i++)
-            {
-                gpu_ax <<<num_blocks, num_threads >>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
-            }
+                
+            gpu_ax <<<num_blocks, num_threads >>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
         }
         cudaDeviceSynchronize();
         break;
 
     case(1) :               //kernel_shared(NUR ALS BEISPIEL)
-        /*for (int i = 0; i<runs; i++)
-        {
-            gpu_ax_shared << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
-        }*/
+            //gpu_ax_shared << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
         break;
 
     case(2) :               //kernel_advanced(NUR ALS BEISPIEL)
-        /*for (int i = 0; i<runs; i++)
-        {
-            gpu_ax_advanced << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
-        }*/
+           //gpu_ax_advanced << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
         break;
     }
 }
-template void gpu_ax_call<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs, int version, int mem_option);
-template void gpu_ax_call<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
-template void gpu_ax_call<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
+template void gpu_ax_overall<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int version, int mem_option);
+template void gpu_ax_overall<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int version, int mem_option);
+template void gpu_ax_overall<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int version, int mem_option);
 
 
 //=============================================================================
