@@ -155,7 +155,7 @@ template void allocation<double>(double **data, double **fvec, double **result, 
 //                          KERNEL
 //=============================================================================
 
-template<typename Scalar>
+/*template<typename Scalar>
 float gpu_axaa(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs,)
 {
     cudaEvent_t start_unified, stop_unified;
@@ -182,44 +182,41 @@ float gpu_axaa(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max
     cudaDeviceSynchronize();
     return (elapsedTime_unified / (float)runs);
 }
-template float mult_vec_unified_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
-template float mult_vec_unified_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
-template float mult_vec_unified_time<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
-
+template float gpu_axaa<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs);
+template float gpu_axaa<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
+template float gpu_axaa<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
+*/
 
 //GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
 void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option)
 {
-    if (mem_option == 1)
-    {
-        Scalar *d_data, *d_fvec, *d_result;
-        int *d_indices;
-
-        cudaHostGetDevicePointer((void **)&d_data, (void *)data, 0);
-        cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
-        cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
-        cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
-    }
+    int num_blocks = ceil((double)dim_local / 1024);
+    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
 
     switch (version)
     {
     case(0) :               //kernel_standart
-        int num_blocks = ceil((double)dim_local / 1024);
-        int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
-        
         if(mem_option == 0)
         {
             for (int i = 0; i < runs; i++)
             {
-                gpu_ax << <num_blocks, num_threads >> >(data, fvec, result, indices, max_row_length, dim_local);
+                gpu_ax <<<num_blocks, num_threads >>>(data, fvec, result, indices, max_row_length, dim_local);
             }
         }
-        else
+        else if(mem_option == 1)
         {
+            Scalar *d_data, *d_fvec, *d_result;
+            int *d_indices;
+
+            cudaHostGetDevicePointer((void **)&d_data, (void *)data, 0);
+            cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
+            cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
+            cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
+
             for (int i = 0; i<runs; i++)
             {
-                gpu_ax << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+                gpu_ax <<<num_blocks, num_threads >>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
             }
         }
         cudaDeviceSynchronize();
