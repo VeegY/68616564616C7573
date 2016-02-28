@@ -5,7 +5,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cmath>
-//#include <string>
+#include <string>
 #include "include/timer.hpp"
 #define RESET "\e[0m"
 #define BLUE "\e[34;1m"
@@ -57,13 +57,13 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     if (meth == 1)
     {
         method = "Kernel vs Kernel";
-        first = "Kernel Version" + memop + ": " + ver_first;
-        second = "Kernel Version" + memop + ": " + ver_second;
+        first = "Kernel Version"+memop+": "+ver_first;
+        second = "Kernel Version"+memop": "+ver_second;
     }
     if (meth == 2)
     {
         method = "Kernel vs CPU";
-        first = "Kernel Version" + memop + ": " + ver_first;
+        first = "Kernel Version"+memop+": "+ver_first;
         second = "CPU";
     }
     
