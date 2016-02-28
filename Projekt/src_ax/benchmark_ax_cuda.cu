@@ -38,7 +38,7 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 
 
 template<typename type>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, , int ver_first, int ver_second)
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second)
 {
     string first, second, method;
     if (method == 0)
