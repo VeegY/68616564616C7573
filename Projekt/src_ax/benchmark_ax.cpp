@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
     cleanup(data_first, fvec_first, result_first, indices_first, memory_option);
  
  //------------------------------------------------------------------------------------------------/
- //                                Zeitmessung Kernel Teil 1                   
+ //                                Zeitmessung Kernel Teil 2                   
  //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = zero; version_second = version_first; }
     
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
     int *indices_second = NULL;
     float elapsed_second_kernel = 0.0;
 
-    if (!method == kernel_vs_cpu)
+    if (method != kernel_vs_cpu)
     {
         allocation(&data_second, &fvec_second, &result_second, &indices_second, maxrowlength, dimlocal, dimfvec, memory_option);
         set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
