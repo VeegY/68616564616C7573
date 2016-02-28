@@ -8,6 +8,22 @@
 #include "include/benchmark_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
+enum methods { unified_vs_zero, kernel_vs_kernel, kernel_vs_cpu };  //choose a method
+enum version { kernel_standart, kernel_shared, kernel_advanced };   //keep your kernels in the same order as they are in the switch in your gpu_xx_call
+enum memory_opt { unified, zero };                                  //choose a method of memory usage(for method k_vs_k and k_vs_cpu)
+//================================================================================================/
+//									GLOBAL SETTINGS!
+//================================================================================================/
+int method = unified_vs_zero;               
+int version_first = kernel_standart;        
+//Für Kernel vs Kernel
+int version_second = kernel_advanced;      
+//Für Kernel vs Kernel und Kernel vs CPU
+int memory_option = zero;
+
+//------------------------------------------------------------------------------------------------/
+//                                   APPLICATION SETTINGS
+//------------------------------------------------------------------------------------------------/
 #define dimlocal 16384
 #define dimfvec 16384
 #define maxrowlength 7
@@ -15,155 +31,150 @@ using namespace std;
 
 void print_p();
 
-template<typename Scalar>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, Scalar schalter);
+template<typename type>
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second)
 
 template<typename Scalar>
-void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
 
 template<typename Scalar>
-void alloc_zero(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
-
-template<typename Scalar>
-float mult_vec_unified_time(Scalar* data, Scalar* fvec, Scalar* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
-
-template<typename Scalar>
-float mult_vec_zero_time(Scalar* data, Scalar* fvec, Scalar* result, int* inices, int max_row_length, int dim_local, int dim_fvec, int runs);
-
-template<typename Scalar>
-void mult_vec_unified(Scalar* data, Scalar* fvec, Scalar* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
-
-template<typename Scalar>
-void mult_vec_zero(Scalar* data, Scalar* fvec, Scalar* result, int* inices, int max_row_length, int dim_local, int dim_fvec);
+void allocation(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local, int dim_fvec, int mem_option);
 
 template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
 
 int main(int argc, char* argv[])
 {
+    //Array zur Zeitmessung
+    //float *benchmark_times = new float[6];
     //Generiere Data/Indices Int-Array sowie fvec Int Array
     float *data_host = new float[dimlocal*maxrowlength];
     int *indices_host = new int[dimlocal*maxrowlength];
     float *fvec_host = new float[dimfvec];
-    float *set_value_time = new float[2];
-    set_value_time[0] = 0.0;
-    set_value_time[1] = 0.0;
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
-    Timer timer_overall, timer_set_value;
+    Timer timer_overall, timer_set_value, timer_kernel;
 
 //================================================================================================/
-//										Unified Kernel
+//									THE MAGIC HAPPENS HERE
 //================================================================================================/
 //------------------------------------------------------------------------------------------------/
-//                                   Overall - Zeitmessung
+//                                Zeitmessung Overall Teil 1
 //------------------------------------------------------------------------------------------------/
- 
+    if (method == unified_vs_zero) { memory_option = unified; }
+
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
     {
-        float *data_unified = NULL;
-        float *fvec_unified = NULL;
-        float *result_unified = NULL;
-        int *indices_unified = NULL;
-        
-        alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
+        float *data_first = NULL;
+        float *fvec_first = NULL;
+        float *result_first = NULL;
+        int *indices_first = NULL;
 
-        timer_set_value.start();
-        set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
-        set_value_time[0] += timer_set_value.stop();
-        
-        mult_vec_unified(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec);
-
-        //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
-        cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
-        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
-        //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
+        allocation(&data_first, &fvec_first, &result_first, &indices_first, maxrowlength, dimlocal, dimfvec, memory_option);
+        set_values(data_host, indices_host, fvec_host, data_first, indices_first, fvec_first, maxrowlength, dimlocal, dimfvec);
+        gpu_ax_call(data_first, fvec_first, result_first, indices_first, maxrowlength, dimlocal, dimfvec, (int)1, version_first, memory_option);
+        cleanup(data_first, fvec_first, result_first, indices_first, memory_option);
     }
-    float elapsed_unified_overall = timer_overall.stop() / (float)iteration;
+    float elapsed_first_overall = timer_overall.stop() / (float)iteration;
 
 //------------------------------------------------------------------------------------------------/
-//                                   Kernel - Zeitmessung
+//                                Zeitmessung Overall Teil 2
 //------------------------------------------------------------------------------------------------/
-    float *data_unified = NULL;
-    float *fvec_unified = NULL;
-    float *result_unified = NULL;
-    int *indices_unified = NULL;
-
-    alloc_unified(&data_unified, &fvec_unified, &result_unified, &indices_unified, maxrowlength, dimlocal, dimfvec);
-    set_values(data_host, indices_host, fvec_host, data_unified, indices_unified, fvec_unified, maxrowlength, dimlocal, dimfvec);
-
-
-    float elapsed_unified_kernel =
-        mult_vec_unified_time(data_unified, fvec_unified, result_unified, indices_unified, maxrowlength, dimlocal, dimfvec, iteration);
- 
-    check_result(result_unified, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'u');
-
-    //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
-    cleanup(data_unified, fvec_unified, result_unified, indices_unified, 0);
-    //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 1);
-    //cleanup(data_unified, fvec_unified, result_unified, indices_unified, 2);
- 
-
-//================================================================================================/
-//										Zero Copy Kernel
-//================================================================================================/
-//------------------------------------------------------------------------------------------------/
-//                                   Overall - Zeitmessung
-//------------------------------------------------------------------------------------------------/
+    if (method == unified_vs_zero) { memory_option = zero; version_second = version_first; }
 
     timer_overall.start();
     for (int r = 0; r<iteration; r++)
     {
-        float *data_zero = NULL;
-        float *fvec_zero = NULL;
-        float *result_zero = NULL;
-        int *indices_zero = NULL;
+        float *data_second = NULL;
+        float *fvec_second = NULL;
+        float *result_second = NULL;
+        int *indices_second = NULL;
 
-        alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, maxrowlength, dimlocal, dimfvec);
-        
-        timer_set_value.start();
-        set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, maxrowlength, dimlocal, dimfvec);
-        set_value_time[1] += timer_set_value.stop();
-
-        mult_vec_zero(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec);
-
-        //TODO: test (0=CudaFree,1=CudeFreeHost,2=delete[])
-        //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 0);
-        cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
-        //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
+        if (!method == kernel_vs_cpu)
+        {
+            allocation(&data_second, &fvec_second, &result_second, &indices_second, maxrowlength, dimlocal, dimfvec, memory_option);
+            set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
+            gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, (int)1, version_second, memory_option);
+            cleanup(data_second, fvec_second, result_second, indices_second, memory_option);
+        }
+        else//CPU Zeitmessung
+        {
+            //set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
+            //cpu_ax()
+            //cleanup(data_second, fvec_second, result_second, indices_second, 2);
+        }
     }
-    float elapsed_zero_overall = timer_overall.stop()/(float) iteration;
+    float elapsed_second_overall = timer_overall.stop() / (float)iteration;
+
 
 //------------------------------------------------------------------------------------------------/
-//                                   Kernel - Zeitmessung
+//                                Zeitmessung Kernel Teil 1                   
 //------------------------------------------------------------------------------------------------/
-    float *data_zero= NULL;
-    float *fvec_zero = NULL;
-    float *result_zero = NULL;
-    int *indices_zero = NULL;
+    if (method == unified_vs_zero) { memory_option = unified; }
+    
+    float *data_first = NULL;
+    float *fvec_first = NULL;
+    float *result_first = NULL;
+    int *indices_first = NULL;
 
-    alloc_zero(&data_zero, &fvec_zero, &result_zero, &indices_zero, maxrowlength, dimlocal, dimfvec);
-    set_values(data_host, indices_host, fvec_host, data_zero, indices_zero, fvec_zero, maxrowlength, dimlocal, dimfvec);
+    allocation(&data_first, &fvec_first, &result_first, &indices_first, maxrowlength, dimlocal, dimfvec, memory_option);
+    set_values(data_host, indices_host, fvec_host, data_first, indices_first, fvec_first, maxrowlength, dimlocal, dimfvec);
 
-    float elapsed_zero_kernel =
-        mult_vec_zero_time(data_zero, fvec_zero, result_zero, indices_zero, maxrowlength, dimlocal, dimfvec, iteration);
+    //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
+    timer_kernel.start();
+    gpu_ax_call(data_first, fvec_first, result_first, indices_first, maxrowlength, dimlocal, dimfvec, iteration, version_first, memory_option);
+    float elapsed_first_kernel = timer_kernel.stop()*1.0e3;
+    //=========================================//
 
-    check_result(result_zero, data_host, indices_host, fvec_host, maxrowlength, dimlocal, 'z');
+    cleanup(data_first, fvec_first, result_first, indices_first, memory_option);
+ 
+ //------------------------------------------------------------------------------------------------/
+ //                                Zeitmessung Kernel Teil 1                   
+ //------------------------------------------------------------------------------------------------/
+    if (method == unified_vs_zero) { memory_option = zero; version_second = version_first; }
+    
+    float *data_second = NULL;
+    float *fvec_second = NULL;
+    float *result_second = NULL;
+    int *indices_second = NULL;
 
-    //TODO: test (0=CudaFree,1=CudeFreeHos,2=delete[])
-    //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 0);
-    cleanup(data_zero, fvec_zero, result_zero, indices_zero, 1);
-    //cleanup(data_zero, fvec_zero, result_zero, indices_zero, 2);
+    if (!method == kernel_vs_cpu)
+    {
+        allocation(&data_second, &fvec_second, &result_second, &indices_second, maxrowlength, dimlocal, dimfvec, memory_option);
+        set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
+        
+        //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
+        timer_kernel.start();
+        gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, iteration, version_second, memory_option);
+        float elapsed_second_kernel = timer_kernel.stop()*1.0e3;
+        //=========================================//
+        
+        cleanup(data_second, fvec_second, result_second, indices_second, memory_option);
+    }
+    else//CPU Zeitmessung
+    {
+        //set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
+        
+        //=========================================//
+        //timer_kernel.start();
+        //cpu_ax()
+        //float elapsed_second_kernel = timer_kernel.stop();
+        //=========================================//
 
+        //cleanup(data_second, fvec_second, result_second, indices_second, 2);
+    }
+    
+    
+    
 //================================================================================================/
 //                                         Evaluieren
 //================================================================================================/
 
     float schalter = 0.0;
-    performance(maxrowlength, dimlocal, elapsed_unified_kernel, elapsed_unified_overall, elapsed_zero_kernel, elapsed_zero_overall, iteration, schalter);
-    printf("Time SET Unified= %f,  SET ZERO = %f", (set_value_time[0] * 1.0e3) / iteration, (set_value_time[1] * 1.0e3) / iteration));
+    performance(maxrowlength, dimlocal, elapsed_first_kernel, elapsed_first_overall, elapsed_second_kernel, elapsed_second_overall, iteration, schalter, method, version_first, version_second);
+    
 
     delete[] data_host;
     delete[] indices_host;

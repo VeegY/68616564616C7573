@@ -37,10 +37,29 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 }
 
 
-//CALCULATING MEMORY BANDWITH
 template<typename type>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter)
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, , int ver_first, int ver_second)
 {
+    string first, second, method;
+    if (method == 0)
+    {
+        method = "Unified Memory vs Zero Copy";
+        first = "Unified Memory";
+        second = "Zero Copy";
+    }
+    if (method == 1)
+    {
+        method = "Kernel vs Kernel";
+        first = "Kernel Version: " + ver_first;
+        second = "Kernel Version: " + ver_second;
+    }
+    if (method == 2)
+    {
+        method = "Kernel vs CPU";
+        first = "Kernel Version: " + ver_first;
+        second = "CPU";
+    }
+    
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
 
@@ -57,11 +76,12 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     int bytes = elements*(sizeof(type) + sizeof(int)) + 2*(sizeof(type)*dim_local);// Elements(Data+Indices) + Fvec Read und Result Write
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
+    printf("                   " + method + "\n");
     printf("        DIM = %i ~~ %i Iterations\n", dim_local, runs);
     printf("            %.2fGB/2GB DRAM used\n", storage / 1.0e9);
     printf(GREY "===============================================\n");
     printf("-----------------------------------------------\n");
-    printf(CYAN "                UNIFIED_MERMORY\n");
+    printf(CYAN "                    "+first+"\n");
     printf(GREY "-----------------------------------------------\n");
     printf(CYAN "Kernel Runtime:\t\t\t%f(ms)\n",time_ku);
     printf("Overall Runtime:\t\t%f(ms)\n",time_ou*1.0e3);
@@ -69,7 +89,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     printf("Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop  / (time_ku*1.0e6));
     printf(GREY "-----------------------------------------------\n");
     printf("-----------------------------------------------\n");
-    printf(BLUE "                ZERO_COPY\n");
+    printf(BLUE "                     "+second+"\n");
     printf(GREY "-----------------------------------------------\n");
     printf(BLUE "Kernel Runtime:\t\t\t%f(ms)\n",time_kz);
     printf("Overall Runtime:\t\t%f(ms)\n",time_oz*1.0e3);
@@ -81,9 +101,9 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 
     
 }
-template void performance<int>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter);
-template void performance<float>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter);
-template void performance<double>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter);
+template void performance<int>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second);
+template void performance<float>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second);
+template void performance<double>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter, int meth, int ver_first, int ver_second);
 
 
 //PROPERTIES OF TEGRA K1
@@ -102,70 +122,41 @@ void print_p()
 
 }
 
-//ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY
+//=============================================================================
+//                          ALLOCATION
+//                    0=UNIFIED ~~ 1=ZERO COPY
+//=============================================================================
 template<typename Scalar>
-void alloc_unified(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local,int dim_fvec)
+void allocation(Scalar **data, Scalar **fvec, Scalar **result, int **indices, int max_row_length, int dim_local,int dim_fvec, int mem_option)
 {
-    cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*max_row_length);
-    cudaMallocManaged((void **)fvec, sizeof(Scalar)*dim_fvec);
-    cudaMallocManaged((void **)result, sizeof(Scalar)*dim_local);
-    cudaMallocManaged((void **)indices, sizeof(int)*dim_local*max_row_length);
-}
-template void alloc_unified<int>(int **data, int **fvec, int **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
-template void alloc_unified<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
-template void alloc_unified<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
-
-
-//ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY for DistEllpack
-template<typename Scalar>
-void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local)
-{
-    cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*max_row_length);
-    cudaMallocManaged((void **)indices, sizeof(int)*dim_local*max_row_length);
-}
-template void alloc_unifiedD<int>(int **data, int **indices, int max_row_length, int dim_local);
-template void alloc_unifiedD<float>(float **data, int **indices, int max_row_length, int dim_local);
-template void alloc_unifiedD<double>(double **data, int **indices, int max_row_length, int dim_local);
-
-// ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY FOR SLICEDVECTOR
-template<typename Scalar>
-void alloc_unifiedV(Scalar **fvec, int dim_fvec)
-{
-    cudaMallocManaged((void **)fvec, sizeof(Scalar)*dim_fvec);
-}
-template void alloc_unifiedV<int>(int **fvec, int dim_fvec);
-template void alloc_unifiedV<float>(float **fvec, int dim_fvec);
-template void alloc_unifiedV<double>(double **fvec, int dim_fvec);
-
-
-//ALLOCATE MEMORY FUNCTION FOR ZERO COPY 
-template<typename Scalar>
-void alloc_zero(Scalar **data, Scalar **fvec, Scalar **result, int ** indices, int max_row_length, int dim_local, int dim_fvec)
-{
-    cudaDeviceProp prop;
-    cudaGetDeviceProperties(&prop,0);
-
-    if(prop.canMapHostMemory)
+    switch (mem_option)
     {
-      cudaSetDeviceFlags(cudaDeviceMapHost);
-
-      cudaHostAlloc((void **)data, sizeof(Scalar)*max_row_length*dim_local, cudaHostAllocMapped);
-      cudaHostAlloc((void **)fvec, sizeof(Scalar)*dim_fvec, cudaHostAllocMapped);
-      cudaHostAlloc((void **)result, sizeof(Scalar)*dim_local, cudaHostAllocMapped);
-      cudaHostAlloc((void **)indices, sizeof(int)*max_row_length*dim_local, cudaHostAllocMapped);
-    }
+    case(0):
+        cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*max_row_length);
+        cudaMallocManaged((void **)fvec, sizeof(Scalar)*dim_fvec);
+        cudaMallocManaged((void **)result, sizeof(Scalar)*dim_local);
+        cudaMallocManaged((void **)indices, sizeof(int)*dim_local*max_row_length);
+        break;
+    case(1):
+        cudaSetDeviceFlags(cudaDeviceMapHost);
+        cudaHostAlloc((void **)data, sizeof(Scalar)*max_row_length*dim_local, cudaHostAllocMapped);
+        cudaHostAlloc((void **)fvec, sizeof(Scalar)*dim_fvec, cudaHostAllocMapped);
+        cudaHostAlloc((void **)result, sizeof(Scalar)*dim_local, cudaHostAllocMapped);
+        cudaHostAlloc((void **)indices, sizeof(int)*max_row_length*dim_local, cudaHostAllocMapped);
+        break;
+    }   
 }
-template void alloc_zero<int>(int **data, int **fvec, int **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
-template void alloc_zero<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
-template void alloc_zero<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec);
+template void allocation<int>(int **data, int **fvec, int **result, int **indices, int max_row_length, int dim_local, int dim_fvec, int mem_option);
+template void allocation<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec, int mem_option);
+template void allocation<double>(double **data, double **fvec, double **result, int **indices, int max_row_length, int dim_local, int dim_fvec, int mem_option);
+
 
 //=============================================================================
-//                          UNIFIED KERNEL FUNCTIONS
+//                          KERNEL
 //=============================================================================
 
-//GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
-float mult_vec_unified_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
+float gpu_axaa(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs,)
 {
     cudaEvent_t start_unified, stop_unified;
     cudaEventCreate(&start_unified);
@@ -198,86 +189,60 @@ template float mult_vec_unified_time<double>(double* data, double* fvec, double*
 
 //GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
-void mult_vec_unified(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
+void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option)
 {
-    int num_blocks = ceil((double)dim_local/1024);
-    int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
-
-    gpu_ax<<<num_blocks,num_threads>>>(data,fvec,result,indices,max_row_length, dim_local);
-    cudaDeviceSynchronize();
-}
-template void mult_vec_unified<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec);
-template void mult_vec_unified<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
-template void mult_vec_unified<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
-
-
-//=============================================================================
-//                              ZERO KERNEL FUNCTIONS
-//=============================================================================
-
-//KERNE CALL WITH ZERO COPY (NEED TO CALL ALLOC_ZERO BEFORE)
-template<typename Scalar>
-float mult_vec_zero_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs)
-{
-    cudaEvent_t start_zero, stop_zero;
-    cudaEventCreate(&start_zero);
-    cudaEventCreate(&stop_zero);
-
-    Scalar *d_data, *d_fvec, *d_result;
-    int *d_indices;
-
-    cudaHostGetDevicePointer((void **)&d_data,(void *)data, 0);
-    cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
-    cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
-    cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
-
-    int num_blocks = ceil((double)dim_local/1024);
-    int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
-
-    cudaEventRecord(start_zero);
-    for (int i=0;i<runs;i++)
+    if (mem_option == 1)
     {
-        gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
-   
+        Scalar *d_data, *d_fvec, *d_result;
+        int *d_indices;
+
+        cudaHostGetDevicePointer((void **)&d_data, (void *)data, 0);
+        cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
+        cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
+        cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
     }
-    cudaEventRecord(stop_zero);
 
-    cudaEventSynchronize(stop_zero);
-    float elapsedTime_zero = 0.0;
-    cudaEventElapsedTime(&elapsedTime_zero, start_zero, stop_zero);
+    switch (version)
+    {
+    case(0) :               //kernel_standart
+        int num_blocks = ceil((double)dim_local / 1024);
+        int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
+        
+        if(mem_option == 0)
+        {
+            for (int i = 0; i < runs; i++)
+            {
+                gpu_ax << <num_blocks, num_threads >> >(data, fvec, result, indices, max_row_length, dim_local);
+            }
+        }
+        else
+        {
+            for (int i = 0; i<runs; i++)
+            {
+                gpu_ax << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+            }
+        }
+        cudaDeviceSynchronize();
+        break;
 
-    cudaEventDestroy(start_zero);
-    cudaEventDestroy(stop_zero);
-    cudaDeviceSynchronize();
-    cleanup(d_data, d_fvec, d_result, d_indices, 0);
-    return (elapsedTime_zero /(float)runs);
+    case(1) :               //kernel_shared(NUR ALS BEISPIEL)
+        /*for (int i = 0; i<runs; i++)
+        {
+            gpu_ax_shared << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+        }*/
+        break;
+
+    case(2) :               //kernel_advanced(NUR ALS BEISPIEL)
+        /*for (int i = 0; i<runs; i++)
+        {
+            gpu_ax_advanced << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
+        }*/
+        break;
+    }
 }
-template float mult_vec_zero_time<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec, int runs);
-template float mult_vec_zero_time<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
-template float mult_vec_zero_time<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs);
-
-
-template<typename Scalar>
-void mult_vec_zero(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
-{
-    Scalar *d_data, *d_fvec, *d_result;
-    int *d_indices;
-
-    cudaHostGetDevicePointer((void **)&d_data,(void *)data, 0);
-    cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
-    cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
-    cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
-
-    int num_blocks = ceil((double)dim_local/1024);
-    int num_threads = ceil(((double)dim_local/num_blocks)/32)*32;
-
-    gpu_ax<<<num_blocks,num_threads>>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
-    cudaDeviceSynchronize();
-    cleanup(d_data, d_fvec, d_result, d_indices, 0);
-}
-template void mult_vec_zero<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local, int  dim_fvec);
-template void mult_vec_zero<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec);
-template void mult_vec_zero<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec);
+template void gpu_ax_call<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local,int dim_fvec, int runs, int version, int mem_option);
+template void gpu_ax_call<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
+template void gpu_ax_call<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
 
 
 //=============================================================================
@@ -313,11 +278,42 @@ template void cleanup<float>(float *data, float *fvec, float *result, int *indic
 template void cleanup<double>(double *data, double *fvec, double *result, int *indices, int method);
 
 
+
+
+
+
+
+
+//====Ich war nicht mutig genug es zu loeschen :D===/
+/*
+
 template <typename Scalar>
 void cleanupgpu(Scalar *data)
-{   
-    cudaFreeHost(data);
+{
+cudaFreeHost(data);
 }
 template void cleanupgpu<int>(int *data);
 template void cleanupgpu<float>(float *data);
 template void cleanupgpu<double>(double *data);
+
+//ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY for DistEllpack
+template<typename Scalar>
+void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local)
+{
+cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*max_row_length);
+cudaMallocManaged((void **)indices, sizeof(int)*dim_local*max_row_length);
+}
+template void alloc_unifiedD<int>(int **data, int **indices, int max_row_length, int dim_local);
+template void alloc_unifiedD<float>(float **data, int **indices, int max_row_length, int dim_local);
+template void alloc_unifiedD<double>(double **data, int **indices, int max_row_length, int dim_local);
+
+// ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY FOR SLICEDVECTOR
+template<typename Scalar>
+void alloc_unifiedV(Scalar **fvec, int dim_fvec)
+{
+cudaMallocManaged((void **)fvec, sizeof(Scalar)*dim_fvec);
+}
+template void alloc_unifiedV<int>(int **fvec, int dim_fvec);
+template void alloc_unifiedV<float>(float **fvec, int dim_fvec);
+template void alloc_unifiedV<double>(double **fvec, int dim_fvec);
+*/
