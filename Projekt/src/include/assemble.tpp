@@ -1411,21 +1411,23 @@ namespace Icarus
 		
 		
 		
-		
-	/*	
-			template<typename Scalar>
+			
+/*template<typename Scalar>
 	std::pair < DistEllpackMatrix<Scalar>,
 		SlicedVector < Scalar >>
 		assemble_neumann_unrolled(size_t nx, size_t ny, size_t nz,
 		typename ScalarTraits<Scalar>::RealType h,
 		std::function<Scalar(size_t)> bdry)
-	{
+	    {
 			const size_t N = nx*ny*nz;
 			DistEllpackMatrix<Scalar> A(N);
 			SlicedVector<Scalar> rhs(N);
 
 			size_t fron = A.first_row_on_node();
 			size_t lron = fron + A.get_dim_local() - 1;
+			
+			int[][] indexMatrix = new int[A.get_dim_local()][7];
+			int[][] valueMatrix = new int[A.get_dim_local()][7];
 
 			A.prepare_sequential_fill(7);
 			
@@ -1434,27 +1436,27 @@ namespace Icarus
 			if(fron == 0)
 			{
 			    int vtx_global = 0;
-			    
+			    int vtx_local = vtx_global -fron;    
 			    //Dirichlet Randwert in der vorderen unteren linken Ecke
 				A.sequential_fill(0, 1);
-						
-				index[0] = vtx_global;
-				index[1] = vtx_global + 1;
-				index[2] = vtx_global + 2;
-				index[3] = vtx_global + nx;
-				index[4] = vtx_global + 2 * nx;
-				index[5] = vtx_global + nx*ny;
-				index[6] = vtx_global + 2 * nx*ny;
+			    
+				indexMatrix[vtx_local][0] = vtx_global;
+				indexMatrix[vtx_local][1] = vtx_global + 1;
+				indexMatrix[vtx_local][2] = vtx_global + 2;
+				indexMatrix[vtx_local][3] = vtx_global + nx;
+				indexMatrix[vtx_local][4] = vtx_global + 2 * nx;
+				indexMatrix[vtx_local][5] = vtx_global + nx*ny;
+				indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
 
 						//zentraler Differenzenquotient in keine Richtung möglich
 
-						wert[0] = 3.0 * 11.0 / 38.0;
-						wert[1] = -28.0 / 38.0;
-						wert[2] = 17.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
+				valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
+				valueMatrix[vtx_local][1] = -28.0 / 38.0;
+				valueMatrix[vtx_local][2] = 17.0 / 38.0;
+				valueMatrix[vtx_local][3] = -28.0 / 38.0;
+				valueMatrix[vtx_local][4] = 17.0 / 38.0;
+				valueMatrix[vtx_local][5] = -28.0 / 38.0;
+				valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
 						//zeile[vtx_global] = 3.0*11.0/38.0;
 						//zeile[vtx_global+1] = -28.0/38.0;
@@ -1467,13 +1469,13 @@ namespace Icarus
 						//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
 						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 
-						wert[0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(3.0) * 2.0 * h;
+				valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+				valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+				valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
+				valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+				valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
+				valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+				valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
 
 						//zeile[vtx_global] += 3.0*1.0/sqrt(3.0)*3.0/2.0*h;
 						//zeile[vtx_global+1] += 1.0/sqrt(3.0)*(-h)/2.0;
@@ -1491,22 +1493,24 @@ namespace Icarus
 			//Ecke vorne unten rechts
 			if(fron <= nx-1 <= lron)
 			{
-			    index[0] = vtx_global;
-				index[1] = vtx_global - 1;
-				index[2] = vtx_global - 2;
-				index[3] = vtx_global + nx;
-				index[4] = vtx_global + 2 * nx;
-				index[5] = vtx_global + nx*ny;
-				index[6] = vtx_global + 2 * nx*ny;
+    			int vtx_global = nx-1;
+    			int vtx_local = vtx_global-fron;
+			    indexMatrix[vtx_local][0] = vtx_global;
+				indexMatrix[vtx_local][1] = vtx_global - 1;
+				indexMatrix[vtx_local][2] = vtx_global - 2;
+				indexMatrix[vtx_local][3] = vtx_global + nx;
+				indexMatrix[vtx_local][4] = vtx_global + 2 * nx;
+				indexMatrix[vtx_local][5] = vtx_global + nx*ny;
+				indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
 				//zentraler Differenzenquotient in keine Richtung möglich
 
-				wert[0] = 3.0 * 11.0 / 38.0;
-				wert[1] = -28.0 / 38.0;
-				wert[2] = 17.0 / 38.0;
-				wert[3] = -28.0 / 38.0;
-				wert[4] = 17.0 / 38.0;
-				wert[5] = -28.0 / 38.0;
-				wert[6] = 17.0 / 38.0;
+				valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
+				valueMatrix[vtx_local][1] = -28.0 / 38.0;
+				valueMatrix[vtx_local][2] = 17.0 / 38.0;
+				valueMatrix[vtx_local][3] = -28.0 / 38.0;
+				valueMatrix[vtx_local][4] = 17.0 / 38.0;
+				valueMatrix[vtx_local][5] = -28.0 / 38.0;
+				valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
 
 						//zeile[vtx_global] = 3.0*11.0/38.0;
@@ -1520,13 +1524,13 @@ namespace Icarus
 						//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),1/sqrt(3))
 						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 
-						wert[0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(3.0) * 2.0 * h;
+				valueMatrix[vtx_local][0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+				valueMatrix[vtx_local][1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
+				valueMatrix[vtx_local][2] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
+				valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+				valueMatrix[vtx_local][4] += 1.0/ sqrt(3.0) * 2.0 * h;
+				valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+				valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
 
 						//zeile[vtx_global] += 1.0*1.0/sqrt(3.0)*3.0/2.0*h;
 						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
@@ -1539,15 +1543,42 @@ namespace Icarus
 			
 			//Ecke hinten unten links
 			
+			if(fron <= nx*(ny-1) <= lron)
+			{
+    			
+			}
+			
 			//Ecke hinten unten rechts
+			if(fron <= nx*ny-1 <= lron)
+			{
+    			
+			}
+		
 			
 			//Ecke vorne oben links
+			if(fron <= nx*ny*(nz-1) <= lron)
+			{
+			
+			}
 			
 			//Ecke vorne oben rechts
+			if(fron <= nx*ny*(nz-1)+nx-1 <= lron)
+			{
+			
+			}
+			
 			
 			//Ecke hinten oben links
+			if(fron <= nx*ny*(nz-1)+(nx*(ny-1)) <= lron)
+			{
+			
+			}
 			
 			//Ecke hinten oben rechts
+			if(fron <= nx*ny*nz-1 <= lron)
+			{
+			
+			}
 			
 			//Fuelle Kanten (horizontal) (Ohne Ecken)
 		    //Kante vorne unten links
@@ -1617,9 +1648,11 @@ namespace Icarus
 			
 			//Decken
 			
-			//Fuelle inneres
-			first = -1;
-			last = -1;
+			//Fuelle inneres [NOTIZ: Inneres fuellen ist nun einfacher:
+		    //fuelle zuerst alles als ob es inneres ist und korrigire fehler
+		    //im nachhinein]
+			//first = -1;
+			//last = -1;
 			//Deutlich komplizierter.
 			//evtl Liste anlegen mit allen punkten die
 			//noch gefuellt werden muessen
