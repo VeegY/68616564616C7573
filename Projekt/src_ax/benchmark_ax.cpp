@@ -32,7 +32,7 @@ int memory_option = zero;
 void print_p();
 
 template<typename type>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second)
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second);
 
 template<typename Scalar>
 void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
@@ -139,6 +139,7 @@ int main(int argc, char* argv[])
     float *fvec_second = NULL;
     float *result_second = NULL;
     int *indices_second = NULL;
+    float elapsed_second_kernel = 0.0;
 
     if (!method == kernel_vs_cpu)
     {
@@ -148,7 +149,7 @@ int main(int argc, char* argv[])
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
         timer_kernel.start();
         gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, iteration, version_second, memory_option);
-        float elapsed_second_kernel = timer_kernel.stop()*1.0e3;
+        elapsed_second_kernel = timer_kernel.stop()*1.0e3;
         //=========================================//
         
         cleanup(data_second, fvec_second, result_second, indices_second, memory_option);
@@ -160,7 +161,7 @@ int main(int argc, char* argv[])
         //=========================================//
         //timer_kernel.start();
         //cpu_ax()
-        //float elapsed_second_kernel = timer_kernel.stop();
+        //elapsed_second_kernel = timer_kernel.stop();
         //=========================================//
 
         //cleanup(data_second, fvec_second, result_second, indices_second, 2);
