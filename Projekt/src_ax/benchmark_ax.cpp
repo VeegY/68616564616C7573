@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
     timer_kernel.start();
     gpu_ax_call(data_first, fvec_first, result_first, indices_first, maxrowlength, dimlocal, dimfvec, iteration, version_first, memory_option);
-    float elapsed_first_kernel = timer_kernel.stop()*1.0e3;
+    float elapsed_first_kernel = (timer_kernel.stop()*1.0e3) / iteration;
     //=========================================//
 
     cleanup(data_first, fvec_first, result_first, indices_first, memory_option);
@@ -149,7 +149,7 @@ int main(int argc, char* argv[])
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
         timer_kernel.start();
         gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, iteration, version_second, memory_option);
-        elapsed_second_kernel = timer_kernel.stop()*1.0e3;
+        elapsed_second_kernel = (timer_kernel.stop()*1.0e3)/iteration;
         //=========================================//
         
         cleanup(data_second, fvec_second, result_second, indices_second, memory_option);
