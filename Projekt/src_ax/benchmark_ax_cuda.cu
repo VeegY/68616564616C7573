@@ -5,13 +5,14 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cmath>
-#include <string>
+//#include <string>
 #include "include/timer.hpp"
 #define RESET "\e[0m"
 #define BLUE "\e[34;1m"
 #define CYAN "\e[36;1m"
 #define GREY "\e[30;1m"
 #define MAGENTA "\e[35;1m"
+
 
 
 template <typename Scalar>
@@ -41,6 +42,7 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 template<typename type>
 void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second)
 {
+    using std::string;
     string first;
     string second;
     string method;
