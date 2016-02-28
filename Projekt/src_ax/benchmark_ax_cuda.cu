@@ -40,12 +40,13 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 
 
 template<typename type>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second)
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option)
 {
     using std::string;
-    string first;
-    string second;
-    string method;
+    string first, second, method;
+    string memop = "";
+    if (mem_option == 0) { memop = "(Unified Memory)"; }
+    else { memop = "(Zero Copy)"; }
     
     if (meth == 0)
     {
@@ -56,13 +57,13 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     if (meth == 1)
     {
         method = "Kernel vs Kernel";
-        first = "Kernel Version: " + ver_first;
-        second = "Kernel Version: " + ver_second;
+        first = "Kernel Version" + memop + ": " + ver_first;
+        second = "Kernel Version" + memop + ": " + ver_second;
     }
     if (meth == 2)
     {
         method = "Kernel vs CPU";
-        first = "Kernel Version: " + ver_first;
+        first = "Kernel Version" + memop + ": " + ver_first;
         second = "CPU";
     }
     
@@ -107,9 +108,9 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 
     
 }
-template void performance<int>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second);
-template void performance<float>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second);
-template void performance<double>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter, int meth, int ver_first, int ver_second);
+template void performance<int>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second, int mem_option);
+template void performance<float>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second, int mem_option);
+template void performance<double>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter, int meth, int ver_first, int ver_second, int mem_option);
 
 
 //PROPERTIES OF TEGRA K1

@@ -32,7 +32,7 @@ int memory_option = zero;
 void print_p();
 
 template<typename type>
-void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second);
+void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);
 
 template<typename Scalar>
 void gpu_ax_call(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int runs, int version, int mem_option);
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
         float *result_second = NULL;
         int *indices_second = NULL;
 
-        if (!method == kernel_vs_cpu)
+        if (method != kernel_vs_cpu)
         {
             allocation(&data_second, &fvec_second, &result_second, &indices_second, maxrowlength, dimlocal, dimfvec, memory_option);
             set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
