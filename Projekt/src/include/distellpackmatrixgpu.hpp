@@ -1,5 +1,5 @@
-#ifndef __DISTELLPACKMATRIX_HPP_
-#define __DISTELLPACKMATRIX_HPP_
+#ifndef __DISTELLPACKMATRIXGPU_HPP_
+#define __DISTELLPACKMATRIXGPU_HPP_
 
 #include "matrix.hpp"
 #include "utility.hpp"
@@ -26,9 +26,9 @@ namespace Icarus
   * \tparam   Scalar  Skalarer Typ der Einträge.
   */
 template <typename Scalar>
-class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar>>
+class DistEllpackMatrixGpu : public Matrix<DistEllpackMatrixGpu<Scalar>>
 {
-    friend class Matrix<DistEllpackMatrix<Scalar>>;
+    friend class Matrix<DistEllpackMatrixGpu<Scalar>>;
 
 	// MPI Eigenschaften
 	MPI_Comm _my_comm;
@@ -50,7 +50,7 @@ class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar>>
 public:
 
     /// Zugeordneter (d.h. bezüglich der Operatoren vertäglicher) Vektor-Typ.
-    typedef typename MatrixTraits<DistEllpackMatrix<Scalar>>::VectorType VectorType;
+    typedef typename MatrixTraits<DistEllpackMatrixGpu<Scalar>>::VectorType VectorType;
 
     /** 
      * \brief   Standardkonstruktor.
@@ -61,17 +61,17 @@ public:
      * \param   dim_globaö     Dimension der Matrix.
      * \param   my_comm         Kommunikator in die Prozessgruppe der Matrix.
      */
-    DistEllpackMatrix(size_t dim_global, MPI_Comm my_comm = MPI_COMM_WORLD);
+    DistEllpackMatrixGpu(size_t dim_global, MPI_Comm my_comm = MPI_COMM_WORLD);
 
-    ~DistEllpackMatrix();
+    ~DistEllpackMatrixGpu();
 
-	DistEllpackMatrix(DistEllpackMatrix&& other);
+	DistEllpackMatrixGpu(DistEllpackMatrixGpu&& other);
 
-	DistEllpackMatrix(const DistEllpackMatrix& other);
+	DistEllpackMatrixGpu(const DistEllpackMatrixGpu& other);
 
-	DistEllpackMatrix& operator=(DistEllpackMatrix&& other);
+	DistEllpackMatrixGpu& operator=(DistEllpackMatrixGpu&& other);
 
-	DistEllpackMatrix& operator=(const DistEllpackMatrix& other);
+	DistEllpackMatrixGpu& operator=(const DistEllpackMatrixGpu& other);
 
      /** 
      * \brief   Gibt den Kommunikator in die Prozessgruppe der Matrix zurück.
@@ -159,7 +159,7 @@ public:
       * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion 
       *          aufgerufen wird.
       */ 
-    DistEllpackMatrix precond_equi() const;
+    DistEllpackMatrixGpu precond_equi() const;
 
     /**
       * \brief   Erstellt einen zu der Matrix passenden Äquilibrierungsvorkonditionierer.
@@ -170,7 +170,7 @@ public:
       * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion 
       *          aufgerufen wird.
       */ 
-    DistEllpackMatrix precond_jacobi() const;
+    DistEllpackMatrixGpu precond_jacobi() const;
 
     /**
       * \brief   Schreibe den lokalen Inhalt des Block in den Stream out.
@@ -183,7 +183,7 @@ public:
     void print_local_data(std::ostream &os) const;
 
      /**
-      * \brief   Lese eine DistEllpackMatrix aus einem CSR-artigen Dateiformat ein.
+      * \brief   Lese eine DistEllpackMatrixGpu aus einem CSR-artigen Dateiformat ein.
       *
       * Das benötigte Dateiformat wird von dem MATLAB-Skript /util/csrwrite.m
       * erzeugt. Die Informationen werden in drei Dateien gespeichert, deren Namen
@@ -194,23 +194,23 @@ public:
       * \param new_comm  Kommunikator in die Prozessgruppe, der die neu erzeugte Matrix
       *                  gehören soll.
       *
-      * \return Gibt die aus dem Dateitripel erzeugte DistEllpackMatrix zurück.
+      * \return Gibt die aus dem Dateitripel erzeugte DistEllpackMatrixGpu zurück.
       */  
-    static DistEllpackMatrix import_csr_file(const std::string& filename, MPI_Comm new_comm = MPI_COMM_WORLD);
+    static DistEllpackMatrixGpu import_csr_file(const std::string& filename, MPI_Comm new_comm = MPI_COMM_WORLD);
 
 private:
 
     size_t get_dim_impl() const {return _dim_global;}
 
-    void mult_vec_implgpu(const VectorType& vec, VectorType& result) const{LOG_ERROR("GPU not supported.");}
+    void mult_vec_implgpu(const VectorType& vec, VectorType& result) const;
     void mult_vec_impl(const VectorType& vec, VectorType& result) const;
 };
 
 }
 
-#include "distellpackmatrix.tpp"
+#include "distellpackmatrixgpu.tpp"
 
 
 
 
-#endif // __DISTELLPACKMATRIX_HPP_
+#endif // __DISTELLPACKMATRIXGPU_HPP_

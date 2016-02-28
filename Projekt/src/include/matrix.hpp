@@ -27,6 +27,7 @@ public:
     Child& leaf() { return static_cast<Child&>(*this); }
     const Child& leaf() const { return static_cast<const Child&>(*this); }
 
+    void mult_vecgpu(const Vector<VectorType>& x, Vector<VectorType>& res) const { leaf().mult_vec_implgpu(x.leaf(),res.leaf()); }
     void mult_vec(const Vector<VectorType>& x, Vector<VectorType>& res) const { leaf().mult_vec_impl(x.leaf(),res.leaf()); }
 
     size_t get_dim() const {return leaf().get_dim_impl();}
