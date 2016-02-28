@@ -167,16 +167,14 @@ int main(int argc, char* argv[])
         //cleanup(data_second, fvec_second, result_second, indices_second, 2);
     }
     
-    
-    
+   
 //================================================================================================/
 //                                         Evaluieren
 //================================================================================================/
 
     float schalter = 0.0;
-    performance(maxrowlength, dimlocal, elapsed_first_kernel, elapsed_first_overall, elapsed_second_kernel, elapsed_second_overall, iteration, schalter, method, version_first, version_second);
-    
-
+    performance(maxrowlength, dimlocal, elapsed_first_kernel, elapsed_first_overall, elapsed_second_kernel, elapsed_second_overall, iteration, schalter, method, version_first, version_second, memory_option);
+  
     delete[] data_host;
     delete[] indices_host;
     delete[] fvec_host;

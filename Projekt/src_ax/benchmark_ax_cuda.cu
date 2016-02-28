@@ -57,13 +57,17 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     if (meth == 1)
     {
         method = "Kernel vs Kernel";
-        first = "Kernel Version" + memop + ": ";
+        first = "Kernel Version" + memop + ": " ;
+        first += ver_first;
         second = "Kernel Version" + memop + ": ";
+        second += ver_second;
+
     }
     if (meth == 2)
     {
         method = "Kernel vs CPU";
         first = "Kernel Version" + memop + ": ";
+        first += ver_first;
         second = "CPU";
     }
     
