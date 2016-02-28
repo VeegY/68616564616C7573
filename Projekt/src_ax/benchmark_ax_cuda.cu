@@ -87,7 +87,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     int bytes = elements*(sizeof(type) + sizeof(int)) + 2*(sizeof(type)*dim_local);// Elements(Data+Indices) + Fvec Read und Result Write
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf("                   %s\n", method.c_str());
+    printf("           %s\n", method.c_str());
     printf("        DIM = %i ~~ %i Iterations\n", dim_local, runs);
     printf("            %.2fGB/2GB DRAM used\n", storage / 1.0e9);
     printf(GREY "===============================================\n");
