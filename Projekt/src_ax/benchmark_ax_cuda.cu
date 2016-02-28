@@ -5,6 +5,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cmath>
+#include <string>
 #include "include/timer.hpp"
 #define RESET "\e[0m"
 #define BLUE "\e[34;1m"
@@ -40,7 +41,10 @@ __global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int 
 template<typename type>
 void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second)
 {
-    string first, second, method;
+    string first;
+    string second;
+    string method;
+    
     if (method == 0)
     {
         method = "Unified Memory vs Zero Copy";
