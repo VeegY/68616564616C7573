@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
         
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
         elapsed_second_kernel =
-            gpu_ax_call(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, iteration, version_second, memory_option);
+            gpu_ax_time(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec, iteration, version_second, memory_option);
         //=========================================//
         
         cleanup(data_second, fvec_second, result_second, indices_second, memory_option);
