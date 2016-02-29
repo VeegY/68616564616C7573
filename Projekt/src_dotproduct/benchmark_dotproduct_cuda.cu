@@ -55,7 +55,7 @@ __global__ void gpu_scalar(type *one,type *two, type *result, type *placehold, i
         {
             res += placehold[i];
         }
-        result = res;
+        result[0] = res;
     }
     
 
