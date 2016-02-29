@@ -226,7 +226,19 @@ void DistEllpackMatrixGpu<Scalar>::mult_vec_impl(const VectorType& vec, VectorTy
     }
 
     // *************** END Durch CUDA-isierung ersetzen **************
+template <typename Scalar>
+void DistEllpackMatrixGpu<Scalar>::mult_vec_gpu(const VectorType& vec, VectorType& result)
+{
+    assert(_dim_global == vec.get_dim_global());
+    assert(_dim_global == result.get_dim_global());
 
+    FullVectorGpu<Scalar> fvec(vec);
+
+    int num_blocks = ceil((double)dim_local / 1024);
+    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
+
+     gpu_ax << <num_blocks, num_threads >> >(_data, fvec, result, _indices, _max_row_length, _dim_local);
+     cudaDeviceSynchronize();
 }
 
 

@@ -243,6 +243,24 @@ template float gpu_ax_time<double>(double* data, double* fvec, double* restult, 
 
 
 
+//=============================================================================
+//                          KERNEL für DistEllpackKlasse
+//=============================================================================
+template<typename Scalar>
+void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length,
+		  int dim_local)
+{
+    int num_blocks = ceil((double)dim_local / 1024);
+    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
+
+            //=================================//
+                gpu_ax << <num_blocks, num_threads >> >(data, fvec, result, indices, max_row_length, dim_local);
+            cudaDeviceSynchronize();
+            //=================================//
+}
+
+
+
 //GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
 void gpu_ax_overall(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local, int dim_fvec, int version, int mem_option)
