@@ -7,30 +7,30 @@ namespace Icarus
 {
 
 
-    int getx(size_t index,
-		size_t nx, size_t ny)
+    double getx(size_t index,
+		double h, size_t nx, size_t ny)
 	{
 	int	az = (index / nx) / ny;
 	int	ay = index / nx - az*ny;
 	int	ax = index - ay*nx - az*nx*ny;
 
-    return ax;
+    return ((double) ax)*h;
 	}
 
-	int gety(size_t index,
-		size_t nx, size_t ny)
+	double gety(size_t index,
+		double h, size_t nx, size_t ny)
 	{
 	int	az = (index / nx) / ny;
 	int	ay = index / nx - az*ny;
 
-    return ay;
+    return ((double)ay)*h;
 	}
 
-	int getz(size_t index,
-		size_t nx, size_t ny)
+	double getz(size_t index,
+		double h, size_t nx, size_t ny)
 	{
     int az = (index / nx) / ny;
 
-    return az;
+    return ((double) az)*h;
 	}
 }
