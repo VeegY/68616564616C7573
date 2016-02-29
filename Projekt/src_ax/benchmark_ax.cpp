@@ -32,7 +32,7 @@ int memory_option = zero;
 void print_p();
 
 template <typename type>
-void cpu_ax(type data, type fvec, type result, type indices, int maxrow, int dim_local, int dim_fvec);
+void cpu_ax(type data, type fvec, type result, int indices, int maxrow, int dim_local, int dim_fvec);
 
 template<typename type>
 void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
     diagonal_float(data_host, indices_host, fvec_host, maxrowlength, dimlocal, dimfvec);
 
-    Timer timer_overall;
+    Timer timer_overall,timer_cpu;
 
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
@@ -163,12 +163,12 @@ int main(int argc, char* argv[])
         set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
         
         //=========================================//
-        timer_kernel.start();
+        timer_cpu.start();
         for (int r = 0; r < iteration; r++)
         {
             cpu_ax(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec);
         }
-        elapsed_second_kernel = timer_kernel.stop()*1.0e3;
+        elapsed_second_kernel = timer_cpu.stop()*1.0e3;
         //=========================================//
 
         cleanup(data_second, fvec_second, result_second, indices_second, 2);
@@ -203,5 +203,5 @@ void cpu_ax(type *data, type *fvec, type *result, type *indices, int max_row_len
 
 }
 template void cpu_ax<int>(int *data, int *fvec, int *result, int *indices, int max_row_length, int dim_local, int dim_fvec);
-template void cpu_ax<float>(float *data, float *fvec, float *result, float *indices, int max_row_length, int dim_local, int dim_fvec);
-template void cpu_ax<double>(double *data, double *fvec, double *result, double *indices, int max_row_length, int dim_local, int dim_fvec);
+template void cpu_ax<float>(float *data, float *fvec, float *result, int *indices, int max_row_length, int dim_local, int dim_fvec);
+template void cpu_ax<double>(double *data, double *fvec, double *result, int *indices, int max_row_length, int dim_local, int dim_fvec);
