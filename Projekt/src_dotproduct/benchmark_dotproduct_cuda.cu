@@ -313,7 +313,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         else if(mem_option == 1)
         {
             cudaHostAlloc((void **)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
-            Scalar *d_one, *d_two, *d_result;
+            Scalar *d_one, *d_two, *d_result, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
