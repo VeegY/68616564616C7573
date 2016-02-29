@@ -209,7 +209,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
         num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
-    printf("%f -- %f", num_threads, num_blocks);
+    //printf("%f -- %f", num_threads, num_blocks);
 
     switch (version)
     {

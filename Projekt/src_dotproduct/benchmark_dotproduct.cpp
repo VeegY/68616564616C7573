@@ -37,13 +37,13 @@ void print_p();
 void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);*/
 
 template<typename Scalar>
-void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dimlocal, int version, int mem_option);
+void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_local, int version, int mem_option);
 
 template<typename Scalar>
-float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dimlocal, int runs, int version, int mem_option);
+float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, int runs, int version, int mem_option);
 
 /*DONE*/template<typename Scalar>
-void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dimlocal, int mem_option)
+void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local, int mem_option)
 
 /*DONE*/template <typename Scalar>
 void cleanup(Scalar *one, Scalar *two, Scalar *result, int method);
