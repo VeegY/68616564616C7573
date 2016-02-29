@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
       
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
-        gpu_dotproduct_overall(vecone_first, vectwo_first, result_second, dimlocal, version_first, memory_option);
+        gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
