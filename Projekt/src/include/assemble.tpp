@@ -1499,7 +1499,7 @@ void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fr
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
 		valueMatrix[vtx_local][3] = 1.0;
-		valueMatrix[vtx_local][vtx_local]ert[4] = 1.0;
+		valueMatrix[vtx_local][4] = 1.0;
 		//modifizierter Differenzenquotient in x-Richtung
 		valueMatrix[vtx_local][0] += 11.0 / 38.0;
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
@@ -1623,7 +1623,7 @@ void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, 
 
     //Hier fuer finde welche punkte im front panel liegen und
     //fuelle alle die im bereich von fron..lron liegen.
-    int[] frontPanelIdxs = new int[nx*nz];
+    int* frontPanelIdxs = new int[nx*nz];
     for(int iz =0; iz < nz;iz++)
     {
         for(int ix =0;ix<nx;ix++)
@@ -1693,7 +1693,7 @@ void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, i
 {
     //Hier fuer finde welche punkte im back panel liegen und
     //fuelle alle die im bereich von fron..lron liegen.
-    int[] backPanelIdxs = new int[nx*nz];
+    int* backPanelIdxs = new int[nx*nz];
     for(int iz =0; iz < nz;iz++)
     {
         for(int ix =0;ix<nx;ix++)
@@ -1759,7 +1759,7 @@ void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, i
 
 void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[nz];
+    int* kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
     {
         kantenidxs[i] = i*(nx*ny);
@@ -1813,7 +1813,7 @@ void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int f
 
 void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	int[] kantenidxs = new int[nz];
+	int* kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
     {
         kantenidxs[i] = i*(nx*ny)+(nx-1);
@@ -1866,7 +1866,7 @@ void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int 
 
 void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	int[] kantenidxs = new int[nz];
+	int* kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
     {
         kantenidxs[i] = i*(nx*ny)+(nx*ny-1)-(nx-1);
@@ -1923,7 +1923,7 @@ void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
 
 void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	;
+	int* kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
     {
         kantenidxs[i] = i*(nx*ny)+(nx*ny-1);
@@ -1978,7 +1978,7 @@ void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int
 
 void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[nx];
+    int* kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
     {
         kantenidxs[i] = i;
@@ -2033,7 +2033,7 @@ void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int f
 
 void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[nx];
+    int* kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
     {
         kantenidxs[i] = i+(nx*(ny-1));
@@ -2088,7 +2088,7 @@ void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int 
 
 void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[ny];
+    int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
     {
         kantenidxs[i] = i*nx;
@@ -2141,7 +2141,7 @@ void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
 
 void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[ny];
+    int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
     {
         kantenidxs[i] = i*nx+nx-1;
@@ -2196,7 +2196,7 @@ void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int 
 
 void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[nx];
+    int* kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
     {
         kantenidxs[i] = i+(nx*ny*(nz-1));
@@ -2251,7 +2251,7 @@ void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fr
 
 void assembleKanteObenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[nx];
+    int* kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
     {
         kantenidxs[i] = i+(nx*(ny-1));
@@ -2306,7 +2306,7 @@ void assembleKanteObenHinten(int indexMatrix[][7], double valueMatrix[][7],int f
 
 void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[ny];
+    int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
     {
         kantenidxs[i] = i*nx;
@@ -2359,7 +2359,7 @@ void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int f
 
 void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int[] kantenidxs = new int[ny];
+    int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
     {
         kantenidxs[i] = i*nx+nx-1;
