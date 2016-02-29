@@ -29,7 +29,7 @@ std::vector<double> get_quadrature_xpoints(int e, double h, std::vector<double>&
 {
 
     std::vector<double> x_global(27);
-    int e_x=Icarus::getx(e, 20.0, 20.0); //Achtung: Anstatt 20.0, 20.0 müssen später die Werte Nx, Ny eingesetzt werden 
+    int e_x=Icarus::getx(e, h, 20.0, 20.0); //Achtung: Anstatt 20.0, 20.0 müssen später die Werte Nx, Ny eingesetzt werden 
     std::vector<double> x_local{0, 0, h, h, 0, 0, h, h, 0, 0.5*h, h, 0.5*h, 0, 0,
         h, h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0.5*h};
     transformation(ax, h, trans); //Transformation auf das Intervall mit der Länge h
@@ -43,7 +43,7 @@ std::vector<double> get_quadrature_xpoints(int e, double h, std::vector<double>&
 std::vector<double> get_quadrature_ypoints(int e, double h, std::vector<double>& ay, std::vector<double>& trans) //Berechnet die y-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
     std::vector<double> y_global(27);
-    int e_y=Icarus::gety(e, 20.0, 20.0);//Achtung: Anstatt 20.0, 20.0 müssen später die Werte Nx, Ny eingesetzt werden 
+    int e_y=Icarus::gety(e, h, 20.0, 20.0);//Achtung: Anstatt 20.0, 20.0 müssen später die Werte Nx, Ny eingesetzt werden 
     std::vector<double> y_local{h, 0, 0, h, h, 0, 0, h, 0.5*h, h, 0.5*h, h, h,
         0, 0, h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h};
     transformation(ay, h, trans); //Transformation auf das Intervall mit der Länge h
@@ -58,7 +58,7 @@ std::vector<double> get_quadrature_ypoints(int e, double h, std::vector<double>&
 std::vector<double> get_quadrature_zpoints(int e, double h, std::vector<double>& az, std::vector<double>& trans) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
     std::vector<double> z_global(27);
-    int e_z=Icarus::getz(e, 20.0, 20.0);//Achtung: Anstatt 20.0, 20.0 müssen später die Werte Nx, Ny eingesetzt werden 
+    int e_z=Icarus::getz(e, h, 20.0, 20.0);//Achtung: Anstatt 20.0, 20.0 müssen später die Werte Nx, Ny eingesetzt werden 
     std::vector<double> z_local{0, 0, 0, 0, h, h, h, h, 0, 0, 0, 0,
         0.5*h, 0.5*h, 0.5*h, 0.5*h, h, h, h, h, 0,  0.5*h, 0.5*h, 0.5*h, 0.5*h, h,  0.5*h};
     transformation(az, h, trans); //Transformation auf das Intervall mit der Länge h
