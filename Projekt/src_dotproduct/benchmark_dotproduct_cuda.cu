@@ -21,7 +21,7 @@ template<typename type>
 __global__ void gpu_dotproduct(type *one,type *two, type *result, int dim_local)
 {
     extern __shared__ type shar[];
-    idx = threadIdx.x + blockIdx.x * blockDim.x;
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
     type value = (type)0;
     if (idx < dim_local)
     {
