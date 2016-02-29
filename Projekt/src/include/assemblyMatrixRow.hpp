@@ -11,11 +11,26 @@ namespace Icarus
 void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value)
 {
     int n = e.size();
+    int length;
+    switch(n)
+    {
+    case 1:     length = 8
+                break;
+    case 2:     length = 12;
+                break;
+    case 4:     length = 18;
+                break;
+    case 8:     length = 27;
+                break;
+    }
+
+    column.resize(length);
+    value.resize(length);
+
     std::vector<int> a(8);
     //std::vector<double> value(27);
     //std::vector<int> column(27);
-    column.resize(27);
-    value.resize(27);
+
     std::vector<double> grad_Basis1(3);
     std::vector<double> grad_Basis2(3);
     //std::vector<double> Zeile(Nx*Ny*Nz);
@@ -61,7 +76,7 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int
 
             int j=0;
             bool abbr = false;
-            while(abbr==false||j<27)
+            while(abbr==false||j<length)
             {
                 if(e[i] + a[B] == 0)
                 {
