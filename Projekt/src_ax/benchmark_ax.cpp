@@ -32,7 +32,7 @@ int memory_option = zero;
 void print_p();
 
 template <typename type>
-void cpu_ax(type data, type fvec, type result, int indices, int maxrow, int dim_local, int dim_fvec);
+void cpu_ax(type *data, type *fvec, type *result, int *indices, int maxrow, int dim_local, int dim_fvec);
 
 template<typename type>
 void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);
