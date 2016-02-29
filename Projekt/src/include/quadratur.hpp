@@ -17,6 +17,7 @@
 #include <vector>
 #include <math.h>
 
+
 namespace Icarus
 {
 std::vector<double> get_weight(double c, double d);
