@@ -24,7 +24,7 @@ int memory_option = zero;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define maxrowlength 1024
+#define dimlocal 1024
 #define iteration 1000
 
 
@@ -37,13 +37,13 @@ void print_p();
 void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);*/
 
 template<typename Scalar>
-void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_local, int version, int mem_option);
+void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dimlocal, int version, int mem_option);
 
 template<typename Scalar>
-float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, int runs, int version, int mem_option);
+float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dimlocal, int runs, int version, int mem_option);
 
 /*DONE*/template<typename Scalar>
-void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local, int mem_option)
+void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dimlocal, int mem_option)
 
 /*DONE*/template <typename Scalar>
 void cleanup(Scalar *one, Scalar *two, Scalar *result, int method);
@@ -52,9 +52,9 @@ int main(int argc, char* argv[])
 {
     //Array zur Zeitmessung
     //Generiere data/Indices Int-Array sowie fvec Int Array
-    float *vecone_host = new float[maxrowlength];
-    float *vectwo_host = new float[maxrowlength];
-    vec_float(vecone_host, vecone_host, maxrowlength);
+    float *vecone_host = new float[dimlocal];
+    float *vectwo_host = new float[dimlocal];
+    vec_float(vecone_host, vecone_host, dimlocal);
 
     Timer timer_overall,timer_cpu;
 
@@ -73,8 +73,8 @@ int main(int argc, char* argv[])
         float *vectwo_first = NULL;
         float *result_first = NULL;
       
-        allocation(&vecone_first, &vectwo_first, &result, maxrowlength, memory_option);
-        set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, maxrowlength);
+        allocation(&vecone_first, &vectwo_first, &result, dimlocal, memory_option);
+        set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
         gpu_dotproduct_overall(vecone_first, vectwo_first, version_first, memory_option);
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
     }
@@ -94,8 +94,8 @@ int main(int argc, char* argv[])
 
         if (method != kernel_vs_cpu)
         {
-            allocation(&vecone_second, &vectwo_second, &result, maxrowlength, memory_option);
-            set_values(vecone_host, vectwo_host, vecone_second, vectwo_second, maxrowlength);
+            allocation(&vecone_second, &vectwo_second, &result, dimlocal, memory_option);
+            set_values(vecone_host, vectwo_host, vecone_second, vectwo_second, dimlocal);
             gpu_dotproduct_overall(vecone_second, vectwo_second, version_second, memory_option);
             cleanup(vecone_second, vectwo_second, result_second, memory_option);
         }
@@ -118,11 +118,11 @@ int main(int argc, char* argv[])
     float *vectwo_first = NULL;
     float *result_first = NULL;
 
-    allocation(&vecone_first, &vectwo_first, &result, maxrowlength, memory_option);
+    allocation(&vecone_first, &vectwo_first, &result, dimlocal, memory_option);
 
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
     float elapsed_first_kernel = 
-        gpu_dotproduct_time(vecone_first, vectwo_first, result_first, iteration, version_first, memory_option);
+        gpu_dotproduct_time(vecone_first, vectwo_first, result_first, dimlocal, iteration, version_first, memory_option);
     //=========================================//
 
     cleanup(vecone_first, vectwo_first, result_first, memory_option);
@@ -140,11 +140,11 @@ int main(int argc, char* argv[])
 
     if (method != kernel_vs_cpu)
     {
-        allocation(&vecone_second, &vectwo_second, &result, maxrowlength, memory_option);
+        allocation(&vecone_second, &vectwo_second, &result, dimlocal, memory_option);
         
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
         elapsed_second_kernel =
-            gpu_dotproduct_time(vecone_second, vectwo_second, result_second, iteration, version_second, memory_option);
+            gpu_dotproduct_time(vecone_second, vectwo_second, result_second, dimlocal, iteration, version_second, memory_option);
         //=========================================//
         
         cleanup(vecone_second, vectwo_second, result_second, memory_option);
