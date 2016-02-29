@@ -1514,13 +1514,105 @@ private void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7
 private void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
+    int start = nx*ny*(nz-1);
+    if(fron > start)
+    {
+        start = fron;
+    }
+    int end = nx*ny*nz;
+    if(lron< end)
+    {
+        end = lron;
+    }
+
+    for(int i=start;i<=end;i++)
+    {
+        int vtx_global =i;
+        int vtx_local = vtx_global - fron;
+        //Fuelle wie Top Panel
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + 1;
+		indexMatrix[vtx_local][2] = vtx_global - 1;
+		indexMatrix[vtx_local][3] = vtx_global + nx;
+		indexMatrix[vtx_local][4] = vtx_global - nx;
+		indexMatrix[vtx_local][5] = vtx_global - nx*ny;
+		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
+
+		//zentraler Differenzenquotient in x/y-Richtung möglich
+		valueMatrix[vtx_local][0] = -4.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		valueMatrix[vtx_local][3] = 1.0;
+		valueMatrix[vtx_local][4] = 1.0;
+		//modifizierter Differenzenquotient in z-Richtung
+		valueMatrix[vtx_local][0] += 11.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
+						
+		//NeumannRB, Normalenvektor ist (0,0,-1))
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+
+		valueMatrix[vtx_local][0] += (-1.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][5] += (-1.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += (-1.0) * 2.0 * h;
+
+		//zeile[vtx_global] += (-1.0)*3.0/2.0*h;
+		//zeile[vtx_global-nx*ny] += (-1.0)*(-h)/2.0;
+		//zeile[vtx_global-2*nx*ny] += (-1.0)*2.0*h;
+
+    }
+    
 
 }
 
 private void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
+    int start = 0;
+    if(fron > start)
+    {
+        start = fron;
+    }
+    int end = nx*ny-1;
+    if(lron< end)
+    {
+        end = lron;
+    }
 
+    for(int i=start;i<=end;i++)
+    {
+        int vtx_global =i;
+        int vtx_local = vtx_global - fron;
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + 1;
+		indexMatrix[vtx_local][2] = vtx_global - 1;
+		indexMatrix[vtx_local][3] = vtx_global + nx;
+		indexMatrix[vtx_local][4] = vtx_global - nx;
+		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
+
+		////zentraler Differenzenquotient in x/y-Richtung möglich
+		valueMatrix[vtx_local][0] = -4.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		valueMatrix[vtx_local][3] = 1.0;
+		valueMatrix[vtx_local][4] = 1.0;
+		//modifizierter Differenzenquotient in z-Richtung
+		valueMatrix[vtx_local][0] += 11.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
+		
+		//NeumannRB, Normalenvektor ist (0,0,1))
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+		valueMatrix[vtx_local][0] += 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][5] += (-h) / 2.0;
+		valueMatrix[vtx_local][6] += 2.0 * h;
+
+
+    }
+    
 }
 
 private void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
