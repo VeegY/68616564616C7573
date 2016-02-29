@@ -19,7 +19,7 @@ void cleanup(Scalar *pointer, int method);
 int GetNextPowerOf2(int n)
 {
     // Code works for 32bit and 64bit 
-    нннн - н - n;
+    нннн -- n;
     n |= n >> 1;
     n |= n >> 2;
     n |= n >> 4;
@@ -62,9 +62,8 @@ __global__ void gpu_dotproduct(type *one,type *two, type *result, int max_row_le
     }
 
 }
-atomicAdd(&solution[idx / n], matrix[idx]);
 
-//CHANGE!!!!
+/*//CHANGE!!!!
 template<typename type>
 void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option)
 {
@@ -142,7 +141,7 @@ void performance(float time_ku, float time_ou, float time_kz, float time_oz, int
 template void performance<int>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second, int mem_option);
 template void performance<float>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second, int mem_option);
 template void performance<double>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter, int meth, int ver_first, int ver_second, int mem_option);
-
+*/
 
 //PROPERTIES OF TEGRA K1
 void print_p()
@@ -191,7 +190,7 @@ template void allocation<double>(double **vecone, double **vectwo, double **resu
 //                          KERNEL
 //=============================================================================
 template<typename Scalar>
-void gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int max_row_length, int runs, int version, int mem_option);
+float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int max_row_length, int runs, int version, int mem_option);
 {
     Timer timer;
     float elapsed_time = 0.0;
@@ -345,9 +344,9 @@ void cleanup(Scalar *one, Scalar *two, Scalar *result, int method)
             break;
     }
 }
-template void cleanup<int>(int *one, int *two, int result, int method);
-template void cleanup<float>(float *one, float *two, float result, int method);
-template void cleanup<double>(double *one, double *two, double result, int method);
+template void cleanup<int>(int *one, int *two, int *result, int method);
+template void cleanup<float>(float *one, float *two, float *result, int method);
+template void cleanup<double>(double *one, double *two, double *result, int method);
 
 
 

@@ -33,14 +33,14 @@ void print_p();
 //template <typename type>
 //void cpu_ax(type *pointer);
 
-template<typename type>
-void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);
+/*template<typename type>
+void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);*/
 
 template<typename Scalar>
 void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int max_row_length, int version, int mem_option);
 
 template<typename Scalar>
-void gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int max_row_length, int runs, int version, int mem_option);
+float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int max_row_length, int runs, int version, int mem_option);
 
 /*DONE*/template<typename Scalar>
 void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int max_row_length, int mem_option)
