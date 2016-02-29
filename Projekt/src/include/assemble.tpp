@@ -2761,9 +2761,9 @@ template<typename Scalar>
 
             
 
-			int** indexMatrix = new int*[(int)A.get_dim_local];
-			double** valueMatrix = new double*[(int)A.get_dim_local];
-            for(int i=0;i< (int)A.get_dim_local;i++)
+			int** indexMatrix = new int*[(int)A.get_dim_local()];
+			double** valueMatrix = new double*[(int)A.get_dim_local()];
+            for(int i=0;i< A.get_dim_local();i++)
             {
                 indexMatrix[i] = new int[7];
                 valueMatrix[i] = new double[7];
