@@ -5,6 +5,7 @@ PROJECT(stuprotm1516)
 #========================================================================
 
 FILE(GLOB UNIT_TESTS "*_test.cpp")
+FILE(GLOB UNIT_MPITESTS "*_mpitest.cpp")
 
 
 #========================================================================
@@ -20,6 +21,17 @@ FOREACH(testpath ${UNIT_TESTS})
     TARGET_LINK_LIBRARIES(${testname} SRCLIB ${MPI_LIBRARIES})
     add_test(${testname} ${testname})
 ENDFOREACH(testpath)
+
+FOREACH(testpath ${UNIT_MPITESTS})
+    # nicht unbedingt optimal, aber es funktioniert fuers erste
+    string(REGEX REPLACE "([^ ]*)/tests/" "" filename ${testpath})
+    string(REPLACE ".cpp" "" testname ${filename})
+    add_executable(${testname} ${filename})
+    TARGET_LINK_LIBRARIES(${testname} SRCLIB ${MPI_LIBRARIES})
+    add_test(${testname} mpirun -np 4 ${testname})
+ENDFOREACH(testpath)
+
+
 
 
 #========================================================================
