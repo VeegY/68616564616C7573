@@ -1411,7 +1411,7 @@ namespace Icarus
 
 
 
-void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int start = 0;
     int end = nx*ny*nz -nx;
@@ -1464,7 +1464,7 @@ void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fro
     }
 }
 
-void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int start = nx-1;
     int end = nx*ny*nz-1;
@@ -1514,7 +1514,7 @@ void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fr
     }
 }
 
-void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 
     int start = nx*ny*(nz-1);
@@ -1569,7 +1569,7 @@ void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, in
 
 }
 
-void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 
     int start = 0;
@@ -1618,7 +1618,7 @@ void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron,
 
 }
 
-void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 
     //Hier fuer finde welche punkte im front panel liegen und
@@ -1689,7 +1689,7 @@ void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, 
 
 }
 
-void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     //Hier fuer finde welche punkte im back panel liegen und
     //fuelle alle die im bereich von fron..lron liegen.
@@ -1757,7 +1757,7 @@ void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, i
 
 }
 
-void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
@@ -1811,7 +1811,7 @@ void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int f
 
 }
 
-void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	int[] kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
@@ -1864,7 +1864,7 @@ void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int 
 
 }
 
-void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	int[] kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
@@ -1921,7 +1921,7 @@ void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
 
 }
 
-void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	;
     for(int i = 0;i < nz;i++)
@@ -1976,7 +1976,7 @@ void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int
 
 //Untere Kanten
 
-void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
@@ -2031,7 +2031,7 @@ void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int f
     }
 }
 
-void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
@@ -2086,7 +2086,7 @@ void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int 
     }
 }
 
-void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
@@ -2139,7 +2139,7 @@ void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
     }
 }
 
-void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
@@ -2194,7 +2194,7 @@ void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int 
 
 //Obere Kanten
 
-void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
@@ -2249,7 +2249,7 @@ void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fr
     }
 }
 
-void assembleKanteObenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteObenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
@@ -2304,7 +2304,7 @@ void assembleKanteObenHinten(int indexMatrix[][7], double valueMatrix[][7],int f
     }
 }
 
-void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
@@ -2357,7 +2357,7 @@ void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int f
     }
 }
 
-void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int[] kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
@@ -2413,7 +2413,7 @@ void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int f
 //Die Ecken:
 
 //Die unteren Ecken:
-void assembleEckeuntenvornelinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeuntenvornelinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	int Eckenidx = 0;
 
@@ -2453,7 +2453,7 @@ void assembleEckeuntenvornelinks(int indexMatrix[][7], double valueMatrix[][7],i
 }
 
 
-void assembleEckeuntenvornerechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeuntenvornerechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	if(nx-1 <= fron && nx-1 <= lron)
 	{
@@ -2495,7 +2495,7 @@ void assembleEckeuntenvornerechts(int indexMatrix[][7], double valueMatrix[][7],
 
 
 
-void assembleEckeuntenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeuntenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	if(nx*(ny - 1)  <= fron && nx*(ny - 1)  <= lron)
 	{
@@ -2536,7 +2536,7 @@ void assembleEckeuntenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],
 }
 
 
-void assembleEckeuntenhintenrechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeuntenhintenrechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	if(nx*ny - 1 <= fron && nx*ny - 1 <= lron)
 	{
@@ -2577,7 +2577,7 @@ void assembleEckeuntenhintenrechts(int indexMatrix[][7], double valueMatrix[][7]
 }
 
 //die oberen ecken:
-void assembleEckeObenvornelinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeObenvornelinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
 	int Eckenidx = 0+nx*ny*(nz-1);
 
@@ -2617,7 +2617,7 @@ void assembleEckeObenvornelinks(int indexMatrix[][7], double valueMatrix[][7],in
 }
 
 
-void assembleEckeObenvornerechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeObenvornerechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int Eckenidx = nx-1+(nx*ny*(nz-1));
 	if(Eckenidx <= fron && Eckenidx <= lron)
@@ -2660,7 +2660,7 @@ void assembleEckeObenvornerechts(int indexMatrix[][7], double valueMatrix[][7],i
 
 
 
-void assembleEckeObenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeObenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int Eckenidx = nx*(ny - 1) +nx*ny*(nz-1);
 	if(Eckenidx <= fron && Eckenidx  <= lron)
@@ -2702,7 +2702,7 @@ void assembleEckeObenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],i
 }
 
 
-void assembleEckeObenhintenrechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeObenhintenrechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize,double h)
 {
     int Eckenidx = nx*ny - 1 +nx*ny*(nz-1);
 	if(Eckenidx <= fron && Eckenidx <= lron)
@@ -2759,8 +2759,8 @@ template<typename Scalar>
 			size_t fron = A.first_row_on_node();
 			size_t lron = fron + A.get_dim_local() - 1;
 
-			int indexMatrix[][] = new int[A.get_dim_local()][7];
-			double valueMatrix[][] = new double[A.get_dim_local()][7];
+			int indexMatrix[][] = new int[(int)A.get_dim_local()][7];
+			double valueMatrix[][] = new double[(int)A.get_dim_local()][7];
             int msize = A.get_dim_local();
 
 			//Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe
@@ -2794,46 +2794,46 @@ template<typename Scalar>
 
             //Fuelle nun die Seiten:
             //Links
-            assembleLeftSidePanel(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleLeftSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h);
             //Rechts
-            assembleRightSidePanel(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleRightSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h);
             //oben
-            assembleTopPanel(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleTopPanel(indexMatrix,valueMatrix,fron,lron,msize,h);
             //unten
-            assembleBottomPanel(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleBottomPanel(indexMatrix,valueMatrix,fron,lron,msize,h);
             //vorne
-            assembleFrontPanel(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleFrontPanel(indexMatrix,valueMatrix,fron,lron,msize,h);
             //hinten
-            assembleBackPanel(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleBackPanel(indexMatrix,valueMatrix,fron,lron,msize,h);
 
             //Fuelle nun die Kanten:
             //untere Kanten
-            assembleKanteUntenHinten(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteUntenRechts(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteUntenVorne(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteUntenHinten(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteUntenRechts(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteUntenVorne(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h);
             //mittlere Kanten
-            assembleKanteHintenLinks(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteHintenRechts(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteVorneRechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteHintenLinks(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteHintenRechts(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteVorneRechts(indexMatrix,valueMatrix,fron,lron,msize,h);
             //obere Kanten
-            assembleKanteObenHinten(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKantenObenLinks(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteObenHinten(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKantenObenLinks(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h);
 
             //Fuelle nun die Ecken:
             //untere ecken:
-            assembleEckeuntenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleEckeuntenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleEckeuntenvornelinks(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleEckeuntenvornerechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeuntenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleEckeuntenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleEckeuntenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleEckeuntenvornerechts(indexMatrix,valueMatrix,fron,lron,msize,h);
             //obere ecken:
-            assembleEckeObenvornerechts(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleEckeObenvornelinks(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize);
-            assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeObenvornerechts(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleEckeObenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h);
+            assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h);
 
             A.prepare_sequential_fill(7);
             for(int i =0;i< msize;i++)
