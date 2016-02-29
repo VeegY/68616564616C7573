@@ -18,7 +18,7 @@ INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 
 ADD_SUBDIRECTORY(src_ax)
-#ADD_SUBDIRECTORY(src_dotproduct)
+ADD_SUBDIRECTORY(src_dotproduct)
 #ADD_SUBDIRECTORY(src_gradient)
 #ADD_SUBDIRECTORY(src_l2norm)
 
