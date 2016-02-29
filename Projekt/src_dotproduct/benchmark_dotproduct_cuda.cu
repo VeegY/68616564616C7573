@@ -32,7 +32,7 @@ __global__ void gpu_dotproduct(type *one,type *two, type *result, int dim_local)
     __syncthreads();
 
     //reduce kernel
-    for (int offset = pow / 2; offset >0; offset >>= 1)
+    for (int offset = blockDim.x / 2; offset >0; offset >>= 1)
     {
         if (idx < offset)
         {
