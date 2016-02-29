@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <cmath>
-namespace Icarus;
+namespace Icarus
 {
 
 
