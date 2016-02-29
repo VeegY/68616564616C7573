@@ -2,7 +2,7 @@
 //Kann man nachher natürlich abändern
 
 int Nx=3;
-int Ny=10;
+int Ny=4;
 int Nz=5;
 int h=1;
 int z=Nx*Ny;
@@ -237,7 +237,7 @@ void assemble_FEM(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
     }
 
     //Ecke 8
-    i=(z-1)*y;
+    i=(Nx*Ny*Nz)-Nx;
     Zeile++;
     if(Dirichlet)
     {
@@ -334,7 +334,7 @@ void assemble_FEM(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
     //Kante 3:
     for(int j=1; j<Nx-1; j++)
     {
-        i=(z-1)*y + j;
+        i=Nx*Nz*Ny-Nx + j;
         Zeile++;
         if(Dirichlet)
         {
@@ -526,7 +526,7 @@ void assemble_FEM(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
     //Kante 9:
     for(int j=1; j<Nz-1; j++)
     {
-        i=(Nz-1)*z + j*y;
+        i = j*z;
         Zeile++;
         if(Dirichlet)
         {
@@ -590,7 +590,7 @@ void assemble_FEM(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
     //Kante 11:
     for(int j=1; j<Nz-1; j++)
     {
-        i=y-1 + j*z;
+        i = z-1 + j*z;
         Zeile++;
         if(Dirichlet)
         {

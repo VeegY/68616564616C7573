@@ -18,9 +18,9 @@ int main()
     sol.clear();
 
     Icarus::assemble_FEM(matrix, rhs);
-/*
+
 	Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(matrix, rhs);
     solver.solve(sol);
-    */
+
     return 0;
 }
