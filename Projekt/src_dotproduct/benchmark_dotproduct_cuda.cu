@@ -16,22 +16,6 @@
 template <typename Scalar>
 void cleanup(Scalar *pointer, int method);
 
-int GetNextPowerOf2(int n)
-{
-    // Code works for 32bit and 64bit 
-    ญญญญn -= 1;
-    printf("%n test n\n", n);
-    n |= n >> 1;
-    n |= n >> 2;
-    n |= n >> 4;
-    n |= n >> 8;
-    n |= n >> 16; 
-    n |= n >> 16; 
-    n |= n >> 16; 
-                  
-    return n + 1;
-}
-
 //KERNEL!!!
 template<typename type>
 __global__ void gpu_dotproduct(type *one,type *two, type *result, int dim_local)
@@ -199,7 +183,15 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
     int num_threads = 1024;
     if (dim_local<1024)
     {
-        num_threads = GetNextPowerOf2(dim_local);
+        int n = dim_local-1;
+        n |= n >> 1;
+        n |= n >> 2;
+        n |= n >> 4;
+        n |= n >> 8;
+        n |= n >> 16;
+        n |= n >> 16;
+        n |= n >> 16;
+        num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
     printf("%f -- %f", num_threads, num_blocks);
