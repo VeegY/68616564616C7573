@@ -1,3 +1,6 @@
+#include <iostream>
+
+
 #include "assemble.hpp"
 
 namespace Icarus
@@ -95,7 +98,7 @@ namespace Icarus
 			size_t lron = fron + A.get_dim_local() - 1;
 
 			A.prepare_sequential_fill(7);
-			
+
 			for (size_t vtx_global = fron; vtx_global <= lron; vtx_global++)
 			{
 				std::vector<int> index = { 0, 0, 0, 0, 0, 0, 0 };
@@ -104,14 +107,14 @@ namespace Icarus
 				//vereinfacht den Zugriff auf die Array-Elemente
 				int i = vtx_global + 1;
 
-				//Überprüfung der Position
+				//ÃœberprÃ¼fung der Position
 				if (i <= nx*ny) //Boden
 				{
 					if (i == 1) //vorderer unterer linker Eckpunkt
-					{	
+					{
 						//Dirichlet Randwert in der vorderen unteren linken Ecke
 						A.sequential_fill(0, 1);
-						
+
 						index[0] = vtx_global;
 						index[1] = vtx_global + 1;
 						index[2] = vtx_global + 2;
@@ -120,7 +123,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
@@ -169,7 +172,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
@@ -218,7 +221,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
@@ -266,7 +269,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
@@ -314,7 +317,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differezenquotient in x-Richtung möglich
+						//zentraler Differezenquotient in x-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -325,7 +328,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in x-Richtung möglich
+						////zentraler Differezenquotient in x-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+1] = 1.0;
 						//zeile[vtx_global-1] = 1.0;
@@ -362,7 +365,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differezenquotient in x-Richtung möglich
+						//zentraler Differezenquotient in x-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -373,7 +376,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in x-Richtung möglich
+						////zentraler Differezenquotient in x-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+1] = 1.0;
 						//zeile[vtx_global-1] = 1.0;
@@ -393,7 +396,7 @@ namespace Icarus
 						wert[5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
 						wert[6] += 1.0 / sqrt(2.0) * 2.0 * h;
 
-						//zeile[vtx_global] += 0*1.0/sqrt(2.0)*3.0/2.0*h;		
+						//zeile[vtx_global] += 0*1.0/sqrt(2.0)*3.0/2.0*h;
 						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
 						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
 						//zeile[vtx_global+nx*ny] += 1.0/sqrt(2.0)*(-h)/2.0;
@@ -410,7 +413,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differezenquotient in y-Richtung möglich
+						//zentraler Differezenquotient in y-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -421,7 +424,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in y-Richtung möglich
+						////zentraler Differezenquotient in y-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx] = 1.0;
 						//zeile[vtx_global-nx] = 1.0;
@@ -458,7 +461,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						//zentraler Differezenquotient in y-Richtung möglich
+						//zentraler Differezenquotient in y-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -469,7 +472,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in y-Richtung möglich
+						////zentraler Differezenquotient in y-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx] = 1.0;
 						//zeile[vtx_global-nx] = 1.0;
@@ -506,7 +509,7 @@ namespace Icarus
 						index[5] = vtx_global + nx*ny;
 						index[6] = vtx_global + 2 * nx*ny;
 
-						////zentraler Differenzenquotient in x/y-Richtung möglich
+						////zentraler Differenzenquotient in x/y-Richtung mÃ¶glich
 
 						wert[0] = -4.0;
 						wert[1] = 1.0;
@@ -518,7 +521,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in x/y-Richtung möglich
+						////zentraler Differenzenquotient in x/y-Richtung mÃ¶glich
 						//zeile[vtx_global] = -4.0;
 						//zeile[vtx_global+1] = 1.0;
 						//zeile[vtx_global-1] = 1.0;
@@ -555,7 +558,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
 						wert[2] = 17.0 / 38.0;
@@ -564,7 +567,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in keine Richtung möglich
+						////zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						//zeile[vtx_global] = 3.0*11.0/38.0;
 						//zeile[vtx_global+1] = -28.0/38.0;
 						//zeile[vtx_global+2] = 17.0/38.0;
@@ -603,7 +606,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
 						wert[2] = 17.0 / 38.0;
@@ -612,7 +615,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in keine Richtung möglich
+						////zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						//zeile[vtx_global] = 3.0*11.0/38.0;
 						//zeile[vtx_global-1] = -28.0/38.0;
 						//zeile[vtx_global-2] = 17.0/38.0;
@@ -651,7 +654,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
 						wert[2] = 17.0 / 38.0;
@@ -660,7 +663,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in keine Richtung möglich
+						////zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						//zeile[vtx_global] = 3.0*11.0/38.0;
 						//zeile[vtx_global+1] = -28.0/38.0;
 						//zeile[vtx_global+2] = 17.0/38.0;
@@ -699,7 +702,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differenzenquotient in keine Richtung möglich
+						//zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						wert[0] = 3.0 * 11.0 / 38.0;
 						wert[1] = -28.0 / 38.0;
 						wert[2] = 17.0 / 38.0;
@@ -708,7 +711,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in keine Richtung möglich
+						////zentraler Differenzenquotient in keine Richtung mÃ¶glich
 						//zeile[vtx_global] = 3.0*11.0/38.0;
 						//zeile[vtx_global-1] = -28.0/38.0;
 						//zeile[vtx_global-2] = 17.0/38.0;
@@ -747,7 +750,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differezenquotient in x-Richtung möglich
+						//zentraler Differezenquotient in x-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -758,7 +761,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in x-Richtung möglich
+						////zentraler Differezenquotient in x-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+1] = 1.0;
 						//zeile[vtx_global-1] = 1.0;
@@ -795,7 +798,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differezenquotient in x-Richtung möglich
+						//zentraler Differezenquotient in x-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -806,7 +809,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in x-Richtung möglich
+						////zentraler Differezenquotient in x-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+1] = 1.0;
 						//zeile[vtx_global-1] = 1.0;
@@ -843,7 +846,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differezenquotient in y-Richtung möglich
+						//zentraler Differezenquotient in y-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -854,7 +857,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in y-Richtung möglich
+						////zentraler Differezenquotient in y-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx] = 1.0;
 						//zeile[vtx_global-nx] = 1.0;
@@ -891,7 +894,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differezenquotient in y-Richtung möglich
+						//zentraler Differezenquotient in y-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -902,7 +905,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differezenquotient in y-Richtung möglich
+						////zentraler Differezenquotient in y-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx] = 1.0;
 						//zeile[vtx_global-nx] = 1.0;
@@ -939,7 +942,7 @@ namespace Icarus
 						index[5] = vtx_global - nx*ny;
 						index[6] = vtx_global - 2 * nx*ny;
 
-						//zentraler Differenzenquotient in x/y-Richtung möglich
+						//zentraler Differenzenquotient in x/y-Richtung mÃ¶glich
 						wert[0] = -4.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -950,7 +953,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in x/y-Richtung möglich
+						////zentraler Differenzenquotient in x/y-Richtung mÃ¶glich
 						//zeile[vtx_global] = -4.0;
 						//zeile[vtx_global+1] = 1.0;
 						//zeile[vtx_global-1] = 1.0;
@@ -987,7 +990,7 @@ namespace Icarus
 						index[5] = vtx_global + nx;
 						index[6] = vtx_global + 2 * nx;
 
-						//zentraler Differenzenquotient nur in z-Richtung möglich
+						//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -998,7 +1001,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient nur in z-Richtung möglich
+						////zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx*ny] = 1.0;
 						//zeile[vtx_global-nx*ny] = 1.0;
@@ -1036,7 +1039,7 @@ namespace Icarus
 						index[5] = vtx_global + nx;
 						index[6] = vtx_global + 2 * nx;
 
-						//zentraler Differenzenquotient nur in z-Richtung möglich
+						//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -1047,7 +1050,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient nur in z-Richtung möglich
+						////zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx*ny] = 1.0;
 						//zeile[vtx_global-nx*ny] = 1.0;
@@ -1071,7 +1074,7 @@ namespace Icarus
 						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
 						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
 						//zeile[vtx_global+nx] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(2.0) *2.0*h;			
+						//zeile[vtx_global+2*nx] += 1.0/sqrt(2.0) *2.0*h;
 					}
 
 					else //vordere "innere" Seite
@@ -1084,7 +1087,7 @@ namespace Icarus
 						index[5] = vtx_global + nx;
 						index[6] = vtx_global + 2 * nx;
 
-						//zentraler Differenzenquotient in x/z-Richtung möglich
+						//zentraler Differenzenquotient in x/z-Richtung mÃ¶glich
 						wert[0] = -4.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -1095,7 +1098,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in x/z-Richtung möglich
+						////zentraler Differenzenquotient in x/z-Richtung mÃ¶glich
 						//zeile[vtx_global] = -4.0;
 						//zeile[vtx_global+nx*ny] = 1.0;
 						//zeile[vtx_global-nx*ny] = 1.0;
@@ -1131,7 +1134,7 @@ namespace Icarus
 						index[5] = vtx_global - nx;
 						index[6] = vtx_global - 2 * nx;
 
-						//zentraler Differenzenquotient nur in z-Richtung möglich
+						//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -1142,7 +1145,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient nur in z-Richtung möglich
+						////zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx*ny] = 1.0;
 						//zeile[vtx_global-nx*ny] = 1.0;
@@ -1180,7 +1183,7 @@ namespace Icarus
 						index[5] = vtx_global - nx;
 						index[6] = vtx_global - 2 * nx;
 
-						//zentraler Differenzenquotient nur in z-Richtung möglich
+						//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						wert[0] = -2.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -1191,7 +1194,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient nur in z-Richtung möglich
+						////zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 						//zeile[vtx_global] = -2.0;
 						//zeile[vtx_global+nx*ny] = 1.0;
 						//zeile[vtx_global-nx*ny] = 1.0;
@@ -1227,7 +1230,7 @@ namespace Icarus
 						index[5] = vtx_global - nx;
 						index[6] = vtx_global - 2 * nx;
 
-						//zentraler Differenzenquotient in x/z-Richtung möglich
+						//zentraler Differenzenquotient in x/z-Richtung mÃ¶glich
 						wert[0] = -4.0;
 						wert[1] = 1.0;
 						wert[2] = 1.0;
@@ -1238,7 +1241,7 @@ namespace Icarus
 						wert[5] = -28.0 / 38.0;
 						wert[6] = 17.0 / 38.0;
 
-						////zentraler Differenzenquotient in x/z-Richtung möglich
+						////zentraler Differenzenquotient in x/z-Richtung mÃ¶glich
 						//zeile[vtx_global] = -4.0;
 						//zeile[vtx_global+nx*ny] = 1.0;
 						//zeile[vtx_global-nx*ny] = 1.0;
@@ -1271,7 +1274,7 @@ namespace Icarus
 					index[5] = vtx_global + 1;
 					index[6] = vtx_global + 2;
 
-					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					//zentraler Differenzenquotient ist nur in x-Richtung nicht mÃ¶glich, deshalb zuerst normal in y/z-Richtung
 					wert[0] = -4.0;
 					wert[1] = 1.0;
 					wert[2] = 1.0;
@@ -1282,7 +1285,7 @@ namespace Icarus
 					wert[5] = -28.0 / 38.0;
 					wert[6] = 17.0 / 38.0;
 
-					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					////zentraler Differenzenquotient ist nur in x-Richtung nicht mÃ¶glich, deshalb zuerst normal in y/z-Richtung
 					//zeile[vtx_global] = -4.0;
 					//zeile[vtx_global+nx] = 1.0;
 					//zeile[vtx_global-nx] = 1.0;
@@ -1315,7 +1318,7 @@ namespace Icarus
 					index[5] = vtx_global - 1;
 					index[6] = vtx_global - 2;
 
-					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					//zentraler Differenzenquotient ist nur in x-Richtung nicht mÃ¶glich, deshalb zuerst normal in y/z-Richtung
 					wert[0] = -4.0;
 					wert[1] = 1.0;
 					wert[2] = 1.0;
@@ -1326,7 +1329,7 @@ namespace Icarus
 					wert[5] = -28.0 / 38.0;
 					wert[6] = 17.0 / 38.0;
 
-					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					////zentraler Differenzenquotient ist nur in x-Richtung nicht mÃ¶glich, deshalb zuerst normal in y/z-Richtung
 					//zeile[vtx_global] = -4.0;
 					//zeile[vtx_global+nx] = 1.0;
 					//zeile[vtx_global-nx] = 1.0;
@@ -1359,7 +1362,7 @@ namespace Icarus
 					index[5] = vtx_global + nx*ny;
 					index[6] = vtx_global - nx*ny;
 
-					//zentraler Differenzenquotient in alle Richtung möglich
+					//zentraler Differenzenquotient in alle Richtung mÃ¶glich
 					wert[0] = -6.0;
 					wert[1] = 1.0;
 					wert[2] = 1.0;
@@ -1368,7 +1371,7 @@ namespace Icarus
 					wert[5] = 1.0;
 					wert[6] = 1.0;
 
-					////zentraler Differenzenquotient in alle Richtung möglich
+					////zentraler Differenzenquotient in alle Richtung mÃ¶glich
 					//zeile[vtx_global] = -6.0;
 					//zeile[vtx_global+1] = 1.0;
 					//zeile[vtx_global-1] = 1.0;
@@ -1387,39 +1390,39 @@ namespace Icarus
 			}
 			return { A, rhs };
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int start = 0;
     int end = nx*ny*nz -nx;
-           
-            
+
+
     while(start < fron)
     {
         start += nx;
-                
+
     }
-            
+
     while(end > lron)
     {
         end -= nx;
@@ -1437,7 +1440,7 @@ void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fro
 		indexMatrix[vtx_local][4] = vtx_global - nx*ny;
 		indexMatrix[vtx_local][5] = vtx_global + 1;
 		indexMatrix[vtx_local][6] = vtx_global + 2;
-		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+		//zentraler Differenzenquotient ist nur in x-Richtung nicht mÃ¶glich, deshalb zuerst normal in y/z-Richtung
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1448,7 +1451,7 @@ void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fro
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		
+
 
 		//NeumannRB, Normalenvektor ist (1,0,0)
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
@@ -1457,22 +1460,22 @@ void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fro
 		valueMatrix[vtx_local][5] += (-h) / 2.0;
 		valueMatrix[vtx_local][6] += 2.0 * h;
 
-		
-    }   
+
+    }
 }
 
 void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int start = nx-1;
     int end = nx*ny*nz-1;
-           
-            
+
+
     while(start < fron)
     {
         start += nx;
-                
+
     }
-            
+
     while(end > lron)
     {
         end -= nx;
@@ -1491,7 +1494,7 @@ void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fr
 		indexMatrix[vtx_local][5] = vtx_global - 1;
 		indexMatrix[vtx_local][6] = vtx_global - 2;
 
-		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+		//zentraler Differenzenquotient ist nur in x-Richtung nicht mÃ¶glich, deshalb zuerst normal in y/z-Richtung
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1508,7 +1511,7 @@ void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fr
 		valueMatrix[vtx_local][5] += (-1.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += (-1.0) * 2.0 * h;
 
-    }   
+    }
 }
 
 void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
@@ -1538,7 +1541,7 @@ void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, in
 		indexMatrix[vtx_local][5] = vtx_global - nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
 
-		//zentraler Differenzenquotient in x/y-Richtung möglich
+		//zentraler Differenzenquotient in x/y-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1549,7 +1552,7 @@ void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, in
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-						
+
 		//NeumannRB, Normalenvektor ist (0,0,-1))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 
@@ -1562,7 +1565,7 @@ void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, in
 		//zeile[vtx_global-2*nx*ny] += (-1.0)*2.0*h;
 
     }
-    
+
 
 }
 
@@ -1592,7 +1595,7 @@ void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron,
 		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
 
-		////zentraler Differenzenquotient in x/y-Richtung möglich
+		////zentraler Differenzenquotient in x/y-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1603,7 +1606,7 @@ void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron,
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		
+
 		//NeumannRB, Normalenvektor ist (0,0,1))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 		valueMatrix[vtx_local][0] += 3.0 / 2.0 * h;
@@ -1612,7 +1615,7 @@ void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron,
 
 
     }
-    
+
 }
 
 void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
@@ -1629,15 +1632,15 @@ void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, 
             frontPanelIdxs[iz*nx+ix] = idx;
         }
     }
-    
-    
+
+
     int idxStart =0;
     int start =frontPanelIdxs[idxStart];
     while(start < fron)
     {
         idxStart++;
         start = frontPanelIdxs[idxStartdx];
-        
+
     }
 
     int idxEnd = nx*nz-1;
@@ -1646,7 +1649,7 @@ void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, 
     {
         idxEnd--;
         end = frontPanelIdxs[idxEnd];
-        
+
     }
 
     //Alle Benoetigten idx's liegen zwischen idxStart und idxEnd
@@ -1663,7 +1666,7 @@ void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, 
 		indexMatrix[vtx_local][4] = vtx_global - 1;
 		indexMatrix[vtx_local][5] = vtx_global + nx;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx;
-    	//zentraler Differenzenquotient in x/z-Richtung möglich
+    	//zentraler Differenzenquotient in x/z-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1673,7 +1676,7 @@ void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, 
 		valueMatrix[vtx_local][0] += 11.0 / 38.0;
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
-					
+
 
 		//NeumannRB, Normalenvektor ist (0,1,0)
 	    //RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
@@ -1699,15 +1702,15 @@ void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, i
             backPanelIdxs[iz*nx+ix] = idx;
         }
     }
-    
-    
+
+
     int idxStart =0;
     int start =backPanelIdxs[idxStart];
     while(start < fron)
     {
         idxStart++;
         start = backPanelIdxs[idxStartdx];
-        
+
     }
 
     int idxEnd = nx*nz-1;
@@ -1716,7 +1719,7 @@ void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, i
     {
         idxEnd--;
         end = backPanelIdxs[idxEnd];
-        
+
     }
 
     //Alle benoetigten idx's liegen zwischen idxStart und idxEnd
@@ -1733,7 +1736,7 @@ void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, i
 		indexMatrix[vtx_local][5] = vtx_global - nx;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx;
 
-		//zentraler Differenzenquotient in x/z-Richtung möglich
+		//zentraler Differenzenquotient in x/z-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1785,7 +1788,7 @@ void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int f
 		indexMatrix[vtx_local][4] = vtx_global + 2;
 		indexMatrix[vtx_local][5] = vtx_global + nx;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx;
-		//zentraler Differenzenquotient nur in z-Richtung möglich
+		//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1838,7 +1841,7 @@ void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int 
 		indexMatrix[vtx_local][4] = vtx_global - 2;
 		indexMatrix[vtx_local][5] = vtx_global + nx;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx;
-		//zentraler Differenzenquotient nur in z-Richtung möglich
+		//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1893,7 +1896,7 @@ void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
 		indexMatrix[vtx_local][4] = vtx_global + 2;
 		indexMatrix[vtx_local][5] = vtx_global - nx;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx;
-		//zentraler Differenzenquotient nur in z-Richtung möglich
+		//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1949,7 +1952,7 @@ void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int
 		indexMatrix[vtx_local][4] = vtx_global - 2;
 		indexMatrix[vtx_local][5] = vtx_global - nx;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx;
-		//zentraler Differenzenquotient nur in z-Richtung möglich
+		//zentraler Differenzenquotient nur in z-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1994,7 +1997,7 @@ void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int f
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-    
+
         int vtx_global = idx;
         int vtx_local = vtx_global - fron;
         //Fuelle wie in Kante unten Vorne
@@ -2006,7 +2009,7 @@ void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int f
 		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
 
-		//zentraler Differezenquotient in x-Richtung möglich
+		//zentraler Differezenquotient in x-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2017,7 +2020,7 @@ void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int f
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		
+
 		//NeumannRB, Normalenvektor ist (0,1/sqrt(2),1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
@@ -2049,10 +2052,10 @@ void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int 
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-    
+
         int vtx_global = idx;
-        int vtx_local = vtx_global - fron;  
-        
+        int vtx_local = vtx_global - fron;
+
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + 1;
 		indexMatrix[vtx_local][2] = vtx_global - 1;
@@ -2061,7 +2064,7 @@ void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int 
 		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
 
-		//zentraler Differezenquotient in x-Richtung möglich
+		//zentraler Differezenquotient in x-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2104,9 +2107,9 @@ void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-    
+
         int vtx_global = idx;
-        int vtx_local = vtx_global - fron;  
+        int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
 		indexMatrix[vtx_local][2] = vtx_global - nx;
@@ -2114,7 +2117,7 @@ void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
 		indexMatrix[vtx_local][4] = vtx_global + 2;
 		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-		//zentraler Differezenquotient in y-Richtung möglich
+		//zentraler Differezenquotient in y-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2133,7 +2136,7 @@ void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int 
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;
 
-    }    
+    }
 }
 
 void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
@@ -2158,7 +2161,7 @@ void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
         int vtx_global = idx;
-        int vtx_local = vtx_global - fron; 
+        int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
 		indexMatrix[vtx_local][2] = vtx_global - nx;
@@ -2167,7 +2170,7 @@ void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int 
 		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
 
-		//zentraler Differezenquotient in y-Richtung möglich
+		//zentraler Differezenquotient in y-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2185,7 +2188,7 @@ void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int 
 		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;       
+		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;
     }
 }
 
@@ -2212,7 +2215,7 @@ void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fr
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-    
+
         int vtx_global = idx;
         int vtx_local = vtx_global - fron;
         //Fuelle wie in Kante unten Vorne
@@ -2224,7 +2227,7 @@ void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fr
 		indexMatrix[vtx_local][5] = vtx_global - nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
 
-		//zentraler Differezenquotient in x-Richtung möglich
+		//zentraler Differezenquotient in x-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2235,7 +2238,7 @@ void assembleKanteObenVorne(int indexMatrix[][7], double valueMatrix[][7],int fr
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		
+
 		//NeumannRB, Normalenvektor ist (0,1/sqrt(2),-1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
@@ -2267,10 +2270,10 @@ void assembleKanteObenHinten(int indexMatrix[][7], double valueMatrix[][7],int f
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-    
+
         int vtx_global = idx;
-        int vtx_local = vtx_global - fron;  
-        
+        int vtx_local = vtx_global - fron;
+
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + 1;
 		indexMatrix[vtx_local][2] = vtx_global - 1;
@@ -2279,7 +2282,7 @@ void assembleKanteObenHinten(int indexMatrix[][7], double valueMatrix[][7],int f
 		indexMatrix[vtx_local][5] = vtx_global - nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
 
-		//zentraler Differezenquotient in x-Richtung möglich
+		//zentraler Differezenquotient in x-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2322,9 +2325,9 @@ void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int f
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-    
+
         int vtx_global = idx;
-        int vtx_local = vtx_global - fron;  
+        int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
 		indexMatrix[vtx_local][2] = vtx_global - nx;
@@ -2332,7 +2335,7 @@ void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int f
 		indexMatrix[vtx_local][4] = vtx_global + 2;
 		indexMatrix[vtx_local][5] = vtx_global - nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
-		//zentraler Differezenquotient in y-Richtung möglich
+		//zentraler Differezenquotient in y-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2351,7 +2354,7 @@ void assembleKantenObenLinks(int indexMatrix[][7], double valueMatrix[][7],int f
 		valueMatrix[vtx_local][5] -= 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] -= 1.0 / sqrt(2.0) * 2.0 * h;
 
-    }    
+    }
 }
 
 void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
@@ -2376,7 +2379,7 @@ void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int f
     for(int idx = startidx; idx <= endidx ;idx++)
     {
         int vtx_global = idx;
-        int vtx_local = vtx_global - fron; 
+        int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
 		indexMatrix[vtx_local][2] = vtx_global - nx;
@@ -2385,7 +2388,7 @@ void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int f
 		indexMatrix[vtx_local][5] = vtx_global - nx*ny;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
 
-		//zentraler Differezenquotient in y-Richtung möglich
+		//zentraler Differezenquotient in y-Richtung mÃ¶glich
 		valueMatrix[vtx_local][0] = -2.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -2403,7 +2406,7 @@ void assembleKanteObenRechts(int indexMatrix[][7], double valueMatrix[][7],int f
 		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += -1.0 / sqrt(2.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][6] += -1.0 / sqrt(2.0) * 2.0 * h;       
+		valueMatrix[vtx_local][6] += -1.0 / sqrt(2.0) * 2.0 * h;
     }
 }
 
@@ -2426,8 +2429,8 @@ void assembleEckeuntenvornelinks(int indexMatrix[][7], double valueMatrix[][7],i
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2466,8 +2469,8 @@ void assembleEckeuntenvornerechts(int indexMatrix[][7], double valueMatrix[][7],
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2508,8 +2511,8 @@ void assembleEckeuntenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],
 		indexMatrix[vtx_local][4] = vtx_global - 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2549,8 +2552,8 @@ void assembleEckeuntenhintenrechts(int indexMatrix[][7], double valueMatrix[][7]
 		indexMatrix[vtx_local][4] = vtx_global - 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2590,8 +2593,8 @@ void assembleEckeObenvornelinks(int indexMatrix[][7], double valueMatrix[][7],in
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global - nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2614,12 +2617,12 @@ void assembleEckeObenvornelinks(int indexMatrix[][7], double valueMatrix[][7],in
 }
 
 
-void assembleEckeuntenvornerechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeObenvornerechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int Eckenidx = nx-1+(nx*ny*(nz-1));
 	if(Eckenidx <= fron && Eckenidx <= lron)
 	{
-		
+
 
 		vtx_global = Eckenidx;
 		vtx_local = vtx_global - fron;
@@ -2631,8 +2634,8 @@ void assembleEckeuntenvornerechts(int indexMatrix[][7], double valueMatrix[][7],
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global - nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2657,12 +2660,12 @@ void assembleEckeuntenvornerechts(int indexMatrix[][7], double valueMatrix[][7],
 
 
 
-void assembleEckeuntenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeObenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int Eckenidx = nx*(ny - 1) +nx*ny*(nz-1);
 	if(Eckenidx <= fron && Eckenidx  <= lron)
 	{
-		
+
 
 		vtx_global = Eckenidx;
 		vtx_local = vtx_global - fron;
@@ -2674,8 +2677,8 @@ void assembleEckeuntenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],
 		indexMatrix[vtx_local][4] = vtx_global - 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global - nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2699,12 +2702,12 @@ void assembleEckeuntenhintenlinks(int indexMatrix[][7], double valueMatrix[][7],
 }
 
 
-void assembleEckeuntenhintenrechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleEckeObenhintenrechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int Eckenidx = nx*ny - 1 +nx*ny*(nz-1);
 	if(Eckenidx <= fron && Eckenidx <= lron)
 	{
-		
+
 
 		vtx_global = Eckenidx;
 		vtx_local = vtx_global - fron;
@@ -2716,8 +2719,8 @@ void assembleEckeuntenhintenrechts(int indexMatrix[][7], double valueMatrix[][7]
 		indexMatrix[vtx_local][4] = vtx_global - 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global - nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global - 2 * nx*ny;
-		
-		//zentraler Differenzenquotient gar nicht möglich
+
+		//zentraler Differenzenquotient gar nicht mÃ¶glich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
 		valueMatrix[vtx_local][1] = -28.0/38.0;
@@ -2739,9 +2742,9 @@ void assembleEckeuntenhintenrechts(int indexMatrix[][7], double valueMatrix[][7]
 		valueMatrix[vtx_local][6] += (-1.0) / sqrt(3.0) * 2.0 * h;
 	}
 }
-		
-		
-			
+
+
+
 template<typename Scalar>
 	std::pair < DistEllpackMatrix<Scalar>,
 		SlicedVector < Scalar >>
@@ -2755,12 +2758,13 @@ template<typename Scalar>
 
 			size_t fron = A.first_row_on_node();
 			size_t lron = fron + A.get_dim_local() - 1;
-			
+
 			int[][] indexMatrix = new int[A.get_dim_local()][7];
 			double[][] valueMatrix = new double[A.get_dim_local()][7];
+            int msize = A.get_dim_local();
 
-			//Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe 
-			//danach die Seiten und Ecken.
+			//Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe
+			//danach die Seiten danach Kanten danach Ecken.
 
 			//Das Innere
 			for(int i =0;i<A.get_dim_local();i++)
@@ -2774,7 +2778,7 @@ template<typename Scalar>
 				indexMatrix[i][5] = vtx_global + nx*ny;
 				indexMatrix[i][6] = vtx_global - nx*ny;
 
-				//zentraler Differenzenquotient in alle Richtung möglich
+				//zentraler Differenzenquotient in alle Richtung mÃ¶glich
 				valueMatrix[i][0] = -6.0;
 				valueMatrix[i][1] = 1.0;
 				valueMatrix[i][2] = 1.0;
@@ -2783,1454 +2787,67 @@ template<typename Scalar>
 				valueMatrix[i][5] = 1.0;
 				valueMatrix[i][6] = 1.0;
 
-				////zentraler Differenzenquotient in alle Richtung möglich
+				////zentraler Differenzenquotient in alle Richtung mÃ¶glich
                 //keine RB
-		    
-			}
 
-			A.prepare_sequential_fill(7);
+			}
 
             //Fuelle nun die Seiten:
             //Links
-
-            //Rechts 
-
+            assembleLeftSidePanel(indexMatrix,valueMatrix,fron,lron,msize);
+            //Rechts
+            assembleRightSidePanel(indexMatrix,valueMatrix,fron,lron,msize);
             //oben
-
+            assembleTopPanel(indexMatrix,valueMatrix,fron,lron,msize);
             //unten
-
+            assembleBottomPanel(indexMatrix,valueMatrix,fron,lron,msize);
             //vorne
-
+            assembleFrontPanel(indexMatrix,valueMatrix,fron,lron,msize);
             //hinten
-			
-			//Fuelle Eckpunkte: (Bei Eckpunkten sind (eher) if's OK (da nur 1 Punkt))
-			//Ecke vorne unten links
-			if(fron == 0)
-			{
-			    int vtx_global = 0;
-			    int vtx_local = vtx_global -fron;    
-			    //Dirichlet Randwert in der vorderen unteren linken Ecke
-				A.sequential_fill(0, 1);
-			    
-				indexMatrix[vtx_local][0] = vtx_global;
-				indexMatrix[vtx_local][1] = vtx_global + 1;
-				indexMatrix[vtx_local][2] = vtx_global + 2;
-				indexMatrix[vtx_local][3] = vtx_global + nx;
-				indexMatrix[vtx_local][4] = vtx_global + 2 * nx;
-				indexMatrix[vtx_local][5] = vtx_global + nx*ny;
-				indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-
-						//zentraler Differenzenquotient in keine Richtung möglich
-
-				valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
-				valueMatrix[vtx_local][1] = -28.0 / 38.0;
-				valueMatrix[vtx_local][2] = 17.0 / 38.0;
-				valueMatrix[vtx_local][3] = -28.0 / 38.0;
-				valueMatrix[vtx_local][4] = 17.0 / 38.0;
-				valueMatrix[vtx_local][5] = -28.0 / 38.0;
-				valueMatrix[vtx_local][6] = 17.0 / 38.0;
-
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-				valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-				valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-				valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
-				valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-				valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
-				valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-				valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 3.0*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(3.0) *2.0*h;
-						
-						//NOTIZ: SIMON BITTE UEBERPRUEFEN WIE 1. ZEILE IN
-						//DIE MATRIX GESCHRIEBEN WERDEN SOLL
-						
-			}
-			
-			//Ecke vorne unten rechts
-			if(fron <= nx-1 <= lron)
-			{
-    			int vtx_global = nx-1;
-    			int vtx_local = vtx_global-fron;
-			    indexMatrix[vtx_local][0] = vtx_global;
-				indexMatrix[vtx_local][1] = vtx_global - 1;
-				indexMatrix[vtx_local][2] = vtx_global - 2;
-				indexMatrix[vtx_local][3] = vtx_global + nx;
-				indexMatrix[vtx_local][4] = vtx_global + 2 * nx;
-				indexMatrix[vtx_local][5] = vtx_global + nx*ny;
-				indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-				//zentraler Differenzenquotient in keine Richtung möglich
-
-				valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
-				valueMatrix[vtx_local][1] = -28.0 / 38.0;
-				valueMatrix[vtx_local][2] = 17.0 / 38.0;
-				valueMatrix[vtx_local][3] = -28.0 / 38.0;
-				valueMatrix[vtx_local][4] = 17.0 / 38.0;
-				valueMatrix[vtx_local][5] = -28.0 / 38.0;
-				valueMatrix[vtx_local][6] = 17.0 / 38.0;
-
-
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-				valueMatrix[vtx_local][0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-				valueMatrix[vtx_local][1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-				valueMatrix[vtx_local][2] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-				valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-				valueMatrix[vtx_local][4] += 1.0/ sqrt(3.0) * 2.0 * h;
-				valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-				valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 1.0*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(3.0) *2.0*h;
-			}
-			
-			//Ecke hinten unten links
-			
-			if(fron <= nx*(ny-1) <= lron)
-			{
-    			
-			}
-			
-			//Ecke hinten unten rechts
-			if(fron <= nx*ny-1 <= lron)
-			{
-    			
-			}
-		
-			
-			//Ecke vorne oben links
-			if(fron <= nx*ny*(nz-1) <= lron)
-			{
-			
-			}
-			
-			//Ecke vorne oben rechts
-			if(fron <= nx*ny*(nz-1)+nx-1 <= lron)
-			{
-			
-			}
-			
-			
-			//Ecke hinten oben links
-			if(fron <= nx*ny*(nz-1)+(nx*(ny-1)) <= lron)
-			{
-			
-			}
-			
-			//Ecke hinten oben rechts
-			if(fron <= nx*ny*nz-1 <= lron)
-			{
-			
-			}
-			
-			//Fuelle Kanten (horizontal) (Ohne Ecken)
-		    //Kante vorne unten links
-		    //bestimme 1. und letzte zu schreibende Zeile:
-		    /*int first = max(fron,1);
-		    int last = min(lron,nx-2);
-		    for(int vtx_global = first; vtx_global <= last; vtx_global++)
-		    {
-		    
-		    }
-		    */
-		    
-			
-			//Kante vorne unten rechts
-			
-			//Kante hinten unten links
-			
-			//Kante hinten unten rechts
-			
-			//Kante vorne oben links
-			
-			//Kante vorne oben rechts
-			
-			//Kante hinten oben links
-			
-			//Kante hinten oben rechts
-			
-			//Fuelle Kanten (vertikal) (Ohne Ecken)
-			//Kante vorne links
-			/*first = -1;
-			last = -1;
-			for(int a = 1 ; a<= nz-1;a++)
-			{
-			    if(nx*ny*a >= fron && first ==-1)
-			    {
-			        first = nx*ny*a;
-			    }
-			    if(nx*ny*a > lron && last ==-1)
-			    {
-			        last = nx*ny*(a-1);
-			    }
-			}
-			first = max(fron,nx*ny);
-			last = min(lron,nx*ny*(nz-2))
-			for(int vtx_global = first; vtx_global<= last;vtx_global+=nx*ny)
-			{
-			    
-			}
-			*/
-			
-			//Kante vorne rechts 
-			
-			//Kante hinten links
-			
-			//kante hinten rechts
-			
-			//Fuelle Seitenflaechen (ohne kanten und ecken)
-			//Seite links
-			
-			//Seite rechts
-			
-			//Seite vorne
-			
-			//Seite hinten
-			
-			//Boden
-			
-			//Decken
-			
-			//Fuelle inneres [NOTIZ: Inneres fuellen ist nun einfacher:
-		    //fuelle zuerst alles als ob es inneres ist und korrigire fehler
-		    //im nachhinein]
-			//first = -1;
-			//last = -1;
-			//Deutlich komplizierter.
-			//evtl Liste anlegen mit allen punkten die
-			//noch gefuellt werden muessen
-
-			
-			/*
-			for (size_t vtx_global = fron; vtx_global <= lron; vtx_global++)
-			{
-				std::vector<int> index = { 0, 0, 0, 0, 0, 0, 0 };
-				std::vector<Scalar> wert = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-
-				//vereinfacht den Zugriff auf die Array-Elemente
-				int i = vtx_global + 1;
-
-				//Überprüfung der Position
-				if (i <= nx*ny) //Boden
-				{
-					if (i == 1) //vorderer unterer linker Eckpunkt
-					{	
-						
-
-					}
-
-					else if (i == nx) //vorderer unterer rechter Eckpunkt
-					{
-						
-					}
-
-					else if (i == nx*(ny - 1) + 1) //hinterer unterer linker Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global + 2;
-						index[3] = vtx_global - nx;
-						index[4] = vtx_global - 2 * nx;
-						index[5] = vtx_global + nx*ny;
-						index[6] = vtx_global + 2 * nx*ny;
-
-						//zentraler Differenzenquotient in keine Richtung möglich
-
-						wert[0] = 3.0 * 11.0 / 38.0;
-						wert[1] = -28.0 / 38.0;
-						wert[2] = 17.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 1.0*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(3.0) *2.0*h;
-					}
-
-					else if (i == nx*ny) //hinterer  unterer rechter Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global - 1;
-						index[2] = vtx_global - 2;
-						index[3] = vtx_global - nx;
-						index[4] = vtx_global - 2 * nx;
-						index[5] = vtx_global + nx*ny;
-						index[6] = vtx_global + 2 * nx*ny;
-
-						//zentraler Differenzenquotient in keine Richtung möglich
-
-						wert[0] = 3.0 * 11.0 / 38.0;
-						wert[1] = -28.0 / 38.0;
-						wert[2] = 17.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(3),-1/sqrt(3),1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-1.0)*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(3.0) *2.0*h;
-					}
-
-					else if (i < nx) //vordere untere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global - 1;
-						index[3] = vtx_global + nx;
-						index[4] = vtx_global + 2 * nx;
-						index[5] = vtx_global + nx*ny;
-						index[6] = vtx_global + 2 * nx*ny;
-
-						//zentraler Differezenquotient in x-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in y/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in x-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+1] = 1.0;
-						//zeile[vtx_global-1] = 1.0;
-						////modifizierter Differenzenquotient in y/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,1/sqrt(2),1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
-						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 2.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else if (i > nx*(ny - 1)) //hintere untere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global - 1;
-						index[3] = vtx_global - nx;
-						index[4] = vtx_global - 2 * nx;
-						index[5] = vtx_global + nx*ny;
-						index[6] = vtx_global + 2 * nx*ny;
-
-						//zentraler Differezenquotient in x-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in y/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in x-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+1] = 1.0;
-						//zeile[vtx_global-1] = 1.0;
-						//modifizierter Differenzenquotient in y/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 0*1.0/sqrt(2.0)*3.0/2.0*h;		
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else if (i % nx == 1) //linke untere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx;
-						index[2] = vtx_global - nx;
-						index[3] = vtx_global + 1;
-						index[4] = vtx_global + 2;
-						index[5] = vtx_global + nx*ny;
-						index[6] = vtx_global + 2 * nx*ny;
-
-						//zentraler Differezenquotient in y-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in y-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx] = 1.0;
-						//zeile[vtx_global-nx] = 1.0;
-						////modifizierter Differenzenquotient in x/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(2),0,1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
-						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 2.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else if (i % nx == 0) //rechte untere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx;
-						index[2] = vtx_global - nx;
-						index[3] = vtx_global - 1;
-						index[4] = vtx_global - 2;
-						index[5] = vtx_global + nx*ny;
-						index[6] = vtx_global + 2 * nx*ny;
-
-						//zentraler Differezenquotient in y-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in y-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx] = 1.0;
-						//zeile[vtx_global-nx] = 1.0;
-						////modifizierter Differenzenquotient in x/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
-						////zeile[vtx_global] += 0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global+nx*ny] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else // "innere" Punkte des Bodens
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global - 1;
-						index[3] = vtx_global + nx;
-						index[4] = vtx_global - nx;
-						index[5] = vtx_global + nx*ny;
-						index[6] = vtx_global + 2 * nx*ny;
-
-						////zentraler Differenzenquotient in x/y-Richtung möglich
-
-						wert[0] = -4.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						wert[3] = 1.0;
-						wert[4] = 1.0;
-						//modifizierter Differenzenquotient in z-Richtung
-						wert[0] += 11.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in x/y-Richtung möglich
-						//zeile[vtx_global] = -4.0;
-						//zeile[vtx_global+1] = 1.0;
-						//zeile[vtx_global-1] = 1.0;
-						//zeile[vtx_global+nx] = 1.0;
-						//zeile[vtx_global-nx] = 1.0;
-						//modifizierter Differenzenquotient in z-Richtung
-						//zeile[vtx_global] += 11.0/38.0;
-						//zeile[vtx_global+nx*ny] = -28.0/38.0;
-						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,0,1))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += 3.0 / 2.0 * h;
-						wert[5] += (-h) / 2.0;
-						wert[6] += 2.0 * h;
-
-						//zeile[vtx_global] += 3.0/2.0*h;
-						//zeile[vtx_global+nx*ny] += (-h)/2.0;
-						//zeile[vtx_global+2*nx*ny] += 2.0*h;
-
-					}
-				}
-
-				else if (i > nx*ny*(nz - 1)) //Deckel
-				{
-					if (i == nx*ny*(nz - 1)+1) //vorderer oberer linker Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global + 2;
-						index[3] = vtx_global + nx;
-						index[4] = vtx_global + 2 * nx;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differenzenquotient in keine Richtung möglich
-						wert[0] = 3.0 * 11.0 / 38.0;
-						wert[1] = -28.0 / 38.0;
-						wert[2] = 17.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in keine Richtung möglich
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 1.0*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-					}
-
-					else if (i == nx*ny*(nz - 1)+nx) //vorderer oberer rechter Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global - 1;
-						index[2] = vtx_global - 2;
-						index[3] = vtx_global + nx;
-						index[4] = vtx_global + 2 * nx;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differenzenquotient in keine Richtung möglich
-						wert[0] = 3.0 * 11.0 / 38.0;
-						wert[1] = -28.0 / 38.0;
-						wert[2] = 17.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in keine Richtung möglich
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-1.0)*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-					}
-
-					else if (i == nx*ny*nz-nx+1) //hinterer oberer linker Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global + 2;
-						index[3] = vtx_global - nx;
-						index[4] = vtx_global - 2 * nx;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differenzenquotient in keine Richtung möglich
-						wert[0] = 3.0 * 11.0 / 38.0;
-						wert[1] = -28.0 / 38.0;
-						wert[2] = 17.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in keine Richtung möglich
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-1.0)*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-					}
-
-					else if (i == nx*ny*nz) //hinterer  oberer rechter Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global - 1;
-						index[2] = vtx_global - 2;
-						index[3] = vtx_global - nx;
-						index[4] = vtx_global - 2 * nx;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differenzenquotient in keine Richtung möglich
-						wert[0] = 3.0 * 11.0 / 38.0;
-						wert[1] = -28.0 / 38.0;
-						wert[2] = 17.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in keine Richtung möglich
-						//zeile[vtx_global] = 3.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += (-3.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-						wert[1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[2] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[3] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(3.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-3.0)*1.0/sqrt(3.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(3.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(3.0) *2.0*h;
-					}
-
-					else if (i  < nx*ny*(nz - 1)+nx) //vordere obere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global - 1;
-						index[3] = vtx_global + nx;
-						index[4] = vtx_global + 2 * nx;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differezenquotient in x-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in y/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in x-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+1] = 1.0;
-						//zeile[vtx_global-1] = 1.0;
-						////modifizierter Differenzenquotient in y/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,1/sqrt(2),-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-
-						////zeile[vtx_global] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else if (i > nx*ny*(nz - 1)+nx*(ny-1)) //hintere obere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global - 1;
-						index[3] = vtx_global - nx;
-						index[4] = vtx_global - 2 * nx;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differezenquotient in x-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in y/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in x-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+1] = 1.0;
-						//zeile[vtx_global-1] = 1.0;
-						////modifizierter Differenzenquotient in y/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += (-2.0) * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
-						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-2.0)*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else if (i % nx== 1) //linke obere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx;
-						index[2] = vtx_global - nx;
-						index[3] = vtx_global + 1;
-						index[4] = vtx_global + 2;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differezenquotient in y-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in y-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx] = 1.0;
-						//zeile[vtx_global-nx] = 1.0;
-						////modifizierter Differenzenquotient in x/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(2),0,-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-
-						////zeile[vtx_global] += 0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else if (i % nx == 0) //rechte obere Kante ohne Eckpunkt
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx;
-						index[2] = vtx_global - nx;
-						index[3] = vtx_global - 1;
-						index[4] = vtx_global - 2;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differezenquotient in y-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/z-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differezenquotient in y-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx] = 1.0;
-						//zeile[vtx_global-nx] = 1.0;
-						////modifizierter Differenzenquotient in x/z-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += (-2.0) * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
-						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-2.0)*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else // "innere" Punkte des Deckels
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + 1;
-						index[2] = vtx_global - 1;
-						index[3] = vtx_global + nx;
-						index[4] = vtx_global - nx;
-						index[5] = vtx_global - nx*ny;
-						index[6] = vtx_global - 2 * nx*ny;
-
-						//zentraler Differenzenquotient in x/y-Richtung möglich
-						wert[0] = -4.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						wert[3] = 1.0;
-						wert[4] = 1.0;
-						//modifizierter Differenzenquotient in z-Richtung
-						wert[0] += 11.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in x/y-Richtung möglich
-						//zeile[vtx_global] = -4.0;
-						//zeile[vtx_global+1] = 1.0;
-						//zeile[vtx_global-1] = 1.0;
-						//zeile[vtx_global+nx] = 1.0;
-						//zeile[vtx_global-nx] = 1.0;
-						////modifizierter Differenzenquotient in z-Richtung
-						//zeile[vtx_global] += 11.0/38.0;
-						//zeile[vtx_global-nx*ny] = -28.0/38.0;
-						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,0,-1))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += (-1.0) * 3.0 / 2.0 * h;
-						wert[5] += (-1.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-1.0)*3.0/2.0*h;
-						//zeile[vtx_global-nx*ny] += (-1.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx*ny] += (-1.0)*2.0*h;
-
-					}
-				}
-
-				else if (i % (nx*ny) <= nx) //vordere Seite, aber nicht Boden oder Deckel
-				{
-					if (i % nx == 1) //linke Kante
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx*ny;
-						index[2] = vtx_global - nx*ny;
-						index[3] = vtx_global + 1;
-						index[4] = vtx_global + 2;
-						index[5] = vtx_global + nx;
-						index[6] = vtx_global + 2 * nx;
-
-						//zentraler Differenzenquotient nur in z-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/y-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient nur in z-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx*ny] = 1.0;
-						//zeile[vtx_global-nx*ny] = 1.0;
-						////modifizierter Differenzenquotient in x/y-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(2),1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
-						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
-						//zeile[vtx_global] += 2.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(2.0) *2.0*h;
-
-					}
-
-					if (i % nx == 0) //rechte Kante
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx*ny;
-						index[2] = vtx_global - nx*ny;
-						index[3] = vtx_global - 1;
-						index[4] = vtx_global - 2;
-						index[5] = vtx_global + nx;
-						index[6] = vtx_global + 2 * nx;
-
-						//zentraler Differenzenquotient nur in z-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/y-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient nur in z-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx*ny] = 1.0;
-						//zeile[vtx_global-nx*ny] = 1.0;
-						////modifizierter Differenzenquotient in x/y-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(2),1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						//wert[0] += 0*1.0/sqrt(2.0)*3.0/2.0*h;
-						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
-						////zeile[vtx_global] += 0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global+nx] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2*nx] += 1.0/sqrt(2.0) *2.0*h;			
-					}
-
-					else //vordere "innere" Seite
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx*ny;
-						index[2] = vtx_global - nx*ny;
-						index[3] = vtx_global + 1;
-						index[4] = vtx_global - 1;
-						index[5] = vtx_global + nx;
-						index[6] = vtx_global + 2 * nx;
-
-						//zentraler Differenzenquotient in x/z-Richtung möglich
-						wert[0] = -4.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						wert[3] = 1.0;
-						wert[4] = 1.0;
-						//modifizierter Differenzenquotient in y-Richtung
-						wert[0] += 11.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in x/z-Richtung möglich
-						//zeile[vtx_global] = -4.0;
-						//zeile[vtx_global+nx*ny] = 1.0;
-						//zeile[vtx_global-nx*ny] = 1.0;
-						//zeile[vtx_global+1]=1.0;
-						//zeile[vtx_global-1]=1.0;
-						////modifizierter Differenzenquotient in y-Richtung
-						//zeile[vtx_global] += 11.0/38.0;
-						//zeile[vtx_global+nx] = -28.0/38.0;
-						//zeile[vtx_global+2*nx] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,1,0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						wert[0] += 3.0 / 2.0 * h;
-						wert[5] += (-h) / 2.0;
-						wert[6] += 2.0 * h;
-
-						//zeile[vtx_global] += 3.0/2.0*h;
-						//zeile[vtx_global+nx] += (-h)/2.0;
-						//zeile[vtx_global+2*nx] += 2.0*h;
-					}
-				}
-
-				else if (i % (nx*ny) > nx*(ny - 1)) //hintere Seite, aber nicht Boden oder Deckel
-				{
-					if (i % nx == 1) //linke Kante
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx*ny;
-						index[2] = vtx_global - nx*ny;
-						index[3] = vtx_global + 1;
-						index[4] = vtx_global + 2;
-						index[5] = vtx_global - nx;
-						index[6] = vtx_global - 2 * nx;
-
-						//zentraler Differenzenquotient nur in z-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/y-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient nur in z-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx*ny] = 1.0;
-						//zeile[vtx_global-nx*ny] = 1.0;
-						////modifizierter Differenzenquotient in x/y-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global+1] = -28.0/38.0;
-						//zeile[vtx_global+2] = 17.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (1/sqrt(2),-1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-
-						////zeile[vtx_global] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global+1] += 1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global+2] += 1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-
-					}
-
-					if (i % nx == 0) //rechte Kante
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx*ny;
-						index[2] = vtx_global - nx*ny;
-						index[3] = vtx_global - 1;
-						index[4] = vtx_global - 2;
-						index[5] = vtx_global - nx;
-						index[6] = vtx_global - 2 * nx;
-
-						//zentraler Differenzenquotient nur in z-Richtung möglich
-						wert[0] = -2.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						//modifizierter Differenzenquotient in x/y-Richtung
-						wert[0] += 2.0 * 11.0 / 38.0;
-						wert[3] = -28.0 / 38.0;
-						wert[4] = 17.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient nur in z-Richtung möglich
-						//zeile[vtx_global] = -2.0;
-						//zeile[vtx_global+nx*ny] = 1.0;
-						//zeile[vtx_global-nx*ny] = 1.0;
-						////modifizierter Differenzenquotient in x/y-Richtung
-						//zeile[vtx_global] += 2.0*11.0/38.0;
-						//zeile[vtx_global-1] = -28.0/38.0;
-						//zeile[vtx_global-2] = 17.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (-1/sqrt(2),-1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-						wert[0] += (-2.0) * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
-						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-						wert[5] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-2.0)*1.0/sqrt(2.0)*3.0/2.0*h;
-						//zeile[vtx_global-1] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*1.0/sqrt(2.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*1.0/sqrt(2.0) *2.0*h;
-					}
-
-					else // hintere "innere" Seite
-					{
-						index[0] = vtx_global;
-						index[1] = vtx_global + nx*ny;
-						index[2] = vtx_global - nx*ny;
-						index[3] = vtx_global + 1;
-						index[4] = vtx_global - 1;
-						index[5] = vtx_global - nx;
-						index[6] = vtx_global - 2 * nx;
-
-						//zentraler Differenzenquotient in x/z-Richtung möglich
-						wert[0] = -4.0;
-						wert[1] = 1.0;
-						wert[2] = 1.0;
-						wert[3] = 1.0;
-						wert[4] = 1.0;
-						//modifizierter Differenzenquotient in y-Richtung
-						wert[0] += 11.0 / 38.0;
-						wert[5] = -28.0 / 38.0;
-						wert[6] = 17.0 / 38.0;
-
-						////zentraler Differenzenquotient in x/z-Richtung möglich
-						//zeile[vtx_global] = -4.0;
-						//zeile[vtx_global+nx*ny] = 1.0;
-						//zeile[vtx_global-nx*ny] = 1.0;
-						//zeile[vtx_global+1] =1.0;
-						//zeile[vtx_global-1] =1.0;
-						////modifizierter Differenzenquotient in y-Richtung
-						//zeile[vtx_global] += 11.0/38.0;
-						//zeile[vtx_global-nx] = -28.0/38.0;
-						//zeile[vtx_global-2*nx] = 17.0/38.0;
-
-						//NeumannRB, Normalenvektor ist (0,-1,0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-						wert[0] += (-1.0) * 3.0 / 2.0 * h;
-						wert[5] += (-1.0)*(-h) / 2.0;
-						wert[6] += (-1.0) * 2.0 * h;
-
-						//zeile[vtx_global] += (-1.0)*3.0/2.0*h;
-						//zeile[vtx_global-nx] += (-1.0)*(-h)/2.0;
-						//zeile[vtx_global-2*nx] += (-1.0)*2.0*h;
-					}
-				}
-
-				else if (i % nx == 1) //linke Seite, aber nicht vordere/hintere Seite oder Boden/Deckel
-				{
-					index[0] = vtx_global;
-					index[1] = vtx_global + nx;
-					index[2] = vtx_global - nx;
-					index[3] = vtx_global + nx*ny;
-					index[4] = vtx_global - nx*ny;
-					index[5] = vtx_global + 1;
-					index[6] = vtx_global + 2;
-
-					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
-					wert[0] = -4.0;
-					wert[1] = 1.0;
-					wert[2] = 1.0;
-					wert[3] = 1.0;
-					wert[4] = 1.0;
-					//modifizierter Differenzenquotient in x-Richtung
-					wert[0] += 11.0 / 38.0;
-					wert[5] = -28.0 / 38.0;
-					wert[6] = 17.0 / 38.0;
-
-					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
-					//zeile[vtx_global] = -4.0;
-					//zeile[vtx_global+nx] = 1.0;
-					//zeile[vtx_global-nx] = 1.0;
-					//zeile[vtx_global+nx*ny] = 1.0;
-					//zeile[vtx_global-nx*ny] = 1.0;
-					////modifizierter Differenzenquotient in x-Richtung
-					//zeile[vtx_global] += 11.0/38.0;
-					//zeile[vtx_global+1] = -28.0/38.0;
-					//zeile[vtx_global+2] = 17.0/38.0;
-
-					//NeumannRB, Normalenvektor ist (1,0,0)
-					//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-					wert[0] += 3.0 / 2.0 * h;
-					wert[5] += (-h) / 2.0;
-					wert[6] += 2.0 * h;
-
-					//zeile[vtx_global] += 3.0/2.0*h;
-					//zeile[vtx_global+1] += (-h)/2.0;
-					//zeile[vtx_global+2] += 2.0*h;
-				}
-
-				else if (i % nx == 0) //rechte Seite, aber nicht vordere/hintere Seite oder Boden/Deckel
-				{
-					index[0] = vtx_global;
-					index[1] = vtx_global + nx;
-					index[2] = vtx_global - nx;
-					index[3] = vtx_global + nx*ny;
-					index[4] = vtx_global - nx*ny;
-					index[5] = vtx_global - 1;
-					index[6] = vtx_global - 2;
-
-					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
-					wert[0] = -4.0;
-					wert[1] = 1.0;
-					wert[2] = 1.0;
-					wert[3] = 1.0;
-					wert[4] = 1.0;
-					//modifizierter Differenzenquotient in x-Richtung
-					wert[0] += 11.0 / 38.0;
-					wert[5] = -28.0 / 38.0;
-					wert[6] = 17.0 / 38.0;
-
-					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
-					//zeile[vtx_global] = -4.0;
-					//zeile[vtx_global+nx] = 1.0;
-					//zeile[vtx_global-nx] = 1.0;
-					//zeile[vtx_global+nx*ny] = 1.0;
-					//zeile[vtx_global-nx*ny] = 1.0;
-					////modifizierter Differenzenquotient in x-Richtung
-					//zeile[vtx_global] += 11.0/38.0;
-					//zeile[vtx_global-1] = -28.0/38.0;
-					//zeile[vtx_global-2] = 17.0/38.0;
-
-					//NeumannRB, Normalenvektor ist (-1,0,0)
-					//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-					wert[0] += (-1.0) * 3.0 / 2.0 * h;
-					wert[5] += (-1.0)*(-h) / 2.0;
-					wert[6] += (-1.0) * 2.0 * h;
-
-					//zeile[vtx_global] += (-1.0)*3.0/2.0*h;
-					//zeile[vtx_global-1] += (-1.0)*(-h)/2.0;
-					//zeile[vtx_global-2] += (-1.0)*2.0*h;
-				}
-
-				else //innere Punkte
-				{
-					index[0] = vtx_global;
-					index[1] = vtx_global + 1;
-					index[2] = vtx_global - 1;
-					index[3] = vtx_global + nx;
-					index[4] = vtx_global - nx;
-					index[5] = vtx_global + nx*ny;
-					index[6] = vtx_global - nx*ny;
-
-					//zentraler Differenzenquotient in alle Richtung möglich
-					wert[0] = -6.0;
-					wert[1] = 1.0;
-					wert[2] = 1.0;
-					wert[3] = 1.0;
-					wert[4] = 1.0;
-					wert[5] = 1.0;
-					wert[6] = 1.0;
-
-					////zentraler Differenzenquotient in alle Richtung möglich
-					//zeile[vtx_global] = -6.0;
-					//zeile[vtx_global+1] = 1.0;
-					//zeile[vtx_global-1] = 1.0;
-					//zeile[vtx_global+nx] = 1.0;
-					//zeile[vtx_global-nx] = 1.0;
-					//zeile[vtx_global+nx*ny] = 1.0;
-					//zeile[vtx_global-nx*ny] = 1.0;
-
-					//keine RB
-				}
-
-				if (i!=1) {for (int j=0; j<7; j++) A.sequential_fill(index[j], wert[j]);}
-				A.end_of_row();
+            assembleBackPanel(indexMatrix,valueMatrix,fron,lron,msize);
+
+            //Fuelle nun die Kanten:
+            //untere Kanten
+            assembleKanteUntenHinten(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteUntenRechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteUntenVorne(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize);
+            //mittlere Kanten
+            assembleKanteHintenLinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteHintenRechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteVorneRechts(indexMatrix,valueMatrix,fron,lron,msize);
+            //obere Kanten
+            assembleKanteObenHinten(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKantenObenLinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize);
+
+            //Fuelle nun die Ecken:
+            //untere ecken:
+            assembleEckeuntenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeuntenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeuntenvornelinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeuntenvornerechts(indexMatrix,valueMatrix,fron,lron,msize);
+            //obere ecken:
+            assembleEckeObenvornerechts(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeObenvornelinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize);
+            assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize);
+
+            A.prepare_sequential_fill(7);
+            for(int i =0;i< msize;i++)
+            {
+                for(int j = 0; j<7;j++)
+                {
+                    A.sequential_fill(indexMatrix[i][j],valueMatrix[i][j]);
+                }
+                A.end_of_row();
+                int vtx_global = indexMatrix[i][0];
 
 				rhs.set_local(vtx_global, h*h*bdry(vtx_global));
-			}
-			return { A, rhs };
-		}
-		*/
+            }
+
+
 }
+
