@@ -4,6 +4,18 @@
 // nur für intellisense
 #include "distellpackmatrixgpu.hpp"
 
+template<typename Scalar>
+void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local);
+
+template <typename Scalar>
+void cleanupgpu(Scalar *data);
+
+template<typename Scalar>
+void alloc_unifiedD(Scalar **data, size_t **indices, int max_row_length, int dim_local);
+
+template<typename Scalar>
+void alloc_unifiedV(Scalar **fvec, int dim_fvec);
+
 namespace Icarus
 {
 
@@ -57,7 +69,7 @@ _data(nullptr)
 {
 	try
 	{
-            alloc_unifiedD(*_data,*_indices, _max_row_length, _dim_local);
+            alloc_unifiedD(& _data,& _indices, _max_row_length, _dim_local);
 	}
 	catch (...)
 	{
@@ -132,7 +144,7 @@ DistEllpackMatrixGpu<Scalar>::operator=(const DistEllpackMatrixGpu& other)
 
 	try
 	{
-	    alloc_unifiedD(*_data,*_indices, _max_row_length, _dim_local);
+	    alloc_unifiedD(& _data,& _indices, _max_row_length, _dim_local);
 	}
 	catch (...)
 	{
@@ -164,7 +176,7 @@ void DistEllpackMatrixGpu<Scalar>::prepare_sequential_fill(size_t max_row_length
     _max_row_length = max_row_length;
     try
     {
-        alloc_unifiedD(*_data,*_indices, _max_row_length, _dim_local);
+        alloc_unifiedD(& _data,& _indices, _max_row_length, _dim_local);
     }
     catch(...)
     {
@@ -224,8 +236,9 @@ void DistEllpackMatrixGpu<Scalar>::mult_vec_impl(const VectorType& vec, VectorTy
         }
         result.set_local(row, res);
     }
-
     // *************** END Durch CUDA-isierung ersetzen **************
+}
+
 template <typename Scalar>
 void DistEllpackMatrixGpu<Scalar>::mult_vec_gpu(const VectorType& vec, VectorType& result)
 {
@@ -234,11 +247,8 @@ void DistEllpackMatrixGpu<Scalar>::mult_vec_gpu(const VectorType& vec, VectorTyp
 
     FullVectorGpu<Scalar> fvec(vec);
 
-    int num_blocks = ceil((double)dim_local / 1024);
-    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
-
-     gpu_ax << <num_blocks, num_threads >> >(_data, fvec, result, _indices, _max_row_length, _dim_local);
-     cudaDeviceSynchronize();
+    gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length,
+		  int dim_local)
 }
 
 

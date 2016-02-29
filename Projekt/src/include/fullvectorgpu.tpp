@@ -15,6 +15,19 @@
 // nur für intellisense
 #include "fullvectorgpu.hpp"
 
+
+template<typename Scalar>
+void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local);
+
+template <typename Scalar>
+void cleanupgpu(Scalar *data);
+
+template<typename Scalar>
+void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local);
+
+template<typename Scalar>
+void alloc_unifiedV(Scalar **fvec, int dim_fvec);
+
 namespace Icarus
 {
 
@@ -29,10 +42,10 @@ FullVectorGpu<Scalar>::FullVectorGpu(size_t dim, MPI_Comm my_comm) :
 {
     MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
     MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
-    
+
     try
     {
-        alloc_unifiedV(* _data, _dim);
+        alloc_unifiedV(& _data, _dim);
     }
     catch(...)
     {
@@ -41,14 +54,14 @@ FullVectorGpu<Scalar>::FullVectorGpu(size_t dim, MPI_Comm my_comm) :
 }
 
 template<typename Scalar>
-FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVector<Scalar>& vec) :
+FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVectorGpu<Scalar>& vec) :
 	_my_comm(vec.get_comm()),
     _data(nullptr),
     _dim(vec.get_dim_global())
 {
     try
     {
-                alloc_unifiedV(* _data, _dim);
+        alloc_unifiedV(& _data, _dim);
     }
 	catch (...)
 	{
@@ -63,7 +76,7 @@ FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVector<Scalar>& vec) :
     // eigenen teil herauskopieren
     for(size_t i=0; i<vec.get_dim_local(); i++)
        this_chunk[i] = vec.get_local(i);
-    
+
 	// synchronisiere die teile
     for(int node = 0; node < _num_nodes; node++)
     {
@@ -120,7 +133,7 @@ FullVectorGpu<Scalar>::operator=(const FullVectorGpu& other)
 	_my_rank = other._my_rank;
 	_num_nodes = other._num_nodes;
     _dim = other._dim;
-    
+
 	_data = new Scalar[_dim];
     for (size_t i = 0; i < _dim; i++)
         _data[i] = other._data[i];

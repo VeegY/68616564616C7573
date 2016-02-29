@@ -6,13 +6,7 @@
 #include <cuda_runtime.h>
 #include <cmath>
 #include <string>
-#include "include/timer.hpp"
-#define RESET "\e[0m"
-#define BLUE "\e[34;1m"
-#define CYAN "\e[36;1m"
-#define GREY "\e[30;1m"
-#define MAGENTA "\e[35;1m"
-
+//#include "include/timer.hpp"
 
 
 template <typename Scalar>
@@ -47,7 +41,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
     string memop = "";
     if (mem_option == 0) { memop = "(Unified Memory)"; }
     else { memop = "(Zero Copy)"; }
-    
+
     if (meth == 0)
     {
         method = "Unified Memory vs Zero Copy";
@@ -70,7 +64,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
         first += ver_first;
         second = "CPU";
     }
-    
+
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
 
@@ -79,11 +73,11 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 
     //==='DISK STORAGE~============================================//
     unsigned long long int storage = sizeof(type)*(2 * dim_local + dim_local*max_row_length) + sizeof(int)*dim_local*max_row_length;
-    
+
         //===#FLOP=====================================================//
     unsigned long long int flop = 2 * elements;
 
-    //==#BYTES=====================================================//           
+    //==#BYTES=====================================================//
     int bytes = elements*(sizeof(type) + sizeof(int)) + 2*(sizeof(type)*dim_local);// Elements(Data+Indices) + Fvec Read und Result Write
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
@@ -110,7 +104,7 @@ void performance(int max_row_length, int dim_local, float time_ku, float time_ou
 
 
 
-    
+
 }
 template void performance<int>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second, int mem_option);
 template void performance<float>(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second, int mem_option);
@@ -123,7 +117,7 @@ void print_p()
 
     cudaDeviceProp prop;
     cudaGetDeviceProperties(&prop,0);
-    
+
     printf("==============================\nDevice name: %s\n------------------------------\n", prop.name);
     printf("Memory Clock Rate (KHz): %d\n",prop.memoryClockRate);
     printf("Memory Bus Width (bits): %d\n",prop.memoryBusWidth);
@@ -155,7 +149,7 @@ void allocation(Scalar **data, Scalar **fvec, Scalar **result, int **indices, in
         cudaHostAlloc((void **)result, sizeof(Scalar)*dim_local, cudaHostAllocMapped);
         cudaHostAlloc((void **)indices, sizeof(int)*max_row_length*dim_local, cudaHostAllocMapped);
         break;
-    }   
+    }
 }
 template void allocation<int>(int **data, int **fvec, int **result, int **indices, int max_row_length, int dim_local, int dim_fvec, int mem_option);
 template void allocation<float>(float **data, float **fvec, float **result, int **indices, int max_row_length, int dim_local, int dim_fvec, int mem_option);
@@ -207,7 +201,7 @@ float gpu_ax_time(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int 
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
-            
+
         }
         break;
 
@@ -284,7 +278,7 @@ void gpu_ax_overall(Scalar *data, Scalar *fvec, Scalar *result, int *indices, in
             cudaHostGetDevicePointer((void **)&d_fvec, (void *)fvec, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_indices, (void *)indices, 0);
-                
+
             gpu_ax <<<num_blocks, num_threads >>>(d_data, d_fvec, d_result, d_indices, max_row_length, dim_local);
         }
         cudaDeviceSynchronize();
@@ -344,25 +338,29 @@ template void cleanup<double>(double *data, double *fvec, double *result, int *i
 
 
 //====Ich war nicht mutig genug es zu loeschen :D===/
-/*
+
 template <typename Scalar>
 void cleanupgpu(Scalar *data)
 {
-cudaFreeHost(data);
+cudaFree(data);
 }
 template void cleanupgpu<int>(int *data);
 template void cleanupgpu<float>(float *data);
 template void cleanupgpu<double>(double *data);
+
+
 //ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY for DistEllpack
 template<typename Scalar>
-void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local)
+void alloc_unifiedD(Scalar **data, size_t **indices, int max_row_length, int dim_local)
 {
 cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*max_row_length);
-cudaMallocManaged((void **)indices, sizeof(int)*dim_local*max_row_length);
+cudaMallocManaged((void **)indices, sizeof(size_t)*dim_local*max_row_length);
 }
-template void alloc_unifiedD<int>(int **data, int **indices, int max_row_length, int dim_local);
-template void alloc_unifiedD<float>(float **data, int **indices, int max_row_length, int dim_local);
-template void alloc_unifiedD<double>(double **data, int **indices, int max_row_length, int dim_local);
+template void alloc_unifiedD<int>(int **data, size_t **indices, int max_row_length, int dim_local);
+template void alloc_unifiedD<float>(float **data, size_t **indices, int max_row_length, int dim_local);
+template void alloc_unifiedD<double>(double **data, size_t **indices, int max_row_length, int dim_local);
+
+
 // ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY FOR SLICEDVECTOR
 template<typename Scalar>
 void alloc_unifiedV(Scalar **fvec, int dim_fvec)
@@ -372,4 +370,3 @@ cudaMallocManaged((void **)fvec, sizeof(Scalar)*dim_fvec);
 template void alloc_unifiedV<int>(int **fvec, int dim_fvec);
 template void alloc_unifiedV<float>(float **fvec, int dim_fvec);
 template void alloc_unifiedV<double>(double **fvec, int dim_fvec);
-*/

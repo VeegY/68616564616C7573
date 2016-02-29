@@ -36,9 +36,9 @@ namespace Icarus
   * \tparam   Scalar  Skalarer Typ der Einträge.
   */
 template<typename Scalar>
-class slicedvectorgpu : public Vector<slicedvectorgpu<Scalar>>
+class SlicedVectorGpu : public Vector<SlicedVectorGpu<Scalar>>
 {
-    friend class Vector<slicedvectorgpu<Scalar>>;
+    friend class Vector<SlicedVectorGpu<Scalar>>;
 
 	// mpi umgebung
 	MPI_Comm _my_comm;
@@ -46,7 +46,7 @@ class slicedvectorgpu : public Vector<slicedvectorgpu<Scalar>>
 
     // Globale und lokale Dimension
     size_t _dim_global, _dim_local;
-    
+
     // Größe des lokalen Blocks auf den ersten N-1 bzw. der letzten Node
     size_t _dim_local_nopad, _dim_local_last;
     Scalar* _data;
@@ -65,35 +65,35 @@ public:
      * \param   dim_global   Globale Dimension des Vektors, also Summe der Größen der
      *                       auf die Nodes verteilten Blöcke.
      */
-    explicit slicedvectorgpu(size_t dim_global, MPI_Comm my_comm = MPI_COMM_WORLD);
+    explicit SlicedVectorGpu(size_t dim_global, MPI_Comm my_comm = MPI_COMM_WORLD);
 
-    ~slicedvectorgpu();
+    ~SlicedVectorGpu();
 
-    slicedvectorgpu(const slicedvectorgpu& other);
+    SlicedVectorGpu(const SlicedVectorGpu& other);
 
-    slicedvectorgpu(slicedvectorgpu&& other);
+    SlicedVectorGpu(SlicedVectorGpu&& other);
 
-    slicedvectorgpu& operator=(const slicedvectorgpu& other);
+    SlicedVectorGpu& operator=(const SlicedVectorGpu& other);
 
-    slicedvectorgpu& operator=(slicedvectorgpu&& other);
+    SlicedVectorGpu& operator=(SlicedVectorGpu&& other);
 
     /**
       * \brief   Setze den Wert val an die globale Position pos.
       *
-      * Setze den Wert val an die globale Position pos. Diese Operation erfordert 
+      * Setze den Wert val an die globale Position pos. Diese Operation erfordert
       * MPI-Kommunikation, wenn die zu setzende Position nicht auf der Node liegt,
       * die den Befehl ausführt, und ist daher hinsichtlich Effizienz mit Vorsicht
       * zu benutzen.
       *
       * \param   pos   Globale Position des Elements, das gesetzt werden soll.
       * \param   val   Wert, der an die Stelle pos kopiert werden soll.
-      */    
+      */
     void set_global(size_t pos, const Scalar& val);
 
     /**
       * \brief   Hole den Eintrag an der globalen Position pos.
       *
-      * Hole den Wert an der globale Position pos. Diese Operation erfordert 
+      * Hole den Wert an der globale Position pos. Diese Operation erfordert
       * MPI-Kommunikation, wenn die zu lesende Position nicht auf der Node liegt,
       * die den Befehl ausführt, und ist daher hinsichtlich Effizienz mit Vorsicht
       * zu benutzen.
@@ -143,12 +143,12 @@ public:
     /**
       * \brief   Setze den Wert val an die lokale Position pos.
       *
-      * Setze den Wert val an die lokale Position pos. Diese Operation erfordert 
+      * Setze den Wert val an die lokale Position pos. Diese Operation erfordert
       * keine MPI-Kommunikation.
       *
       * \param   pos   Lokale Position des Elements, das gesetzt werden soll.
       * \param   val   Wert, der an die Stelle pos kopiert werden soll.
-      */ 
+      */
     void set_local(size_t pos, const Scalar& val)
     {
         _data[pos] = val;
@@ -157,7 +157,7 @@ public:
     /**
       * \brief   Hole den Eintrag an der lokalen Position pos.
       *
-      * Hole den Wert an der lokalen Position pos. Diese Operation erfordert 
+      * Hole den Wert an der lokalen Position pos. Diese Operation erfordert
       * keine MPI-Kommunikation.
       *
       * \param   pos   Lokale Position des Elements, das gelesen werden soll.
@@ -170,9 +170,9 @@ public:
     }
 
 private:
-    void swap_impl(slicedvectorgpu& other);
+    void swap_impl(SlicedVectorGpu& other);
 
-    void copy_impl(const slicedvectorgpu& other);
+    void copy_impl(const SlicedVectorGpu& other);
 
     RealType l2norm2_impl() const;
 
@@ -188,9 +188,9 @@ private:
         for(size_t i=0; i<_dim_local; i++) _data[i] = s;
     }
 
-    Scalar scal_prod_impl(const slicedvectorgpu& other) const;
+    Scalar scal_prod_impl(const SlicedVectorGpu& other) const;
 
-    void axpy_impl(const Scalar& alpha, const slicedvectorgpu& y);
+    void axpy_impl(const Scalar& alpha, const SlicedVectorGpu& y);
 
     void scal_impl(const Scalar& alpha);
 

@@ -15,6 +15,19 @@
 // nur für intellisense
 #include "slicedvectorgpu.hpp"
 
+
+template<typename Scalar>
+void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local);
+
+template <typename Scalar>
+void cleanupgpu(Scalar *data);
+
+template<typename Scalar>
+void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local);
+
+template<typename Scalar>
+void alloc_unifiedV(Scalar **fvec, int dim_fvec);
+
 namespace Icarus
 {
 
@@ -22,8 +35,8 @@ namespace Icarus
 
 
 template<typename Scalar>
-slicedvectorgpu<Scalar>::
-slicedvectorgpu(size_t dim_global, MPI_Comm my_comm) :
+SlicedVectorGpu<Scalar>::
+SlicedVectorGpu(size_t dim_global, MPI_Comm my_comm) :
 	_my_comm(my_comm),
     _dim_global(dim_global),
     _dim_local(0),
@@ -52,25 +65,25 @@ slicedvectorgpu(size_t dim_global, MPI_Comm my_comm) :
     // allokiere lokalen speicher
     try
     {
-        alloc_unifiedV(* _data, _dim_local);
+        alloc_unifiedV(& _data, _dim_local);
     }
     catch(...)
     {
-        LOG_ERROR("Memory allocation for slicedvectorgpu failed.");
+        LOG_ERROR("Memory allocation for SlicedVectorGpu failed.");
     }
     // LOG_DEBUG("dim_local ",_dim_local,", dim_local_nopad ", _dim_local_nopad);
 }
 
 template<typename Scalar>
-slicedvectorgpu<Scalar>::
-~slicedvectorgpu()
+SlicedVectorGpu<Scalar>::
+~SlicedVectorGpu()
 {
     if(_data) cleanupgpu(_data);
 }
 
 template<typename Scalar>
-slicedvectorgpu<Scalar>::
-slicedvectorgpu(const slicedvectorgpu& other) :
+SlicedVectorGpu<Scalar>::
+SlicedVectorGpu(const SlicedVectorGpu& other) :
 	_my_comm(other._my_comm),
 	_my_rank(other._my_rank),
 	_num_nodes(other._num_nodes),
@@ -85,8 +98,8 @@ slicedvectorgpu(const slicedvectorgpu& other) :
 }
 
 template<typename Scalar>
-slicedvectorgpu<Scalar>::
-slicedvectorgpu(slicedvectorgpu&& other) :
+SlicedVectorGpu<Scalar>::
+SlicedVectorGpu(SlicedVectorGpu&& other) :
 	_my_comm(other._my_comm),
 	_my_rank(other._my_rank),
 	_num_nodes(other._num_nodes),
@@ -100,9 +113,9 @@ slicedvectorgpu(slicedvectorgpu&& other) :
 }
 
 template<typename Scalar>
-slicedvectorgpu<Scalar>&
-slicedvectorgpu<Scalar>::
-operator=(const slicedvectorgpu& other)
+SlicedVectorGpu<Scalar>&
+SlicedVectorGpu<Scalar>::
+operator=(const SlicedVectorGpu& other)
 {
     // selbst
     if (this == &other) return this;
@@ -122,9 +135,9 @@ operator=(const slicedvectorgpu& other)
 }
 
 template<typename Scalar>
-slicedvectorgpu<Scalar>&
-slicedvectorgpu<Scalar>::
-operator=(slicedvectorgpu&& other)
+SlicedVectorGpu<Scalar>&
+SlicedVectorGpu<Scalar>::
+operator=(SlicedVectorGpu&& other)
 {
     // selbst
     if (this == &other) return this;
@@ -142,7 +155,7 @@ operator=(slicedvectorgpu&& other)
 }
 
 template<typename Scalar>
-void slicedvectorgpu<Scalar>::
+void SlicedVectorGpu<Scalar>::
 set_global(size_t pos, const Scalar& val)
 {
     int affected_rank = pos / _dim_local_nopad;
@@ -151,7 +164,7 @@ set_global(size_t pos, const Scalar& val)
 }
 
 template<typename Scalar>
-Scalar slicedvectorgpu<Scalar>::
+Scalar SlicedVectorGpu<Scalar>::
 get_global(size_t pos) const
 {
     int affected_rank = pos / _dim_local_nopad;
@@ -166,15 +179,15 @@ get_global(size_t pos) const
 }
 
 template<typename Scalar>
-void slicedvectorgpu<Scalar>::print_local_data(std::ostream& out) const
+void SlicedVectorGpu<Scalar>::print_local_data(std::ostream& out) const
 {
 	for (size_t i = 0; i < _dim_local; i++)
 		out << i << ":\t" << _data[i] << std::endl;
 }
 
 template<typename Scalar>
-typename slicedvectorgpu<Scalar>::RealType
-slicedvectorgpu<Scalar>::
+typename SlicedVectorGpu<Scalar>::RealType
+SlicedVectorGpu<Scalar>::
 l2norm2_impl() const
 {
     RealType res(0), res_global;
@@ -186,8 +199,8 @@ l2norm2_impl() const
 }
 
 template<typename Scalar>
-typename slicedvectorgpu<Scalar>::RealType
-slicedvectorgpu<Scalar>::
+typename SlicedVectorGpu<Scalar>::RealType
+SlicedVectorGpu<Scalar>::
 maxnorm_impl() const
 {
     RealType res = std::numeric_limits<RealType>::min(), res_global, tmp;
@@ -202,8 +215,8 @@ maxnorm_impl() const
 }
 
 template<typename Scalar>
-Scalar slicedvectorgpu<Scalar>::
-scal_prod_impl(const slicedvectorgpu<Scalar>& other) const
+Scalar SlicedVectorGpu<Scalar>::
+scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
 {
     assert(_dim_global == other._dim_global);
 
@@ -216,8 +229,8 @@ scal_prod_impl(const slicedvectorgpu<Scalar>& other) const
 }
 
 template<typename Scalar>
-void slicedvectorgpu<Scalar>::
-axpy_impl(const Scalar& alpha, const slicedvectorgpu<Scalar>& y)
+void SlicedVectorGpu<Scalar>::
+axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
 {
     assert(_dim_global == y._dim_global);
 
@@ -226,7 +239,7 @@ axpy_impl(const Scalar& alpha, const slicedvectorgpu<Scalar>& y)
 }
 
 template<typename Scalar>
-void slicedvectorgpu<Scalar>::
+void SlicedVectorGpu<Scalar>::
 scal_impl(const Scalar& alpha)
 {
    for(size_t i=0; i<_dim_local; i++)
@@ -235,8 +248,8 @@ scal_impl(const Scalar& alpha)
 
 
 template<typename Scalar>
-void slicedvectorgpu<Scalar>::
-swap_impl(slicedvectorgpu &other)
+void SlicedVectorGpu<Scalar>::
+swap_impl(SlicedVectorGpu &other)
 {
     assert(_dim_global == other._dim_global);
 
@@ -244,8 +257,8 @@ swap_impl(slicedvectorgpu &other)
 }
 
 template<typename Scalar>
-void slicedvectorgpu<Scalar>::
-copy_impl(const slicedvectorgpu &other)
+void SlicedVectorGpu<Scalar>::
+copy_impl(const SlicedVectorGpu &other)
 {
     assert(_dim_global == other._dim_global);
 
@@ -257,7 +270,7 @@ copy_impl(const slicedvectorgpu &other)
 
 
 template<typename Scalar>
-struct VectorTraits<slicedvectorgpu<Scalar>>
+struct VectorTraits<SlicedVectorGpu<Scalar>>
 {
     typedef typename ScalarTraits<Scalar>::RealType RealType;
     typedef Scalar ScalarType;

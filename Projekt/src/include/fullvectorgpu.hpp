@@ -17,7 +17,7 @@
 #include <memory>
 #include <random>
 #include <limits>
-#include "slicedvector.hpp"
+#include "slicedvectorgpu.hpp"
 #include "mpihandler.hpp"
 
 namespace Icarus
@@ -28,12 +28,12 @@ namespace Icarus
   *
   * Alle Elemente dieses Vektors liegen auf jeder Node der zugeordneten Prozessgruppe.
   *
-  * \tparam   Scalar  Skalarer Typ der Einträge.  
+  * \tparam   Scalar  Skalarer Typ der Einträge.
   */
 template<typename Scalar>
-class FullVector : public Vector<FullVector<Scalar>>
+class FullVectorGpu : public Vector<FullVectorGpu<Scalar>>
 {
-    friend class Vector<FullVector<Scalar>>;
+    friend class Vector<FullVectorGpu<Scalar>>;
 
     MPI_Comm _my_comm;
     int _my_rank, _num_nodes;
@@ -46,7 +46,7 @@ public:
     typedef Scalar ScalarType;
     typedef typename ScalarTraits<Scalar>::RealType RealType;
 
-   /** 
+   /**
      * \brief   Standardkonstruktor.
      *
      * Erzeugt einen Vektor der Dimension dim, der komplett auf jeder Node der
@@ -55,46 +55,46 @@ public:
      * \param   dim     Dimension des Vektors.
      * \param   my_comm Kommunikator in die Prozessgruppe des Vektors.
      */
-    explicit FullVector(size_t dim, MPI_Comm my_comm = MPI_COMM_WORLD);
-    
-     /** 
-     * \brief   Konvertierkonstruktor für einen SlicedVector.
+    explicit FullVectorGpu(size_t dim, MPI_Comm my_comm = MPI_COMM_WORLD);
+
+     /**
+     * \brief   Konvertierkonstruktor für einen SlicedVectorGpu.
      *
      * Erzeugt einen Vektor mit der globalen Dimension von vec, der alle
      * Teile von vec lokal enthält. Alle Prozesse der Gruppe, die vec verwalten,
-     * erhalten eine vollständige Kopie des FullVectors.
+     * erhalten eine vollständige Kopie des FullVectorGpus.
      *
-     * \param   vec     SlicedVector, der vollständig verteilt werden soll.
+     * \param   vec     SlicedVectorGpu, der vollständig verteilt werden soll.
      */
-    explicit FullVector(const SlicedVector<Scalar>& vec);
+    explicit FullVectorGpu(const SlicedVectorGpu<Scalar>& vec);
 
-    ~FullVector();
+    ~FullVectorGpu();
 
-    FullVector(const FullVector& other);
+    FullVectorGpu(const FullVectorGpu& other);
 
-    FullVector(FullVector&& other);
+    FullVectorGpu(FullVectorGpu&& other);
 
-    FullVector& operator=(const FullVector& other);
+    FullVectorGpu& operator=(const FullVectorGpu& other);
 
-    FullVector& operator=(FullVector&& other);
+    FullVectorGpu& operator=(FullVectorGpu&& other);
 
     /**
      * \brief   Operator für den elementweisen Zugriff.
      *
-     * Dieser Operator ermöglicht die elementweise Manipulation des FullVector,
+     * Dieser Operator ermöglicht die elementweise Manipulation des FullVectorGpu,
      * analog zu C-Arrays und STL-Containern.
      *
-     * \param   index   Index des Elements, auf das zugegriffen werden soll.   
+     * \param   index   Index des Elements, auf das zugegriffen werden soll.
      */
     Scalar& operator[](size_t index) {assert(index<_dim); return _data[index];}
 
     /**
      * \brief   Operator für den elementweisen Zugriff, konstante Variante.
      *
-     * Dieser Operator ermöglicht das elementweise Auslesen des FullVector,
+     * Dieser Operator ermöglicht das elementweise Auslesen des FullVectorGpu,
      * analog zu C-Arrays und STL-Containern.
      *
-     * \param   index   Index des Elements, das gelesen werden soll.   
+     * \param   index   Index des Elements, das gelesen werden soll.
      */
 	const Scalar& operator[](size_t index) const { assert(index<_dim); return _data[index]; }
 
@@ -113,15 +113,15 @@ private:
         for(size_t i=0; i<_dim; i++) _data[i] = s;
     }
 
-    Scalar scal_prod_impl(const FullVector& other) const;
+    Scalar scal_prod_impl(const FullVectorGpu& other) const;
 
-    void axpy_impl(const Scalar& alpha, const FullVector& y);
+    void axpy_impl(const Scalar& alpha, const FullVectorGpu& y);
 
     void scal_impl(const Scalar& alpha);
 
-    void swap_impl(FullVector& other);
+    void swap_impl(FullVectorGpu& other);
 
-    void copy_impl(const FullVector& other);
+    void copy_impl(const FullVectorGpu& other);
 
     size_t get_dim_impl() const { return _dim; }
 };
