@@ -1,3 +1,6 @@
+#ifndef __TESTFUNCTIONS_HPP_
+#define __TESTFUNCTIONS_HPP_
+
 namespace Icarus
 {
 
@@ -17,7 +20,7 @@ math_function::math_function(int type):
 
 double math_function::eval(double x, double y, double z)
 {
-    switch (number)
+    switch (_type)
     {
     case 0:
         return 0.0;
@@ -32,3 +35,5 @@ double math_function::eval(double x, double y, double z)
 }
 
 }//namespace Icarus
+
+#endif//__TESTFUNCTIONS_HPP_

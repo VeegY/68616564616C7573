@@ -11,10 +11,10 @@ namespace Icarus
 void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value)
 {
     int n = e.size();
-    int length;
+    int length(0);
     switch(n)
     {
-    case 1:     length = 8
+    case 1:     length = 8;
                 break;
     case 2:     length = 12;
                 break;
