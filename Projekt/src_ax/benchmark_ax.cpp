@@ -14,7 +14,7 @@ enum memory_opt { unified, zero };                                  //choose a m
 //================================================================================================/
 //									GLOBAL SETTINGS!
 //================================================================================================/
-int method = kernel_vs_cpu;               
+int method = kernel_vs_kernel;               
 int version_first = kernel_standart;        
 //Für Kernel vs Kernel
 int version_second = kernel_standart;      
