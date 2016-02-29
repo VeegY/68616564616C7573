@@ -4,13 +4,15 @@
 #include <vector>
 #include "basis.hpp"
 
+#include "testfunctions.hpp"
+
 namespace Icarus
 {
 
-double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene)
+double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, math_function g=math_function(0))
 {
     int n = e.size();
-    double RHS;
+    double RHS(0.0);
 
     //TODO TOCHECK changed 02-24-16
     std::vector<double> X(27), Y(27), Z(27), weight(27);

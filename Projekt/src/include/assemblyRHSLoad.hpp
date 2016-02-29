@@ -5,13 +5,15 @@
 #include "quadratur.hpp"
 #include "basis.hpp"
 
+#include "testfunctions.hpp"
+
 namespace Icarus
 {
 
-double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A)
+double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, math_function f=math_function(0))
 {
     int n = e.size();
-    double RHS;
+    double RHS(0.0);
 
     //TODO TOCHECK changed 02-24-16
     std::vector<double> X(27), Y(27), Z(27), weight(27);
