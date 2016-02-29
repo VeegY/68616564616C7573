@@ -14,7 +14,7 @@ enum memory_opt { unified, zero };                                  //choose a m
 //================================================================================================/
 //									GLOBAL SETTINGS!
 //================================================================================================/
-int method = unified_vs_zero;               
+int method = kernel_vs_cpu;               
 int version_first = kernel_standart;        
 //Für Kernel vs Kernel
 int version_second = kernel_standart;      
@@ -30,6 +30,9 @@ int memory_option = zero;
 #define iteration 1000
 
 void print_p();
+
+template <typename type>
+void cpu_ax(type data, type fvec, type result, type indices, int maxrow, int dim_local, int dim_fvec);
 
 template<typename type>
 void performance(int max_row_length, int dim_local, float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);
@@ -104,9 +107,9 @@ int main(int argc, char* argv[])
         }
         else//CPU Zeitmessung
         {
-            //set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
-            //cpu_ax()
-            //cleanup(data_second, fvec_second, result_second, indices_second, 2);
+            set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
+            cpu_ax(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec);
+            cleanup(data_second, fvec_second, result_second, indices_second, 2);
         }
     }
     float elapsed_second_overall = timer_overall.stop() / (float)iteration;
@@ -157,15 +160,18 @@ int main(int argc, char* argv[])
     }
     else//CPU Zeitmessung
     {
-        //set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
+        set_values(data_host, indices_host, fvec_host, data_second, indices_second, fvec_second, maxrowlength, dimlocal, dimfvec);
         
         //=========================================//
-        //timer_kernel.start();
-        //cpu_ax()
-        //elapsed_second_kernel = timer_kernel.stop();
+        timer_kernel.start();
+        for (int r = 0; r < iteration; r++)
+        {
+            cpu_ax(data_second, fvec_second, result_second, indices_second, maxrowlength, dimlocal, dimfvec);
+        }
+        elapsed_second_kernel = timer_kernel.stop()*1.0e3;
         //=========================================//
 
-        //cleanup(data_second, fvec_second, result_second, indices_second, 2);
+        cleanup(data_second, fvec_second, result_second, indices_second, 2);
     }
     
    
@@ -181,3 +187,21 @@ int main(int argc, char* argv[])
     delete[] fvec_host;
     return 0;
 }
+
+template <typename type>
+void cpu_ax(type *data, type *fvec, type *result, type *indices, int max_row_length, int dim_local, int dim_fvec)
+{
+    for (int i = 0; i < dim_local; i++)
+    {
+        float value = 0.0;
+        for (int j = 0; j < max_row_length; j++)
+        {
+            value += data[i + dim_local*j] * fvec[indices[i + dim_local*j]];
+        }
+        result[i] = value;
+    }
+
+}
+template void cpu_ax<int>(int *data, int *fvec, int *result, int *indices, int max_row_length, int dim_local, int dim_fvec);
+template void cpu_ax<float>(float *data, float *fvec, float *result, float *indices, int max_row_length, int dim_local, int dim_fvec);
+template void cpu_ax<double>(double *data, double *fvec, double *result, double *indices, int max_row_length, int dim_local, int dim_fvec);

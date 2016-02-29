@@ -7,7 +7,7 @@ project(stuprotm1516)
 #========================================================================
 
 FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h")
-CUDA_ADD_EXECUTABLE(benchmark_ax ${SOURCES})
+CUDA_ADD_EXECUTABLE(benchmark ${SOURCES})
 
 
 #========================================================================
@@ -17,7 +17,7 @@ CUDA_ADD_EXECUTABLE(benchmark_ax ${SOURCES})
 #enables make code
 add_custom_target(
      code ALL
-     DEPENDS benchmark_ax
+     DEPENDS benchmark
      )
 
 
@@ -33,7 +33,7 @@ LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
-TARGET_LINK_LIBRARIES(benchmark_ax ${MPI_LIBRARIES})
+TARGET_LINK_LIBRARIES(benchmark ${MPI_LIBRARIES})
 
 
 #========================================================================
