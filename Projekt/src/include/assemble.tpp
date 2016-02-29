@@ -1407,18 +1407,168 @@ namespace Icarus
 		
 		
 		
+
+private void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+    int start = 0;
+    int end = nx*ny*nz -nx;
+           
+            
+    while(start < fron)
+    {
+        start += nx;
+                
+    }
+            
+    while(end > lron)
+    {
+        end -= nx;
+    }
+
+    for(int i =start; i<=end ;i+=nx)
+    {
+        int vtx_local = i - fron;
+        int vtx_global =i;
+        //fuelle wie linke Seite
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + nx;
+		indexMatrix[vtx_local][2] = vtx_global - nx;
+		indexMatrix[vtx_local][3] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][4] = vtx_global - nx*ny;
+		indexMatrix[vtx_local][5] = vtx_global + 1;
+		indexMatrix[vtx_local][6] = vtx_global + 2;
+		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+		valueMatrix[vtx_local][0] = -4.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		valueMatrix[vtx_local][3] = 1.0;
+		valueMatrix[vtx_local][4] = 1.0;
+		//modifizierter Differenzenquotient in x-Richtung
+		valueMatrix[vtx_local][0] += 11.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
 		
+
+		//NeumannRB, Normalenvektor ist (1,0,0)
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+
+		valueMatrix[vtx_local][0] += 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][5] += (-h) / 2.0;
+		valueMatrix[vtx_local][6] += 2.0 * h;
+
 		
+    }   
+}
+
+private void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+    int start = nx-1;
+    int end = nx*ny*nz-1;
+           
+            
+    while(start < fron)
+    {
+        start += nx;
+                
+    }
+            
+    while(end > lron)
+    {
+        end -= nx;
+    }
+
+    for(int i=start;i<=lron;i++)
+    {
+        int vtx_local = i-fron;
+        int vtx_global = i;
+        //Fuelle wie rechte seite.
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + nx;
+		indexMatrix[vtx_local][2] = vtx_global - nx;
+		indexMatrix[vtx_local][3] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][4] = vtx_global - nx*ny;
+		indexMatrix[vtx_local][5] = vtx_global - 1;
+		indexMatrix[vtx_local][6] = vtx_global - 2;
+
+		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+		valueMatrix[vtx_local][0] = -4.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		valueMatrix[vtx_local][3] = 1.0;
+		valueMatrix[vtx_local][vtx_local]ert[4] = 1.0;
+		//modifizierter Differenzenquotient in x-Richtung
+		valueMatrix[vtx_local][0] += 11.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
+		//NeumannRB, Normalenvektor ist (-1,0,0)
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+		valueMatrix[vtx_local][0] += (-1.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][5] += (-1.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += (-1.0) * 2.0 * h;
+
+    }   
+}
+
+private void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
+private void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
+private void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
+private void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
+private void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
+private void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
+private void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
+private void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+
+
+}
+
 		
 		
 			
-/*template<typename Scalar>
+template<typename Scalar>
 	std::pair < DistEllpackMatrix<Scalar>,
 		SlicedVector < Scalar >>
 		assemble_neumann_unrolled(size_t nx, size_t ny, size_t nz,
 		typename ScalarTraits<Scalar>::RealType h,
 		std::function<Scalar(size_t)> bdry)
-	    {
+	    	{
 			const size_t N = nx*ny*nz;
 			DistEllpackMatrix<Scalar> A(N);
 			SlicedVector<Scalar> rhs(N);
@@ -1427,9 +1577,51 @@ namespace Icarus
 			size_t lron = fron + A.get_dim_local() - 1;
 			
 			int[][] indexMatrix = new int[A.get_dim_local()][7];
-			int[][] valueMatrix = new int[A.get_dim_local()][7];
+			double[][] valueMatrix = new double[A.get_dim_local()][7];
+
+			//Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe 
+			//danach die Seiten und Ecken.
+
+			//Das Innere
+			for(int i =0;i<A.get_dim_local();i++)
+			{
+			    int vtx_global = i + fron;
+                indexMatrix[i][0] = vtx_global;
+   				indexMatrix[i][1] = vtx_global + 1;
+				indexMatrix[i][2] = vtx_global - 1;
+				indexMatrix[i][3] = vtx_global + nx;
+	    		indexMatrix[i][4] = vtx_global - nx;
+				indexMatrix[i][5] = vtx_global + nx*ny;
+				indexMatrix[i][6] = vtx_global - nx*ny;
+
+				//zentraler Differenzenquotient in alle Richtung möglich
+				valueMatrix[i][0] = -6.0;
+				valueMatrix[i][1] = 1.0;
+				valueMatrix[i][2] = 1.0;
+				valueMatrix[i][3] = 1.0;
+				valueMatrix[i][4] = 1.0;
+				valueMatrix[i][5] = 1.0;
+				valueMatrix[i][6] = 1.0;
+
+				////zentraler Differenzenquotient in alle Richtung möglich
+                //keine RB
+		    
+			}
 
 			A.prepare_sequential_fill(7);
+
+            //Fuelle nun die Seiten:
+            //Links
+
+            //Rechts 
+
+            //oben
+
+            //unten
+
+            //vorne
+
+            //hinten
 			
 			//Fuelle Eckpunkte: (Bei Eckpunkten sind (eher) if's OK (da nur 1 Punkt))
 			//Ecke vorne unten links
