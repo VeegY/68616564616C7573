@@ -43,7 +43,7 @@ template<typename Scalar>
 float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, int runs, int version, int mem_option);
 
 /*DONE*/template<typename Scalar>
-void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local, int mem_option)
+void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local, int mem_option);
 
 /*DONE*/template <typename Scalar>
 void cleanup(Scalar *one, Scalar *two, Scalar *result, int method);
