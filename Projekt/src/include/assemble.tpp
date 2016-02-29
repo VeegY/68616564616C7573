@@ -1618,11 +1618,138 @@ private void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],i
 private void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
+    //Hier fuer finde welche punkte im front panel liegen und
+    //fuelle alle die im bereich von fron..lron liegen.
+    int[] frontPanelIdxs = new int[nx*nz];
+    for(int iz =0; iz < nz;iz++)
+    {
+        for(int ix =0;ix<nx;ix++)
+        {
+            int idx = iz*(nx*ny) + ix;
+            frontPanelIdxs[iz*nx+ix] = idx;
+        }
+    }
+    
+    
+    int idxStart =0;
+    int start =frontPanelIdxs[idxStart];
+    while(start < fron)
+    {
+        idxStart++;
+        start = frontPanelIdxs[idxStartdx];
+        
+    }
+
+    int idxEnd = nx*nz-1;
+    int end = frontPanelIdxs[idxEnd];
+    while(lron < end)
+    {
+        idxEnd--;
+        end = frontPanelIdxs[idxEnd];
+        
+    }
+
+    //Alle Benoetigten idx's liegen zwischen idxStart und idxEnd
+    for(int idx = idxStart; idx<=idxEnd;idx++)
+    {
+        int vtx_global = frontPanelIdxs[idx];
+        int vtx_local =vtx_global - fron;
+        //fuelle wie in der vorderen seite
+
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][2] = vtx_global - nx*ny;
+		indexMatrix[vtx_local][3] = vtx_global + 1;
+		indexMatrix[vtx_local][4] = vtx_global - 1;
+		indexMatrix[vtx_local][5] = vtx_global + nx;
+		indexMatrix[vtx_local][6] = vtx_global + 2 * nx;
+    	//zentraler Differenzenquotient in x/z-Richtung möglich
+		valueMatrix[vtx_local][0] = -4.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		valueMatrix[vtx_local][3] = 1.0;
+		valueMatrix[vtx_local][4] = 1.0;
+		//modifizierter Differenzenquotient in y-Richtung
+		valueMatrix[vtx_local][0] += 11.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+					
+
+		//NeumannRB, Normalenvektor ist (0,1,0)
+	    //RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+
+		valueMatrix[vtx_local][0] += 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][5] += (-h) / 2.0;
+		valueMatrix[vtx_local][6] += 2.0 * h;
+
+    }
 
 }
 
 private void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
+    //Hier fuer finde welche punkte im back panel liegen und
+    //fuelle alle die im bereich von fron..lron liegen.
+    int[] backPanelIdxs = new int[nx*nz];
+    for(int iz =0; iz < nz;iz++)
+    {
+        for(int ix =0;ix<nx;ix++)
+        {
+            int idx = iz*(nx*ny) + ix + nx*(ny-1);
+            backPanelIdxs[iz*nx+ix] = idx;
+        }
+    }
+    
+    
+    int idxStart =0;
+    int start =backPanelIdxs[idxStart];
+    while(start < fron)
+    {
+        idxStart++;
+        start = backPanelIdxs[idxStartdx];
+        
+    }
+
+    int idxEnd = nx*nz-1;
+    int end = backPanelIdxs[idxEnd];
+    while(lron < end)
+    {
+        idxEnd--;
+        end = backPanelIdxs[idxEnd];
+        
+    }
+
+    //Alle benoetigten idx's liegen zwischen idxStart und idxEnd
+    for(int idx = idxStart; idx<=idxEnd;idx++)
+    {
+        int vtx_global = frontPanelIdxs[idx];
+        int vtx_local =vtx_global - fron;
+        //fuelle wie in der hinteren Seite
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][2] = vtx_global - nx*ny;
+		indexMatrix[vtx_local][3] = vtx_global + 1;
+		indexMatrix[vtx_local][4] = vtx_global - 1;
+		indexMatrix[vtx_local][5] = vtx_global - nx;
+		indexMatrix[vtx_local][6] = vtx_global - 2 * nx;
+
+		//zentraler Differenzenquotient in x/z-Richtung möglich
+		valueMatrix[vtx_local][0] = -4.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		valueMatrix[vtx_local][3] = 1.0;
+		valueMatrix[vtx_local][4] = 1.0;
+		//modifizierter Differenzenquotient in y-Richtung
+		valueMatrix[vtx_local][0] += 11.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+	    valueMatrix[vtx_local][6] = 17.0 / 38.0;
+		//NeumannRB, Normalenvektor ist (0,-1,0)
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+		valueMatrix[vtx_local][0] += (-1.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][5] += (-1.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += (-1.0) * 2.0 * h;
+
+    }
 
 
 }
