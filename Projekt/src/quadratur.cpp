@@ -35,7 +35,7 @@ std::vector<double> get_quadrature_xpoints(int e, double h, std::vector<double>&
     transformation(ax, h, trans); //Transformation auf das Intervall mit der Länge h
     for(int j=0; j<27; ++j)
     {
-        x_global[j]=trans[j]+e_x+x_local[j]; //Hier fehlt noch das Einbinden von getXcoordinate(e)!!!
+        x_global[j]=trans[j]+e_x+x_local[j]; 
     }
     return x_global;
 }
@@ -49,7 +49,7 @@ std::vector<double> get_quadrature_ypoints(int e, double h, std::vector<double>&
     transformation(ay, h, trans); //Transformation auf das Intervall mit der Länge h
     for(int l=0; l<27; ++l)
     {
-        y_global[l]=trans[l]+e_y+y_local[l];//Hier fehlt noch das Einbinden von getYcoordinate(e)
+        y_global[l]=trans[l]+e_y+y_local[l];
     }
     return y_global;
 }
@@ -64,7 +64,7 @@ std::vector<double> get_quadrature_zpoints(int e, double h, std::vector<double>&
     transformation(az, h, trans); //Transformation auf das Intervall mit der Länge h
     for(int r=0; r<27; ++r)
     {
-        z_global[r]=trans[r]+e_z+z_local[r]; //Hier fehlt noch das Einbinden von getZcoordinate(e)
+        z_global[r]=trans[r]+e_z+z_local[r]; 
     }
     return z_global;
 }
