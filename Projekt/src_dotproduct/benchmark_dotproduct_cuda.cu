@@ -18,12 +18,12 @@ void cleanup(Scalar *pointer, int method);
 
 //KERNEL!!!
 template<typename type>
-__global__ void gpu_scalar(type *one,type *two, type *result, type *placehold, int dim_local, int numblocks)
+__global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, int dim_local, int numblocks)
 {
     extern __shared__ type shar[];
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
     int sidx = threadIdx.x;
-    type value = (type)0;
+    type value = 0;
     if (idx < dim_local)
     {
         value = one[idx];
@@ -234,7 +234,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
-            cudaHostGetDevicePointer((void **)&d_placehold, (void *)result, 0);
+            cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
 
             //=================================//
             timer.start();
@@ -307,7 +307,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         if(mem_option == 0)
         {
             cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
-            gpu_scalar <<<num_blocks, num_threads, sizeof(Scalar)*dim_local >>>(one, two, result, dim_local, num_blocks);
+            gpu_scalar <<<num_blocks, num_threads, sizeof(Scalar)*dim_local >>>(one, two, result, placehold, dim_local, num_blocks);
         }
         else if(mem_option == 1)
         {
@@ -317,8 +317,9 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
+            cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
             
-            gpu_scalar << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, dim_local, num_blocks);
+            gpu_scalar << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
         }
         cudaDeviceSynchronize();
         break;
