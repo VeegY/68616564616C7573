@@ -1408,7 +1408,7 @@ namespace Icarus
 		
 		
 
-private void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int start = 0;
     int end = nx*ny*nz -nx;
@@ -1461,7 +1461,7 @@ private void assembleLeftSidePanel(int indexMatrix[][7], double valueMatrix[][7]
     }   
 }
 
-private void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int start = nx-1;
     int end = nx*ny*nz-1;
@@ -1511,7 +1511,7 @@ private void assembleRightSidePanel(int indexMatrix[][7], double valueMatrix[][7
     }   
 }
 
-private void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
     int start = nx*ny*(nz-1);
@@ -1566,7 +1566,7 @@ private void assembleTopPanel(int indexMatrix[][7], double valueMatrix[][7],int 
 
 }
 
-private void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
     int start = 0;
@@ -1615,7 +1615,7 @@ private void assembleBottomPanel(int indexMatrix[][7], double valueMatrix[][7],i
     
 }
 
-private void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
     //Hier fuer finde welche punkte im front panel liegen und
@@ -1686,7 +1686,7 @@ private void assembleFrontPanel(int indexMatrix[][7], double valueMatrix[][7],in
 
 }
 
-private void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     //Hier fuer finde welche punkte im back panel liegen und
     //fuelle alle die im bereich von fron..lron liegen.
@@ -1754,7 +1754,7 @@ private void assembleBackPanel(int indexMatrix[][7], double valueMatrix[][7],int
 
 }
 
-private void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int[] kantenidxs = new int[nz];
     for(int i = 0;i < nz;i++)
@@ -1808,19 +1808,19 @@ private void assembleKanteVorneLinks(int indexMatrix[][7], double valueMatrix[][
 
 }
 
-private void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteVorneRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
 
 }
 
-private void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteHintenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
 
 }
 
-private void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
 
 
@@ -1828,7 +1828,7 @@ private void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[
 
 //Untere Kanten
 
-private void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int[] kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
@@ -1883,7 +1883,7 @@ private void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][
     }
 }
 
-private void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
     int[] kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
@@ -1938,34 +1938,130 @@ private void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[]
     }
 }
 
-private void assembleKantenUntenLinks()
+void assembleKantenUntenLinks(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
+    int[] kantenidxs = new int[ny];
+    for(int i = 0;i < ny;i++)
+    {
+        kantenidxs[i] = i*nx;
+    }
 
+    int startidx = 0;
+    int endidx = ny;
+    while(kantenidxs[startidxs] < fron)
+    {
+        startidx++;
+    }
+    while(kantenidxs[endidx] > lron)
+    {
+        endidx--;
+    }
+
+    for(int idx = startidx; idx <= endidx ;idx++)
+    {
+    
+        int vtx_global = idx;
+        int vtx_local = vtx_global - fron;  
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + nx;
+		indexMatrix[vtx_local][2] = vtx_global - nx;
+		indexMatrix[vtx_local][3] = vtx_global + 1;
+		indexMatrix[vtx_local][4] = vtx_global + 2;
+		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
+		//zentraler Differezenquotient in y-Richtung möglich
+		valueMatrix[vtx_local][0] = -2.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		//modifizierter Differenzenquotient in x/z-Richtung
+		valueMatrix[vtx_local][0] += 2.0 * 11.0 / 38.0;
+		valueMatrix[vtx_local][3] = -28.0 / 38.0;
+		valueMatrix[vtx_local][4] = 17.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
+		//NeumannRB, Normalenvektor ist (1/sqrt(2),0,1/sqrt(2))
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;
+
+    }    
 }
 
-private void assembleKanteUntenRechts()
+void assembleKanteUntenRechts(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
 {
+    int[] kantenidxs = new int[ny];
+    for(int i = 0;i < ny;i++)
+    {
+        kantenidxs[i] = i*nx+nx-1;
+    }
 
+    int startidx = 0;
+    int endidx = ny;
+    while(kantenidxs[startidxs] < fron)
+    {
+        startidx++;
+    }
+    while(kantenidxs[endidx] > lron)
+    {
+        endidx--;
+    }
+
+    for(int idx = startidx; idx <= endidx ;idx++)
+    {
+        int vtx_global = idx;
+        int vtx_local = vtx_global - fron; 
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + nx;
+		indexMatrix[vtx_local][2] = vtx_global - nx;
+		indexMatrix[vtx_local][3] = vtx_global - 1;
+		indexMatrix[vtx_local][4] = vtx_global - 2;
+		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
+
+		//zentraler Differezenquotient in y-Richtung möglich
+		valueMatrix[vtx_local][0] = -2.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		//modifizierter Differenzenquotient in x/z-Richtung
+		valueMatrix[vtx_local][0] += 2.0 * 11.0 / 38.0;
+		valueMatrix[vtx_local][3] = -28.0 / 38.0;
+		valueMatrix[vtx_local][4] = 17.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
+		//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,1/sqrt(2))
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+
+		//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
+		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;       
+    }
 }
 
 //Obere Kanten
 
-private void assembleKanteObenVorne()
+void assembleKanteObenVorne()
 {
 
 }
 
-private void assembleKanteObenHinten()
+void assembleKanteObenHinten()
 {
 
 }
 
-private void assembleKantenObenLinks()
+void assembleKantenObenLinks()
 {
 
 }
 
-private void assembleKanteObenRechts()
+void assembleKanteObenRechts()
 {
 
 }
