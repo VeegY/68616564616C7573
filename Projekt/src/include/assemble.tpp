@@ -1826,6 +1826,150 @@ private void assembleKanteHintenRechts(int indexMatrix[][7], double valueMatrix[
 
 }
 
+//Untere Kanten
+
+private void assembleKanteUntenVorne(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+    int[] kantenidxs = new int[nx];
+    for(int i = 0;i < nx;i++)
+    {
+        kantenidxs[i] = i;
+    }
+
+    int startidx = 0;
+    int endidx = nx;
+    while(kantenidxs[startidxs] < fron)
+    {
+        startidx++;
+    }
+    while(kantenidxs[endidx] > lron)
+    {
+        endidx--;
+    }
+
+    for(int idx = startidx; idx <= endidx ;idx++)
+    {
+    
+        int vtx_global = idx;
+        int vtx_local = vtx_global - fron;
+        //Fuelle wie in Kante unten Vorne
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + 1;
+		indexMatrix[vtx_local][2] = vtx_global - 1;
+		indexMatrix[vtx_local][3] = vtx_global + nx;
+		indexMatrix[vtx_local][4] = vtx_global + 2 * nx;
+		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
+
+		//zentraler Differezenquotient in x-Richtung möglich
+		valueMatrix[vtx_local][0] = -2.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		//modifizierter Differenzenquotient in y/z-Richtung
+		valueMatrix[vtx_local][0] += 2.0 * 11.0 / 38.0;
+		valueMatrix[vtx_local][3] = -28.0 / 38.0;
+		valueMatrix[vtx_local][4] = 17.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
+		
+		//NeumannRB, Normalenvektor ist (0,1/sqrt(2),1/sqrt(2))
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;
+    }
+}
+
+private void assembleKanteUntenHinten(int indexMatrix[][7], double valueMatrix[][7],int fron, int lron, int msize)
+{
+    int[] kantenidxs = new int[nx];
+    for(int i = 0;i < nx;i++)
+    {
+        kantenidxs[i] = i+(nx*(ny-1));
+    }
+
+    int startidx = 0;
+    int endidx = nx;
+    while(kantenidxs[startidxs] < fron)
+    {
+        startidx++;
+    }
+    while(kantenidxs[endidx] > lron)
+    {
+        endidx--;
+    }
+
+    for(int idx = startidx; idx <= endidx ;idx++)
+    {
+    
+        int vtx_global = idx;
+        int vtx_local = vtx_global - fron;  
+        
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global + 1;
+		indexMatrix[vtx_local][2] = vtx_global - 1;
+		indexMatrix[vtx_local][3] = vtx_global - nx;
+		indexMatrix[vtx_local][4] = vtx_global - 2 * nx;
+		indexMatrix[vtx_local][5] = vtx_global + nx*ny;
+		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
+
+		//zentraler Differezenquotient in x-Richtung möglich
+		valueMatrix[vtx_local][0] = -2.0;
+		valueMatrix[vtx_local][1] = 1.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		//modifizierter Differenzenquotient in y/z-Richtung
+		valueMatrix[vtx_local][0] += 2.0 * 11.0 / 38.0;
+		valueMatrix[vtx_local][3] = -28.0 / 38.0;
+		valueMatrix[vtx_local][4] = 17.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+
+		//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),1/sqrt(2))
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+
+		//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
+		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;
+    }
+}
+
+private void assembleKantenUntenLinks()
+{
+
+}
+
+private void assembleKanteUntenRechts()
+{
+
+}
+
+//Obere Kanten
+
+private void assembleKanteObenVorne()
+{
+
+}
+
+private void assembleKanteObenHinten()
+{
+
+}
+
+private void assembleKantenObenLinks()
+{
+
+}
+
+private void assembleKanteObenRechts()
+{
+
+}
+
 		
 		
 			
