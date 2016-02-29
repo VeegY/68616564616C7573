@@ -19,7 +19,7 @@ void cleanup(Scalar *pointer, int method);
 int GetNextPowerOf2(int n)
 {
     // Code works for 32bit and 64bit 
-    ญญญญ --n;
+    ญญญญn--;
     n |= n >> 1;
     n |= n >> 2;
     n |= n >> 4;
@@ -190,7 +190,7 @@ template void allocation<double>(double **vecone, double **vectwo, double **resu
 //                          KERNEL
 //=============================================================================
 template<typename Scalar>
-float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, int runs, int version, int mem_option);
+float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, int runs, int version, int mem_option)
 {
     Timer timer;
     float elapsed_time = 0.0;
@@ -212,7 +212,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_dotproduct<<<num_blocks, num_threads, sizeof(Scalar)*dim_local >>>(one, two, result, dim_local);
+                gpu_dotproduct<<<num_blocks, num_threads, sizeof(Scalar)*dim_local>>>(one, two, result, dim_local);
             }
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
