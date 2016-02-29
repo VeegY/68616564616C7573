@@ -2759,8 +2759,8 @@ template<typename Scalar>
 			size_t fron = A.first_row_on_node();
 			size_t lron = fron + A.get_dim_local() - 1;
 
-			int[][] indexMatrix = new int[A.get_dim_local()][7];
-			double[][] valueMatrix = new double[A.get_dim_local()][7];
+			int indexMatrix[][] = new int[A.get_dim_local()][7];
+			double valueMatrix[][] = new double[A.get_dim_local()][7];
             int msize = A.get_dim_local();
 
 			//Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe
