@@ -19,7 +19,8 @@ void cleanup(Scalar *pointer, int method);
 int GetNextPowerOf2(int n)
 {
     // Code works for 32bit and 64bit 
-    ญญญญn--;
+    ญญญญn -= 1;
+    printf("%n test n\n", n);
     n |= n >> 1;
     n |= n >> 2;
     n |= n >> 4;
@@ -200,8 +201,8 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
     {
         num_threads = GetNextPowerOf2(dim_local);
     }
-    int num_blocks = ceil((double)Dim_local / 1024);
-    printf("%f -- %f",num_threads,num_blocks)
+    int num_blocks = ceil((double)dim_local / 1024);
+    printf("%f -- %f", num_threads, num_blocks);
 
     switch (version)
     {
@@ -220,9 +221,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
         }
         else if (mem_option == 1)
         {
-            Scalar *d_one;
-            Scalar *d_two;
-            Scalar *d_result;
+            Scalar *d_one, *d_two, *d_result;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
@@ -293,9 +292,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         }
         else if(mem_option == 1)
         {
-            Scalar *d_one;
-            Scalar *d_two;
-            Scalar *d_result;
+            Scalar *d_one, *d_two, *d_result;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
