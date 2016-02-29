@@ -18,33 +18,46 @@ void cleanup(Scalar *pointer, int method);
 
 //KERNEL!!!
 template<typename type>
-__global__ void gpu_dotproduct(type *one,type *two, type *result, int dim_local)
+__global__ void gpu_dotproduct(type *one,type *two, type *result, type *placehold, int dim_local, int numblocks)
 {
     extern __shared__ type shar[];
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    int sidx = threadIdx.x;
     type value = (type)0;
     if (idx < dim_local)
     {
         value = one[idx];
         value *= two[idx];
     }
-    shar[idx] = value;
+    shar[sidx] = value;
     __syncthreads();
 
     //reduce kernel
     for (int offset = blockDim.x / 2; offset >0; offset >>= 1)
     {
-        if (idx < offset)
+        if (sidx < offset)
         {
-            shar[idx] += shar[idx + offset];
+            shar[sidx] += shar[sidx + offset];
         }
         __syncthreads();
     }
 
+    if (sidx == 0)
+    {
+        placehold[blockIdx.x] = shar[0];
+    }
+    __syncthreads();
+
     if (idx == 0)
     {
-        atomicAdd(&result, shar[idx]));
+        type res = 0;
+        for (int i = 0; i < numblocks; i++)
+        {
+            res += placehold[i];
+        }
+        result = res;
     }
+    
 
 }
 
@@ -180,6 +193,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
     Timer timer;
     float elapsed_time = 0.0;
 
+    Scalar *placehold = NULL;
     int num_threads = 1024;
     if (dim_local<1024)
     {
@@ -201,11 +215,12 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
     case(0) :               //kernel_standart
         if (mem_option == 0)
         {
+            cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
             //=================================//
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_dotproduct<<<num_blocks, num_threads, sizeof(Scalar)*dim_local>>>(one, two, result, dim_local);
+                gpu_dotproduct<<<num_blocks, num_threads, sizeof(Scalar)*dim_local>>>(one, two, result, placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -213,17 +228,19 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
         }
         else if (mem_option == 1)
         {
-            Scalar *d_one, *d_two, *d_result;
+            cudaHostAlloc((void **)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
+            Scalar *d_one, *d_two, *d_result, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
+            cudaHostGetDevicePointer((void **)&d_placehold, (void *)result, 0);
 
             //=================================//
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_dotproduct << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, dim_local);
+                gpu_dotproduct << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -280,7 +297,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
     case(0) :               //kernel_standart
         if(mem_option == 0)
         {
-            gpu_dotproduct <<<num_blocks, num_threads, sizeof(Scalar)*dim_local >>>(one, two, result, dim_local);
+            gpu_dotproduct <<<num_blocks, num_threads, sizeof(Scalar)*dim_local >>>(one, two, result, dim_local, num_blocks);
         }
         else if(mem_option == 1)
         {
@@ -290,7 +307,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             
-            gpu_dotproduct << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, dim_local);
+            gpu_dotproduct << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, dim_local, num_blocks);
         }
         cudaDeviceSynchronize();
         break;
