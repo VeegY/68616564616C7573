@@ -10,7 +10,7 @@ int y=Nx;
 
 //TODO: wieder loeschen
 #define Dirichlet true
-#define Neumann true
+#define Neumann false 
 //TODO: wieder loeschen
 
 
@@ -22,10 +22,10 @@ int y=Nx;
 namespace Icarus
 {
 
-int nomain()
+void assemble_FEM(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
 {
-
-    DistEllpackMatrix<double> Matrix(Nx*Ny*Nz);
+    Matrix.prepare_sequential_fill(27);
+    //DistEllpackMatrix<double> Matrix(Nx*Ny*Nz);
 
     int i;
     int Zeile;
@@ -41,7 +41,6 @@ int nomain()
     Zeile=0;
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -52,7 +51,6 @@ int nomain()
         //Matrix.setZeile(i, assemblyMatrixRow(e, A));
         //TODO Zeile i befuellen nicht die naechste
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -71,9 +69,9 @@ int nomain()
     //Ecke 2
     i=y-1;
     Zeile++;
+    
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -83,7 +81,6 @@ int nomain()
         e[0]=i-1; A[0]=1;
         //TODO Zeile i befuellen nicht die naechste
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -104,7 +101,6 @@ int nomain()
     Zeile++;
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -113,7 +109,6 @@ int nomain()
     {
         e[0]=i-1-y; A[0]=2;
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -134,7 +129,6 @@ int nomain()
     Zeile++;
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -143,7 +137,6 @@ int nomain()
     {
         e[0]=i-y; A[0]=3;
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -164,7 +157,6 @@ int nomain()
     Zeile++;
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -173,7 +165,6 @@ int nomain()
     {
         e[0]=i-z; A[0]=4;
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -194,7 +185,6 @@ int nomain()
     Zeile++;
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -203,7 +193,6 @@ int nomain()
     {
         e[0]=i-1-z; A[0]=5;
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -224,7 +213,6 @@ int nomain()
     Zeile++;
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -233,7 +221,6 @@ int nomain()
     {
         e[0]=i-1-y-z; A[0]=6;
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -254,7 +241,6 @@ int nomain()
     Zeile++;
     if(Dirichlet)
     {
-        Matrix.prepare_sequential_fill(1);
         Matrix.sequential_fill(i, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= 999999;
@@ -263,7 +249,6 @@ int nomain()
     {
         e[0]=i-y-z; A[0]=7;
         assemblyMatrixRow(e, A, column, value);
-        Matrix.prepare_sequential_fill(8);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
@@ -289,7 +274,6 @@ int nomain()
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -299,7 +283,6 @@ int nomain()
             e[0]=i-1; A[0]=1;
             e[1]=i; A[1]=0;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -323,7 +306,6 @@ int nomain()
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -333,7 +315,6 @@ int nomain()
             e[0]=i-y -1; A[0]=2;
             e[1]=i-y; A[1]=3;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -357,7 +338,6 @@ int nomain()
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -367,7 +347,6 @@ int nomain()
             e[0]=i-y-z -1; A[0]=6;
             e[1]=i-y-z; A[1]=7;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -391,7 +370,6 @@ int nomain()
        Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -401,7 +379,6 @@ int nomain()
             e[0]=i-z -1; A[0]=5;
             e[1]=i-z; A[1]=4;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -425,7 +402,6 @@ int nomain()
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -435,7 +411,6 @@ int nomain()
             e[0]=i-y; A[0]=3;
             e[1]=i; A[1]=0;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -459,7 +434,6 @@ int nomain()
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -469,7 +443,6 @@ int nomain()
             e[0]=i-1 -y; A[0]=2;
             e[1]=i-1; A[1]=1;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -493,7 +466,6 @@ int nomain()
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -503,7 +475,6 @@ int nomain()
             e[0]=i-1-z -y; A[0]=6;
             e[1]=i-1-z; A[1]=5;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -521,13 +492,12 @@ int nomain()
     }
 
     //Kante 8:
-    for(int j=1; j<Nz-1; j++)
+    for(int j=1; j<Ny-1; j++)
     {
-        i= j*z;
+        i = z*(Nz-1) + j*y;
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -537,7 +507,6 @@ int nomain()
             e[0]=i -z; A[0]=4;
             e[1]=i; A[1]=0;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -555,13 +524,12 @@ int nomain()
     }
 
     //Kante 9:
-    for(int j=1; j<Ny-1; j++)
+    for(int j=1; j<Nz-1; j++)
     {
         i=(Nz-1)*z + j*y;
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -571,7 +539,6 @@ int nomain()
             e[0]=i-z -y; A[0]=7;
             e[1]=i-z; A[1]=4;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -589,13 +556,12 @@ int nomain()
     }
 
     //Kante 10:
-    for(int j=1; j<Ny-1; j++)
+    for(int j=1; j<Nz-1; j++)
     {
         i=y-1 + j*z;
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -605,7 +571,6 @@ int nomain()
             e[0]=i-1 -z; A[0]=5;
             e[1]=i-1; A[1]=1;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -623,13 +588,12 @@ int nomain()
     }
 
     //Kante 11:
-    for(int j=1; j<Ny-1; j++)
+    for(int j=1; j<Nz-1; j++)
     {
         i=y-1 + j*z;
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -639,7 +603,6 @@ int nomain()
             e[0]=i-1 -z; A[0]=5;
             e[1]=i-1; A[1]=1;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -657,13 +620,12 @@ int nomain()
     }
 
     //Kante 12:
-    for(int j=1; j<Ny-1; j++)
+    for(int j=1; j<Nz-1; j++)
     {
         i=z-y + j*z;
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.prepare_sequential_fill(1);
             Matrix.sequential_fill(i, 1.0);
             Matrix.end_of_row();
             RHS[Zeile]= 999999;
@@ -673,7 +635,6 @@ int nomain()
             e[0]=i-y -z; A[0]=7;
             e[1]=i-y; A[1]=3;
             assemblyMatrixRow(e, A, column, value);
-            Matrix.prepare_sequential_fill(12);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
@@ -702,7 +663,6 @@ int nomain()
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.prepare_sequential_fill(1);
                 Matrix.sequential_fill(i, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= 999999;
@@ -714,7 +674,6 @@ int nomain()
                 e[2]=i; A[2]=0;
                 e[3]=i -1; A[3]=1;
                 assemblyMatrixRow(e, A, column, value);
-                Matrix.prepare_sequential_fill(18);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
@@ -740,7 +699,6 @@ int nomain()
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.prepare_sequential_fill(1);
                 Matrix.sequential_fill(i, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= 999999;
@@ -752,7 +710,6 @@ int nomain()
                 e[2]=i -z ; A[2]=4;
                 e[3]=i -1 -z; A[3]=5;
                 assemblyMatrixRow(e, A, column, value);
-                Matrix.prepare_sequential_fill(18);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
@@ -778,7 +735,6 @@ int nomain()
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.prepare_sequential_fill(1);
                 Matrix.sequential_fill(i, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= 999999;
@@ -790,7 +746,6 @@ int nomain()
                 e[2]=i; A[2]=0;
                 e[3]=i -1; A[3]=1;
                 assemblyMatrixRow(e, A, column, value);
-                Matrix.prepare_sequential_fill(18);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
@@ -816,7 +771,6 @@ int nomain()
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.prepare_sequential_fill(1);
                 Matrix.sequential_fill(i, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= 999999;
@@ -828,7 +782,6 @@ int nomain()
                 e[2]=i -y; A[2]=3;
                 e[3]=i -1 -y; A[3]=2;
                 assemblyMatrixRow(e, A, column, value);
-                Matrix.prepare_sequential_fill(18);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
@@ -854,7 +807,6 @@ int nomain()
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.prepare_sequential_fill(1);
                 Matrix.sequential_fill(i, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= 999999;
@@ -866,7 +818,6 @@ int nomain()
                 e[2]=i; A[2]=0;
                 e[3]=i -y; A[3]=3;
                 assemblyMatrixRow(e, A, column, value);
-                Matrix.prepare_sequential_fill(18);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
@@ -892,7 +843,6 @@ int nomain()
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.prepare_sequential_fill(1);
                 Matrix.sequential_fill(i, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= 999999;
@@ -904,7 +854,6 @@ int nomain()
                 e[2]=i -1; A[2]=1;
                 e[3]=i -y -1; A[3]=2;
                 assemblyMatrixRow(e, A, column, value);
-                Matrix.prepare_sequential_fill(18);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
@@ -935,7 +884,6 @@ int nomain()
                 Zeile++;
                 if(Dirichlet)
                 {
-                    Matrix.prepare_sequential_fill(1);
                     Matrix.sequential_fill(i, 1.0);
                     Matrix.end_of_row();
                     RHS[Zeile]= 999999;
@@ -951,7 +899,6 @@ int nomain()
                     e[6]=i; A[6]=0;
                     e[7]=i -1; A[7]=1;
                     assemblyMatrixRow(e, A, column, value);
-                    Matrix.prepare_sequential_fill(27);
                     for (int m(0); m<27; ++m)
                         Matrix.sequential_fill(column[m], value[m]);
                     Matrix.end_of_row();
@@ -963,7 +910,8 @@ int nomain()
         }
     }
 
-    return 0;
+    for (int i(0); i<Nx*Ny*Nz; ++i)
+        rhs.set_global(i, RHS[i]);
 
 }//nomain()
 
