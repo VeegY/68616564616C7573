@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
 }
 
 template <typename type>
-void cpu_ax(type *data, type *fvec, type *result, type *indices, int max_row_length, int dim_local, int dim_fvec)
+void cpu_ax(type *data, type *fvec, type *result, int *indices, int max_row_length, int dim_local, int dim_fvec)
 {
     for (int i = 0; i < dim_local; i++)
     {
