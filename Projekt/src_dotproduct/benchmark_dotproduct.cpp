@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = unified; }
 
+    printf("OVERALL ONE START\n");
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
     {
@@ -85,6 +86,7 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = zero; version_second = version_first; }
 
+    printf("OVERALLTWO START\n");
     timer_overall.start();
     for (int r = 0; r<iteration; r++)
     {
@@ -113,7 +115,7 @@ int main(int argc, char* argv[])
 //                                Zeitmessung Kernel Teil 1                   
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = unified; }
-    
+    printf("KERNEL 1 ONE START\n");
     float *vecone_first = NULL;
     float *vectwo_first = NULL;
     float *result_first = NULL;
@@ -131,7 +133,7 @@ int main(int argc, char* argv[])
  //                                Zeitmessung Kernel Teil 2                   
  //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = zero; version_second = version_first; }
-    
+    printf("KERNEL TWO START\n");
     float *vecone_second = NULL;
     float *vectwo_second = NULL;
     float *result_second = NULL;
