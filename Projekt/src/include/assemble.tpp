@@ -2746,115 +2746,115 @@ void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fr
 
 
 template<typename Scalar>
-	std::pair < DistEllpackMatrix<Scalar>,
-		SlicedVector < Scalar >>
-		assemble_neumann_unrolled(size_t nx, size_t ny, size_t nz,
-		typename ScalarTraits<Scalar>::RealType h,
-		std::function<Scalar(size_t)> bdry)
-	    	{
-			const size_t N = nx*ny*nz;
-			DistEllpackMatrix<Scalar> A(N);
-			SlicedVector<Scalar> rhs(N);
+std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
+    assemble_neumann_unrolled(size_t nx, size_t ny, size_t nz,
+        typename ScalarTraits<Scalar>::RealType h,
+        std::function<Scalar(size_t)> bdry)
+{
+    const size_t N = nx*ny*nz;
+    DistEllpackMatrix<Scalar> A(N);
+    SlicedVector<Scalar> rhs(N);
 
-			size_t fron = A.first_row_on_node();
-			size_t lron = fron + A.get_dim_local() - 1;
+    size_t fron = A.first_row_on_node();
+    size_t lron = fron + A.get_dim_local() - 1;
 
-            
 
-			int** indexMatrix = new int*[(int)A.get_dim_local()];
-			double** valueMatrix = new double*[(int)A.get_dim_local()];
-            for(int i=0;i< A.get_dim_local();i++)
-            {
-                indexMatrix[i] = new int[7];
-                valueMatrix[i] = new double[7];
-            }
-            int msize = A.get_dim_local();
 
-			//Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe
-			//danach die Seiten danach Kanten danach Ecken.
+    int** indexMatrix = new int*[(int)A.get_dim_local()];
+    double** valueMatrix = new double*[(int)A.get_dim_local()];
+    for(int i=0;i< A.get_dim_local();i++)
+    {
+        indexMatrix[i] = new int[7];
+        valueMatrix[i] = new double[7];
+    }
+    int msize = A.get_dim_local();
 
-			//Das Innere
-			for(int i =0;i<A.get_dim_local();i++)
-			{
-			    int vtx_global = i + fron;
-                indexMatrix[i][0] = vtx_global;
-   				indexMatrix[i][1] = vtx_global + 1;
-				indexMatrix[i][2] = vtx_global - 1;
-				indexMatrix[i][3] = vtx_global + nx;
-	    		indexMatrix[i][4] = vtx_global - nx;
-				indexMatrix[i][5] = vtx_global + nx*ny;
-				indexMatrix[i][6] = vtx_global - nx*ny;
+    //Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe
+    //danach die Seiten danach Kanten danach Ecken.
 
-				//zentraler Differenzenquotient in alle Richtung möglich
-				valueMatrix[i][0] = -6.0;
-				valueMatrix[i][1] = 1.0;
-				valueMatrix[i][2] = 1.0;
-				valueMatrix[i][3] = 1.0;
-				valueMatrix[i][4] = 1.0;
-				valueMatrix[i][5] = 1.0;
-				valueMatrix[i][6] = 1.0;
+    //Das Innere
+    for(int i =0;i<A.get_dim_local();i++)
+    {
+        int vtx_global = i + fron;
+        indexMatrix[i][0] = vtx_global;
+        indexMatrix[i][1] = vtx_global + 1;
+        indexMatrix[i][2] = vtx_global - 1;
+        indexMatrix[i][3] = vtx_global + nx;
+        indexMatrix[i][4] = vtx_global - nx;
+        indexMatrix[i][5] = vtx_global + nx*ny;
+        indexMatrix[i][6] = vtx_global - nx*ny;
 
-				////zentraler Differenzenquotient in alle Richtung möglich
-                //keine RB
+        //zentraler Differenzenquotient in alle Richtung moeglich
+        valueMatrix[i][0] = -6.0;
+        valueMatrix[i][1] = 1.0;
+        valueMatrix[i][2] = 1.0;
+        valueMatrix[i][3] = 1.0;
+        valueMatrix[i][4] = 1.0;
+        valueMatrix[i][5] = 1.0;
+        valueMatrix[i][6] = 1.0;
 
-			}
+        ////zentraler Differenzenquotient in alle Richtung moeglich
+        //keine RB
 
-            //Fuelle nun die Seiten:
-            //Links
-            assembleLeftSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //Rechts
-            assembleRightSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //oben
-            assembleTopPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //unten
-            assembleBottomPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //vorne
-            assembleFrontPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //hinten
-            assembleBackPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    }
 
-            //Fuelle nun die Kanten:
-            //untere Kanten
-            assembleKanteUntenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteUntenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteUntenVorne(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //mittlere Kanten
-            assembleKanteHintenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteHintenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteVorneRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //obere Kanten
-            assembleKanteObenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKantenObenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //Fuelle nun die Seiten:
+    //Links
+    assembleLeftSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //Rechts
+    assembleRightSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //oben
+    assembleTopPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //unten
+    assembleBottomPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //vorne
+    assembleFrontPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //hinten
+    assembleBackPanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
 
-            //Fuelle nun die Ecken:
-            //untere ecken:
-            assembleEckeuntenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleEckeuntenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleEckeuntenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleEckeuntenvornerechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            //obere ecken:
-            assembleEckeObenvornerechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleEckeObenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-            assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //Fuelle nun die Kanten:
+    //untere Kanten
+    assembleKanteUntenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteUntenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteUntenVorne(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //mittlere Kanten
+    assembleKanteHintenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteHintenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteVorneRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //obere Kanten
+    assembleKanteObenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKantenObenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
 
-            A.prepare_sequential_fill(7);
-            for(int i =0;i< msize;i++)
-            {
-                for(int j = 0; j<7;j++)
-                {
-                    A.sequential_fill(indexMatrix[i][j],valueMatrix[i][j]);
-                }
-                A.end_of_row();
-                int vtx_global = indexMatrix[i][0];
+    //Fuelle nun die Ecken:
+    //untere ecken:
+    assembleEckeuntenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleEckeuntenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleEckeuntenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleEckeuntenvornerechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    //obere ecken:
+    assembleEckeObenvornerechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleEckeObenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
 
-				rhs.set_local(vtx_global, h*h*bdry(vtx_global));
-            }
-            return {A,rhs};
+    A.prepare_sequential_fill(7);
+    for(int i =0;i< msize;i++)
+    {
+        for(int j = 0; j<7;j++)
+        {
+            A.sequential_fill(indexMatrix[i][j],valueMatrix[i][j]);
+        }
+        A.end_of_row();
+        int vtx_global = indexMatrix[i][0];
 
+        rhs.set_local(vtx_global, h*h*bdry(vtx_global));
+    }
+    return {A,rhs};
 }
+
+}//namespace Icarus
 
