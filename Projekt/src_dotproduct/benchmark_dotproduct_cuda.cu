@@ -302,6 +302,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
     }
     int num_blocks = ceil((double)dim_local / 1024);
     printf("\t\tSETUP GENERATED\n");
+    printf("\t\tVERSION %i\n",version);
     switch (version)
     {
     case(0) :               //kernel_standart
