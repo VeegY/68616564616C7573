@@ -221,7 +221,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar<<<num_blocks, num_threads, sizeof(Scalar)*dim_local>>>(one, two, result, placehold, dim_local, num_blocks);
+                gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(one, two, result, placehold, dim_local, num_blocks);
             }
             //cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -241,7 +241,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
+                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
             }
             //cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -312,6 +312,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
             printf("\t\tKERNEL\n");
             gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads >>>(one, two, result, placehold, dim_local, num_blocks);
+            printf("\t\tKERNEL END\n");
         }
         else if(mem_option == 1)
         {
@@ -323,7 +324,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
             
-            gpu_scalar << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
+            gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
         }
         //cudaDeviceSynchronize();
         break;
