@@ -2854,7 +2854,7 @@ template<typename Scalar>
 
 				rhs.set_local(vtx_global, h*h*bdry(vtx_global));
             }
-
+            return {A,rhs};
 
 }
 
