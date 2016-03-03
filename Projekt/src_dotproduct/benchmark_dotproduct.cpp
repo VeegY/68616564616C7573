@@ -80,6 +80,7 @@ int main(int argc, char* argv[])
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
         printf("END KERNEL\n");
+        printf("%i\n",memory_option);
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
         printf("ONE RUN DON\n");
     }

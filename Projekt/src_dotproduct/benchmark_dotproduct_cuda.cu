@@ -300,6 +300,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         n |= n >> 16;
         num_threads = n + 1;
     }
+    //TESTCASE//
     int num_blocks = ceil((double)dim_local / 1024);
     printf("\t\tSETUP GENERATED\n");
     printf("\t\tVERSION %i\n",version);
@@ -308,11 +309,8 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
     case(0) :               //kernel_standart
         if(mem_option == 0)
         {
-            printf("\t\PLACEHOLD GENERATED\n");
             cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
-            printf("\t\tKERNEL\n");
             gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads >>>(one, two, result, placehold, dim_local, num_blocks);
-            printf("\t\tKERNEL END\n");
         }
         else if(mem_option == 1)
         {
