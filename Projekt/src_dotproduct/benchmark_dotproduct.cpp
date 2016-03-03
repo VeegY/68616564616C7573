@@ -65,9 +65,7 @@ int main(int argc, char* argv[])
 //                                Zeitmessung Overall Teil 1
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = unified; }
-    printf("\t\tMEMOP:%i\n",memory_option);
 
-    printf("OVERALL ONE START\n");
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
     {
@@ -75,13 +73,9 @@ int main(int argc, char* argv[])
         float *vectwo_first = NULL;
         float *result_first = NULL;
       
-        printf("\tALLOCATION START\n");
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
-        printf("\tVALUES START\n");
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
-        printf("\tKERNEL START with memOP: %i\n", memory_option);
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
-        printf("\tCLEANUP START\n");
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;

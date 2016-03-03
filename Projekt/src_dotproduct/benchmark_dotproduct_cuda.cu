@@ -223,7 +223,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             {
                 gpu_scalar<<<num_blocks, num_threads, sizeof(Scalar)*dim_local>>>(one, two, result, placehold, dim_local, num_blocks);
             }
-            cudaDeviceSynchronize();
+            //cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
         }
@@ -243,7 +243,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             {
                 gpu_scalar << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
             }
-            cudaDeviceSynchronize();
+            //cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
             
@@ -325,7 +325,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             
             gpu_scalar << <num_blocks, num_threads, sizeof(Scalar)*dim_local >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
         }
-        cudaDeviceSynchronize();
+        //cudaDeviceSynchronize();
         break;
 
     case(1) :               //kernel_shared(NUR ALS BEISPIEL)
