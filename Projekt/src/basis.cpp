@@ -12,7 +12,7 @@ double evaluate_Basis3d(int e, int A, double X, double Y, double Z)
     double y0(1.0);
     double z0(1.0);
     double h(0.1);
-    double zwsp;
+    double zwsp(0.0);
 
     switch(A)
     {
@@ -32,7 +32,7 @@ double evaluate_Basis3d(int e, int A, double X, double Y, double Z)
                 break;
         case 7: zwsp = ((x0 + h - X) / h) * ((y0 - Y) / -h) * ((z0 - Z) / -h);
                 break;
-        default: zwsp = 0.0; std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
     }
     return zwsp;
 }
@@ -47,7 +47,7 @@ std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, 
     double y0(1.0);
     double z0(1.0);
     double h(0.1);
-    std::vector<double> zwsp(3);
+    std::vector<double> zwsp{0.0, 0.0, 0.0};
 
     switch(A)
     {
@@ -83,7 +83,7 @@ std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, 
                 zwsp[1] = (1/h) * ((x0 + h - X) / h) * ((z0 - Z) / -h);
                 zwsp[2] = (1/h) * ((x0 + h - X) / h) * ((y0 - Y) / -h);
                 break;
-        default: zwsp = {0.0, 0.0, 0.0}; std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
     }
     return zwsp;
 }
@@ -97,7 +97,7 @@ double evaluate_Basis2d(int e, int A, int type, double R1, double R2)
     double y0(1.0);
     double z0(1.0);
     double h(0.1);
-    double zwsp;
+    double zwsp(0.0);
 
     switch(type)
     {
@@ -152,7 +152,7 @@ double evaluate_Basis2d(int e, int A, int type, double R1, double R2)
                     zwsp = ((y0 + h - R1) / h) * ((z0 - R2) / -h);
                 }
                 break;
-        default: zwsp = 0.0; std::cout << "Fehler: keine gültige Ebene" << std::endl;
+        default: std::cout << "Fehler: keine gültige Ebene" << std::endl;
     }
     return zwsp;
 }
