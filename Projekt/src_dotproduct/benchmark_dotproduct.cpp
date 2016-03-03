@@ -64,7 +64,10 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
 //                                Zeitmessung Overall Teil 1
 //------------------------------------------------------------------------------------------------/
-    if (method == unified_vs_zero) { memory_option = unified; }
+    if (method == unified_vs_zero) 
+    { 
+        memory_option = unified; 
+    }
 
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
