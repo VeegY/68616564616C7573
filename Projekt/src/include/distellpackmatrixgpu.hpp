@@ -36,7 +36,7 @@ class DistEllpackMatrixGpu : public Matrix<DistEllpackMatrixGpu<Scalar>>
 
     // Mit PAD wird das padding durchgeführt
     static const int PAD = 0;
-	
+
     size_t _dim_global, _dim_local, _dim_local_nopad, _max_row_length;
 
     size_t * _indices;
@@ -52,7 +52,7 @@ public:
     /// Zugeordneter (d.h. bezüglich der Operatoren vertäglicher) Vektor-Typ.
     typedef typename MatrixTraits<DistEllpackMatrixGpu<Scalar>>::VectorType VectorType;
 
-    /** 
+    /**
      * \brief   Standardkonstruktor.
      *
      * Erzeugt einen Vektor der Dimension dim, der komplett auf jeder Node der
@@ -73,7 +73,7 @@ public:
 
 	DistEllpackMatrixGpu& operator=(const DistEllpackMatrixGpu& other);
 
-     /** 
+     /**
      * \brief   Gibt den Kommunikator in die Prozessgruppe der Matrix zurück.
      */
 	MPI_Comm get_comm() const { return _my_comm; }
@@ -103,7 +103,7 @@ public:
       * Anschließend können die Zeilen mit sequential_fill und end_of_row gefüllt werden, beginnend
       * bei der lokal ersten Zeile.
       * Die maximale auf dieser Node auftretende Zeilenlänge muss vorher bekannt sein.
-      * 
+      *
       * \param max_row_length Maximal auf dieser Node auftretende Zeilenlänge.
       */
     void prepare_sequential_fill(size_t max_row_length);
@@ -116,17 +116,17 @@ public:
       * auf der füllenden Node auftretende Zeilenlänge gesetzt werden.
       * Nachdem der letzte Eintrag einer Zeile gesetzt wurde, wird mit end_of_row
       * die Zeile beendet.
-      * 
+      *
       * \param colind Spaltenindex des einzutregenden Werts. Es muss colind < dim_global gelten.
       * \param val    Wert, der an die Position colind geschrieben werden soll.
-      */    
+      */
     void sequential_fill(size_t colind, const Scalar& val);
 
     /**
       * \brief   Beende eine Zeile beim zeilenweisen Füllen der Matrix.
       *
       * Diese Funktion beendet die aktuelle Zeile beim Füllvorgang und setzt den
-      * Füllcursor auf die nächste Zeile, oder beendet den Füllvorgang, falls die 
+      * Füllcursor auf die nächste Zeile, oder beendet den Füllvorgang, falls die
       * letzte auf der Node vorhandene Zeile beendet wurde.
       *
       * Vor dem erste Aufruf dieser Funktion muss mit prepare_sequential_fill die maximal
@@ -134,7 +134,7 @@ public:
       *
       * Diese Funktion muss während eines Füllvorgangs auf der Node genau dim_local mal
       * aufgerufen werden.
-      */   
+      */
     void end_of_row();
 
     /**
@@ -143,33 +143,33 @@ public:
       * Ein positiver Rückgabewert dieser Funktion ist einerseits ein Indikator für einen erfolgreich
       * abgeschlossenen Füllvorgang und andererseits die Voraussetzung für sämtliche algebraische
       * Operationen mit der Matrix.
-      * 
+      *
       * \return Gibt zurück, ob die Matrix korrekt gefüllt wurde.
-      */  
+      */
     bool is_filled() const { return _filled; }
 
     /**
       * \brief   Gibt den globalen Index der ersten auf der Node liegenden Zeile zurück.
-      */  
+      */
     size_t first_row_on_node() const { return _my_rank * _dim_local_nopad; }
 
     /**
       * \brief   Erstellt einen zu der Matrix passenden Äquilibrierungsvorkonditionierer.
       *
-      * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion 
+      * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion
       *          aufgerufen wird.
-      */ 
+      */
     DistEllpackMatrixGpu precond_equi() const;
 
     /**
       * \brief   Erstellt einen zu der Matrix passenden Äquilibrierungsvorkonditionierer.
       *
-      * Wenn in einer Zeile eine Null auf der Diagonalen steht, wird diese Zeile 
+      * Wenn in einer Zeile eine Null auf der Diagonalen steht, wird diese Zeile
       * durch die Vorkonditionierung nicht verändert.
       *
-      * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion 
+      * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion
       *          aufgerufen wird.
-      */ 
+      */
     DistEllpackMatrixGpu precond_jacobi() const;
 
     /**
@@ -195,14 +195,13 @@ public:
       *                  gehören soll.
       *
       * \return Gibt die aus dem Dateitripel erzeugte DistEllpackMatrixGpu zurück.
-      */  
+      */
     static DistEllpackMatrixGpu import_csr_file(const std::string& filename, MPI_Comm new_comm = MPI_COMM_WORLD);
 
 private:
 
     size_t get_dim_impl() const {return _dim_global;}
 
-    void mult_vec_implgpu(const VectorType& vec, VectorType& result) const;
     void mult_vec_impl(const VectorType& vec, VectorType& result) const;
 };
 

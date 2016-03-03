@@ -252,6 +252,9 @@ void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_r
             cudaDeviceSynchronize();
             //=================================//
 }
+template void gpu_ax_<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local);
+template void gpu_ax_<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local);
+template void gpu_ax_<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local);
 
 
 

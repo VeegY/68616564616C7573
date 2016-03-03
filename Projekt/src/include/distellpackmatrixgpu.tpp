@@ -214,41 +214,17 @@ void DistEllpackMatrixGpu<Scalar>::end_of_row()
         _filled = true;
 }
 
+
+
 template <typename Scalar>
 void DistEllpackMatrixGpu<Scalar>::mult_vec_impl(const VectorType& vec, VectorType& result) const
 {
     assert(_dim_global == vec.get_dim_global());
     assert(_dim_global == result.get_dim_global());
 
-    // hole vec komplett in die node
-	FullVector<Scalar> fvec(vec);
-
-	// *************** BEGIN Durch CUDA-isierung ersetzen ************
-
-    for(size_t row = 0; row < _dim_local; row++)
-    {
-        Scalar res = 0;
-        for(size_t col = 0; col < _max_row_length; col++)
-        {
-            size_t pos = col*_dim_local + row;
-			if(_data[pos] == PAD) continue;
-			res += _data[pos] * fvec[_indices[pos]];
-        }
-        result.set_local(row, res);
-    }
-    // *************** END Durch CUDA-isierung ersetzen **************
-}
-
-template <typename Scalar>
-void DistEllpackMatrixGpu<Scalar>::mult_vec_gpu(const VectorType& vec, VectorType& result)
-{
-    assert(_dim_global == vec.get_dim_global());
-    assert(_dim_global == result.get_dim_global());
-
     FullVectorGpu<Scalar> fvec(vec);
 
-    gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length,
-		  int dim_local)
+    gpu_ax_(_data, fvec, result, _indices, _max_row_length, _dim_local);
 }
 
 
@@ -409,7 +385,7 @@ struct MatrixTraits<DistEllpackMatrixGpu<Scalar>>
 {
     typedef typename ScalarTraits<Scalar>::RealType RealType;
     typedef Scalar ScalarType;
-    typedef SlicedVector<Scalar> VectorType;
+    typedef SlicedVectorGpu<Scalar> VectorType;
 };
 
 }

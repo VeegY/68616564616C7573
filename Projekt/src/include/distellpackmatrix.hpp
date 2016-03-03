@@ -202,7 +202,7 @@ private:
 
     size_t get_dim_impl() const {return _dim_global;}
 
-    void mult_vec_implgpu(const VectorType& vec, VectorType& result) const{LOG_ERROR("GPU not supported.");}
+
     void mult_vec_impl(const VectorType& vec, VectorType& result) const;
 };
 
