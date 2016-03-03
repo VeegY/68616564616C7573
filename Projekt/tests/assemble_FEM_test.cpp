@@ -23,7 +23,7 @@ int main()
     Icarus::SlicedVector<double> sol(nx*ny*nz);
     sol.clear();
 
-//    assembler.assemble(matrix, rhs);
+    assembler.assemble(matrix, rhs);
 
 	Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(matrix, rhs);
     solver.solve(sol);
