@@ -76,6 +76,7 @@ int main(int argc, char* argv[])
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
+        printf("END KERNEL\n");
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
         printf("ONE RUN DON\n");
     }
@@ -85,7 +86,11 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
 //                                Zeitmessung Overall Teil 2
 //------------------------------------------------------------------------------------------------/
-    if (method == unified_vs_zero) { memory_option = zero; version_second = version_first; }
+    if (method == unified_vs_zero) 
+    { 
+        memory_option = zero; 
+        version_second = version_first; 
+    }
 
     printf("OVERALLTWO START\n");
     timer_overall.start();
