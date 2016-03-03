@@ -77,6 +77,25 @@ namespace Icarus
 		typename ScalarTraits<Scalar>::RealType h,
 		std::function<Scalar(size_t)> bdry);
 
+    /**
+	* \brief	Assembliert eine Matrix	mittels Differenzenquotienten zweiter Ordnung.
+	*			Es werden Neumann BC verwendet. Es wird effizienter Assembliert.
+	*
+	* \param nx			Anzahl der (äquidistanten Punkte in x-Richtung)
+	* \param ny			Anzahl der (äquidistanten Punkte in y-Richtung)
+	* \param nz			Anzahl der (äquidistanten Punkte in z-Richtung)
+	* \param h				Schrittweite des finiten Differnezenquotienten
+	* \function bdry			Funktion, die den Neumann-Wert eines Punktes zurückgibt.
+	*
+	* \return Gibt ein Paar aus Matrix und rechter Seite zurück.
+	*/
+	template<typename Scalar>
+	std::pair <DistEllpackMatrix<Scalar>,
+		SlicedVector < Scalar >>
+		assemble_neumann_unrolled(size_t nx, size_t ny, size_t nz,
+		typename ScalarTraits<Scalar>::RealType h,
+		std::function<Scalar(size_t)> bdry);
+
 }
 
 #include "assemble.tpp"
