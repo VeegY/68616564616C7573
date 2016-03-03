@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
 //                                Zeitmessung Overall Teil 1
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = unified; }
+    printf("\t\tMEMOP:%i\n",memory_option);
 
     printf("OVERALL ONE START\n");
     timer_overall.start();
