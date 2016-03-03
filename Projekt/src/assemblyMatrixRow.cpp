@@ -1,15 +1,18 @@
-#ifndef __ASSEMBLYMATRIXROW_HPP_
-#define __ASSEMBLYMATRIXROW_HPP_
+//#include <vector>
+//#include "quadratur.hpp"
+//#include "basis.hpp"
 
-#include <vector>
-#include "quadratur.hpp"
-#include "basis.hpp"
+#include "include/assemblefem.hpp"
 
 namespace Icarus
 {
 
-void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value)
+void assembleFem::assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value)
 {
+    //TODO sinnvoll?
+    int z(Nx*Ny);
+    int y(Nx);
+
     int n = e.size();
     int length(0);
     switch(n)
@@ -100,5 +103,3 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int
 }
 
 }//namespace Icarus
-
-#endif

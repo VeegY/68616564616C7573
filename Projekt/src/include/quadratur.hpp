@@ -9,6 +9,8 @@
 *   die eine Quadratur implementieren muss.
 */
 
+/*
+
 #ifndef __QUADRATUR_HPP_
 #define __QUADRATUR_HPP_
 
@@ -28,3 +30,5 @@ std::vector<double> get_quadrature_zpoints(int e, double h, std::vector<double>&
 }//namespace Icarus
 
 #endif // __QUADRATUR_HPP_
+
+*/

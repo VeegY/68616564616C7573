@@ -3,11 +3,14 @@
 #include <cstdlib>
 #include <iomanip>
 #include <cmath>
+
+#include "include/assemblefem.hpp"
+
 namespace Icarus
 {
 
 
-    double getx(size_t index,
+    double assembleFem::getx(size_t index,
 		double h, size_t nx, size_t ny)
 	{
 	int	az = (index / nx) / ny;
@@ -17,7 +20,7 @@ namespace Icarus
     return ((double) ax)*h;
 	}
 
-	double gety(size_t index,
+	double assembleFem::gety(size_t index,
 		double h, size_t nx, size_t ny)
 	{
 	int	az = (index / nx) / ny;
@@ -26,7 +29,7 @@ namespace Icarus
     return ((double)ay)*h;
 	}
 
-	double getz(size_t index,
+	double assembleFem::getz(size_t index,
 		double h, size_t nx, size_t ny)
 	{
     int az = (index / nx) / ny;

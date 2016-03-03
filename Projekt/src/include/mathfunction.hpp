@@ -1,24 +1,24 @@
-#ifndef __TESTFUNCTIONS_HPP_
-#define __TESTFUNCTIONS_HPP_
+#ifndef __MATHFUNCTION_HPP_
+#define __MATHFUNCTION_HPP_
 
 namespace Icarus
 {
 
-class math_function
+class mathfunction
 {
 public:
-    math_function(int type);
+    mathfunction(int type);
     double eval(double x, double y, double z);
 private:
     int _type;
 };
 
-math_function::math_function(int type):
+mathfunction::mathfunction(int type):
     _type(type)
 {
 }
 
-double math_function::eval(double x, double y, double z)
+double mathfunction::eval(double x, double y, double z)
 {
     switch (_type)
     {
@@ -36,4 +36,4 @@ double math_function::eval(double x, double y, double z)
 
 }//namespace Icarus
 
-#endif//__TESTFUNCTIONS_HPP_
+#endif//__MATHFUNCTION_HPP_

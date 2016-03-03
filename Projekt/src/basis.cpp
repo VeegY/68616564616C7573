@@ -1,9 +1,10 @@
-#include "include/basis.hpp"
+//#include "include/basis.hpp"
+#include "include/assemblefem.hpp"
 
 namespace Icarus
 {
 
-double evaluate_Basis3d(int e, int A, double X, double Y, double Z)
+double assembleFem::evaluate_Basis3d(int e, int A, double X, double Y, double Z)
 {
     //double x0(getXcoordinate(e));
     //double y0(getYcoordinate(e));
@@ -38,7 +39,7 @@ double evaluate_Basis3d(int e, int A, double X, double Y, double Z)
 }
 
 
-std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z)
+std::vector<double> assembleFem::evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z)
 {
     //double x0(getXcoordinate(e));
     //double y0(getYcoordinate(e));
@@ -88,7 +89,7 @@ std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, 
     return zwsp;
 }
 
-double evaluate_Basis2d(int e, int A, int type, double R1, double R2)
+double assembleFem::evaluate_Basis2d(int e, int A, int type, double R1, double R2)
 {
     //double x0(getXcoordinate(e));
     //double y0(getYcoordinate(e));

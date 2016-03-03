@@ -1,16 +1,13 @@
-#ifndef __ASSEMBLYRHSLOAD_HPP_
-#define __ASSEMBLYRHSLOAD_HPP_
+//#include <vector>
+//#include "basis.hpp"
 
-#include <vector>
-#include "quadratur.hpp"
-#include "basis.hpp"
-
-#include "testfunctions.hpp"
+//#include "testfunctions.hpp"
+#include "include/assemblefem.hpp"
 
 namespace Icarus
 {
 
-double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, math_function f=math_function(0))
+double assembleFem::assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, mathfunction g)
 {
     int n = e.size();
     double RHS(0.0);
@@ -32,17 +29,28 @@ double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, math_function f
         Y = get_quadrature_xpoints(e[i], h, ay, trans);
         Z = get_quadrature_xpoints(e[i], h, az, trans);
         //TODO TOCHECK changed 02-24-16
-        //get_quadrature_xpoints(e[i], X, h);
-        int nqp = X.size();
+        //getQuadrature(e[i], "Name") = X, Y, Z, weight;
 
-        for(int q = 0; q<nqp; q++)
-        {
-            RHS += evaluate_Basis3d(e[i], A[i], X[q], Y[q], Z[q]) * f.eval(X[q], Y[q], Z[q]) * weight[q];
-        }
+        int nqp = X.size();
+            for(int q = 0; q<nqp; q++){
+                //X-Y-Ebene
+                if(Ebene == 1)
+                {
+                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Y[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
+                }
+                //X-Z-Ebene
+                if(Ebene == 2)
+                {
+                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
+                }
+                //Y-Z-Ebene
+                if(Ebene == 3)
+                {
+                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, Y[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
+                }
+            }
     }
     return RHS;
 }
 
 }//namespace Icarus
-
-#endif

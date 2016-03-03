@@ -1,29 +1,32 @@
 //Ich lasse eine ganze Menge an Redundanz drin, einfach nur für die Lesbarkeit
 //Kann man nachher natürlich abändern
 
-int Nx=3;
-int Ny=4;
-int Nz=5;
-int h=1;
-int z=Nx*Ny;
-int y=Nx;
+//int Nx=3;
+//int Ny=4;
+//int Nz=5;
+//int h=1;
+//int z=Nx*Ny;
+//int y=Nx;
 
-//TODO: wieder loeschen
-#define Dirichlet true
-#define Neumann false 
-//TODO: wieder loeschen
+//#include "include/assemblyMatrixRow.hpp"
+//#include "include/assemblyRHSLoad.hpp"
+//#include "include/assemblyRHSNeumann.hpp"
+//#include "include/distellpackmatrix.hpp"
 
-
-#include "include/assemblyMatrixRow.hpp"
-#include "include/assemblyRHSLoad.hpp"
-#include "include/assemblyRHSNeumann.hpp"
-#include "include/distellpackmatrix.hpp"
+#include "include/assemblefem.hpp"
 
 namespace Icarus
 {
 
-void assemble_FEM(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
+void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
 {
+    //TODO: vorlaeufig, wieder loeschen
+    bool Dirichlet(true);
+    bool Neumann(false);
+    //TODO: vorlaeufig, wieder loeschen
+    int z(Nx*Ny);
+    int y(Nx);
+
     Matrix.prepare_sequential_fill(27);
     //DistEllpackMatrix<double> Matrix(Nx*Ny*Nz);
 

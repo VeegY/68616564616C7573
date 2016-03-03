@@ -1,4 +1,5 @@
-#include "../src/assemblyLGS.cpp"
+//#include "../src/assemblyLGS.cpp"
+#include "../src/include/assemblefem.hpp"
 
 #include "../src/include/slicedvector.hpp"
 #include "../src/include/bicgstabsolver.hpp"
@@ -9,15 +10,20 @@
 
 int main()
 {
-    Icarus::DistEllpackMatrix<double> matrix(Nx*Ny*Nz);
+    double h(1.0);
+    int nx(3), ny(4), nz(5);
 
-    Icarus::SlicedVector<double> rhs(Nx*Ny*Nz);
+    Icarus::assembleFem assembler(h, nx, ny, nz);
+
+    Icarus::DistEllpackMatrix<double> matrix(nx*ny*nz);
+
+    Icarus::SlicedVector<double> rhs(nx*ny*nz);
     rhs.clear();
 
-    Icarus::SlicedVector<double> sol(Nx*Ny*Nz);
+    Icarus::SlicedVector<double> sol(nx*ny*nz);
     sol.clear();
 
-    Icarus::assemble_FEM(matrix, rhs);
+//    assembler.assemble(matrix, rhs);
 
 	Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(matrix, rhs);
     solver.solve(sol);
