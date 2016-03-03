@@ -25,7 +25,7 @@ int memory_option = zero;
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
 #define dimlocal 1024
-#define iteration 1000
+#define iteration 1
 
 
 void print_p();
@@ -74,9 +74,13 @@ int main(int argc, char* argv[])
         float *vectwo_first = NULL;
         float *result_first = NULL;
       
+        printf("\tALLOCATION START\n");
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
+        printf("\tVALUES START\n");
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
+        printf("\tKERNEL START\n");
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
+        printf("\tCLEANUP START\n");
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
