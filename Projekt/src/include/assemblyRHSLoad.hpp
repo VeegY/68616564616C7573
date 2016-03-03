@@ -10,7 +10,7 @@
 namespace Icarus
 {
 
-double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, math_function f=math_function(0))
+double assemblyRHSLoad(std::vector<size_t>& e, std::vector<int>& A, double h, size_t Nx, size_t Ny, math_function f=math_function(0))
 {
     int n = e.size();
     double RHS(0.0);
@@ -28,16 +28,16 @@ double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, math_function f
     {
         //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
         //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], h, ax, trans);
-        Y = get_quadrature_xpoints(e[i], h, ay, trans);
-        Z = get_quadrature_xpoints(e[i], h, az, trans);
+        X = get_quadrature_xpoints(e[i], h, Nx, Ny, ax, trans);
+        Y = get_quadrature_xpoints(e[i], h, Nx, Ny, ay, trans);
+        Z = get_quadrature_xpoints(e[i], h, Nx, Ny, az, trans);
         //TODO TOCHECK changed 02-24-16
         //get_quadrature_xpoints(e[i], X, h);
         int nqp = X.size();
 
         for(int q = 0; q<nqp; q++)
         {
-            RHS += evaluate_Basis3d(e[i], A[i], X[q], Y[q], Z[q]) * f.eval(X[q], Y[q], Z[q]) * weight[q];
+            RHS += evaluate_Basis3d(e[i], A[i], h, Nx, Ny, X[q], Y[q], Z[q]) * f.eval(X[q], Y[q], Z[q]) * weight[q];
         }
     }
     return RHS;

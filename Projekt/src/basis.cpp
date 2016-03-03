@@ -3,15 +3,15 @@
 namespace Icarus
 {
 
-double evaluate_Basis3d(int e, int A, double X, double Y, double Z)
+double evaluate_Basis3d(size_t e, int A, double h, size_t Nx, size_t Ny, double X, double Y, double Z)
 {
-    //double x0(getXcoordinate(e));
-    //double y0(getYcoordinate(e));
-    //double z0(getZcoordinate(e));
-    double x0(1.0);   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
-    double y0(1.0);
-    double z0(1.0);
-    double h(0.1);
+    double x0(getx(e, h, Nx, Ny));
+    double y0(gety(e, h, Nx, Ny));
+    double z0(getz(e, h, Nx, Ny));
+    //double x0(1.0);   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
+    //double y0(1.0);
+    //double z0(1.0);
+    //double h(0.1);
     double zwsp(0.0);
 
     switch(A)
@@ -38,15 +38,16 @@ double evaluate_Basis3d(int e, int A, double X, double Y, double Z)
 }
 
 
-std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z)
+std::vector<double> evaluate_gradient_Basis3d(size_t e, int A, double h, size_t Nx, size_t Ny, double X, double Y, double Z)
 {
-    //double x0(getXcoordinate(e));
-    //double y0(getYcoordinate(e));
-    //double z0(getZcoordinate(e));
-    double x0(1.0);   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
-    double y0(1.0);
-    double z0(1.0);
-    double h(0.1);
+    double x0(getx(e, h, Nx, Ny));
+    double y0(gety(e, h, Nx, Ny));
+    double z0(getz(e, h, Nx, Ny));
+    //double x0(1.0);   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
+    //double y0(1.0);
+    //double z0(1.0);
+    //double h(0.1);
+    double zwsp(0.0);
     std::vector<double> zwsp{0.0, 0.0, 0.0};
 
     switch(A)
@@ -88,15 +89,16 @@ std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, 
     return zwsp;
 }
 
-double evaluate_Basis2d(int e, int A, int type, double R1, double R2)
+double evaluate_Basis2d(size_t e, int A, double h, size_t Nx, size_t Ny, int type, double R1, double R2)
 {
-    //double x0(getXcoordinate(e));
-    //double y0(getYcoordinate(e));
-    //double z0(getZcoordinate(e));
-    double x0(1.0);   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
-    double y0(1.0);
-    double z0(1.0);
-    double h(0.1);
+    double x0(getx(e, h, Nx, Ny));
+    double y0(gety(e, h, Nx, Ny));
+    double z0(getz(e, h, Nx, Ny));
+    //double x0(1.0);   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
+    //double y0(1.0);
+    //double z0(1.0);
+    //double h(0.1);
+    double zwsp(0.0);
     double zwsp(0.0);
 
     switch(type)

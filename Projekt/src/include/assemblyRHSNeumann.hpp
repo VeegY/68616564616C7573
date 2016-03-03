@@ -9,7 +9,7 @@
 namespace Icarus
 {
 
-double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, math_function g=math_function(0))
+double assemblyRHSNeumann(std::vector<size_t>& e, std::vector<int>& A, double h, size_t Nx, size_t Ny, int Ebene, math_function g=math_function(0))
 {
     int n = e.size();
     double RHS(0.0);
@@ -27,9 +27,9 @@ double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, m
     {
         //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
         //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], h, ax, trans);
-        Y = get_quadrature_xpoints(e[i], h, ay, trans);
-        Z = get_quadrature_xpoints(e[i], h, az, trans);
+        X = get_quadrature_xpoints(e[i], h, Nx, Ny, ax, trans);
+        Y = get_quadrature_xpoints(e[i], h, Nx, Ny, ay, trans);
+        Z = get_quadrature_xpoints(e[i], h, Nx, Ny, az, trans);
         //TODO TOCHECK changed 02-24-16
         //getQuadrature(e[i], "Name") = X, Y, Z, weight;
 
@@ -38,17 +38,17 @@ double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, m
                 //X-Y-Ebene
                 if(Ebene == 1)
                 {
-                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Y[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
+                    RHS += evaluate_Basis2d(e[i], A[i], h, Nx, Ny Ebene, X[q], Y[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
                 }
                 //X-Z-Ebene
                 if(Ebene == 2)
                 {
-                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
+                    RHS += evaluate_Basis2d(e[i], A[i], h, Nx, Ny, Ebene, X[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
                 }
                 //Y-Z-Ebene
                 if(Ebene == 3)
                 {
-                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, Y[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
+                    RHS += evaluate_Basis2d(e[i], A[i], h, Nx, Ny, Ebene, Y[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * weight[q];
                 }
             }
     }

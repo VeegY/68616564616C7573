@@ -8,7 +8,7 @@
 namespace Icarus
 {
 
-void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value)
+void assemblyMatrixRow(std::vector<size_t>& e, std::vector<int>& A, double h, size_t Nx, size_t Ny, std::vector<int>& column, std::vector<double>& value)
 {
     int n = e.size();
     int length(0);
@@ -54,9 +54,9 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int
     {
         //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
         //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], h, ax, trans);
-        Y = get_quadrature_xpoints(e[i], h, ay, trans);
-        Z = get_quadrature_xpoints(e[i], h, az, trans);
+        X = get_quadrature_xpoints(e[i], h, Nx, Ny, ax, trans);
+        Y = get_quadrature_xpoints(e[i], h, Nx, Ny, ay, trans);
+        Z = get_quadrature_xpoints(e[i], h, Nx, Ny, az, trans);
         //TODO TOCHECK changed 02-24-16
 
         int nqp = X.size();
@@ -67,8 +67,8 @@ void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int
             zwsp = 0;
             for(int q = 0; q<nqp; q++)
             {
-                grad_Basis1 = evaluate_gradient_Basis3d(e[i], A[i], X[q], Y[q], Z[q]);
-                grad_Basis2 = evaluate_gradient_Basis3d(e[i], B, X[q], Y[q], Z[q]);
+                grad_Basis1 = evaluate_gradient_Basis3d(e[i], A[i], h, Nx, Ny, X[q], Y[q], Z[q]);
+                grad_Basis2 = evaluate_gradient_Basis3d(e[i], B, h, Nx, Ny, X[q], Y[q], Z[q]);
                 //zwsp += grad_Basis1.dot(grad_Basis2) * weight[q];
                 zwsp += (grad_Basis1[0]*grad_Basis2[0] + grad_Basis1[1]*grad_Basis2[1]
                     + grad_Basis1[2]*grad_Basis2[2]) * weight[q];
