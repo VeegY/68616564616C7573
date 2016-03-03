@@ -337,6 +337,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
            //gpu_ax_advanced << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, dim_local, dim_local);
         break;
     }
+    printf("\t\Switch left\n");
 }
 template void gpu_dotproduct_overall<int>(int *one, int * two, int *result, int dim_local, int version, int mem_option);
 template void gpu_dotproduct_overall<float>(float *one, float * two, float *result, int dim_local, int version, int mem_option);

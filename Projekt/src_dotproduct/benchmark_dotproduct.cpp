@@ -24,7 +24,7 @@ int memory_option = zero;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimlocal 1024
+#define dimlocal 512
 #define iteration 1
 
 
@@ -77,8 +77,10 @@ int main(int argc, char* argv[])
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
+        printf("ONE RUN DON\n");
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
+    printf("FIRST DONE\n");
 
 //------------------------------------------------------------------------------------------------/
 //                                Zeitmessung Overall Teil 2
