@@ -64,7 +64,7 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
 
 /*//CHANGE!!!!
 template<typename type>
-void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option)
+void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local)
 {
     using std::string;
     string first, second, method;
@@ -99,17 +99,39 @@ void performance(float time_ku, float time_ou, float time_kz, float time_oz, int
     cudaGetDeviceProperties(&prop,0);
 
     //CHANGE BELOW HERE!!!
-    //===#ELEMENTS IN THE MATRIX===================================//
-    unsigned long long int elements = 7 * dim_local - 2 - 2 * (floor(pow(dim_local, (1.0 / 3.0)))) - 2 * (floor(pow(dim_local, (2.0 / 3.0))));
+    //===#ELEMENTS IN THE VECTOR===================================//
+    unsigned long long int elements = dim_local;
 
     //==='DISK STORAGE~============================================//
-    unsigned long long int storage = sizeof(type)*(2 * dim_local + dim_local*dim_local) + sizeof(int)*dim_local*dim_local;
+    unsigned long long int storage = sizeof(type)*dim_local;
     
-        //===#FLOP=====================================================//
-    unsigned long long int flop = 2 * elements;
+    //===#FLOP=====================================================//
+    int num_threads = 1024;
+    if (dim_local<1024)
+    {
+        int n = dim_local-1;
+        n |= n >> 1;
+        n |= n >> 2;
+        n |= n >> 4;
+        n |= n >> 8;
+        n |= n >> 16;
+        n |= n >> 16;
+        n |= n >> 16;
+        num_threads = n + 1;
+    }
+    int num_blocks = ceil((double)dim_local / 1024);
+    
+    unsigned long long int flop = elements;         //MULT INTO SHARED MEMORY
+    for(int i=2;i<num_threads;i*2)
+    {
+        elements += i*num_blocks;                   //REDUCE KERNEL
+    }
+    elements += num_blocks                          //PLACEHOLDER REDUCE
 
     //==#BYTES=====================================================//           
-    int bytes = elements*(sizeof(type) + sizeof(int)) + 2*(sizeof(type)*dim_local);// Elements(Data+Indices) + Fvec Read und Result Write
+    int bytes = (elements+1)*sizeof(type);
+
+
     printf(GREY "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
     printf("           %s\n", method.c_str());
@@ -137,9 +159,9 @@ void performance(float time_ku, float time_ou, float time_kz, float time_oz, int
 
     
 }
-template void performance<int>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second, int mem_option);
-template void performance<float>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second, int mem_option);
-template void performance<double>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter, int meth, int ver_first, int ver_second, int mem_option);
+template void performance<int>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local);
+template void performance<float>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local);
+template void performance<double>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local);
 */
 
 //PROPERTIES OF TEGRA K1

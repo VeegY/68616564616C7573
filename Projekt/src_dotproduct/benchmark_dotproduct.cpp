@@ -24,7 +24,7 @@ int memory_option = zero;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimlocal 2048
+#define dimlocal 1024
 #define iteration 1
 
 
@@ -33,8 +33,8 @@ void print_p();
 //template <typename type>
 //void cpu_ax(type *pointer);
 
-/*template<typename type>
-void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option);*/
+template<typename type>
+void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local);
 
 template<typename Scalar>
 void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_local, int version, int mem_option);
@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
 //================================================================================================/
 
     float schalter = 0.0;
-   // performance(elapsed_first_kernel, elapsed_first_overall, elapsed_second_kernel, elapsed_second_overall, iteration, schalter, method, version_first, version_second, memory_option);
+   performance(elapsed_first_kernel, elapsed_first_overall, elapsed_second_kernel, elapsed_second_overall, iteration, schalter, method, version_first, version_second, memory_option, dimlocal);
   
     delete[] vecone_host;
     delete[] vectwo_host;
