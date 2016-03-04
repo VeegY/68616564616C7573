@@ -62,7 +62,7 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
 
 }
 
-/*//CHANGE!!!!
+//CHANGE!!!!
 template<typename type>
 void performance(float time_ku, float time_ou, float time_kz, float time_oz, int runs, type schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local)
 {
@@ -162,7 +162,7 @@ void performance(float time_ku, float time_ou, float time_kz, float time_oz, int
 template void performance<int>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, int schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local);
 template void performance<float>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, float schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local);
 template void performance<double>(float time_ku, float time_ou, float time_kz, float time_oz, int runs, double schalter, int meth, int ver_first, int ver_second, int mem_option, int dim_local);
-*/
+
 
 //PROPERTIES OF TEGRA K1
 void print_p()
