@@ -78,15 +78,14 @@ int main(int argc, char* argv[])
       
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
-        //print_vec(vecone_first, vectwo_first, dimlocal);
+        
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
-        check_result_dotproduct(result_first, vecone_host, vectwo_host, dimlocal, '1');
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
     printf("FIRST DONE\n");
 
-/*//------------------------------------------------------------------------------------------------/
+//------------------------------------------------------------------------------------------------/
 //                                Zeitmessung Overall Teil 2
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) 
@@ -130,12 +129,15 @@ int main(int argc, char* argv[])
     float *result_first = NULL;
 
     allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
+    set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
 
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
     float elapsed_first_kernel = 
         gpu_dotproduct_time(vecone_first, vectwo_first, result_first, dimlocal, iteration, version_first, memory_option);
     //=========================================//
 
+    print_vec(vecone_first, vectwo_first, dimlocal);
+    check_result_dotproduct(result_first, vecone_host, vectwo_host, dimlocal, '1');
     cleanup(vecone_first, vectwo_first, result_first, memory_option);
  
  //------------------------------------------------------------------------------------------------/
@@ -152,12 +154,15 @@ int main(int argc, char* argv[])
     if (method != kernel_vs_cpu)
     {
         allocation(&vecone_second, &vectwo_second, &result_second, dimlocal, memory_option);
+        set_values(vecone_host, vectwo_host, vecone_second, vectwo_second, dimlocal);
         
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
         elapsed_second_kernel =
             gpu_dotproduct_time(vecone_second, vectwo_second, result_second, dimlocal, iteration, version_second, memory_option);
         //=========================================//
         
+        print_vec(vecone_second, vectwo_second, dimlocal);
+        check_result_dotproduct(result_second, vecone_host, vectwo_host, dimlocal, '2');
         cleanup(vecone_second, vectwo_second, result_second, memory_option);
     }
     else//CPU Zeitmessung
@@ -176,7 +181,7 @@ int main(int argc, char* argv[])
         //cleanup(pointer_second, 2);
     }
     
- */  
+ 
 //================================================================================================/
 //                                         Evaluieren
 //================================================================================================/

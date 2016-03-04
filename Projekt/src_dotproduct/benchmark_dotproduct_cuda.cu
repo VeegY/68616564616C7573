@@ -195,7 +195,6 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
     Timer timer;
     float elapsed_time = 0.0;
 
-    Scalar *placehold = NULL;
     int num_threads = 1024;
     if (dim_local<1024)
     {
@@ -217,7 +216,8 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
     case(0) :               //kernel_standart
         if (mem_option == 0)
         {
-            cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
+            Scalar *placehold = NULL;
+            cudaMallocManaged((void **)&placehold, sizeof(Scalar)*num_blocks);
             //=================================//
             timer.start();
             for (int i = 0; i < runs; i++)
@@ -230,7 +230,8 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
         }
         else if (mem_option == 1)
         {
-            cudaHostAlloc((void **)placehold, sizeof(double)*num_blocks, cudaHostAllocMapped);
+            Scalar *placehold = NULL;
+            cudaHostAlloc((void **)&placehold, sizeof(double)*num_blocks, cudaHostAllocMapped);
             Scalar *d_one, *d_two, *d_result, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
