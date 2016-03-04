@@ -168,9 +168,9 @@ void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local
     switch (mem_option)
     {
     case(0):
-        cudaMallocManaged((void **)vecone, sizeof(Scalar)*dim_local);
-        cudaMallocManaged((void **)vectwo, sizeof(Scalar)*dim_local);
-        cudaMallocManaged((void **)result, sizeof(Scalar));
+        if(cudaSuccess != cudaMallocManaged((void **)vecone, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
+        if(cudaSuccess != cudaMallocManaged((void **)vectwo, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
+        if(cudaSuccess != cudaMallocManaged((void **)result, sizeof(Scalar))) {printf("ALLOC ERROR");}
         //TODO: ERROR CHECKING
         break;
     case(1):
