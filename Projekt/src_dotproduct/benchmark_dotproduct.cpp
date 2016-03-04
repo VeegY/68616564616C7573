@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     //Generiere data/Indices Int-Array sowie fvec Int Array
     float *vecone_host = new float[dimlocal];
     float *vectwo_host = new float[dimlocal];
-    vec_float(vecone_host, vectwo_host, dimlocal);
+    vec_float(vecone_host, vecone_host, dimlocal);
 
     Timer timer_overall,timer_cpu;
 
