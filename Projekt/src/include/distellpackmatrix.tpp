@@ -351,7 +351,7 @@ DistEllpackMatrix<Scalar>::precond_jacobi() const
 
     for(size_t i=0; i<_dim_local; i++)
     {
-          val = 1;
+        val = 1;
         for(size_t j=0; j<_max_row_length; j++)
         {
             if(_indices[j*_dim_local + i] == fron+i && _data[j*_dim_local + i] != 0)
@@ -360,7 +360,7 @@ DistEllpackMatrix<Scalar>::precond_jacobi() const
                 break;
             }
         }
-        Kinv.sequential_fill(i,val);
+        Kinv.sequential_fill(i+fron,val);
         Kinv.end_of_row();
     }
 

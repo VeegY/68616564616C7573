@@ -47,10 +47,10 @@ int jacpc_test(size_t N, size_t maxrow)
     }
     mat1.mult_vec(rhs, rhs);
     jac.mult_vec(rhs, res);
-    double checktol = std::numeric_limits<double>::epsilon()*1000;
+    double checktol = std::numeric_limits<double>::epsilon()*10;
     for (size_t i(fron); i <= lron; i++)
     {
-        if (std::abs((rhs.get_global(i)/diag_entries.get_global(i))-res.get_global(i)) > checktol)
+        if (std::abs((rhs.get_global(i)/diag_entries.get_global(i))-res.get_global(i)) > checktol*std::abs(res.get_global(i)))
             LOG_ERROR("jacobi pc failed;  result: ", res.get_global(i), " ;  error: ",
                        std::abs((rhs.get_global(i)/diag_entries.get_global(i))-res.get_global(i)));
     }
