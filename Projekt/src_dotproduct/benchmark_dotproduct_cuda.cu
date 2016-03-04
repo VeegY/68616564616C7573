@@ -51,8 +51,8 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
     
     if (idx == 0)
     {
-        type res = 0;
-        for (int i = 0; i <= numblocks; ++i)
+        type res = placehold[0];
+        for (int i = 1; i <= numblocks; ++i)
         {
             res += placehold[i];
         }
