@@ -122,11 +122,11 @@ void performance(float time_ku, float time_ou, float time_kz, float time_oz, int
     int num_blocks = ceil((double)dim_local / 1024);
     
     unsigned long long int flop = elements;         //MULT INTO SHARED MEMORY
-    for(int i=2;i<num_threads;i*2)
+    for(int i=2;i<num_threads;i=i*2)
     {
         elements += i*num_blocks;                   //REDUCE KERNEL
     }
-    elements += num_blocks                          //PLACEHOLDER REDUCE
+    elements += num_blocks;                         //PLACEHOLDER REDUCE
 
     //==#BYTES=====================================================//           
     int bytes = (elements+1)*sizeof(type);
