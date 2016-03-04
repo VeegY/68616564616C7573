@@ -144,6 +144,14 @@ void set_values(float *veconeh, float *vectwoh, float *veconeg, float *vectwog, 
     }
 }
 
+void print_vec(float *vecone, float *vectwo, int dim_local)
+{
+    for (int k = 0; k < dim_local; k++)
+    {
+        printf("Vector One: %f ~~ Vector Two: %f\n", vecone[k], vectwo[k]);
+    }
+}
+
 void print_time(float *ukt, float *uot, float *zkt, float *zot,int runs)
 {
     float uktime=0, uotime=0, zktime=0, zotime=0;

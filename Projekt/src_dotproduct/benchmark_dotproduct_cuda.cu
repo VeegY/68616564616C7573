@@ -171,6 +171,7 @@ void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local
         cudaMallocManaged((void **)vecone, sizeof(Scalar)*dim_local);
         cudaMallocManaged((void **)vectwo, sizeof(Scalar)*dim_local);
         cudaMallocManaged((void **)result, sizeof(Scalar));
+        //TODO: ERROR CHECKING
         break;
     case(1):
         cudaSetDeviceFlags(cudaDeviceMapHost);
@@ -300,10 +301,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         n |= n >> 16;
         num_threads = n + 1;
     }
-    //TESTCASE//
     int num_blocks = ceil((double)dim_local / 1024);
-    printf("\t\tSETUP GENERATED\n");
-    printf("\t\tVERSION %i\n",version);
     switch (version)
     {
     case(0) :               //kernel_standart
@@ -335,7 +333,6 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
            //gpu_ax_advanced << <num_blocks, num_threads >> >(d_data, d_fvec, d_result, d_indices, dim_local, dim_local);
         break;
     }
-    printf("\t\Switch left\n");
 }
 template void gpu_dotproduct_overall<int>(int *one, int * two, int *result, int dim_local, int version, int mem_option);
 template void gpu_dotproduct_overall<float>(float *one, float * two, float *result, int dim_local, int version, int mem_option);
