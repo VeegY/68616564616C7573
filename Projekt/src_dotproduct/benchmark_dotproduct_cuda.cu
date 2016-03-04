@@ -310,13 +310,13 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         if(mem_option == 0)
         {
             Scalar *placehold = NULL;
-            if(cudaSuccess != cudaMallocManaged((void *)placehold, sizeof(Scalar)*num_blocks)) {printf("ALLOC ERROR");}
+            if(cudaSuccess != cudaMallocManaged((void **)&placehold, sizeof(Scalar)*num_blocks)) {printf("ALLOC ERROR");}
             gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, result, placehold, dim_local, num_blocks);
         }
         else if(mem_option == 1)
         {
             Scalar *placehold = NULL;
-            cudaHostAlloc((void *)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
+            cudaHostAlloc((void **)&placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
             Scalar *d_one, *d_two, *d_result, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
