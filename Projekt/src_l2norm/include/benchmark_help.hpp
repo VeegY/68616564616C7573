@@ -216,6 +216,15 @@ void print_vec(float *vecone, float *vectwo, int dim_local)
     }
 }
 
+void print_vec_one(float *vecone, int dim_local)
+{
+    for (int k = 0; k < dim_local; k++)
+    {
+        printf("Vector One: %f\n", vecone[k]);
+    }
+}
+
+
 void print_time(float *ukt, float *uot, float *zkt, float *zot,int runs)
 {
     float uktime=0, uotime=0, zktime=0, zotime=0;
