@@ -247,7 +247,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
-            printf("P1:%f\nP2:%f\n",placehold[0],placehold[1]);
+            printf("P1:%f\nP2:%f\nR:%f\n",placehold[0],placehold[1],result[0]);
         }
         else if (mem_option == 1)
         {
