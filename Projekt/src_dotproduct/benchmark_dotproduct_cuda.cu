@@ -345,6 +345,7 @@ template void gpu_dotproduct_overall<double>(double *one, double * two, double *
 template <typename Scalar>
 void cleanup(Scalar *one, Scalar *two, Scalar *result, int method)
 {
+    printf("IN CLEAN");
     switch(method)
     {
         case(0):

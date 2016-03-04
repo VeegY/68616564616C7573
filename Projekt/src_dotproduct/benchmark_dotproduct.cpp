@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     //Generiere data/Indices Int-Array sowie fvec Int Array
     float *vecone_host = new float[dimlocal];
     float *vectwo_host = new float[dimlocal];
-    vec_float(vecone_host, vecone_host, dimlocal);
+    vec_float(vecone_host, vectwo_host, dimlocal);
 
     Timer timer_overall,timer_cpu;
 
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
     printf("FIRST DONE\n");
 
-//------------------------------------------------------------------------------------------------/
+/*//------------------------------------------------------------------------------------------------/
 //                                Zeitmessung Overall Teil 2
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) 
@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
         //cleanup(pointer_second, 2);
     }
     
-   
+ */  
 //================================================================================================/
 //                                         Evaluieren
 //================================================================================================/
