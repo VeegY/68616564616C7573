@@ -119,6 +119,28 @@ void check_result(float *result, float *datah, int *indicesh, float *fvech, int 
     else printf(WARNING "%c_Kernel outcome false\n", a);
 }
 
+void check_result_dotproduct(float result, float veconeh, float vectwoh, int dim_local, char a)
+{
+    float diff, value = 0.0;
+    bool check = true;
+    for (int k = 0; k < dim_local; k++)
+    {
+        value += veconeh[k] * vectwoh[k];
+    }
+    diff = value - result;
+    printf("DIFF: %f\nVALUE: %f\nRESULT: %f\n", diff, value, result);
+    if (diff > 1.0e-2 || diff < -1.0e-2)
+    {
+        check = false;
+    }
+
+    if (check)
+    {
+        printf(GREEN "%c_Kernel outcome true\n" RESET, a);
+    }
+    else printf(WARNING "%c_Kernel outcome false\n", a);
+}
+
 void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *indicesg, float *fvecg, int max_row_length, int dim_local, int dim_fvec)
 {
 	for (int i = 0; i < dim_local; i++)
