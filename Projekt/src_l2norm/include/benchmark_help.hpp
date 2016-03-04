@@ -159,7 +159,7 @@ void check_result_l2norm(float *result, float *vectwoh, int dim_local, char a)
     bool check = true;
     for (int k = 0; k < dim_local; k++)
     {
-        
+        value += vectwoh[k] * vectwoh[k];
     }
     diff = value - result[0];
     printf("DIFF: %f\nVALUE: %f\nRESULT: %f\n", diff, value, result);
@@ -197,6 +197,14 @@ void set_values(float *veconeh, float *vectwoh, float *veconeg, float *vectwog, 
     {
         veconeg[k] = veconeh[k];
         vectwog[k] = vectwoh[k];
+    }
+}
+
+void set_values_l2norm(float *veconeh, float *veconeg, int dim_local)
+{
+    for (int k = 0; k < dim_local; k++)
+    {
+        veconeg[k] = veconeh[k];
     }
 }
 

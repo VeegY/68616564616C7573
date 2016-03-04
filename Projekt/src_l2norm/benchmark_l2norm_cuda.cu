@@ -189,7 +189,7 @@ template void allocation<double>(double **vector, double **result, int dim_local
 //                          KERNEL
 //=============================================================================
 template<typename Scalar>
-float gpu_dotproduct_time(Scalar *vector, Scalar *result, int dim_local, int runs, int version, int mem_option)
+float gpu_l2norm_time(Scalar *vector, Scalar *result, int dim_local, int runs, int version, int mem_option)
 {
     Timer timer;
     float elapsed_time = 0.0;
@@ -275,15 +275,15 @@ float gpu_dotproduct_time(Scalar *vector, Scalar *result, int dim_local, int run
     }
     return elapsed_time / runs;
 }
-template float gpu_dotproduct_time<int>(int *vector, int *result, int dim_local, int runs, int version, int mem_option);
-template float gpu_dotproduct_time<float>(float *vector, float *result, int dim_local, int runs, int version, int mem_option);
-template float gpu_dotproduct_time<double>(double *vector, double *result, int dim_local, int runs, int version, int mem_option);
+template float gpu_l2norm_time<int>(int *vector, int *result, int dim_local, int runs, int version, int mem_option);
+template float gpu_l2norm_time<float>(float *vector, float *result, int dim_local, int runs, int version, int mem_option);
+template float gpu_l2norm_time<double>(double *vector, double *result, int dim_local, int runs, int version, int mem_option);
 
 
 
 //GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
-void gpu_dotproduct_overall(Scalar *vector, Scalar *result, int dim_local, int version, int mem_option)
+void gpu_l2norm_overall(Scalar *vector, Scalar *result, int dim_local, int version, int mem_option)
 {
     Scalar *placehold = NULL;
 
@@ -333,9 +333,9 @@ void gpu_dotproduct_overall(Scalar *vector, Scalar *result, int dim_local, int v
         break;
     }
 }
-template void gpu_dotproduct_overall<int>(int *vector, int *result, int dim_local, int version, int mem_option);
-template void gpu_dotproduct_overall<float>(float *vector, float *result, int dim_local, int version, int mem_option);
-template void gpu_dotproduct_overall<double>(double *vector, double *result, int dim_local, int version, int mem_option);
+template void gpu_l2norm_overall<int>(int *vector, int *result, int dim_local, int version, int mem_option);
+template void gpu_l2norm_overall<float>(float *vector, float *result, int dim_local, int version, int mem_option);
+template void gpu_l2norm_overall<double>(double *vector, double *result, int dim_local, int version, int mem_option);
 
 
 //=============================================================================

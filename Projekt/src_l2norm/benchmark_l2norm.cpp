@@ -75,9 +75,9 @@ int main(int argc, char* argv[])
         float *result_first = NULL;
       
         allocation(&vector_first, &result_first, dimlocal, memory_option);
-        set_values(vector_host, vector_first, dimlocal);
+        set_values_l2norm(vector_host, vector_first, dimlocal);
         print_vec_one(vector_first, dimlocal);
-        gpu_dotproduct_overall(vector_first, result_first, dimlocal, version_first, memory_option);
+        gpu_l2norm_overall(vector_first, result_first, dimlocal, version_first, memory_option);
         printf("END KERNEL\n");
         printf("%i\n",memory_option);
         check_result_l2norm(result_first, vector_host, dimlocal, '1');
@@ -106,8 +106,8 @@ int main(int argc, char* argv[])
         if (method != kernel_vs_cpu)
         {
             allocation(&vector_second, &result_second, dimlocal, memory_option);
-            set_values(vector_host, vectwo_second, dimlocal);
-            gpu_dotproduct_overall(vector_second, result_second, dimlocal, version_second, memory_option);
+            set_values_l2norm(vector_host, vector_second, dimlocal);
+            gpu_l2norm_overall(vector_second, result_second, dimlocal, version_second, memory_option);
             cleanup(vector_second, result_second, memory_option);
         }
         else//CPU Zeitmessung
@@ -129,10 +129,11 @@ int main(int argc, char* argv[])
     float *result_first = NULL;
 
     allocation(&vector_first, &result_first, dimlocal, memory_option);
+    set_values_l2norm(vector_host, vector_first, dimlocal);
 
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
     float elapsed_first_kernel = 
-        gpu_dotproduct_time(vector_first, result_first, dimlocal, iteration, version_first, memory_option);
+        gpu_l2norm_time(vector_first, result_first, dimlocal, iteration, version_first, memory_option);
     //=========================================//
 
     cleanup(vector_first, result_first, memory_option);
@@ -150,10 +151,11 @@ int main(int argc, char* argv[])
     if (method != kernel_vs_cpu)
     {
         allocation(&vector_second, &result_second, dimlocal, memory_option);
+        set_values_l2norm(vector_host, vector_second, dimlocal);
         
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
         elapsed_second_kernel =
-            gpu_dotproduct_time(vector_second, result_second, dimlocal, iteration, version_second, memory_option);
+            gpu_l2norm_time(vector_second, result_second, dimlocal, iteration, version_second, memory_option);
         //=========================================//
         
         cleanup(vector_second, result_second, memory_option);
@@ -183,7 +185,6 @@ int main(int argc, char* argv[])
    // performance(elapsed_first_kernel, elapsed_first_overall, elapsed_second_kernel, elapsed_second_overall, iteration, schalter, method, version_first, version_second, memory_option);
   
     delete[] vector_host;
-    delete[] vectwo_host;
 
     return 0;
 }
