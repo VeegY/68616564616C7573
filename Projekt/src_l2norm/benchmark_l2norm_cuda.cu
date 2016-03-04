@@ -301,7 +301,7 @@ void gpu_dotproduct_overall(Scalar *vector, Scalar *result, int dim_local, int v
         num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
-    printf("num_threads: %i\n num_blocks:%i\n"num_threads,num_blocks);
+    printf("num_threads: %i\n num_blocks:%i\n",num_threads,num_blocks);
     switch (version)
     {
     case(0) :               //kernel_standart
@@ -342,7 +342,7 @@ template void gpu_dotproduct_overall<double>(double *vector, double *result, int
 //                              CLEANUP FUNCTIONS
 //=============================================================================
 template <typename Scalar>
-void cleanup(Scalar *vector, Scalar *two, Scalar *result, int method)
+void cleanup(Scalar *vector, Scalar *result, int method)
 {
     printf("IN CLEAN");
     switch(method)
