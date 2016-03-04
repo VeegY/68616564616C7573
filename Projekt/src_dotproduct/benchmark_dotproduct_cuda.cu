@@ -20,8 +20,8 @@ void cleanup(Scalar *pointer, int method);
 template<typename type>
 __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, int dim_local, int numblocks)
 {
-    extern __shared__ float shar[];
-    //type* shar = (type*)array;
+    extern __shared__ float array[];
+    type* shar = (type*)array;
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
     int sidx = threadIdx.x;
     type value = 0;
