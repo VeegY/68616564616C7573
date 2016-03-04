@@ -46,7 +46,7 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
     if (sidx == 0)
     {
         //placehold[blockIdx.x] = shar[0];
-        result[0]=shar[0]
+        result[0]=shar[0];
     }
     __syncthreads();
     /*
