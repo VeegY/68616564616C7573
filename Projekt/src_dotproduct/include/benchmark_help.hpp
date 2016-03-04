@@ -128,7 +128,7 @@ void check_result_dotproduct(float *result, float *veconeh, float *vectwoh, int 
         value += veconeh[k] * vectwoh[k];
     }
     diff = value - result[0];
-    printf("DIFF: %f\n", diff);
+    printf("DIFF: %f\nVALUE: %f\nRESULT: %f\n", diff, value, result[0]);
     if (diff > 1.0e-2 || diff < -1.0e-2)
     {
         check = false;
