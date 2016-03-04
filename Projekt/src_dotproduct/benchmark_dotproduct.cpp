@@ -24,7 +24,7 @@ int memory_option = zero;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimlocal 512
+#define dimlocal 32
 #define iteration 1
 
 
@@ -79,6 +79,7 @@ int main(int argc, char* argv[])
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
         //TODO: CHECK VALUES!
+        print_vec(vecone_first, vectwo_first, dimlocal);
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
         printf("END KERNEL\n");
         printf("%i\n",memory_option);

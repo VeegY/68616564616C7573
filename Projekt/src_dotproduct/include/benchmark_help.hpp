@@ -51,11 +51,11 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
 
 }
 
-void vec_float(float *vecone, float* vectwo, int max_row_length)
+void vec_float(float *vecone, float* vectwo, int dim_local)
 {
     srand(static_cast <unsigned> (time(0)));
     float value_one, value_two;
-    for (int k = 0; k < max_row_length; k++)
+    for (int k = 0; k < dim_local; k++)
     {
         value_one = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
         value_two = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
@@ -135,9 +135,9 @@ void set_values(float *datah, int *indicesh, float *fvech, float *datag, int *in
     }
 }
 
-void set_values(float *veconeh, float *vectwoh, float *veconeg, float *vectwog, int max_row_length)
+void set_values(float *veconeh, float *vectwoh, float *veconeg, float *vectwog, int dim_local)
 {
-    for (int k = 0; k < max_row_length; k++)
+    for (int k = 0; k < dim_local; k++)
     {
         veconeg[k] = veconeh[k];
         vectwog[k] = vectwoh[k];
