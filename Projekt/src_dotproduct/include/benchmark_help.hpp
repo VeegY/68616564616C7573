@@ -119,7 +119,7 @@ void check_result(float *result, float *datah, int *indicesh, float *fvech, int 
     else printf(WARNING "%c_Kernel outcome false\n", a);
 }
 
-void check_result_dotproduct(float result, float veconeh, float vectwoh, int dim_local, char a)
+void check_result_dotproduct(float *result, float *veconeh, float *vectwoh, int dim_local, char a)
 {
     float diff, value = 0.0;
     bool check = true;
@@ -127,7 +127,7 @@ void check_result_dotproduct(float result, float veconeh, float vectwoh, int dim
     {
         value += veconeh[k] * vectwoh[k];
     }
-    diff = value - result;
+    diff = value - result[0];
     printf("DIFF: %f\nVALUE: %f\nRESULT: %f\n", diff, value, result);
     if (diff > 1.0e-2 || diff < -1.0e-2)
     {
