@@ -20,10 +20,10 @@ void cleanup(Scalar *pointer, int method);
 template<typename type>
 __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, int dim_local, int numblocks)
 {
-    //extern __shared__ float shar[];
+    extern __shared__ float shar[];
     //type* shar = (type*)array;
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
-    /*int sidx = threadIdx.x;
+    int sidx = threadIdx.x;
     type value = 0;
     if (idx < dim_local)
     {
@@ -42,13 +42,14 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
         }
         __syncthreads();
     }
-
+    
     if (sidx == 0)
     {
-        placehold[blockIdx.x] = shar[0];
+        //placehold[blockIdx.x] = shar[0];
+        result[0]=shar[0]
     }
     __syncthreads();
-    */
+    /*
     if (idx == 0)
     {
         //type res = 0;
@@ -57,9 +58,9 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
             //res += placehold[i];
         //}
         //result[0] = res;
-        result[0]=3;
+        result[0]=3;1
     }
-    
+    */
 
 }
 
