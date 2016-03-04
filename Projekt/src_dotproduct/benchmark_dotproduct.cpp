@@ -24,7 +24,7 @@ int memory_option = zero;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimlocal 8
+#define dimlocal 2048
 #define iteration 1
 
 
@@ -133,7 +133,6 @@ int main(int argc, char* argv[])
         gpu_dotproduct_time(vecone_first, vectwo_first, result_first, dimlocal, iteration, version_first, memory_option);
     //=========================================//
 
-    print_vec(vecone_first, vectwo_first, dimlocal);
     check_result_dotproduct(result_first, vecone_host, vectwo_host, dimlocal, '1');
     cleanup(vecone_first, vectwo_first, result_first, memory_option);
  
@@ -157,7 +156,6 @@ int main(int argc, char* argv[])
             gpu_dotproduct_time(vecone_second, vectwo_second, result_second, dimlocal, iteration, version_second, memory_option);
         //=========================================//
         
-        print_vec(vecone_second, vectwo_second, dimlocal);
         check_result_dotproduct(result_second, vecone_host, vectwo_host, dimlocal, '2');
         cleanup(vecone_second, vectwo_second, result_second, memory_option);
     }
