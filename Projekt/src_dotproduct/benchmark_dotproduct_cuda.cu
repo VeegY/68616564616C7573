@@ -20,10 +20,10 @@ void cleanup(Scalar *pointer, int method);
 template<typename type>
 __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, int dim_local, int numblocks)
 {
-    extern __shared__ float shar[];
+    //extern __shared__ float shar[];
     //type* shar = (type*)array;
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
-    int sidx = threadIdx.x;
+    /*int sidx = threadIdx.x;
     type value = 0;
     if (idx < dim_local)
     {
@@ -48,15 +48,16 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
         placehold[blockIdx.x] = shar[0];
     }
     __syncthreads();
-
+    */
     if (idx == 0)
     {
-        type res = 0;
-        for (int i = 0; i < numblocks; i++)
-        {
-            res += placehold[i];
-        }
-        result[0] = res;
+        //type res = 0;
+        //for (int i = 0; i < numblocks; i++)
+        //{
+            //res += placehold[i];
+        //}
+        //result[0] = res;
+        result[0]=3;
     }
     
 
@@ -303,7 +304,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
-    printf("num_threads: %i\n num_blocks:%i\n",num_threads,num_blocks);
+    printf("num_threads: %i\nnum_blocks:%i\n",num_threads,num_blocks);
     switch (version)
     {
     case(0) :               //kernel_standart
