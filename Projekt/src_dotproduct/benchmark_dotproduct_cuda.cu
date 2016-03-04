@@ -302,6 +302,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
+    printf("num_threads: %i\nnum_blocks:%i\n"num_threads,num_blocks);
     switch (version)
     {
     case(0) :               //kernel_standart
