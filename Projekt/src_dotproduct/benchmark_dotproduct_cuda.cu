@@ -20,8 +20,8 @@ void cleanup(Scalar *pointer, int method);
 template<typename type>
 __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, int dim_local, int numblocks)
 {
-    extern __shared__ double array[];
-    type* shar = (type*)array;
+    extern __shared__ float array[];
+    //type* shar = (type*)array;
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
     int sidx = threadIdx.x;
     type value = 0;
@@ -310,7 +310,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         if(mem_option == 0)
         {
             cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
-            gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, result, placehold, dim_local, num_blocks);
+            gpu_scalar <<<num_blocks, num_threads, sizeof(float)*num_threads>>>(one, two, result, placehold, dim_local, num_blocks);
         }
         else if(mem_option == 1)
         {
@@ -322,7 +322,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
             
-            gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
+            gpu_scalar << <num_blocks, num_threads, sizeof(float)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
         }
         cudaDeviceSynchronize();
         break;
