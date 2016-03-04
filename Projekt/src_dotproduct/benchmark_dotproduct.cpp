@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     //Generiere data/Indices Int-Array sowie fvec Int Array
     float *vecone_host = new float[dimlocal];
     float *vectwo_host = new float[dimlocal];
-    vec_float(vecone_host, vecone_host, dimlocal);
+    vec_float(vecone_host, vectwo_host, dimlocal);
 
     Timer timer_overall,timer_cpu;
 
@@ -78,7 +78,6 @@ int main(int argc, char* argv[])
       
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
-        //TODO: CHECK VALUES!
         print_vec(vecone_first, vectwo_first, dimlocal);
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
         printf("END KERNEL\n");
