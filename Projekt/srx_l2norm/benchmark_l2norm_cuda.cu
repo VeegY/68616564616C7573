@@ -18,7 +18,7 @@ void cleanup(Scalar *pointer, int method);
 
 //KERNEL!!!
 template<typename type>
-__global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, int dim_local, int numblocks)
+__global__ void gpu_scalar(type *vector, type *result, type *placehold, int dim_local, int numblocks)
 {
     extern __shared__ double array[];
     type* shar = (type*)array;
@@ -27,8 +27,8 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
     type value = 0;
     if (idx < dim_local)
     {
-        value = one[idx];
-        value *= two[idx];
+        value = vector[idx];
+        value *= value;
     }
     shar[sidx] = value;
     __syncthreads();
@@ -56,6 +56,7 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
         {
             res += placehold[i];
         }
+        //TODO WURZEL
         result[0] = res;
     }
     
@@ -163,34 +164,32 @@ void print_p()
 //                    0=UNIFIED ~~ 1=ZERO COPY
 //=============================================================================
 template<typename Scalar>
-void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local, int mem_option)
+void allocation(Scalar **vector, Scalar **result, int dim_local, int mem_option)
 {
     switch (mem_option)
     {
     case(0):
-        if(cudaSuccess != cudaMallocManaged((void **)vecone, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
-        if(cudaSuccess != cudaMallocManaged((void **)vectwo, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
+        if(cudaSuccess != cudaMallocManaged((void **)vector, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
         if(cudaSuccess != cudaMallocManaged((void **)result, sizeof(Scalar))) {printf("ALLOC ERROR");}
         //TODO: ERROR CHECKING
         break;
     case(1):
         cudaSetDeviceFlags(cudaDeviceMapHost);
-        cudaHostAlloc((void **)vecone, sizeof(Scalar)*dim_local, cudaHostAllocMapped);
-        cudaHostAlloc((void **)vectwo, sizeof(Scalar)*dim_local, cudaHostAllocMapped);
+        cudaHostAlloc((void **)vector, sizeof(Scalar)*dim_local, cudaHostAllocMapped);
         cudaHostAlloc((void **)result, sizeof(Scalar), cudaHostAllocMapped);
         break;
     }   
 }
-template void allocation<int>(int **vecone, int **vectwo, int **result, int dim_local, int mem_option);
-template void allocation<float>(float **vecone, float **vectwo, float **result, int dim_local, int mem_option);
-template void allocation<double>(double **vecone, double **vectwo, double **result, int dim_local, int mem_option);
+template void allocation<int>(int **vector, int **result, int dim_local, int mem_option);
+template void allocation<float>(float **vector, float **result, int dim_local, int mem_option);
+template void allocation<double>(double **vector, double **result, int dim_local, int mem_option);
 
 
 //=============================================================================
 //                          KERNEL
 //=============================================================================
 template<typename Scalar>
-float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, int runs, int version, int mem_option)
+float gpu_dotproduct_time(Scalar *vector, Scalar *result, int dim_local, int runs, int version, int mem_option)
 {
     Timer timer;
     float elapsed_time = 0.0;
@@ -222,7 +221,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(one, two, result, placehold, dim_local, num_blocks);
+                gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vector, result, placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -231,10 +230,9 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
         else if (mem_option == 1)
         {
             cudaHostAlloc((void **)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
-            Scalar *d_one, *d_two, *d_result, *d_placehold;
+            Scalar *d_vector, *d_result, *d_placehold;
 
-            cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
-            cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
+            cudaHostGetDevicePointer((void **)&d_vector, (void *)vector, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
 
@@ -242,7 +240,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
+                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_vector, d_result, d_placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -277,15 +275,15 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
     }
     return elapsed_time / runs;
 }
-template float gpu_dotproduct_time<int>(int *one, int * two, int *result, int dim_local, int runs, int version, int mem_option);
-template float gpu_dotproduct_time<float>(float *one, float * two, float *result, int dim_local, int runs, int version, int mem_option);
-template float gpu_dotproduct_time<double>(double *one, double * two, double *result, int dim_local, int runs, int version, int mem_option);
+template float gpu_dotproduct_time<int>(int *vector, int *result, int dim_local, int runs, int version, int mem_option);
+template float gpu_dotproduct_time<float>(float *vector, float *result, int dim_local, int runs, int version, int mem_option);
+template float gpu_dotproduct_time<double>(double *vector, double *result, int dim_local, int runs, int version, int mem_option);
 
 
 
 //GENERATING KERNEL TIME UNIFIED MEMORY
 template<typename Scalar>
-void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_local, int version, int mem_option)
+void gpu_dotproduct_overall(Scalar *vector, Scalar *result, int dim_local, int version, int mem_option)
 {
     Scalar *placehold = NULL;
 
@@ -310,19 +308,18 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         if(mem_option == 0)
         {
             cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
-            gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, result, placehold, dim_local, num_blocks);
+            gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(vector, result, placehold, dim_local, num_blocks);
         }
         else if(mem_option == 1)
         {
             cudaHostAlloc((void **)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
-            Scalar *d_one, *d_two, *d_result, *d_placehold;
+            Scalar *d_vector, *d_result, *d_placehold;
 
-            cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
-            cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
+            cudaHostGetDevicePointer((void **)&d_vector, (void *)vector, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
             
-            gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
+            gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads>>>(d_vector, d_result, d_placehold, dim_local, num_blocks);
         }
         cudaDeviceSynchronize();
         break;
@@ -336,78 +333,34 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         break;
     }
 }
-template void gpu_dotproduct_overall<int>(int *one, int * two, int *result, int dim_local, int version, int mem_option);
-template void gpu_dotproduct_overall<float>(float *one, float * two, float *result, int dim_local, int version, int mem_option);
-template void gpu_dotproduct_overall<double>(double *one, double * two, double *result, int dim_local, int version, int mem_option);
+template void gpu_dotproduct_overall<int>(int *vector, int *result, int dim_local, int version, int mem_option);
+template void gpu_dotproduct_overall<float>(float *vector, float *result, int dim_local, int version, int mem_option);
+template void gpu_dotproduct_overall<double>(double *vector, double *result, int dim_local, int version, int mem_option);
 
 
 //=============================================================================
 //                              CLEANUP FUNCTIONS
 //=============================================================================
 template <typename Scalar>
-void cleanup(Scalar *one, Scalar *two, Scalar *result, int method)
+void cleanup(Scalar *vector, Scalar *two, Scalar *result, int method)
 {
     printf("IN CLEAN");
     switch(method)
     {
         case(0):
-            cudaFree(one);
-            cudaFree(two);
+            cudaFree(vector);
             cudaFree(result);
             break;
         case(1):
-            cudaFreeHost(one);
-            cudaFreeHost(two);
+            cudaFreeHost(vector);
             cudaFreeHost(result);
             break;
         case(2):
-            delete[] one;
-            delete[] two;
+            delete[] vector;
             delete[] result;
             break;
     }
 }
-template void cleanup<int>(int *one, int *two, int *result, int method);
-template void cleanup<float>(float *one, float *two, float *result, int method);
-template void cleanup<double>(double *one, double *two, double *result, int method);
-
-
-
-
-
-
-
-
-//====Ich war nicht mutig genug es zu loeschen :D===/
-/*
-
-template <typename Scalar>
-void cleanupgpu(Scalar *data)
-{
-cudaFreeHost(data);
-}
-template void cleanupgpu<int>(int *data);
-template void cleanupgpu<float>(float *data);
-template void cleanupgpu<double>(double *data);
-
-//ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY for DistEllpack
-template<typename Scalar>
-void alloc_unifiedD(Scalar **data, int **indices, int dim_local, int dim_local)
-{
-cudaMallocManaged((void **)data, sizeof(Scalar)*dim_local*dim_local);
-cudaMallocManaged((void **)indices, sizeof(int)*dim_local*dim_local);
-}
-template void alloc_unifiedD<int>(int **data, int **indices, int dim_local, int dim_local);
-template void alloc_unifiedD<float>(float **data, int **indices, int dim_local, int dim_local);
-template void alloc_unifiedD<double>(double **data, int **indices, int dim_local, int dim_local);
-
-// ALLOCATE MEMORY FUNCTION FOR UNIFIED MEMORY FOR SLICEDVECTOR
-template<typename Scalar>
-void alloc_unifiedV(Scalar **fvec, int dim_fvec)
-{
-cudaMallocManaged((void **)fvec, sizeof(Scalar)*dim_fvec);
-}
-template void alloc_unifiedV<int>(int **fvec, int dim_fvec);
-template void alloc_unifiedV<float>(float **fvec, int dim_fvec);
-template void alloc_unifiedV<double>(double **fvec, int dim_fvec);
-*/
+template void cleanup<int>(int *vector, int *result, int method);
+template void cleanup<float>(float *vector, float *result, int method);
+template void cleanup<double>(double *vector, double *result, int method);
