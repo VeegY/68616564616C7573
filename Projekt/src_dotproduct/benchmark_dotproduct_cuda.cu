@@ -288,8 +288,7 @@ template float gpu_dotproduct_time<double>(double *one, double * two, double *re
 template<typename Scalar>
 void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_local, int version, int mem_option)
 {
-    Scalar *placehold = NULL;
-
+    
     int num_threads = 1024;
     if (dim_local<1024)
     {
@@ -310,11 +309,13 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
     case(0) :               //kernel_standart
         if(mem_option == 0)
         {
+            Scalar *placehold = NULL;
             cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
             gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, result, placehold, dim_local, num_blocks);
         }
         else if(mem_option == 1)
         {
+            Scalar *placehold = NULL;
             cudaHostAlloc((void **)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
             Scalar *d_one, *d_two, *d_result, *d_placehold;
 
