@@ -169,9 +169,9 @@ void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local
     switch (mem_option)
     {
     case(0):
-        if(cudaSuccess != cudaMallocManaged((void **)vecone, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
-        if(cudaSuccess != cudaMallocManaged((void **)vectwo, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
-        if(cudaSuccess != cudaMallocManaged((void **)result, sizeof(Scalar))) {printf("ALLOC ERROR");}
+        cudaMallocManaged((void **)vecone, sizeof(Scalar)*dim_local);
+        cudaMallocManaged((void **)vectwo, sizeof(Scalar)*dim_local);
+        cudaMallocManaged((void **)result, sizeof(Scalar));
         //TODO: ERROR CHECKING
         break;
     case(1):
@@ -310,7 +310,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         if(mem_option == 0)
         {
             Scalar *placehold = NULL;
-            cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
+            if(cudaSuccess != cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks)) {printf("ALLOC ERROR");}
             gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, result, placehold, dim_local, num_blocks);
         }
         else if(mem_option == 1)
@@ -349,7 +349,6 @@ template void gpu_dotproduct_overall<double>(double *one, double * two, double *
 template <typename Scalar>
 void cleanup(Scalar *one, Scalar *two, Scalar *result, int method)
 {
-    printf("IN CLEAN");
     switch(method)
     {
         case(0):

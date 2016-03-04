@@ -78,13 +78,10 @@ int main(int argc, char* argv[])
       
         allocation(&vecone_first, &vectwo_first, &result_first, dimlocal, memory_option);
         set_values(vecone_host, vectwo_host, vecone_first, vectwo_first, dimlocal);
-        print_vec(vecone_first, vectwo_first, dimlocal);
+        //print_vec(vecone_first, vectwo_first, dimlocal);
         gpu_dotproduct_overall(vecone_first, vectwo_first, result_first, dimlocal, version_first, memory_option);
-        printf("END KERNEL\n");
-        printf("%i\n",memory_option);
         check_result_dotproduct(result_first, vecone_host, vectwo_host, dimlocal, '1');
         cleanup(vecone_first, vectwo_first, result_first, memory_option);
-        printf("ONE RUN DON\n");
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
     printf("FIRST DONE\n");
