@@ -25,7 +25,7 @@ int memory_option = zero;
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
 #define dimlocal 2048
-#define iteration 1
+#define iteration 1000
 
 
 void print_p();
