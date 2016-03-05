@@ -225,7 +225,6 @@ float gpu_l2norm_time(Scalar *vector, Scalar *result, int dim_local, int runs, i
             Scalar *d_vector, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_vector, (void *)vector, 0);
-            cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
 
             //=================================//
@@ -320,7 +319,6 @@ void gpu_l2norm_overall(Scalar *vector, Scalar *result, int dim_local, int versi
             Scalar *d_vector, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_vector, (void *)vector, 0);
-            cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
             
             gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads>>>(d_vector, d_placehold, dim_local, num_blocks);
