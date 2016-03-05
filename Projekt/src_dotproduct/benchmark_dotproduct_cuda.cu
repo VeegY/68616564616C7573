@@ -18,7 +18,7 @@ void cleanup(Scalar *pointer, int method);
 
 //KERNEL!!!
 template<typename type>
-__global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, int dim_local, int numblocks)
+__global__ void gpu_scalar(type *one, type *two, type *placehold, int dim_local, int numblocks)
 {
     extern __shared__ double array[];
     type* shar = (type*)array;
@@ -233,7 +233,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
                 gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(one, two, placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
-            type value = placehold[0];
+            Scalar value = placehold[0];
             for(int i=1;i<num_blocks;i++)
             {
                 value += placehold[i];
@@ -260,7 +260,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
                 gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
-            type value = placehold[0];
+            Scalar value = placehold[0];
             for(int i=1;i<num_blocks;i++)
             {
                 value += placehold[i];
@@ -334,7 +334,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, placehold, dim_local, num_blocks);
             cudaDeviceSynchronize();
 
-            type value = placehold[0];
+            Scalar value = placehold[0];
             for(int i=1;i<num_blocks;i++)
             {
                 value += placehold[i];
@@ -355,7 +355,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
             gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_placehold, dim_local, num_blocks);
             cudaDeviceSynchronize();
 
-            type value = placehold[0];
+            Scalar value = placehold[0];
             for(int i=1;i<num_blocks;i++)
             {
                 value += placehold[i];
