@@ -47,19 +47,7 @@ __global__ void gpu_scalar(type *one, type *two, type *result, type *placehold, 
     {
         placehold[blockIdx.x] = shar[0];
     }
-    __syncthreads();
     
-    if (idx == 0)
-    {
-        type res = placehold[0];
-        for(int i = 1; i <= numblocks; ++i)
-        {
-            res += placehold[i];
-        }
-        result[0] = res;
-    }
-    
-
 }
 
 //CHANGE!!!!
@@ -242,9 +230,15 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(one, two, result, placehold, dim_local, num_blocks);
+                gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(one, two, placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
+            type value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = value;
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
             printf("P1:%f\nP2:%f\nR:%f\n",placehold[0],placehold[1],result[0]);
@@ -253,20 +247,25 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
         {
             Scalar *placehold = NULL;
             cudaHostAlloc((void **)&placehold, sizeof(double)*num_blocks, cudaHostAllocMapped);
-            Scalar *d_one, *d_two, *d_result, *d_placehold;
+            Scalar *d_one, *d_two, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
-            cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
 
             //=================================//
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
+                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
+            type value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = value;
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
             
@@ -324,6 +323,7 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
+
     switch (version)
     {
     case(0) :               //kernel_standart
@@ -331,22 +331,38 @@ void gpu_dotproduct_overall(Scalar *one, Scalar * two, Scalar *result, int dim_l
         {
             Scalar *placehold = NULL;
             if(cudaSuccess != cudaMallocManaged((void **)&placehold, sizeof(Scalar)*num_blocks)) {printf("ALLOC ERROR");}
-            gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, result, placehold, dim_local, num_blocks);
+            gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(one, two, placehold, dim_local, num_blocks);
+            cudaDeviceSynchronize();
+
+            type value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = value;
+
         }
         else if(mem_option == 1)
         {
             Scalar *placehold = NULL;
             cudaHostAlloc((void **)&placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
-            Scalar *d_one, *d_two, *d_result, *d_placehold;
+            Scalar *d_one, *d_two, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
-            cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
             
-            gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_result, d_placehold, dim_local, num_blocks);
+            gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, d_placehold, dim_local, num_blocks);
+            cudaDeviceSynchronize();
+
+            type value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = value;
         }
-        cudaDeviceSynchronize();
+        
         break;
 
     case(1) :               //kernel_shared(NUR ALS BEISPIEL)
