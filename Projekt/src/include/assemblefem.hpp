@@ -18,10 +18,12 @@ public:
     assembleFem(double sh, int sx, int sy, int sz):
         h(sh), Nx(sx), Ny(sy), Nz(sz), z(Nx*Ny), y(Nx)
     {
+        //TODO TOCHECK sind die Werte alle korrekt?
         _weight = get_weight(5.0/9.0, 8.0/9.0);
         double a(sqrt(0.6));
         _ax = {-a, -a, -a, -a, -a, -a, -a, -a, -a, 0, 0, 0, 0, 0, 0, 0, 0, 0, a, a, a, a, a, a, a, a, a};  //x-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-        _ay = {-a, -a, -a, 0.5, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0.25, a, a, a}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
+        //_ay = {-a, -a, -a, 0.5, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0.25, a, a, a}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
+        _ay = {-a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
         _az = {-a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a};   //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
     }
     void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs);
