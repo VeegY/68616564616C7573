@@ -18,7 +18,7 @@ void cleanup(Scalar *pointer, int method);
 
 //KERNEL!!!
 template<typename type>
-__global__ void gpu_scalar(type *vector, type *result, type *placehold, int dim_local, int numblocks)
+__global__ void gpu_scalar(type *vector, type *placehold, int dim_local, int numblocks)
 {
     extern __shared__ double array[];
     type* shar = (type*)array;
@@ -47,20 +47,7 @@ __global__ void gpu_scalar(type *vector, type *result, type *placehold, int dim_
     {
         placehold[blockIdx.x] = shar[0];
     }
-    __syncthreads();
-
-    if (idx == 0)
-    {
-        type res = 0;
-        for (int i = 0; i < numblocks; i++)
-        {
-            res += placehold[i];
-        }
-        //TODO WURZEL
-        result[0] = res;
-    }
-    
-
+ 
 }
 
 /*//CHANGE!!!!
@@ -169,9 +156,8 @@ void allocation(Scalar **vector, Scalar **result, int dim_local, int mem_option)
     switch (mem_option)
     {
     case(0):
-        if(cudaSuccess != cudaMallocManaged((void **)vector, sizeof(Scalar)*dim_local)) {printf("ALLOC ERROR");}
-        if(cudaSuccess != cudaMallocManaged((void **)result, sizeof(Scalar))) {printf("ALLOC ERROR");}
-        //TODO: ERROR CHECKING
+        cudaMallocManaged((void **)vector, sizeof(Scalar)*dim_local);
+        cudaMallocManaged((void **)result, sizeof(Scalar));
         break;
     case(1):
         cudaSetDeviceFlags(cudaDeviceMapHost);
@@ -221,9 +207,15 @@ float gpu_l2norm_time(Scalar *vector, Scalar *result, int dim_local, int runs, i
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vector, result, placehold, dim_local, num_blocks);
+                gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vector, placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
+            Scalar value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = sqrt(value);
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
         }
@@ -240,9 +232,15 @@ float gpu_l2norm_time(Scalar *vector, Scalar *result, int dim_local, int runs, i
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_vector, d_result, d_placehold, dim_local, num_blocks);
+                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_vector, d_placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
+            Scalar value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = sqrt(value);
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
             
@@ -301,14 +299,20 @@ void gpu_l2norm_overall(Scalar *vector, Scalar *result, int dim_local, int versi
         num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
-    printf("num_threads: %i\n num_blocks:%i\n",num_threads,num_blocks);
     switch (version)
     {
     case(0) :               //kernel_standart
         if(mem_option == 0)
         {
             cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
-            gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(vector, result, placehold, dim_local, num_blocks);
+            gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(vector, placehold, dim_local, num_blocks);
+            cudaDeviceSynchronize();
+            Scalar value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = sqrt(value);
         }
         else if(mem_option == 1)
         {
@@ -319,9 +323,15 @@ void gpu_l2norm_overall(Scalar *vector, Scalar *result, int dim_local, int versi
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
             cudaHostGetDevicePointer((void **)&d_placehold, (void *)placehold, 0);
             
-            gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads>>>(d_vector, d_result, d_placehold, dim_local, num_blocks);
+            gpu_scalar<<<num_blocks, num_threads, sizeof(double)*num_threads>>>(d_vector, d_placehold, dim_local, num_blocks);
+            cudaDeviceSynchronize();
+            Scalar value = placehold[0];
+            for(int i=1;i<num_blocks;i++)
+            {
+                value += placehold[i];
+            }
+            result[0] = sqrt(value);
         }
-        cudaDeviceSynchronize();
         break;
 
     case(1) :               //kernel_shared(NUR ALS BEISPIEL)

@@ -161,8 +161,8 @@ void check_result_l2norm(float *result, float *vectwoh, int dim_local, char a)
     {
         value += vectwoh[k] * vectwoh[k];
     }
-    diff = value - result[0];
-    printf("DIFF: %f\nVALUE: %f\nRESULT: %f\n", diff, value, result);
+    diff = sqrt(value) - result[0];
+    printf(GREEN "DIFF: %f\n" RESET, diff);
     if (diff > 1.0e-2 || diff < -1.0e-2)
     {
         check = false;

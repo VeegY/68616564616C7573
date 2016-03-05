@@ -78,16 +78,11 @@ int main(int argc, char* argv[])
         set_values_l2norm(vector_host, vector_first, dimlocal);
         print_vec_one(vector_first, dimlocal);
         gpu_l2norm_overall(vector_first, result_first, dimlocal, version_first, memory_option);
-        printf("END KERNEL\n");
-        printf("%i\n",memory_option);
-        check_result_l2norm(result_first, vector_host, dimlocal, '1');
         cleanup(vector_first, result_first, memory_option);
-        printf("ONE RUN DON\n");
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
-    printf("FIRST DONE\n");
 
-/*//------------------------------------------------------------------------------------------------/
+//------------------------------------------------------------------------------------------------/
 //                                Zeitmessung Overall Teil 2
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) 
@@ -96,7 +91,6 @@ int main(int argc, char* argv[])
         version_second = version_first; 
     }
 
-    printf("OVERALLTWO START\n");
     timer_overall.start();
     for (int r = 0; r<iteration; r++)
     {
@@ -124,7 +118,7 @@ int main(int argc, char* argv[])
 //                                Zeitmessung Kernel Teil 1                   
 //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = unified; }
-    printf("KERNEL 1 ONE START\n");
+    
     float *vector_first = NULL;
     float *result_first = NULL;
 
@@ -136,13 +130,14 @@ int main(int argc, char* argv[])
         gpu_l2norm_time(vector_first, result_first, dimlocal, iteration, version_first, memory_option);
     //=========================================//
 
+    check_result_l2norm(result_first, vector_host, dimlocal, '1');
     cleanup(vector_first, result_first, memory_option);
  
  //------------------------------------------------------------------------------------------------/
  //                                Zeitmessung Kernel Teil 2                   
  //------------------------------------------------------------------------------------------------/
     if (method == unified_vs_zero) { memory_option = zero; version_second = version_first; }
-    printf("KERNEL TWO START\n");
+
     float *vector_second = NULL;
     float *result_second = NULL;
 
@@ -158,6 +153,7 @@ int main(int argc, char* argv[])
             gpu_l2norm_time(vector_second, result_second, dimlocal, iteration, version_second, memory_option);
         //=========================================//
         
+        check_result_l2norm(result_second, vector_host, dimlocal, '2');
         cleanup(vector_second, result_second, memory_option);
     }
     else//CPU Zeitmessung
