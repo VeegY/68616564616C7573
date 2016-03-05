@@ -352,7 +352,6 @@ template void gpu_l2norm_overall<double>(double *vector, double *result, int dim
 template <typename Scalar>
 void cleanup(Scalar *vector, Scalar *result, int method)
 {
-    printf("IN CLEAN");
     switch(method)
     {
         case(0):
