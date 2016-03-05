@@ -71,7 +71,7 @@ void vec_float_one(float *vecone, int dim_local)
     float value_one;
     for (int k = 0; k < dim_local; k++)
     {
-        value_one = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
+        value_one = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 10));
         vecone[k] = value_one;
     }
 

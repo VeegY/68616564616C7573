@@ -202,7 +202,7 @@ float gpu_l2norm_time(Scalar *vector, Scalar *result, int dim_local, int runs, i
     case(0) :               //kernel_standart
         if (mem_option == 0)
         {
-            cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
+            cudaMallocManaged((void **)&placehold, sizeof(Scalar)*num_blocks);
             //=================================//
             timer.start();
             for (int i = 0; i < runs; i++)
@@ -221,8 +221,8 @@ float gpu_l2norm_time(Scalar *vector, Scalar *result, int dim_local, int runs, i
         }
         else if (mem_option == 1)
         {
-            cudaHostAlloc((void **)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
-            Scalar *d_vector, *d_result, *d_placehold;
+            cudaHostAlloc((void **)&placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
+            Scalar *d_vector, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_vector, (void *)vector, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
@@ -304,7 +304,7 @@ void gpu_l2norm_overall(Scalar *vector, Scalar *result, int dim_local, int versi
     case(0) :               //kernel_standart
         if(mem_option == 0)
         {
-            cudaMallocManaged((void **)placehold, sizeof(Scalar)*num_blocks);
+            cudaMallocManaged((void **)&placehold, sizeof(Scalar)*num_blocks);
             gpu_scalar <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(vector, placehold, dim_local, num_blocks);
             cudaDeviceSynchronize();
             Scalar value = placehold[0];
@@ -316,8 +316,8 @@ void gpu_l2norm_overall(Scalar *vector, Scalar *result, int dim_local, int versi
         }
         else if(mem_option == 1)
         {
-            cudaHostAlloc((void **)placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
-            Scalar *d_vector, *d_result, *d_placehold;
+            cudaHostAlloc((void **)&placehold, sizeof(Scalar)*num_blocks, cudaHostAllocMapped);
+            Scalar *d_vector, *d_placehold;
 
             cudaHostGetDevicePointer((void **)&d_vector, (void *)vector, 0);
             cudaHostGetDevicePointer((void **)&d_result, (void *)result, 0);
