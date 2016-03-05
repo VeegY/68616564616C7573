@@ -10,29 +10,26 @@ namespace Icarus
 {
 
 
-    double assembleFem::getx(size_t index,
-		double h, size_t nx, size_t ny)
+    double assembleFem::getx(size_t index)
 	{
-	int	az = (index / nx) / ny;
-	int	ay = index / nx - az*ny;
-	int	ax = index - ay*nx - az*nx*ny;
+	int	az = (index / Nx) / Ny;
+	int	ay = index / Nx - az*Ny;
+	int	ax = index - ay*Nx - az*Nx*Ny;
 
     return ((double) ax)*h;
 	}
 
-	double assembleFem::gety(size_t index,
-		double h, size_t nx, size_t ny)
+	double assembleFem::gety(size_t index)
 	{
-	int	az = (index / nx) / ny;
-	int	ay = index / nx - az*ny;
+	int	az = (index / Nx) / Ny;
+	int	ay = index / Nx - az*Ny;
 
     return ((double)ay)*h;
 	}
 
-	double assembleFem::getz(size_t index,
-		double h, size_t nx, size_t ny)
+	double assembleFem::getz(size_t index)
 	{
-    int az = (index / nx) / ny;
+    int az = (index / Nx) / Ny;
 
     return ((double) az)*h;
 	}

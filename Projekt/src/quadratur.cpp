@@ -18,7 +18,7 @@ std::vector<double> assembleFem::get_weight(double c, double d)  //Gibt die Gewi
     return {e, f, e, f, g, f, e, f, e, f, g, f, g, d*d*d, g, f, g, f, e, f, e, f, g, f, e, f, e};
 }
 
-void assembleFem::transformation(std::vector<double>& ai, double h, std::vector<double>& trans) //Berechnet Transformation auf das Intervall der Länge h
+void assembleFem::transformation(std::vector<double>& ai, std::vector<double>& trans) //Berechnet Transformation auf das Intervall der Länge h
 {
     for(int i=0; i<27; ++i)
     {
@@ -26,14 +26,14 @@ void assembleFem::transformation(std::vector<double>& ai, double h, std::vector<
     }
 }
 
-std::vector<double> assembleFem::get_quadrature_xpoints(int e, double h, std::vector<double>& ax, std::vector<double>& trans) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
+std::vector<double> assembleFem::get_quadrature_xpoints(int e, std::vector<double>& trans) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
 
     std::vector<double> x_global(27);
-    int e_x=getx(e, h, Nx, Ny);
+    int e_x=getx(e);
     std::vector<double> x_local{0, 0, h, h, 0, 0, h, h, 0, 0.5*h, h, 0.5*h, 0, 0,
         h, h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0.5*h};
-    transformation(ax, h, trans); //Transformation auf das Intervall mit der Länge h
+    transformation(_ax, trans); //Transformation auf das Intervall mit der Länge h
     for(int j=0; j<27; ++j)
     {
         x_global[j]=trans[j]+e_x+x_local[j]; 
@@ -41,13 +41,13 @@ std::vector<double> assembleFem::get_quadrature_xpoints(int e, double h, std::ve
     return x_global;
 }
 
-std::vector<double> assembleFem::get_quadrature_ypoints(int e, double h, std::vector<double>& ay, std::vector<double>& trans) //Berechnet die y-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
+std::vector<double> assembleFem::get_quadrature_ypoints(int e, std::vector<double>& trans) //Berechnet die y-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
     std::vector<double> y_global(27);
-    int e_y=gety(e, h, Nx, Ny);
+    int e_y=gety(e);
     std::vector<double> y_local{h, 0, 0, h, h, 0, 0, h, 0.5*h, h, 0.5*h, h, h,
         0, 0, h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h};
-    transformation(ay, h, trans); //Transformation auf das Intervall mit der Länge h
+    transformation(_ay, trans); //Transformation auf das Intervall mit der Länge h
     for(int l=0; l<27; ++l)
     {
         y_global[l]=trans[l]+e_y+y_local[l];
@@ -56,13 +56,13 @@ std::vector<double> assembleFem::get_quadrature_ypoints(int e, double h, std::ve
 }
 
 
-std::vector<double> assembleFem::get_quadrature_zpoints(int e, double h, std::vector<double>& az, std::vector<double>& trans) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
+std::vector<double> assembleFem::get_quadrature_zpoints(int e, std::vector<double>& trans) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
     std::vector<double> z_global(27);
-    int e_z=getz(e, h, Nx, Ny);
+    int e_z=getz(e);
     std::vector<double> z_local{0, 0, 0, 0, h, h, h, h, 0, 0, 0, 0,
         0.5*h, 0.5*h, 0.5*h, 0.5*h, h, h, h, h, 0,  0.5*h, 0.5*h, 0.5*h, 0.5*h, h,  0.5*h};
-    transformation(az, h, trans); //Transformation auf das Intervall mit der Länge h
+    transformation(_az, trans); //Transformation auf das Intervall mit der Länge h
     for(int r=0; r<27; ++r)
     {
         z_global[r]=trans[r]+e_z+z_local[r]; 

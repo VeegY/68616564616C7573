@@ -18,18 +18,18 @@ double assembleFem::assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, ma
     std::vector<double> transx(27);
     std::vector<double> transy(27);
     std::vector<double> transz(27);
-    transformation(_ax, h, transx);
-    transformation(_ay, h, transy);
-    transformation(_az, h, transz);
+    transformation(_ax, transx);
+    transformation(_ay, transy);
+    transformation(_az, transz);
     //TODO TOCHECK changed 02-24-16
 
     for(int i = 0; i < n; i++)
     {
         //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
         //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], h, _ax, transx);
-        Y = get_quadrature_xpoints(e[i], h, _ay, transy);
-        Z = get_quadrature_xpoints(e[i], h, _az, transz);
+        X = get_quadrature_xpoints(e[i], transx);
+        Y = get_quadrature_ypoints(e[i], transy);
+        Z = get_quadrature_zpoints(e[i], transz);
         //TODO TOCHECK changed 02-24-16
         //get_quadrature_xpoints(e[i], X, h);
         int nqp = X.size();

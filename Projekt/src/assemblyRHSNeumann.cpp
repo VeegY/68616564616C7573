@@ -21,9 +21,9 @@ double assembleFem::assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A,
     {
         //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
         //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], h, _ax, trans);
-        Y = get_quadrature_xpoints(e[i], h, _ay, trans);
-        Z = get_quadrature_xpoints(e[i], h, _az, trans);
+        X = get_quadrature_xpoints(e[i], trans);
+        Y = get_quadrature_ypoints(e[i], trans);
+        Z = get_quadrature_zpoints(e[i], trans);
         //TODO TOCHECK changed 02-24-16
         //getQuadrature(e[i], "Name") = X, Y, Z, weight;
 

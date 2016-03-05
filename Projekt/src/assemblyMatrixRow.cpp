@@ -42,9 +42,9 @@ void assembleFem::assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, st
     std::vector<double> transx(27);
     std::vector<double> transy(27);
     std::vector<double> transz(27);
-    transformation(_ax, h, transx);
-    transformation(_ay, h, transy);
-    transformation(_az, h, transz);
+    transformation(_ax, transx);
+    transformation(_ay, transy);
+    transformation(_az, transz);
     //TODO TOCHECK changed 02-24-16
 
     //Schleife ueber alle Elemente
@@ -52,9 +52,9 @@ void assembleFem::assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, st
     {
         //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
         //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], h, _ax, transx);
-        Y = get_quadrature_ypoints(e[i], h, _ay, transy);
-        Z = get_quadrature_zpoints(e[i], h, _az, transz);
+        X = get_quadrature_xpoints(e[i], transx);
+        Y = get_quadrature_ypoints(e[i], transy);
+        Z = get_quadrature_zpoints(e[i], transz);
         //TODO TOCHECK changed 02-24-16
 
         int nqp = X.size();
@@ -83,12 +83,15 @@ void assembleFem::assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, st
             {
                 if(column[j] == e[i] + a[B])
                 {
+std::cout << "i, B, j: " << i << ", " << B << ", " << j << " -> ";
+std::cout << "set value[" << j << "] += " << zwsp << std::endl;
                     value[j] += zwsp;
                     abbr = true;
                 }
-                else if(column[j] == 0)
+                else if(j>0 && column[j] == 0)
                 {
-                    std::cout << "set column" << std::endl;
+std::cout << "i, B, j: " << i << ", " << B << ", " << j << " -> ";
+std::cout << "set value[" << j << "] += " << zwsp << ", column[" << j << "] = " << e[i]+a[B] << std::endl;
                     column[j] = e[i] + a[B];
                     value[j] += zwsp;
                     abbr = true;
