@@ -218,7 +218,7 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
         num_threads = n + 1;
     }
     int num_blocks = ceil((double)dim_local / 1024);
-    printf("NUM_BLOCKS:%i\nNUM_THREADS:%i\n",num_blocks,num_threads);
+
     switch (version)
     {
     case(0) :               //kernel_standart
@@ -241,7 +241,6 @@ float gpu_dotproduct_time(Scalar *one, Scalar * two, Scalar *result, int dim_loc
             result[0] = value;
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
-            printf("P1:%f\nP2:%f\nR:%f\n",placehold[0],placehold[1],result[0]);
         }
         else if (mem_option == 1)
         {
