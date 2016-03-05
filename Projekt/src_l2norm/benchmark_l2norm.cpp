@@ -76,7 +76,6 @@ int main(int argc, char* argv[])
       
         allocation(&vector_first, &result_first, dimlocal, memory_option);
         set_values_l2norm(vector_host, vector_first, dimlocal);
-        print_vec_one(vector_first, dimlocal);
         gpu_l2norm_overall(vector_first, result_first, dimlocal, version_first, memory_option);
         cleanup(vector_first, result_first, memory_option);
     }
