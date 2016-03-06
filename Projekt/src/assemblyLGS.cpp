@@ -10,6 +10,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     //TODO: vorlaeufig, wieder loeschen
     bool Dirichlet(true);
     bool Neumann(false);
+    double RHSVAL(1.0);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
@@ -28,7 +29,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -60,7 +61,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -92,7 +93,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -125,7 +126,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -157,7 +158,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= RHSVAL;
             }
             else
             {
@@ -189,7 +190,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -221,7 +222,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -252,7 +253,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -284,7 +285,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -315,7 +316,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -347,7 +348,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= RHSVAL;
             }
             else
             {
@@ -379,7 +380,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -411,7 +412,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= RHSVAL;
             }
             else
             {
@@ -444,7 +445,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 //{
                 //    Matrix.sequential_fill(Zeile, 1.0);
                 //    Matrix.end_of_row();
-                //    RHS[Zeile]= 999999;
+                //    RHS[Zeile]= RHSVAL;
                 //}
                 //else
                 {
@@ -462,6 +463,34 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                         std::cout << column[m] << ", " << value[m] << std::endl;
                         Matrix.sequential_fill(column[m], value[m]);
                     }
+                    // fuer 3,3,3 ist das die richtige Reihenfolge der Matrixzeile
+                    //Matrix.sequential_fill(0, value[0]);
+                    //Matrix.sequential_fill(1, value[1]);
+                    //Matrix.sequential_fill(2, value[8]);
+                    //Matrix.sequential_fill(3, value[3]);
+                    //Matrix.sequential_fill(4, value[2]);
+                    //Matrix.sequential_fill(5, value[9]);
+                    //Matrix.sequential_fill(6, value[16]);
+                    //Matrix.sequential_fill(7, value[13]);
+                    //Matrix.sequential_fill(8, value[12]);
+                    //Matrix.sequential_fill(9, value[4]);
+                    //Matrix.sequential_fill(10, value[5]);
+                    //Matrix.sequential_fill(11, value[10]);
+                    //Matrix.sequential_fill(12, value[7]);
+                    //Matrix.sequential_fill(13, value[6]);
+                    //Matrix.sequential_fill(14, value[11]);
+                    //Matrix.sequential_fill(15, value[17]);
+                    //Matrix.sequential_fill(16, value[15]);
+                    //Matrix.sequential_fill(17, value[14]);
+                    //Matrix.sequential_fill(18, value[18]);
+                    //Matrix.sequential_fill(19, value[19]);
+                    //Matrix.sequential_fill(20, value[22]);
+                    //Matrix.sequential_fill(21, value[21]);
+                    //Matrix.sequential_fill(22, value[20]);
+                    //Matrix.sequential_fill(23, value[23]);
+                    //Matrix.sequential_fill(24, value[26]);
+                    //Matrix.sequential_fill(25, value[25]);
+                    //Matrix.sequential_fill(26, value[24]);
                     std::cout << std::endl;
                     //Matrix.sequential_fill(Zeile, 1.0);
                     Matrix.end_of_row();
@@ -479,7 +508,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= RHSVAL;
             }
             else
             {
@@ -511,7 +540,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -543,7 +572,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill( Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= RHSVAL;
             }
             else
             {
@@ -575,7 +604,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -607,7 +636,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill( Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -638,7 +667,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -670,7 +699,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill( Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -701,7 +730,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -733,7 +762,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= RHSVAL;
             }
             else
             {
@@ -765,7 +794,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -798,7 +827,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -829,7 +858,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill( Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= RHSVAL;
         }
         else
         {
@@ -861,7 +890,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= RHSVAL;
     }
     else
     {
@@ -881,14 +910,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }   
-   
+
+    //TODO rhs direkt fuellen (erst wenn alles laeuft)
     for (int i(0); i<Nx*Ny*Nz; ++i)
         rhs.set_global(i, RHS[i]);
-    //rhs.set_global(5, 4.0);
-    //rhs.set_global(53, 34.0);
-    //rhs.set_global(12, 24.0);
-    //rhs.set_global(34, 23.0);
-    //rhs.set_global(1, 234.0);
 
 }//nomain()
 

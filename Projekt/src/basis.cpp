@@ -10,8 +10,8 @@ double assembleFem::evaluate_Basis3d(int e, int A, double X, double Y, double Z)
     //double y0(getYcoordinate(e));
     //double z0(getZcoordinate(e));
     double x0(getx(e));   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
-    double y0(getx(e));
-    double z0(getx(e));
+    double y0(gety(e));
+    double z0(getz(e));
     double zwsp(0.0);
 
     switch(A)
@@ -44,8 +44,8 @@ std::vector<double> assembleFem::evaluate_gradient_Basis3d(int e, int A, double 
     //double y0(getYcoordinate(e));
     //double z0(getZcoordinate(e));
     double x0(getx(e));   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
-    double y0(getx(e));
-    double z0(getx(e));
+    double y0(gety(e));
+    double z0(getz(e));
     std::vector<double> zwsp{0.0, 0.0, 0.0};
 
     switch(A)
@@ -93,8 +93,8 @@ double assembleFem::evaluate_Basis2d(int e, int A, int type, double R1, double R
     //double y0(getYcoordinate(e));
     //double z0(getZcoordinate(e));
     double x0(getx(e));   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
-    double y0(getx(e));
-    double z0(getx(e));
+    double y0(gety(e));
+    double z0(getz(e));
     double zwsp(0.0);
 
     switch(type)

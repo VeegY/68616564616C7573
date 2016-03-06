@@ -10,8 +10,10 @@
 namespace Icarus
 {
 
-std::vector<double> assembleFem::get_weight(double c, double d)  //Gibt die Gewichte der Quadratur als Vektor aus
+std::vector<double> assembleFem::get_weight()  //Gibt die Gewichte der Quadratur als Vektor aus
 {
+    double c(5.0/9.0);
+    double d(8.0/9.0);
     double e(c*c*c);
     double f((c*c)*d);
     double g(c*(d*d));
@@ -28,7 +30,16 @@ void assembleFem::transformation(std::vector<double>& ai, std::vector<double>& t
 
 std::vector<double> assembleFem::get_quadrature_xpoints(int e, std::vector<double>& trans) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
-
+    //Berechnet die Translation und die Skalierung
+    double e_x=getx(e);
+    double a1=(1-sqrt(3/5))*h/2 + e_x;
+    double a2=h/2 + e_x;
+    double a3=(1+sqrt(3/5))*h/2 + e_x;
+ 
+    //Bastelt den Vektor zusammen
+    return std::vector<double>{a1,a1,a1,a1,a1,a1,a1,a1,a1, a2,a2,a2,a2,a2,a2,a2,a2,a2, a3,a3,a3,a3,a3,a3,a3,a3,a3};
+ 
+    /* alt:
     std::vector<double> x_global(27);
     int e_x=getx(e);
     std::vector<double> x_local{0, 0, h, h, 0, 0, h, h, 0, 0.5*h, h, 0.5*h, 0, 0,
@@ -39,10 +50,21 @@ std::vector<double> assembleFem::get_quadrature_xpoints(int e, std::vector<doubl
         x_global[j]=trans[j]+e_x+x_local[j]; 
     }
     return x_global;
+    */
 }
 
 std::vector<double> assembleFem::get_quadrature_ypoints(int e, std::vector<double>& trans) //Berechnet die y-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
+    //Berechnet die Translation und die Skalierung
+    double e_y=gety(e);
+    double a1=(1-sqrt(3/5))*h/2 + e_y;
+    double a2=h/2 + e_y;
+    double a3=(1+sqrt(3/5))*h/2 + e_y;
+ 
+    //Bastelt den Vektor zusammen
+    return std::vector<double>{a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3}; 
+ 
+    /* alt:
     std::vector<double> y_global(27);
     int e_y=gety(e);
     std::vector<double> y_local{h, 0, 0, h, h, 0, 0, h, 0.5*h, h, 0.5*h, h, h,
@@ -53,11 +75,22 @@ std::vector<double> assembleFem::get_quadrature_ypoints(int e, std::vector<doubl
         y_global[l]=trans[l]+e_y+y_local[l];
     }
     return y_global;
+    */
 }
 
 
 std::vector<double> assembleFem::get_quadrature_zpoints(int e, std::vector<double>& trans) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
 {
+    //Berechnet die Translation und die Skalierung
+    double e_z=getz(e);
+    double a1=(1-sqrt(3/5))*h/2 + e_z;
+    double a2=h/2 + e_z;
+    double a3=(1+sqrt(3/5))*h/2 + e_z;
+
+    //Bastelt den Vektor zusammen
+    return std::vector<double>{a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3};
+ 
+    /* alt:
     std::vector<double> z_global(27);
     int e_z=getz(e);
     std::vector<double> z_local{0, 0, 0, 0, h, h, h, h, 0, 0, 0, 0,
@@ -68,6 +101,7 @@ std::vector<double> assembleFem::get_quadrature_zpoints(int e, std::vector<doubl
         z_global[r]=trans[r]+e_z+z_local[r]; 
     }
     return z_global;
+    */
 }
 
 
