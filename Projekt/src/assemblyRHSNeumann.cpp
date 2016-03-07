@@ -17,26 +17,28 @@ double assembleFem::assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A,
 
     for(int i = 0; i < n; i++)
     {
-        X = get_quadrature_xpoints(e[i]);
-        Y = get_quadrature_ypoints(e[i]);
-        Z = get_quadrature_zpoints(e[i]);
-
         int nqp = X.size();
             for(int q = 0; q<nqp; q++){
                 //X-Y-Ebene
                 if(Ebene == 1)
                 {
-                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Y[q]) * g.eval(X[q], Y[q], Z[q]) * _weight[q];
+                    X = get_quadrature_xpoints_2d(e[i]);
+                    Y = get_quadrature_ypoints_2d(e[i]);
+                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Y[q]) * g.eval(X[q], Y[q], Z[q]) * _weight_2d[q];
                 }
                 //X-Z-Ebene
                 if(Ebene == 2)
                 {
-                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * _weight[q];
+                    X = get_quadrature_xpoints_2d(e[i]);
+                    Z = get_quadrature_zpoints_2d(e[i]);
+                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, X[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * _weight_2d[q];
                 }
                 //Y-Z-Ebene
                 if(Ebene == 3)
                 {
-                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, Y[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * _weight[q];
+                    Y = get_quadrature_ypoints_2d(e[i]);
+                    Z = get_quadrature_zpoints_2d(e[i]);
+                    RHS += evaluate_Basis2d(e[i], A[i], Ebene, Y[q], Z[q]) * g.eval(X[q], Y[q], Z[q]) * _weight_2d[q];
                 }
             }
     }

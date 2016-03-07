@@ -1,10 +1,3 @@
-//#include "include/quadratur.hpp"
-//#include "include/getxyz.hpp"
-//#include <cmath>
-//#include <iostream>
-//#include <vector>
-//#include <math.h>
-
 #include "include/assemblefem.hpp"
 
 namespace Icarus
@@ -18,6 +11,12 @@ std::vector<double> assembleFem::get_weight()  //Gibt die Gewichte der Quadratur
     double f((c*c)*d);
     double g(c*(d*d));
     return {e, f, e, f, g, f, e, f, e, f, g, f, g, d*d*d, g, f, g, f, e, f, e, f, g, f, e, f, e};
+}
+
+std::vector<double> assembleFem::get_weight_2d()  //Gibt die Gewichte der Quadratur als Vektor aus
+{
+    //TODO
+    return {0.0};
 }
 
 std::vector<double> assembleFem::get_quadrature_xpoints(int e) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für d Wuerfel mit Kantenlaenge hx*hy*hz
@@ -55,6 +54,24 @@ std::vector<double> assembleFem::get_quadrature_zpoints(int e) //Berechnet die z
 
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3};
+}
+
+std::vector<double> assembleFem::get_quadrature_xpoints_2d(int e) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte fuer das Intervall für den uerfel mit Kantenlaenge hx*hy*hz
+{
+    //TODO
+    return std::vector<double>{0.0};
+}
+
+std::vector<double> assembleFem::get_quadrature_ypoints_2d(int e) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte fuer das Intervall für den uerfel mit Kantenlaenge hx*hy*hz
+{
+    //TODO
+    return std::vector<double>{0.0};
+}
+
+std::vector<double> assembleFem::get_quadrature_zpoints_2d(int e) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte fuer das Intervall für den uerfel mit Kantenlaenge hx*hy*hz
+{
+    //TODO
+    return std::vector<double>{0.0};
 }
 
 }//namespace Icarus

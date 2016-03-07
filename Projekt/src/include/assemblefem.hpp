@@ -19,6 +19,7 @@ public:
         h(sh), Nx(sx), Ny(sy), Nz(sz), z(Nx*Ny), y(Nx)
     {
         _weight = get_weight(); //TODO weight Vektor direkt bei Initialisierung setzen?
+        _weight_2d = get_weight_2d();
         double a(sqrt(0.6));
         _ax = {-a, -a, -a, -a, -a, -a, -a, -a, -a, 0, 0, 0, 0, 0, 0, 0, 0, 0, a, a, a, a, a, a, a, a, a};  //x-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
         _ay = {-a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
@@ -37,14 +38,18 @@ public:
     double gety(size_t index);
     double getz(size_t index);
     std::vector<double> get_weight();
+    std::vector<double> get_weight_2d();
     std::vector<double> get_quadrature_xpoints(int e);
     std::vector<double> get_quadrature_ypoints(int e);
     std::vector<double> get_quadrature_zpoints(int e);
+    std::vector<double> get_quadrature_xpoints_2d(int e);
+    std::vector<double> get_quadrature_ypoints_2d(int e);
+    std::vector<double> get_quadrature_zpoints_2d(int e);
 
     double h;
     int Nx, Ny, Nz;
     int z, y;
-    std::vector<double> _weight;
+    std::vector<double> _weight, _weight_2d;
     std::vector<double> _ax, _ay, _az;
 };
 
