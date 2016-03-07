@@ -1,4 +1,6 @@
-//#include "include/basis.hpp"
+//TODO TODISCUSS:
+// immer direkt return ...; ? also zwsp und x0,y0,z0 umgehen
+
 #include "include/assemblefem.hpp"
 
 namespace Icarus
@@ -6,10 +8,7 @@ namespace Icarus
 
 double assembleFem::evaluate_Basis3d(int e, int A, double X, double Y, double Z)
 {
-    //double x0(getXcoordinate(e));
-    //double y0(getYcoordinate(e));
-    //double z0(getZcoordinate(e));
-    double x0(getx(e));   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
+    double x0(getx(e));
     double y0(gety(e));
     double z0(getz(e));
     double zwsp(0.0);
@@ -40,10 +39,7 @@ double assembleFem::evaluate_Basis3d(int e, int A, double X, double Y, double Z)
 
 std::vector<double> assembleFem::evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z)
 {
-    //double x0(getXcoordinate(e));
-    //double y0(getYcoordinate(e));
-    //double z0(getZcoordinate(e));
-    double x0(getx(e));   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
+    double x0(getx(e));
     double y0(gety(e));
     double z0(getz(e));
     std::vector<double> zwsp{0.0, 0.0, 0.0};
@@ -89,17 +85,14 @@ std::vector<double> assembleFem::evaluate_gradient_Basis3d(int e, int A, double 
 
 double assembleFem::evaluate_Basis2d(int e, int A, int type, double R1, double R2)
 {
-    //double x0(getXcoordinate(e));
-    //double y0(getYcoordinate(e));
-    //double z0(getZcoordinate(e));
-    double x0(getx(e));   //Setzen von x0, y0, z0 und h nur zum Testen, ersetze durch auskommentiertes getcoordinate
+    double x0(getx(e));
     double y0(gety(e));
     double z0(getz(e));
     double zwsp(0.0);
 
     switch(type)
     {
-        case 0: if(A==0)
+        case 1: if(A==0)
                 {
                     zwsp = ((x0 + h - R1) / h) * ((y0 + h - R2) / h);
                 }
@@ -116,7 +109,7 @@ double assembleFem::evaluate_Basis2d(int e, int A, int type, double R1, double R
                     zwsp = ((x0 + h - R1) / h) * ((y0 - R2) / -h);
                 }
                 break;
-        case 1: if(A==0)
+        case 2: if(A==0)
                 {
                     zwsp = ((x0 + h - R1) / h) * ((z0 + h - R2) / h);
                 }
@@ -133,7 +126,7 @@ double assembleFem::evaluate_Basis2d(int e, int A, int type, double R1, double R
                     zwsp = ((x0 + h - R1) / h) * ((z0 - R2) / -h);
                 }
                 break;
-        case 2: if(A==0)
+        case 3: if(A==0)
                 {
                     zwsp = ((y0 + h - R1) / h) * ((z0 + h - R2) / h);
                 }
