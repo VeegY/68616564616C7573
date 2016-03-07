@@ -1,0 +1,7 @@
+\contentsline {section}{\numberline {1}Motivation and Problem statement}{4}
+\contentsline {section}{\numberline {2}Introduction}{4}
+\contentsline {section}{\numberline {3}Hardware}{5}
+\contentsline {subsection}{\numberline {3.1}Rackdesign}{5}
+\contentsline {subsection}{\numberline {3.2}Dashbord}{5}
+\contentsline {section}{\numberline {4}Software}{6}
+\contentsline {section}{\numberline {5}Results}{7}
