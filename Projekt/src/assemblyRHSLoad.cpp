@@ -13,25 +13,13 @@ double assembleFem::assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, ma
     int n = e.size();
     double RHS(0.0);
 
-    //TODO TOCHECK changed 02-24-16
     std::vector<double> X(27), Y(27), Z(27);
-    std::vector<double> transx(27);
-    std::vector<double> transy(27);
-    std::vector<double> transz(27);
-    transformation(_ax, transx);
-    transformation(_ay, transy);
-    transformation(_az, transz);
-    //TODO TOCHECK changed 02-24-16
 
     for(int i = 0; i < n; i++)
     {
-        //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
-        //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], transx);
-        Y = get_quadrature_ypoints(e[i], transy);
-        Z = get_quadrature_zpoints(e[i], transz);
-        //TODO TOCHECK changed 02-24-16
-        //get_quadrature_xpoints(e[i], X, h);
+        X = get_quadrature_xpoints(e[i]);
+        Y = get_quadrature_ypoints(e[i]);
+        Z = get_quadrature_zpoints(e[i]);
         int nqp = X.size();
 
         for(int q = 0; q<nqp; q++)

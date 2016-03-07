@@ -37,10 +37,9 @@ public:
     double gety(size_t index);
     double getz(size_t index);
     std::vector<double> get_weight();
-    void transformation(std::vector<double>& ai, std::vector<double>& trans);
-    std::vector<double> get_quadrature_xpoints(int e, std::vector<double>& trans);
-    std::vector<double> get_quadrature_ypoints(int e, std::vector<double>& trans);
-    std::vector<double> get_quadrature_zpoints(int e, std::vector<double>& trans);
+    std::vector<double> get_quadrature_xpoints(int e);
+    std::vector<double> get_quadrature_ypoints(int e);
+    std::vector<double> get_quadrature_zpoints(int e);
 
     double h;
     int Nx, Ny, Nz;

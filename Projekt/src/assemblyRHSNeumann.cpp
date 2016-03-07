@@ -12,20 +12,14 @@ double assembleFem::assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A,
     int n = e.size();
     double RHS(0.0);
 
-    //TODO TOCHECK changed 02-24-16
     std::vector<double> X(27), Y(27), Z(27);
     std::vector<double> trans(27);
-    //TODO TOCHECK changed 02-24-16
 
     for(int i = 0; i < n; i++)
     {
-        //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
-        //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], trans);
-        Y = get_quadrature_ypoints(e[i], trans);
-        Z = get_quadrature_zpoints(e[i], trans);
-        //TODO TOCHECK changed 02-24-16
-        //getQuadrature(e[i], "Name") = X, Y, Z, weight;
+        X = get_quadrature_xpoints(e[i]);
+        Y = get_quadrature_ypoints(e[i]);
+        Z = get_quadrature_zpoints(e[i]);
 
         int nqp = X.size();
             for(int q = 0; q<nqp; q++){

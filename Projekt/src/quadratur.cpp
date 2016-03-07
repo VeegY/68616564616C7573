@@ -1,9 +1,9 @@
 //#include "include/quadratur.hpp"
 //#include "include/getxyz.hpp"
-#include <cmath>
-#include <iostream>
-#include <vector>
-#include <math.h>
+//#include <cmath>
+//#include <iostream>
+//#include <vector>
+//#include <math.h>
 
 #include "include/assemblefem.hpp"
 
@@ -20,66 +20,32 @@ std::vector<double> assembleFem::get_weight()  //Gibt die Gewichte der Quadratur
     return {e, f, e, f, g, f, e, f, e, f, g, f, g, d*d*d, g, f, g, f, e, f, e, f, g, f, e, f, e};
 }
 
-void assembleFem::transformation(std::vector<double>& ai, std::vector<double>& trans) //Berechnet Transformation auf das Intervall der Länge h
-{
-    for(int i=0; i<27; ++i)
-    {
-        trans[i]=(ai[i]+1)*0.5*h;
-    }
-}
-
-std::vector<double> assembleFem::get_quadrature_xpoints(int e, std::vector<double>& trans) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
+std::vector<double> assembleFem::get_quadrature_xpoints(int e) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für d Wuerfel mit Kantenlaenge hx*hy*hz
 {
     //Berechnet die Translation und die Skalierung
     double e_x=getx(e);
     double a1=(1.0-sqrt(3.0/5.0))*h/2.0 + e_x;
     double a2=h/2.0 + e_x;
     double a3=(1.0+sqrt(3.0/5.0))*h/2.0 + e_x;
- 
+
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a1,a1,a1,a1,a1,a1,a1,a1, a2,a2,a2,a2,a2,a2,a2,a2,a2, a3,a3,a3,a3,a3,a3,a3,a3,a3};
- 
-    /* alt:
-    std::vector<double> x_global(27);
-    int e_x=getx(e);
-    std::vector<double> x_local{0, 0, h, h, 0, 0, h, h, 0, 0.5*h, h, 0.5*h, 0, 0,
-        h, h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0.5*h};
-    transformation(_ax, trans); //Transformation auf das Intervall mit der Länge h
-    for(int j=0; j<27; ++j)
-    {
-        x_global[j]=trans[j]+e_x+x_local[j]; 
-    }
-    return x_global;
-    */
 }
 
-std::vector<double> assembleFem::get_quadrature_ypoints(int e, std::vector<double>& trans) //Berechnet die y-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
+std::vector<double> assembleFem::get_quadrature_ypoints(int e) //Berechnet die y-Koordinaten der Gauss-Quadraturpunkte fuer das Intervall für de Wuerfel mit Kantenlaenge hx*hy*h
 {
     //Berechnet die Translation und die Skalierung
     double e_y=gety(e);
     double a1=(1.0-sqrt(3.0/5.0))*h/2.0 + e_y;
     double a2=h/2.0 + e_y;
     double a3=(1.0+sqrt(3.0/5.0))*h/2.0 + e_y;
- 
+
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3}; 
- 
-    /* alt:
-    std::vector<double> y_global(27);
-    int e_y=gety(e);
-    std::vector<double> y_local{h, 0, 0, h, h, 0, 0, h, 0.5*h, h, 0.5*h, h, h,
-        0, 0, h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h, 0, 0.5*h, h, 0.5*h, 0.5*h};
-    transformation(_ay, trans); //Transformation auf das Intervall mit der Länge h
-    for(int l=0; l<27; ++l)
-    {
-        y_global[l]=trans[l]+e_y+y_local[l];
-    }
-    return y_global;
-    */
 }
 
 
-std::vector<double> assembleFem::get_quadrature_zpoints(int e, std::vector<double>& trans) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte für das Intervall für den Würfel mit Kantenlänge hx*hy*hz
+std::vector<double> assembleFem::get_quadrature_zpoints(int e) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte fuer das Intervall für den uerfel mit Kantenlaenge hx*hy*hz
 {
     //Berechnet die Translation und die Skalierung
     double e_z=getz(e);
@@ -89,24 +55,13 @@ std::vector<double> assembleFem::get_quadrature_zpoints(int e, std::vector<doubl
 
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3};
- 
-    /* alt:
-    std::vector<double> z_global(27);
-    int e_z=getz(e);
-    std::vector<double> z_local{0, 0, 0, 0, h, h, h, h, 0, 0, 0, 0,
-        0.5*h, 0.5*h, 0.5*h, 0.5*h, h, h, h, h, 0,  0.5*h, 0.5*h, 0.5*h, 0.5*h, h,  0.5*h};
-    transformation(_az, trans); //Transformation auf das Intervall mit der Länge h
-    for(int r=0; r<27; ++r)
-    {
-        z_global[r]=trans[r]+e_z+z_local[r]; 
-    }
-    return z_global;
-    */
 }
 
-
-
 }//namespace Icarus
+
+
+
+
 
 /*Beispielhafte main-Funktion zum Verständnis, die einzelnen Funktionen benutzt/initialisiert werden müssen:
 
