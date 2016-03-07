@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.12)  7 MAR 2016 11:51
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.12)  7 MAR 2016 12:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -451,23 +451,31 @@ LaTeX Warning: No \author given.
 
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Abschlussbericht.aux) )
- 
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+\openout2 = `./MotivationIntroduction/MotivationIntroduction.aux'.
+
+
+(./MotivationIntroduction/MotivationIntroduction.tex) [2
+
+]
+(./Abschlussbericht.aux (./MotivationIntroduction/MotivationIntroduction.aux)) 
+) 
 Here is how much of TeX's memory you used:
- 3048 strings out of 493304
- 41080 string characters out of 6139871
+ 3060 strings out of 493304
+ 41537 string characters out of 6139871
  137206 words of memory out of 5000000
- 6496 multiletter control sequences out of 15000+600000
- 10398 words of font info for 31 fonts, out of 8000000 for 9000
+ 6501 multiletter control sequences out of 15000+600000
+ 11170 words of font info for 32 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  40i,6n,51p,249b,218s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf/fo
-nts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-
-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx2074.pfb>
-Output written on Abschlussbericht.pdf (1 page, 34116 bytes).
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf/f
+onts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm
+-super/sfrm1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1440.pfb>
+</usr/share/texmf/fonts/type1/public/cm-super/sfsx2074.pfb>
+Output written on Abschlussbericht.pdf (2 pages, 51710 bytes).
 PDF statistics:
- 21 PDF objects out of 1000 (max. 8388607)
- 14 compressed objects within 1 object stream
+ 28 PDF objects out of 1000 (max. 8388607)
+ 19 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
