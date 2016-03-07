@@ -24,7 +24,7 @@ void vec_float_one(float *vecone, int dim_local)
 
 void check_result_maxnorm(float *result, float *vector, int dim_local, char a)
 {
-    float diff, value = 0.0;
+    float diff, value = 0.0, compare;
     bool check = true;
     for (int k = 0; k < dim_local; k++)
     {
