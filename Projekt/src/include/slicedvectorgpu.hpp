@@ -23,6 +23,7 @@
 
 #include "mpihandler.hpp"
 #include "vector.hpp"
+#include "distellpackmatrixgpu.hpp"
 
 namespace Icarus
 {
@@ -40,9 +41,9 @@ class SlicedVectorGpu : public Vector<SlicedVectorGpu<Scalar>>
 {
     friend class Vector<SlicedVectorGpu<Scalar>>;
 
-	// mpi umgebung
-	MPI_Comm _my_comm;
-	int _my_rank, _num_nodes;
+    // mpi umgebung
+    MPI_Comm _my_comm;
+    int _my_rank, _num_nodes;
 
     // Globale und lokale Dimension
     size_t _dim_global, _dim_local;
@@ -55,6 +56,8 @@ public:
     typedef Scalar ScalarType;
     typedef typename ScalarTraits<Scalar>::RealType RealType;
 
+    friend DistEllpackMatrixGpu<SlicedVectorGpu>::mult_vec_impl(const FullVectorGpu&, SlicedVectorGpu&);
+    
    /**
      * \brief   Standardkonstruktor.
      *

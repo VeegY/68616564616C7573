@@ -13,8 +13,8 @@ template <typename Scalar>
 void cleanup(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int method);
 
 //KERNEL
-template<typename type>
-__global__ void  gpu_ax(type* data, type* fvec, type* result, int* indices, int max_row_length, int dim_local)
+template<typename mtype, typename vtype, typename rtype>
+__global__ void  gpu_ax(mtype* data, const vtype* fvec, rtype* result, int* indices, size_t max_row_length, size_t dim_local)
 {
 
     int idx = threadIdx.x+blockDim.x*blockIdx.x;
@@ -240,9 +240,9 @@ template float gpu_ax_time<double>(double* data, double* fvec, double* restult, 
 //=============================================================================
 //                          KERNEL für DistEllpackKlasse
 //=============================================================================
-template<typename Scalar>
-void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length,
-		  int dim_local)
+template<typename mtype, template vtype, template rtype>
+void gpu_ax_(mtype* data, const vtype* fvec, rtype* result, int *indices, size_t max_row_length,
+		  size_t dim_local)
 {
     int num_blocks = ceil((double)dim_local / 1024);
     int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
@@ -252,9 +252,8 @@ void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_r
             cudaDeviceSynchronize();
             //=================================//
 }
-template void gpu_ax_<int>(int* data, int* fvec, int* result, int* indices, int max_row_length, int dim_local);
-template void gpu_ax_<float>(float* data, float* fvec, float* result, int* indices, int max_row_length, int dim_local);
-template void gpu_ax_<double>(double* data, double* fvec, double* restult, int* indices, int max_row_length, int dim_local);
+template void gpu_ax_<float, float, float>(mtype*, const vtype*, rtype*, int*, size_t, size_t);
+template void gpu_ax_<double, double, double>(mtype*, const vtype*, rtype*, int*, size_t, size_t);
 
 
 

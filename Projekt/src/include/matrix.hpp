@@ -2,8 +2,6 @@
 #define __MATRIX_HPP_
 
 #include <limits>
-#include "slicedvector.hpp"
-#include "fullvector.hpp"
 
 namespace Icarus
 {

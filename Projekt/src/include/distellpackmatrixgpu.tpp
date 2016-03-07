@@ -4,8 +4,8 @@
 // nur für intellisense
 #include "distellpackmatrixgpu.hpp"
 
-template<typename Scalar>
-void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local);
+template<typename mtype, typename vtype, typename rtype>
+void gpu_ax_(mtype *data, const vtype* fvec, rtype* result, int *indices, size_t max_row_length, size_t dim_local);
 
 template <typename Scalar>
 void cleanupgpu(Scalar *data);
@@ -224,7 +224,7 @@ void DistEllpackMatrixGpu<Scalar>::mult_vec_impl(const VectorType& vec, VectorTy
 
     FullVectorGpu<Scalar> fvec(vec);
 
-    gpu_ax_(_data, fvec, result, _indices, _max_row_length, _dim_local);
+    gpu_ax_(_data, fvec._data, result._data, _indices, _max_row_length, _dim_local);
 }
 
 

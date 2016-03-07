@@ -19,6 +19,7 @@
 #include <limits>
 #include "slicedvectorgpu.hpp"
 #include "mpihandler.hpp"
+#include "distellpackmatrixgpu.hpp"
 
 namespace Icarus
 {
@@ -46,6 +47,8 @@ public:
     typedef Scalar ScalarType;
     typedef typename ScalarTraits<Scalar>::RealType RealType;
 
+  //  friend DistEllpackMatrixGpu<Scalar>::mult_vec_impl(const FullVectorGpu&, SlicedVectorGpu&);
+    
    /**
      * \brief   Standardkonstruktor.
      *
@@ -77,7 +80,7 @@ public:
     FullVectorGpu& operator=(const FullVectorGpu& other);
 
     FullVectorGpu& operator=(FullVectorGpu&& other);
-
+    
     /**
      * \brief   Operator für den elementweisen Zugriff.
      *

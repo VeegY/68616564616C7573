@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iterator>
 #include <algorithm>
+#include "fullvectorgpu.hpp"
 
 namespace Icarus
 {
