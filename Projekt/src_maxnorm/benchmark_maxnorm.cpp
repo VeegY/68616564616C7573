@@ -24,7 +24,7 @@ int memory_option = zero;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimlocal 8
+#define dimlocal 8192
 #define iteration 1
 
 
@@ -129,7 +129,6 @@ int main(int argc, char* argv[])
         gpu_maxnorm_time(vector_first, result_first, dimlocal, iteration, version_first, memory_option);
     //=========================================//
 
-    print_vec_one(vector_first, dimlocal);
     check_result_maxnorm(result_first, vector_host, dimlocal, '1');
     cleanup(vector_first, result_first, memory_option);
  
@@ -152,8 +151,7 @@ int main(int argc, char* argv[])
         elapsed_second_kernel =
             gpu_maxnorm_time(vector_second, result_second, dimlocal, iteration, version_second, memory_option);
         //=========================================//
-        
-        print_vec_one(vector_second, dimlocal);
+
         check_result_maxnorm(result_second, vector_host, dimlocal, '2');
         cleanup(vector_second, result_second, memory_option);
     }
