@@ -32,9 +32,9 @@ std::vector<double> assembleFem::get_quadrature_xpoints(int e, std::vector<doubl
 {
     //Berechnet die Translation und die Skalierung
     double e_x=getx(e);
-    double a1=(1-sqrt(3/5))*h/2 + e_x;
-    double a2=h/2 + e_x;
-    double a3=(1+sqrt(3/5))*h/2 + e_x;
+    double a1=(1.0-sqrt(3.0/5.0))*h/2.0 + e_x;
+    double a2=h/2.0 + e_x;
+    double a3=(1.0+sqrt(3.0/5.0))*h/2.0 + e_x;
  
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a1,a1,a1,a1,a1,a1,a1,a1, a2,a2,a2,a2,a2,a2,a2,a2,a2, a3,a3,a3,a3,a3,a3,a3,a3,a3};
@@ -57,9 +57,9 @@ std::vector<double> assembleFem::get_quadrature_ypoints(int e, std::vector<doubl
 {
     //Berechnet die Translation und die Skalierung
     double e_y=gety(e);
-    double a1=(1-sqrt(3/5))*h/2 + e_y;
-    double a2=h/2 + e_y;
-    double a3=(1+sqrt(3/5))*h/2 + e_y;
+    double a1=(1.0-sqrt(3.0/5.0))*h/2.0 + e_y;
+    double a2=h/2.0 + e_y;
+    double a3=(1.0+sqrt(3.0/5.0))*h/2.0 + e_y;
  
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3}; 
@@ -83,9 +83,9 @@ std::vector<double> assembleFem::get_quadrature_zpoints(int e, std::vector<doubl
 {
     //Berechnet die Translation und die Skalierung
     double e_z=getz(e);
-    double a1=(1-sqrt(3/5))*h/2 + e_z;
-    double a2=h/2 + e_z;
-    double a3=(1+sqrt(3/5))*h/2 + e_z;
+    double a1=(1.0-sqrt(3.0/5.0))*h/2.0 + e_z;
+    double a2=h/2.0 + e_z;
+    double a3=(1.0+sqrt(3.0/5.0))*h/2.0 + e_z;
 
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3};
