@@ -1,22 +1,31 @@
-\documentclass[a4paper]{scrartcl}
-\usepackage{german} 
-% Damit die Verwendung der deutschen Sprache nicht ganz so umst\"andlich wird,
-% sollte man die folgenden Pakete einbinden: 
-%\usepackage[latin1]{inputenc}% ermöglich die direkte Eingabe der Umlaute 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc} % das Trennen der Umlaute
-\usepackage{ngerman} % hiermit werden deutsche Bezeichnungen genutzt und 
-                     % die W\"orter werden anhand der neue Rechtschreibung 
-		     % automatisch getrennt.  
-		     
-\usepackage{amsmath, amsthm, amssymb, amsfonts}
-\usepackage{diagbox}
-\usepackage{graphicx}
-%\usepackage{•}
+\documentclass[12pt,a4paper, oneside,ngerman]{scrartcl}
+\usepackage[ngerman]{babel}			% deutsche Namen/Umlaute
+\usepackage[utf8]{inputenc}			% Zeichensatzkodierung
+\usepackage{graphicx}				% Einbinden von Bildern
+\usepackage{color}				% Farben wenn es sein muß
+\usepackage{eurosym}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb,amsmath,amsthm, mathtools}
+\usepackage{dsfont}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pstricks-add}
+\usepackage{units}
+\usepackage{textcomp}
+\usepackage{subfigure}
+\usepackage{mwe} % new package from Martin scharrer
+\usepackage{caption}
 
-\title{Abschlussbericht Studienprojekt Technomathematik}
+
+
+\setlength{\parindent}{0pt}%gegen Einrücken nach Bildern
+
+\subject{TU-Dortmund Faktultät für Mathematik}
+\title{Abschlussbericht}
+\subtitle{Studienprojekt-Technomathematik 2015-2016}
+\author{Studienprojektgruppe Technomathematik}
+\publishers{\parbox[b][12cm]{\textwidth}{\centering Betreuer: Dipl.-Inf. Markus Geveler}}
 \date{\today}
-\author{Autor(en)}
 
 
 \begin{document}
@@ -25,10 +34,11 @@
 \newpage
 \tableofcontents
 \newpage
-\includegraphics[scale=0.69]{db.pdf}
+
 \include{./MotivationIntroduction/MotivationIntroduction}
 \include{./MainSection/HardwarePart}
 \include{./MainSection/SoftwarePart}
 \include{./Results/Results}
+
 
 \end{document}

@@ -1,10 +1,13 @@
 \section{Hardware}
 Der zweite wichtige Aspekt beim Aufbau eines unkonventionellen 
-Supercomputers ist der Physikalische aufbau des Computers.
+Supercomputers ist der physikalische Aufbau des Computers.
 Hierbei muss man darauf achten ein Gleichgewicht zwischen den Faktoren: 
 Energieverbrauch, Rechengeschwindigkeit und Kühlung zu finden.
 Zusätzlich soll unabhängig von der Größe des Clusters eine
-einfache Lösung für Monitoring bereitgestellt werden.
+einfache Lösung für das Monitoring bereitgestellt werden.
+
+\section{Hardwareauswahl und Motivation}
+HIER NOCH INHALT EINFÜGEN!
 
 
 \subsection{Rackdesign}
@@ -20,8 +23,81 @@ $18^\circ\text{C}~\text{bis}~40^\circ \text{C}$ gehalten wird.
 %Besonders beim Aufbau eines insulären Jetson-TK1-Clusters ist die Kühlung ein
 %heikles Thema, da sowohl die Temperatur des Rechenclusters als auch 
 %die Temperatur des Energiespeichers in seinem stark restringierten Bereich liegen müssen.
-
-
+\subsubsection{Anordnung der Rechenknoten}
+Hinsichtlich der oben beschriebenen Problematik ist die Anordnung der Knoten 
+das zentrale Instrument mit dem Man die Bildung potenzieller Wärmenester 
+gegen den Platzverbrauch des Clusters abwägen kann.~\\
+Wegen zu hoher Energiekosten muss auf den Einsatz einer
+Wasserkühlung verzichtet werden um eine möglichst hohe Energieeffizienz 
+er erreichen.
+Die einfachsten Ansätze zum Aufbau des Supercomputers, 
+welche sich mittels Luftkühlung umsetzen lassen, sind:
+\begin{itemize}
+\item[1)]Rechenknoten in horizontalen Schichten anzuordnen
+\item[2)]Rechenknoten vertikal anzuordnen und nebeneinander aufstellen
+\end{itemize} 
+Je nach Aufbau ergeben sich dabei einige Vor- und Nachteile für den Großrechner, welche hier anhand der
+Wärmebildern gezeigt werden.\\
+~\\
+\begin{minipage}{0.50\textwidth}
+\centering
+	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/convective-horizontal-2.png}
+	\captionof{figure}{Vertikaler Aufbau}
+	\label{fig:sample_figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.50\textwidth}
+\centering
+	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/convective-vertical-2.png}
+	\captionof{figure}{Horizontaler Aufbau}
+	\label{fig:sample_figure}
+\end{minipage}
+~\\
+Vergleicht man diese Beiden Ansätze, so sieht man, dass im horizontalen Szenario zwischen den 
+Platten, auf denen die Rechenknoten angebracht sind, Wärme-Nester entstehen. Zudem liefert die
+Analyse des Stromlinien Diagramms, dass besonders in der Mitte der Platten die Wärme nur schlecht  
+abtransportiert werden kann.\\
+Im Gegensatz dazu ist der Wärmeabtransport beim vertikalem Ansatz durch aufsteigende warme Luft
+besser möglich. Hierbei sollte allerdings bemerkt werden, dass durch die schiefe Lage des Ventilators
+die Gravitationskraft Unregelmäßigkeiten bei der Rotation verursachen könnte, was schlussendlich zu einer verkürzten Lebensdauer des Ventilators führen könnte.\\
+Um die Vorteile der Beiden Ansätze zu kombinieren und gleichzeitig für Wartbarkeit des 
+Rechenclusters zu erhöhen wählt man einen Ansatz, bei dem die Bords in einer Doppelhelix-Struktur 
+angeordnet werden.\\
+~\\
+\begin{minipage}{0.50\textwidth}
+\centering
+	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/render3.jpg}
+	\captionof{figure}{Render des Serveraufbaus}
+	\label{fig:sample_figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.50\textwidth}
+\centering
+	\includegraphics[width=0.99\textwidth]{./Bilder/Icarus/20160307_161232.jpg}
+	\captionof{figure}{Serveraufbau (7. März 2016)}
+	\label{fig:sample_figure}
+\end{minipage}
+~\\
+Wie auf diesen Abbildungen zu erkennen ist wird durch die Verwendung der Doppelhelix-Struktur
+ein größerer Abstand zwischen den Bords für eine verbesserte Kühlung, bei gleichzeitig geringem
+Platzverbrauch ermöglicht.\\ 
+\subsubsection{Strom und Netzwerkanbindung}
+Über die Anordnung hinaus muss nun die Stromversorgung und die Netzwerkanbindung
+der Bords geregelt werden. Eine besondere Herausforderung hierbei ist die 
+Anordnung der Netzteile der einzelnen Rechenknoten. 
+Um zu gewährleisten, dass sich durch das Aufheizen der Netzteile keine gefährlichen
+Wärmenester bilden wird eine spezielle Halterung verwendet.
+Unter nutzung moderner 3D-Druck Technologien, wie sind häufig in der 'Maker-Szene' eingesetzt werden,
+wurde eine Halterung produziert, welche trotz geringem Materialaufwand eine sehr hohe stabiliät 
+und eine gute Luftzufuhr ermöglicht.
+\begin{center}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.7\textwidth]{./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png}
+		\captionof{figure}{Halterung für die Netzteile}
+		\label{fig:sample_figure}
+	\end{figure}
+\end{center}
 
 
 \subsection{Dashbord}

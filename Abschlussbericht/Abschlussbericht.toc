@@ -1,7 +1,11 @@
-\contentsline {section}{\numberline {1}Motivation and Problem statement}{4}
-\contentsline {section}{\numberline {2}Introduction}{4}
-\contentsline {section}{\numberline {3}Hardware}{5}
-\contentsline {subsection}{\numberline {3.1}Rackdesign}{5}
-\contentsline {subsection}{\numberline {3.2}Dashbord}{5}
-\contentsline {section}{\numberline {4}Software}{6}
-\contentsline {section}{\numberline {5}Results}{7}
+\select@language {ngerman}
+\contentsline {section}{\numberline {1}Motivation and Problem statement}{3}
+\contentsline {section}{\numberline {2}Introduction}{3}
+\contentsline {section}{\numberline {3}Hardware}{4}
+\contentsline {section}{\numberline {4}Hardwareauswahl und Motivation}{4}
+\contentsline {subsection}{\numberline {4.1}Rackdesign}{4}
+\contentsline {subsubsection}{\numberline {4.1.1}Anordnung der Rechenknoten}{4}
+\contentsline {subsubsection}{\numberline {4.1.2}Strom und Netzwerkanbindung}{5}
+\contentsline {subsection}{\numberline {4.2}Dashbord}{5}
+\contentsline {section}{\numberline {5}Software}{7}
+\contentsline {section}{\numberline {6}Results}{8}
