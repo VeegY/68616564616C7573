@@ -254,7 +254,7 @@ float gpu_maxnorm_time(Scalar *vector, Scalar *result, int dim_local, int runs, 
                     value = placehold[i];
                 }
             }
-            result[0] = sqrt(value);
+            result[0] = value;
             elapsed_time = timer.stop()*1.0e3;
             //=================================//
             
