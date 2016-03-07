@@ -20,10 +20,10 @@ namespace Icarus
 	 * \param rhs		Rechte Seite, die aufgebaut wird
 	 * \param h			Schrittweite des finiten Differnezenquotienten
 	 * \param Type		Typ des Vertex
-	 * \param Nx		Anzahl der (äquidistanten Punkte in x-Richtung)
-	 * \param Ny		Anzahl der (äquidistanten Punkte in y-Richtung)
-	 * \param Nz		Anzahl der (äquidistanten Punkte in z-Richtung)
-	 * \param vertex	Vertex in Node-Zählung
+	 * \param Nx		Anzahl der (aequidistanten Punkte in x-Richtung)
+	 * \param Ny		Anzahl der (aequidistanten Punkte in y-Richtung)
+	 * \param Nz		Anzahl der (aequidistanten Punkte in z-Richtung)
+	 * \param vertex	Vertex in Node-Zaehlung
 	 * \param rhs_val	Wert der rechten Seite am Vertex
 	 */
 	template<typename Scalar>
@@ -41,10 +41,10 @@ namespace Icarus
 	 *
 	 * \param dic_points	Vektor mit dem Typ der auftretenden Punkte
 	 * \param h				Schrittweite des finiten Differnezenquotienten
-	 * \param Nx			Anzahl der (äquidistanten Punkte in x-Richtung)
-	 * \param Ny			Anzahl der (äquidistanten Punkte in y-Richtung)
-	 * \param Nz			Anzahl der (äquidistanten Punkte in z-Richtung)
-	 * \param rhs_func		Funktion, die jedem räumlichen Index einen Wert
+	 * \param Nx			Anzahl der (aequidistanten Punkte in x-Richtung)
+	 * \param Ny			Anzahl der (aequidistanten Punkte in y-Richtung)
+	 * \param Nz			Anzahl der (aequidistanten Punkte in z-Richtung)
+	 * \param rhs_func		Funktion, die jedem raeumlichen Index einen Wert
 	 *						der rechten Seite zuweist.
 	 *
 	 * \return Gibt ein Paar aus Matrix und rechter Seite zurück.
@@ -62,9 +62,9 @@ namespace Icarus
 	* \brief	Assembliert eine Matrix	mittels Differenzenquotienten zweiter Ordnung.
 	*			Es werden Neumann BC verwendet
 	*
-	* \param nx			Anzahl der (äquidistanten Punkte in x-Richtung)
-	* \param ny			Anzahl der (äquidistanten Punkte in y-Richtung)
-	* \param nz			Anzahl der (äquidistanten Punkte in z-Richtung)
+	* \param nx			Anzahl der (aequidistanten Punkte in x-Richtung)
+	* \param ny			Anzahl der (aequidistanten Punkte in y-Richtung)
+	* \param nz			Anzahl der (aequidistanten Punkte in z-Richtung)
 	* \param h				Schrittweite des finiten Differnezenquotienten
 	* \function bdry			Funktion, die den Neumann-Wert eines Punktes zurückgibt.
 	*
@@ -81,9 +81,9 @@ namespace Icarus
 	* \brief	Assembliert eine Matrix	mittels Differenzenquotienten zweiter Ordnung.
 	*			Es werden Neumann BC verwendet. Es wird effizienter Assembliert.
 	*
-	* \param nx			Anzahl der (äquidistanten Punkte in x-Richtung)
-	* \param ny			Anzahl der (äquidistanten Punkte in y-Richtung)
-	* \param nz			Anzahl der (äquidistanten Punkte in z-Richtung)
+	* \param nx			Anzahl der (aequidistanten Punkte in x-Richtung)
+	* \param ny			Anzahl der (aequidistanten Punkte in y-Richtung)
+	* \param nz			Anzahl der (aequidistanten Punkte in z-Richtung)
 	* \param h				Schrittweite des finiten Differnezenquotienten
 	* \function bdry			Funktion, die den Neumann-Wert eines Punktes zurückgibt.
 	*
@@ -98,6 +98,6 @@ namespace Icarus
 
 }
 
-#include "assemble.tpp"
+#include "assemble.tmp.hpp"
 
 #endif // __ASSEMBLE_HPP_
