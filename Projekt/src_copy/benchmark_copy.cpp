@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
         allocation(&vecin_first, &vecout_first, dimlocal, memory_option);
         set_values(vecin_host, vecin_first, dimlocal);
         
-        gpu_dotproduct_overall(vecin_first, vecout_first, dimlocal, version_first, memory_option);
+        gpu_copy_overall(vecin_first, vecout_first, dimlocal, version_first, memory_option);
         cleanup(vecin_first, vecout_first, memory_option);
     }
     float elapsed_first_overall = timer_overall.stop() / (float)iteration;
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
         {
             allocation(&vecin_second, &vecout_second, dimlocal, memory_option);
             set_values(vecin_host, vecin_second, dimlocal);
-            gpu_dotproduct_overall(vecin_second, vecout_second, dimlocal, version_second, memory_option);
+            gpu_copy_overall(vecin_second, vecout_second, dimlocal, version_second, memory_option);
             cleanup(vecin_second, vecout_second, memory_option);
         }
         else//CPU Zeitmessung
@@ -126,10 +126,10 @@ int main(int argc, char* argv[])
 
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
     float elapsed_first_kernel = 
-        gpu_dotproduct_time(vecin_first, vecout_first, dimlocal, iteration, version_first, memory_option);
+        gpu_copy_time(vecin_first, vecout_first, dimlocal, iteration, version_first, memory_option);
     //=========================================//
 
-    check_vecout_dotproduct(vecout_first, vecin_host, dimlocal, '1');
+    check_vecout_copy(vecout_first, vecin_host, dimlocal, '1');
     cleanup(vecin_first, vecout_first, memory_option);
  
  //------------------------------------------------------------------------------------------------/
@@ -148,10 +148,10 @@ int main(int argc, char* argv[])
         
         //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
         elapsed_second_kernel =
-            gpu_dotproduct_time(vecin_second, vecout_second, dimlocal, iteration, version_second, memory_option);
+            gpu_copy_time(vecin_second, vecout_second, dimlocal, iteration, version_second, memory_option);
         //=========================================//
         
-        check_vecout_dotproduct(vecout_second, vecin_host, dimlocal, '2');
+        check_result_copy(vecout_second, vecin_host, dimlocal, '2');
         cleanup(vecin_second, vecout_second, memory_option);
     }
     else//CPU Zeitmessung

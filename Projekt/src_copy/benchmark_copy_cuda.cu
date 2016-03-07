@@ -182,6 +182,9 @@ float gpu_copy_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, in
     Timer timer;
     float elapsed_time = 0.0;
 
+    int num_blocks = ceil((double)dim_local / 1024);
+    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
+
     switch (version)
     {
     case(0) :               //kernel_standart
@@ -191,7 +194,7 @@ float gpu_copy_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, in
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar<<<num_blocks, num_threads>>>(one, two, dim_local);
+                gpu_copy<<<num_blocks, num_threads>>>(one, two, dim_local);
             }
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -207,7 +210,7 @@ float gpu_copy_time(Scalar *one, Scalar * two, Scalar *result, int dim_local, in
             timer.start();
             for (int i = 0; i < runs; i++)
             {
-                gpu_scalar << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, dim_local);
+                gpu_copy << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_one, d_two, dim_local);
             }
             cudaDeviceSynchronize();
             elapsed_time = timer.stop()*1.0e3;
@@ -228,13 +231,15 @@ template float gpu_copy_time<double>(double *one, double * two, int dim_local, i
 template<typename Scalar>
 void gpu_copy_overall(Scalar *one, Scalar * two, int dim_local, int version, int mem_option)
 {
+    int num_blocks = ceil((double)dim_local / 1024);
+    int num_threads = ceil(((double)dim_local / num_blocks) / 32) * 32;
 
     switch (version)
     {
     case(0) :               //kernel_standart
         if (mem_option == 0)
         {
-            gpu_scalar << <num_blocks, num_threads >> >(one, two, dim_local);
+            gpu_copy << <num_blocks, num_threads >> >(one, two, dim_local);
             cudaDeviceSynchronize();
         }
         else if (mem_option == 1)
@@ -242,7 +247,7 @@ void gpu_copy_overall(Scalar *one, Scalar * two, int dim_local, int version, int
             cudaHostGetDevicePointer((void **)&d_one, (void *)one, 0);
             cudaHostGetDevicePointer((void **)&d_two, (void *)two, 0);
 
-            gpu_scalar << <num_blocks, num_threads >> >(d_one, d_two, dim_local);
+            gpu_copy << <num_blocks, num_threads >> >(d_one, d_two, dim_local);
             cudaDeviceSynchronize();
         }
     }
