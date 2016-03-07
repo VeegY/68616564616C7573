@@ -220,6 +220,7 @@ float gpu_maxnorm_time(Scalar *vector, Scalar *result, int dim_local, int runs, 
             }
             cudaDeviceSynchronize();
             Scalar value = placehold[0];
+            printf("PLACEHOLD 0 %f", placehold[0]);
             for (int i = 1; i<num_blocks; i++)
             {
                 printf("PLACEHOLD %i %f", i, placehold[i]);
@@ -247,6 +248,7 @@ float gpu_maxnorm_time(Scalar *vector, Scalar *result, int dim_local, int runs, 
                 gpu_maxnorm << <num_blocks, num_threads, sizeof(double)*num_threads >> >(d_vector, d_placehold, dim_local, num_blocks);
             }
             cudaDeviceSynchronize();
+            printf("PLACEHOLD 0 %f", placehold[0]);
             Scalar value = placehold[0];
             for(int i=1;i<num_blocks;i++)
             {
