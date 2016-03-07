@@ -1,4 +1,5 @@
 #include "include/assemblefem.hpp"
+#include "include/mathfunction.hpp"
 
 #include <iostream>
 
@@ -11,6 +12,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     bool Dirichlet(true);
     bool Neumann(false);
     double RHSVAL(1.0);
+    mathfunction f(1);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
@@ -491,10 +493,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     //Matrix.sequential_fill(24, value[26]);
                     //Matrix.sequential_fill(25, value[25]);
                     //Matrix.sequential_fill(26, value[24]);
-                    std::cout << std::endl;
+                    //std::cout << std::endl;
                     //Matrix.sequential_fill(Zeile, 1.0);
                     Matrix.end_of_row();
-                    RHS[Zeile] = assemblyRHSLoad(e, A);
+                    RHS[Zeile] = assemblyRHSLoad(e, A, f);
 
                     //Neumann eventuell hinzufuegen
                 }
