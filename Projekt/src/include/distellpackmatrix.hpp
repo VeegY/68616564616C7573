@@ -58,7 +58,7 @@ public:
      * Erzeugt einen Vektor der Dimension dim, der komplett auf jeder Node der
      * Prozessgruppe my_comm liegt.
      *
-     * \param   dim_globaö     Dimension der Matrix.
+     * \param   dim_global     Dimension der Matrix.
      * \param   my_comm         Kommunikator in die Prozessgruppe der Matrix.
      */
     DistEllpackMatrix(size_t dim_global, MPI_Comm my_comm = MPI_COMM_WORLD);
