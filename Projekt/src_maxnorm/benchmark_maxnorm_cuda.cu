@@ -222,6 +222,7 @@ float gpu_maxnorm_time(Scalar *vector, Scalar *result, int dim_local, int runs, 
             Scalar value = placehold[0];
             for (int i = 1; i<num_blocks; i++)
             {
+                printf("PLACEHOLD %i %f", i, placehold[i]);
                 if (value < placehold[i])
                 {
                     value = placehold[i];
@@ -249,6 +250,7 @@ float gpu_maxnorm_time(Scalar *vector, Scalar *result, int dim_local, int runs, 
             Scalar value = placehold[0];
             for(int i=1;i<num_blocks;i++)
             {
+                printf("PLACEHOLD %i %f", i, placehold[i]);
                 if (value < placehold[i])
                 {
                     value = placehold[i];
