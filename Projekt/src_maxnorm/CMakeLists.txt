@@ -7,7 +7,7 @@ project(stuprotm1516)
 #========================================================================
 
 FILE(GLOB SOURCES "*.cu" "*.cpp" "*.c" "*.h")
-CUDA_ADD_EXECUTABLE(l2norm ${SOURCES})
+CUDA_ADD_EXECUTABLE(maxnorm ${SOURCES})
 
 
 #========================================================================
@@ -22,7 +22,7 @@ LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
-TARGET_LINK_LIBRARIES(l2norm ${MPI_LIBRARIES})
+TARGET_LINK_LIBRARIES(maxnorm ${MPI_LIBRARIES})
 
 
 #========================================================================
