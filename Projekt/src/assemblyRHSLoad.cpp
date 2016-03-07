@@ -1,8 +1,3 @@
-//#include <vector>
-//#include "quadratur.hpp"
-//#include "basis.hpp"
-
-//#include "testfunctions.hpp"
 #include "include/assemblefem.hpp"
 
 namespace Icarus
@@ -23,9 +18,7 @@ double assembleFem::assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, ma
         int nqp = X.size();
 
         for(int q = 0; q<nqp; q++)
-        {
             RHS += evaluate_Basis3d(e[i], A[i], X[q], Y[q], Z[q]) * f.eval(X[q], Y[q], Z[q]) * _weight[q];
-        }
     }
     return RHS;
 }

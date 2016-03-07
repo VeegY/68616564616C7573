@@ -51,7 +51,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
-   
+
     //Kante 1:
     e.resize(2);
     A.resize(2);
@@ -85,12 +85,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             }
         }
     }//close I-Schleife (X-Achse)
-   
+
     //Ecke 2
     e.resize(1);
     A.resize(1);
     Zeile++; //Zeile sollte hier y-1 sein
-    std::cout << "sollte " << y-1 << " sein: " << Zeile << std::endl;
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -219,7 +218,6 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     e.resize(1);
     A.resize(1);
     Zeile++; //Zeile sollte hier (Ny-1)*y sein
-    std::cout << "sollte " << (Ny-1)*y << " sein: " << Zeile << std::endl;
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -277,12 +275,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             }
         }
     }//close I-Schleife (X-Achse)
-   
+
     //Ecke 4:
     e.resize(1);
     A.resize(1);
     Zeile++; //Zeile sollte hier z-1 sein
-    std::cout << "sollte " << z-1 << " sein: " << Zeile << std::endl;
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -435,8 +432,8 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     e[3]=Zeile -y; A[3]=1;
                     RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
                 }
-            }       
-       
+            }
+
             //Inneres:
             e.resize(8);
             A.resize(8);
@@ -451,6 +448,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 //}
                 //else
                 {
+std::cout << Zeile << std::endl;
                     e[0]=Zeile -1-y-z; A[0]=6;
                     e[1]=Zeile -y-z; A[1]=7;
                     e[2]=Zeile -z; A[2]=4;
@@ -462,7 +460,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     assemblyMatrixRow(e, A, column, value);
                     for (int m(0); m<27; ++m)
                     {
-                        std::cout << column[m] << ", " << value[m] << std::endl;
+//std::cout << column[m] << ", " << value[m] << std::endl;
                         Matrix.sequential_fill(column[m], value[m]);
                     }
                     // fuer 3,3,3 ist das die richtige Reihenfolge der Matrixzeile
@@ -501,7 +499,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     //Neumann eventuell hinzufuegen
                 }
             } //Close I-Schleife (X-Achse)
-           
+
             //Fläche 6:
             e.resize(4);
             A.resize(4);
@@ -626,14 +624,13 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 e[1]=Zeile-y; A[1]=1;
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
-        }       
+        }
     } //close K-schleife (Z-Achse)
-   
+
     //Ecke 5
     e.resize(1);
     A.resize(1);
     Zeile++; //Zeile sollte hier (Nz-1)*z sein
-    std::cout << "sollte " << (Nz-1)*z << " sein: " << Zeile << std::endl;
     if(Dirichlet)
     {
         Matrix.sequential_fill( Zeile, 1.0);
@@ -691,12 +688,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             }
         }
     }//Close I-Schleife (X-Achse)
-       
+
     //Ecke 6:
     e.resize(1);
     A.resize(1);
     Zeile++; //Zeile sollte hier (Nz-1)*z+y-1 sein
-    std::cout << "sollte " << (Nz-1)*z+y-1 << " sein: " << Zeile << std::endl;
     if(Dirichlet)
     {
         Matrix.sequential_fill( Zeile, 1.0);
@@ -817,14 +813,13 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
         }
-                     
-    }//Close J-Schleife (Y-Achse)   
-   
+
+    }//Close J-Schleife (Y-Achse)
+
     //Ecke 7
     e.resize(1);
     A.resize(1);
     Zeile++; //Zeile sollte hier (Nx*Ny*Nz)-Nx sein
-    std::cout << "sollte " << (Nz*Ny*Nz)-Nx << " sein: " << Zeile << std::endl;
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -880,14 +875,13 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 e[1]= Zeile-z; A[1]=3;
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
             }
-        }   
+        }
     }//Close I-Schleife (X-Achse)
-   
+
     //Ecke 8:
     e.resize(1);
     A.resize(1);
     Zeile++; //Zeile sollte hier (Nx*Ny*Nz) sein
-    std::cout << "sollte " << (Nx*Nz*Ny)-1 << " sein: " << Zeile << std::endl;
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
