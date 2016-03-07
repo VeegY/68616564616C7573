@@ -28,19 +28,15 @@ void check_result_maxnorm(float *result, float *vector, int dim_local, char a)
     bool check = true;
     for (int k = 0; k < dim_local; k++)
     {
-        if (vector[k] < 0)
+        compare = vector[k];
+        if (compare < 0)
         {
-            if (-vector[k]>value)
-            {
-                value = -vector[k];
-            }
+            compare = -compare;
         }
-        else
+        
+        if (compare > value)
         {
-            if (vector[k]>value)
-            {
-                value = vector[k];
-            }
+            value = compare;
         }
     }
     diff = value - result[0];
