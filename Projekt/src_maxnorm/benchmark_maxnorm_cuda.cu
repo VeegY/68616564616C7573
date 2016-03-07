@@ -220,9 +220,12 @@ float gpu_maxnorm_time(Scalar *vector, Scalar *result, int dim_local, int runs, 
             }
             cudaDeviceSynchronize();
             Scalar value = placehold[0];
-            for(int i=1;i<num_blocks;i++)
+            for (int i = 1; i<num_blocks; i++)
             {
-                value += placehold[i];
+                if (value < placehold[i])
+                {
+                    value = placehold[i];
+                }
             }
             result[0] = value;
             elapsed_time = timer.stop()*1.0e3;
@@ -319,11 +322,14 @@ void gpu_maxnorm_overall(Scalar *vector, Scalar *result, int dim_local, int vers
             gpu_maxnorm <<<num_blocks, num_threads, sizeof(double)*num_threads>>>(vector, placehold, dim_local, num_blocks);
             cudaDeviceSynchronize();
             Scalar value = placehold[0];
-            for(int i=1;i<num_blocks;i++)
+            for (int i = 1; i<num_blocks; i++)
             {
-                value += placehold[i];
+                if (value < placehold[i])
+                {
+                    value = placehold[i];
+                }
             }
-            result[0] = sqrt(value);
+            result[0] = value;
         }
         else if(mem_option == 1)
         {
@@ -336,11 +342,14 @@ void gpu_maxnorm_overall(Scalar *vector, Scalar *result, int dim_local, int vers
             gpu_maxnorm<<<num_blocks, num_threads, sizeof(double)*num_threads>>>(d_vector, d_placehold, dim_local, num_blocks);
             cudaDeviceSynchronize();
             Scalar value = placehold[0];
-            for(int i=1;i<num_blocks;i++)
+            for (int i = 1; i<num_blocks; i++)
             {
-                value += placehold[i];
+                if (value < placehold[i])
+                {
+                    value = placehold[i];
+                }
             }
-            result[0] = sqrt(value);
+            result[0] = value;
         }
         break;
 
