@@ -20,7 +20,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     int Zeile;
     std::vector<int> e(1);
     std::vector<int> A(1);
-    std::vector<double> RHS(Nx*Ny*Nz);
+    std::vector<double> RHS(_nx*_ny*_nz);
 
     std::vector<int> column(27);
     std::vector<double> value(27);
@@ -56,7 +56,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     e.resize(2);
     A.resize(2);
 
-    for(int i=1; i<Nx-1;i++)
+    for(int i=1; i<_nx-1;i++)
     {
         Zeile++;;
         if(Dirichlet)
@@ -114,14 +114,14 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
-   
-   
-    for(int j=1; j<Ny-1;j++)
+
+
+    for(int j=1; j<_ny-1;j++)
     {
         //Kante 5
         e.resize(2);
         A.resize(2);
-      
+
         Zeile++;
         if(Dirichlet)
         {
@@ -148,11 +148,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
         }
-       
+
         //Fläche 1:
         e.resize(4);
         A.resize(4);
-        for(int i=1; i<Nx-1;i++)
+        for(int i=1; i<_nx-1;i++)
         {
             Zeile++;
             if(Dirichlet)
@@ -182,7 +182,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 }
             }
         } //close I-Schleife (X-Achse)
-       
+
         //Kante: 6
         e.resize(2);
         A.resize(2);
@@ -213,11 +213,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             }
         }
     } //close J-Schleife (Y-Achse)
-   
+
     //Ecke 3:
     e.resize(1);
     A.resize(1);
-    Zeile++; //Zeile sollte hier (Ny-1)*y sein
+    Zeile++; //Zeile sollte hier (_ny-1)*y sein
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -242,11 +242,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
-   
+
     //Kante 2:
     e.resize(2);
-    A.resize(2);   
-    for(int i=1; i<Nx-1; i++)
+    A.resize(2);
+    for(int i=1; i<_nx-1; i++)
     {
         Zeile++;
         if(Dirichlet)
@@ -304,8 +304,8 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
-   
-    for(int k=1; k<Nz-1; k++)
+
+    for(int k=1; k<_nz-1; k++)
     {
         //Kante 9:
         e.resize(2);
@@ -336,11 +336,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
         }
-       
+
         //Fläche 3:
         e.resize(4);
         A.resize(4);
-        for(int i=1; i<Nx-1; i++)
+        for(int i=1; i<_nx-1; i++)
         {
             Zeile++;
             if(Dirichlet)
@@ -368,9 +368,9 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     e[3]=Zeile -1; A[3]=1;
                     RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
                 }
-            }             
+            }
         }//close I-Schleife (X-Achse)
-       
+
         //Kante 10:
         e.resize(2);
         A.resize(2);
@@ -400,8 +400,8 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
         }
-       
-        for(int j=1; j<Ny-1; j++)
+
+        for(int j=1; j<_ny-1; j++)
         {
             //Fläche 5:
             e.resize(4);
@@ -437,7 +437,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             //Inneres:
             e.resize(8);
             A.resize(8);
-            for(int i=1; i<Nx-1; i++)
+            for(int i=1; i<_nx-1; i++)
             {
                 Zeile++;
                 //if(Dirichlet)
@@ -530,8 +530,8 @@ std::cout << Zeile << std::endl;
                     RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
                 }
             }
-        } //close J-Schleife (Y-Achse)     
- 
+        } //close J-Schleife (Y-Achse)
+
         //Kante 12:
         e.resize(2);
         A.resize(2);
@@ -561,11 +561,11 @@ std::cout << Zeile << std::endl;
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
         }
-       
+
         //Fläche 4
         e.resize(4);
         A.resize(4);
-        for(int i=1; i< Nx-1; i++)
+        for(int i=1; i< _nx-1; i++)
         {
             Zeile++;
             if(Dirichlet)
@@ -594,8 +594,8 @@ std::cout << Zeile << std::endl;
                     RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
                 }
             }
-        }//Close I-Schleife (X-Achse)       
-       
+        }//Close I-Schleife (X-Achse)
+
         //Kante 11:
         e.resize(2);
         A.resize(2);
@@ -630,7 +630,7 @@ std::cout << Zeile << std::endl;
     //Ecke 5
     e.resize(1);
     A.resize(1);
-    Zeile++; //Zeile sollte hier (Nz-1)*z sein
+    Zeile++; //Zeile sollte hier (_nz-1)*z sein
     if(Dirichlet)
     {
         Matrix.sequential_fill( Zeile, 1.0);
@@ -655,11 +655,11 @@ std::cout << Zeile << std::endl;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
-       
+
     //Kante 4
     e.resize(2);
     A.resize(2);
-    for(int i =1; i<Nx-1;i++)
+    for(int i =1; i<_nx-1;i++)
     {
         Zeile++;
         if(Dirichlet)
@@ -692,7 +692,7 @@ std::cout << Zeile << std::endl;
     //Ecke 6:
     e.resize(1);
     A.resize(1);
-    Zeile++; //Zeile sollte hier (Nz-1)*z+y-1 sein
+    Zeile++; //Zeile sollte hier (_nz-1)*z+y-1 sein
     if(Dirichlet)
     {
         Matrix.sequential_fill( Zeile, 1.0);
@@ -716,11 +716,11 @@ std::cout << Zeile << std::endl;
             e[0]= Zeile-z; A[0]=3;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
-    } 
-   
-    for(int j=1; j< Ny-1; j++)
+    }
+
+    for(int j=1; j< _ny-1; j++)
     {
-        //Kante 8     
+        //Kante 8
         e.resize(2);
         A.resize(2);
         Zeile++;
@@ -748,12 +748,12 @@ std::cout << Zeile << std::endl;
                 e[1]=Zeile-z; A[1]=3;
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
-        }   
-       
+        }
+
         //Fläche 2:
         e.resize(4);
         A.resize(4);
-        for(int i=1; i<Nx-1; i++)
+        for(int i=1; i<_nx-1; i++)
         {
             Zeile++;
             if(Dirichlet)
@@ -781,9 +781,9 @@ std::cout << Zeile << std::endl;
                     e[3]=Zeile -1; A[3]=1;
                     RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
                 }
-            }       
+            }
         }//Close I-Schleife (X-Achse)
-       
+
         //Kante 7
         e.resize(2);
         A.resize(2);
@@ -819,7 +819,7 @@ std::cout << Zeile << std::endl;
     //Ecke 7
     e.resize(1);
     A.resize(1);
-    Zeile++; //Zeile sollte hier (Nx*Ny*Nz)-Nx sein
+    Zeile++; //Zeile sollte hier (_nx*_ny*_nz)-_nx sein
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -843,12 +843,12 @@ std::cout << Zeile << std::endl;
             e[0]=Zeile-y-z; A[0]=2;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
-    }   
-   
+    }
+
     //Kante 3
     e.resize(2);
     A.resize(2);
-    for(int i=1; i<Nx-1; i++)
+    for(int i=1; i<_nx-1; i++)
     {
         Zeile++;
         if(Dirichlet)
@@ -881,7 +881,7 @@ std::cout << Zeile << std::endl;
     //Ecke 8:
     e.resize(1);
     A.resize(1);
-    Zeile++; //Zeile sollte hier (Nx*Ny*Nz) sein
+    Zeile++; //Zeile sollte hier (_nx*_ny*_nz) sein
     if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -905,10 +905,10 @@ std::cout << Zeile << std::endl;
             e[0]=Zeile-z-y; A[0]=2;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
-    }   
+    }
 
     //TODO rhs direkt fuellen (erst wenn alles laeuft)
-    for (int i(0); i<Nx*Ny*Nz; ++i)
+    for (int i(0); i<_nx*_ny*_nz; ++i)
         rhs.set_global(i, RHS[i]);
 
 }//nomain()

@@ -16,7 +16,7 @@ class assembleFem
 {
 public:
     assembleFem(double sh, int sx, int sy, int sz):
-        h(sh), Nx(sx), Ny(sy), Nz(sz), z(Nx*Ny), y(Nx)
+        _h(sh), _nx(sx), _ny(sy), _nz(sz), z(_nx*_ny), y(_nx)
     {
         _weight = get_weight(); //TODO weight Vektor direkt bei Initialisierung setzen?
         _weight_2d = get_weight_2d(); //TODO weight Vektor direkt bei Initialisierung setzen?
@@ -56,8 +56,8 @@ private:
     std::vector<double> get_quadrature_ypoints_2d_3(int e);
     std::vector<double> get_quadrature_zpoints_2d_3(int e);
 
-    double h;
-    int Nx, Ny, Nz;
+    double _h;
+    int _nx, _ny, _nz;
     int z, y;
     std::vector<double> _weight, _weight_2d;
     std::vector<double> _ax, _ay, _az;
