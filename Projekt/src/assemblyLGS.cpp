@@ -6,13 +6,12 @@
 namespace Icarus
 {
 
-void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
+void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f)
 {
     //TODO: vorlaeufig, wieder loeschen
-    bool Dirichlet(false);
-    bool Neumann(true);
+    bool Dirichlet(true);
+    bool Neumann(false);
     double RHSVAL(1.0);
-    mathfunction f(1);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
@@ -40,7 +39,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
             e[0]=Zeile; A[0]=0;
@@ -73,7 +72,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-1; A[0]=1;
@@ -103,7 +102,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
             e[0]=Zeile-1; A[0]=1;
@@ -136,7 +135,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-y; A[0]=3;
@@ -170,7 +169,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(e, A, f);
                 if(Neumann)
                 {
                     e[0]=Zeile -y-1; A[0]=2;
@@ -200,7 +199,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-y-1; A[0]=2;
@@ -230,7 +229,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
             e[0]=Zeile-y; A[0]=3;
@@ -262,7 +261,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-y-1; A[0]=2;
@@ -292,7 +291,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
             e[0]=Zeile-1-y; A[0]=2;
@@ -324,7 +323,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-z; A[0]=3;
@@ -350,15 +349,15 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             }
             else
             {
-                e[0]=Zeile -1-z; A[0]=7;
+                e[0]=Zeile -1-z; A[0]=5;
                 e[1]=Zeile -z; A[1]=4;
                 e[2]=Zeile; A[2]=0;
-                e[3]=Zeile -1; A[3]=3;
+                e[3]=Zeile -1; A[3]=1;
                 assemblyMatrixRow(e, A, column, value);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(e, A, f);
                 if(Neumann)
                 {
                     e[0]=Zeile -1-z; A[0]=2;
@@ -388,7 +387,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-1-z; A[0]=2;
@@ -422,7 +421,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(e, A, f);
                 if(Neumann)
                 {
                     e[0]=Zeile -y-z; A[0]=2;
@@ -458,40 +457,7 @@ std::cout << Zeile << std::endl;
                     e[7]=Zeile -1; A[7]=1;
                     assemblyMatrixRow(e, A, column, value);
                     for (int m(0); m<27; ++m)
-                    {
-//std::cout << column[m] << ", " << value[m] << std::endl;
                         Matrix.sequential_fill(column[m], value[m]);
-                    }
-                    // fuer 3,3,3 ist das die richtige Reihenfolge der Matrixzeile
-                    //Matrix.sequential_fill(0, value[0]);
-                    //Matrix.sequential_fill(1, value[1]);
-                    //Matrix.sequential_fill(2, value[8]);
-                    //Matrix.sequential_fill(3, value[3]);
-                    //Matrix.sequential_fill(4, value[2]);
-                    //Matrix.sequential_fill(5, value[9]);
-                    //Matrix.sequential_fill(6, value[16]);
-                    //Matrix.sequential_fill(7, value[13]);
-                    //Matrix.sequential_fill(8, value[12]);
-                    //Matrix.sequential_fill(9, value[4]);
-                    //Matrix.sequential_fill(10, value[5]);
-                    //Matrix.sequential_fill(11, value[10]);
-                    //Matrix.sequential_fill(12, value[7]);
-                    //Matrix.sequential_fill(13, value[6]);
-                    //Matrix.sequential_fill(14, value[11]);
-                    //Matrix.sequential_fill(15, value[17]);
-                    //Matrix.sequential_fill(16, value[15]);
-                    //Matrix.sequential_fill(17, value[14]);
-                    //Matrix.sequential_fill(18, value[18]);
-                    //Matrix.sequential_fill(19, value[19]);
-                    //Matrix.sequential_fill(20, value[22]);
-                    //Matrix.sequential_fill(21, value[21]);
-                    //Matrix.sequential_fill(22, value[20]);
-                    //Matrix.sequential_fill(23, value[23]);
-                    //Matrix.sequential_fill(24, value[26]);
-                    //Matrix.sequential_fill(25, value[25]);
-                    //Matrix.sequential_fill(26, value[24]);
-                    //std::cout << std::endl;
-                    //Matrix.sequential_fill(Zeile, 1.0);
                     Matrix.end_of_row();
                     RHS[Zeile] = assemblyRHSLoad(e, A, f);
 
@@ -519,7 +485,7 @@ std::cout << Zeile << std::endl;
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(e, A, f);
                 if(Neumann)
                 {
                     e[0]=Zeile -y-z; A[0]=2;
@@ -549,7 +515,7 @@ std::cout << Zeile << std::endl;
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-z; A[0]=3;
@@ -583,7 +549,7 @@ std::cout << Zeile << std::endl;
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(e, A, f);
                 if(Neumann)
                 {
                     e[0]= Zeile -1-z; A[0]=2;
@@ -613,7 +579,7 @@ std::cout << Zeile << std::endl;
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-1-z; A[0]=2;
@@ -643,7 +609,7 @@ std::cout << Zeile << std::endl;
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
             e[0]= Zeile; A[0]=0;
@@ -675,7 +641,7 @@ std::cout << Zeile << std::endl;
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-1; A[0]=1;
@@ -705,7 +671,7 @@ std::cout << Zeile << std::endl;
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
             e[0]= Zeile-1; A[0]=1;
@@ -737,7 +703,7 @@ std::cout << Zeile << std::endl;
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-y; A[0]=3;
@@ -771,7 +737,7 @@ std::cout << Zeile << std::endl;
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(e, A, f);
                 if(Neumann)
                 {
                     e[0]=Zeile -y-1; A[0]=2;
@@ -801,7 +767,7 @@ std::cout << Zeile << std::endl;
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]=Zeile-y-1; A[0]=2;
@@ -826,19 +792,19 @@ std::cout << Zeile << std::endl;
     }
     else
     {
-        e[0]=Zeile-1-y-z; A[0]=6;
+        e[0]=Zeile-y-z; A[0]=7;
         assemblyMatrixRow(e, A, column, value);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
-            e[0]=Zeile-z-y; A[0]=3;
+            e[0]=Zeile-y; A[0]=3;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
             e[0]=Zeile-z; A[0]=3;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=Zeile-y; A[0]=3;
+            e[0]=Zeile-y-z; A[0]=2;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
@@ -863,7 +829,7 @@ std::cout << Zeile << std::endl;
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(e, A, f);
             if(Neumann)
             {
                 e[0]= Zeile-1-y; A[0]=2;
@@ -893,7 +859,7 @@ std::cout << Zeile << std::endl;
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(e, A, f);
         if(Neumann)
         {
             e[0]=Zeile-y-1; A[0]=2;
@@ -911,4 +877,4 @@ std::cout << Zeile << std::endl;
 
 }//assemble()
 
-}//namespace Icarus 
+}//namespace Icarus

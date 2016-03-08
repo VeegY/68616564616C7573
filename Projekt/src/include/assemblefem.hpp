@@ -26,7 +26,7 @@ public:
         _az = {-a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a}; //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
     }
 
-    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs);
+    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f=mathfunction(0));
 
 private:
     void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value);
