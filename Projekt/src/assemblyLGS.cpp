@@ -9,8 +9,8 @@ namespace Icarus
 void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
 {
     //TODO: vorlaeufig, wieder loeschen
-    bool Dirichlet(true);
-    bool Neumann(false);
+    bool Dirichlet(false);
+    bool Neumann(true);
     double RHSVAL(1.0);
     mathfunction f(1);
     //TODO: vorlaeufig, wieder loeschen
@@ -114,7 +114,6 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
-
 
     for(int j=1; j<_ny-1;j++)
     {
@@ -319,8 +318,8 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         }
         else
         {
-            e[0]=Zeile-z -y; A[0]=7;
-            e[1]=Zeile-z; A[1]=4;
+            e[0]=Zeile-z; A[0]=4;
+            e[1]=Zeile; A[1]=0;
             assemblyMatrixRow(e, A, column, value);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
@@ -337,7 +336,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             }
         }
 
-        //Fläche 3:
+        //Flaeche 3:
         e.resize(4);
         A.resize(4);
         for(int i=1; i<_nx-1; i++)
@@ -351,10 +350,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             }
             else
             {
-                e[0]=Zeile -1-z; A[0]=5;
+                e[0]=Zeile -1-z; A[0]=7;
                 e[1]=Zeile -z; A[1]=4;
                 e[2]=Zeile; A[2]=0;
-                e[3]=Zeile -1; A[3]=1;
+                e[3]=Zeile -1; A[3]=3;
                 assemblyMatrixRow(e, A, column, value);
                 for (int m(0); m<18; ++m)
                     Matrix.sequential_fill(column[m], value[m]);
@@ -608,8 +607,8 @@ std::cout << Zeile << std::endl;
         }
         else
         {
-            e[0]=Zeile-1 -z; A[0]=5;
-            e[1]=Zeile-1; A[1]=1;
+            e[0]=Zeile-1-y-z; A[0]=6;
+            e[1]=Zeile-1-y; A[1]=2;
             assemblyMatrixRow(e, A, column, value);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
@@ -732,8 +731,8 @@ std::cout << Zeile << std::endl;
         }
         else
         {
-            e[0]=Zeile -z; A[0]=4;
-            e[1]=Zeile; A[1]=0;
+            e[0]=Zeile -z-y; A[0]=7;
+            e[1]=Zeile -z; A[1]=4;
             assemblyMatrixRow(e, A, column, value);
             for (int m(0); m<12; ++m)
                 Matrix.sequential_fill(column[m], value[m]);
@@ -813,7 +812,6 @@ std::cout << Zeile << std::endl;
                 RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
             }
         }
-
     }//Close J-Schleife (Y-Achse)
 
     //Ecke 7
@@ -836,11 +834,11 @@ std::cout << Zeile << std::endl;
         RHS[Zeile] = assemblyRHSLoad(e, A);
         if(Neumann)
         {
-            e[0]=Zeile-1-y; A[0]=2;
+            e[0]=Zeile-z-y; A[0]=3;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=Zeile-1-z; A[0]=2;
+            e[0]=Zeile-z; A[0]=3;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=Zeile-y-z; A[0]=2;
+            e[0]=Zeile-y; A[0]=3;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
         }
     }
@@ -890,7 +888,7 @@ std::cout << Zeile << std::endl;
     }
     else
     {
-        e[0]=Zeile-y-z; A[0]=7;
+        e[0]=Zeile-z-y-1; A[0]=6;
         assemblyMatrixRow(e, A, column, value);
         for (int m(0); m<8; ++m)
             Matrix.sequential_fill(column[m], value[m]);
@@ -898,9 +896,9 @@ std::cout << Zeile << std::endl;
         RHS[Zeile] = assemblyRHSLoad(e, A);
         if(Neumann)
         {
-            e[0]=Zeile-y; A[0]=3;
+            e[0]=Zeile-y-1; A[0]=2;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=Zeile-z; A[0]=3;
+            e[0]=Zeile-z-1; A[0]=2;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
             e[0]=Zeile-z-y; A[0]=2;
             RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
@@ -911,6 +909,6 @@ std::cout << Zeile << std::endl;
     for (int i(0); i<_nx*_ny*_nz; ++i)
         rhs.set_global(i, RHS[i]);
 
-}//nomain()
+}//assemble()
 
 }//namespace Icarus 
