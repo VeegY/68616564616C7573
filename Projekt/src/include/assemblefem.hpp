@@ -19,32 +19,42 @@ public:
         h(sh), Nx(sx), Ny(sy), Nz(sz), z(Nx*Ny), y(Nx)
     {
         _weight = get_weight(); //TODO weight Vektor direkt bei Initialisierung setzen?
-        _weight_2d = get_weight_2d();
+        _weight_2d = get_weight_2d(); //TODO weight Vektor direkt bei Initialisierung setzen?
         double a(sqrt(0.6));
-        _ax = {-a, -a, -a, -a, -a, -a, -a, -a, -a, 0, 0, 0, 0, 0, 0, 0, 0, 0, a, a, a, a, a, a, a, a, a};  //x-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
+        _ax = {-a, -a, -a, -a, -a, -a, -a, -a, -a, 0, 0, 0, 0, 0, 0, 0, 0, 0, a, a, a, a, a, a, a, a, a}; //x-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
         _ay = {-a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-        _az = {-a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a};   //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
+        _az = {-a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a}; //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
     }
+
     void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs);
 
-//private:
+private:
     void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value);
+
     double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, mathfunction f=mathfunction(0));
     double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, mathfunction g=mathfunction(0));
-    double evaluate_Basis3d(int e, int A, double X, double Y, double Z);
-    std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z);
-    double evaluate_Basis2d(int e, int A, int type, double R1, double R2);
+
     double getx(size_t index);
     double gety(size_t index);
     double getz(size_t index);
+
+    double evaluate_Basis3d(int e, int A, double X, double Y, double Z);
+    std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z);
     std::vector<double> get_weight();
-    std::vector<double> get_weight_2d();
     std::vector<double> get_quadrature_xpoints(int e);
     std::vector<double> get_quadrature_ypoints(int e);
     std::vector<double> get_quadrature_zpoints(int e);
-    std::vector<double> get_quadrature_xpoints_2d(int e);
-    std::vector<double> get_quadrature_ypoints_2d(int e);
-    std::vector<double> get_quadrature_zpoints_2d(int e);
+
+    double evaluate_Basis2d_1(int e, int A, double R1, double R2);
+    double evaluate_Basis2d_2(int e, int A, double R1, double R2);
+    double evaluate_Basis2d_3(int e, int A, double R1, double R2);
+    std::vector<double> get_weight_2d();
+    std::vector<double> get_quadrature_xpoints_2d_1(int e);
+    std::vector<double> get_quadrature_ypoints_2d_1(int e);
+    std::vector<double> get_quadrature_xpoints_2d_2(int e);
+    std::vector<double> get_quadrature_zpoints_2d_2(int e);
+    std::vector<double> get_quadrature_ypoints_2d_3(int e);
+    std::vector<double> get_quadrature_zpoints_2d_3(int e);
 
     double h;
     int Nx, Ny, Nz;
