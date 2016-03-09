@@ -12,17 +12,18 @@ namespace Icarus
 {
 	// ACHTUNG: Nur die Prozesse, die in comm enthalten sind, dürfen diese Funktion aufrufen.
 	template <class DistMatrix>
-	static DistMatrix construct_model_matrix(unsigned m, MPI_Comm comm = MPI_COMM_WORLD) const
+	static DistMatrix construct_model_matrix(unsigned m, MPI_Comm comm = MPI_COMM_WORLD)
 	{
 		if (comm == MPI_COMM_NULL)
 		{
-			std::cerr "construct_model_matrix von ungueltigem comm aus aufgerufen!" << std::endl;
+			std::cerr << "construct_model_matrix von ungueltigem comm aus aufgerufen!" << std::endl;
 			throw;
 		}
 
 		DistMatrix mat(m*m, comm);
-		int nprocs, myrank;
-		MPI_Comm_rank(comm, &myrank);
+		int nprocs, myranki;
+		MPI_Comm_rank(comm, &myranki);
+		unsigned myrank = myranki;
 		MPI_Comm_size(comm, &nprocs);
 		mat.prepare_sequential_fill(5);
 		
@@ -68,7 +69,7 @@ namespace Icarus
 				mat.sequential_fill(glob + m, -1);
 				// -1 [...] -1 4 -1 [...] -1
 			}
-			mat.end_of_line();
+			mat.end_of_row();
 		}
 		return mat;
 	}
@@ -115,7 +116,7 @@ namespace Icarus
 				for (unsigned m = _m_min; m < _m_max; m++)
 				{
 					// konstruiere matrix, startvektor und rechte seite
-					Matrix mat = construct_model_matrix(m, pcomm);
+					Matrix mat = construct_model_matrix<Matrix>(m, pcomm);
 					Vector rhs(m*m);
 					rhs.fill_const(1.0);
 					Vector res(m*m);
@@ -138,8 +139,8 @@ namespace Icarus
 				}
 
 				// communicator und gruppe freigeben
-				MPI_Comm_free(pcomm);
-				MPI_Group_free(pgroup);
+				MPI_Comm_free(&pcomm);
+				MPI_Group_free(&pgroup);
 			}
 		}
 
@@ -150,11 +151,11 @@ namespace Icarus
 			for (unsigned m = _m_min; m < _m_max; m++)
 				out << m*m << "\t";
 			out << std::endl;
-			for (unsigned nodes = _nodes_min; nodes < _node_max; nodes++)
+			for (unsigned nodes = _node_min; nodes < _node_max; nodes++)
 			{
 				// Drucke Zeile für #nodes [1. mwert 2.mwert ...]
 				for (unsigned m = _m_min; m < _m_max; m++)
-					out << 1.0/_exec_times[nodes - _modes_min][m - _m_min] << '\t';
+					out << 1.0/_exec_times[nodes - _node_min][m - _m_min] << '\t';
 				out << std::endl;
 			}
 
@@ -162,11 +163,11 @@ namespace Icarus
 			for (unsigned m = _m_min; m < _m_max; m++)
 				out << m*m << "\t";
 			out << std::endl;
-			for (unsigned nodes = _nodes_min; nodes < _node_max; nodes++)
+			for (unsigned nodes = _node_min; nodes < _node_max; nodes++)
 			{
 				// Drucke Zeile für #nodes [1. mwert 2.mwert ...]
 				for (unsigned m = _m_min; m < _m_max; m++)
-					out << 1.0/(nodes * _exec_times[nodes - _modes_min][m - _m_min]) << '\t';
+					out << 1.0/(nodes * _exec_times[nodes - _node_min][m - _m_min]) << '\t';
 				out << std::endl;
 			}
 		}
