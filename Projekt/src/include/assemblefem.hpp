@@ -30,10 +30,10 @@ public:
     void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f=mathfunction(0));
 
 private:
-    void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value);
+    void assemblyMatrixRow();
 
-    double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, mathfunction f=mathfunction(0));
-    double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, mathfunction g=mathfunction(0));
+    double assemblyRHSLoad(mathfunction f=mathfunction(0));
+    double assemblyRHSNeumann(int Ebene, mathfunction g=mathfunction(0));
 
     double getx(size_t index);
     double gety(size_t index);
@@ -62,6 +62,9 @@ private:
     int z, y;
     std::vector<double> _weight, _weight_2d;
     std::vector<double> _ax, _ay, _az;
+    std::vector<int> _e, _A;
+    std::vector<int> _column;
+    std::vector<double> _value;
 };
 
 }//namespace Icarus

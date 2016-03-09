@@ -26,36 +26,36 @@ double assembleFem::evaluate_Basis3d(int e, int A, double X, double Y, double Z)
 
 std::vector<double> assembleFem::evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z)
 {
-    double x0(getx(e));
-    double y0(gety(e));
-    double z0(getz(e));
+    double x0(getx(e) - X);
+    double y0(gety(e) - Y);
+    double z0(getz(e) - Z);
 
     switch(A)
     {
-        case 0: return {(-1/_h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h),
-                        (-1/_h) * ((x0 + _h - X) / _h) * ((z0 + _h - Z) / _h),
-                        (-1/_h) * ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h)};
-        case 1: return {(1/_h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h),
-                        (-1/_h) * ((x0 - X) / -_h) * ((z0 + _h - Z) / _h),
-                        (-1/_h) * ((x0 - X) / -_h) * ((y0 + _h - Y) / _h)};
-        case 2: return {(1/_h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h),
-                        (1/_h) * ((x0 - X) / -_h) * ((z0 + _h - Z) / _h),
-                        (-1/_h) * ((x0 - X) / -_h) * ((y0 - Y) / -_h)};
-        case 3: return {(-1/_h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h),
-                        (1/_h) * ((x0 + _h - X) / _h) * ((z0 + _h - Z) / _h),
-                        (-1/_h) * ((x0 + _h - X) / _h) * ((y0 - Y) / -_h)};
-        case 4: return {(-1/_h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h),
-                        (-1/_h) * ((x0 + _h - X) / _h) * ((z0 - Z) / -_h),
-                        (1/_h) * ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h)};
-        case 5: return {(1/_h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h),
-                        (-1/_h) * ((x0 - X) / -_h) * ((z0 - Z) / -_h),
-                        (1/_h) * ((x0 - X) / -_h) * ((y0 + _h - Y) / _h)};
-        case 6: return {(1/_h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h),
-                        (1/_h) * ((x0 - X) / -_h) * ((z0 - Z) / -_h),
-                        (1/_h) * ((x0 - X) / -_h) * ((y0 - Y) / -_h)};
-        case 7: return {(-1/_h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h),
-                        (1/_h) * ((x0 + _h - X) / _h) * ((z0 - Z) / -_h),
-                        (1/_h) * ((x0 + _h - X) / _h) * ((y0 - Y) / -_h)};
+        case 0: return {- (y0 + _h) * (z0 + _h) / (_h*_h*_h),
+                        - (x0 + _h) * (z0 + _h) / (_h*_h*_h),
+                        - (x0 + _h) * (y0 + _h) / (_h*_h*_h)};
+        case 1: return {(y0 + _h) * (z0 + _h) / (_h*_h*_h),
+                        x0 * (z0 + _h) / (_h*_h*_h),
+                        x0 * (y0 + _h) / (_h*_h*_h)};
+        case 2: return {- y0 * (z0 + _h) / (_h*_h*_h),
+                        - x0 * (z0 + _h) / (_h*_h*_h),
+                        - x0 * y0 / (_h*_h*_h)};
+        case 3: return {y0 * (z0 + _h) / (_h*_h*_h),
+                        (x0 + _h) * (z0 + _h) / (_h*_h*_h),
+                        (x0 + _h) * y0 / (_h*_h*_h)};
+        case 4: return {(y0 + _h) * z0 / (_h*_h*_h),
+                        (x0 + _h) * z0 / (_h*_h*_h),
+                        (x0 + _h) * (y0 + _h) / (_h*_h*_h)};
+        case 5: return {- (y0 + _h) * z0 / (_h*_h*_h),
+                        - x0 * z0 / (_h*_h*_h),
+                        - x0 * (y0 + _h) / (_h*_h*_h)};
+        case 6: return {y0 * z0 / (_h*_h*_h),
+                        x0 * z0 / (_h*_h*_h),
+                        x0 * y0 / (_h*_h*_h)};
+        case 7: return {- y0 * z0 / (_h*_h*_h),
+                        - (x0 + _h) * z0 / (_h*_h*_h),
+                        - (x0 + _h) * y0 / (_h*_h*_h)};
     }
     assert(A > 0 && A < 8);
     //TODO Kompiler warnt natuerlich wegen evtl nicht erreichtem return. was machen?
