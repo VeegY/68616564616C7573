@@ -39,7 +39,7 @@ private:
 public:
     /// \brief  Anzahl der Iterationen, nach der abgebrochen wird, wenn die Toleranz nicht
     ///         erreicht werden kann.
-    static const int MAX_ITER = 10000;
+    static const long long MAX_ITER = 10000000000L;
 
     /// \brief  Toleranz, die ohne explizite Angabe angenommen wird
 	static const RealType DEFAULT_TOL;

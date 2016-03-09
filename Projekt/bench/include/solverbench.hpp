@@ -8,6 +8,7 @@
 #include "bicgstabsolver.hpp"
 #include "distellpackmatrix.hpp"
 #include "logger.hpp"
+#include "utility.hpp"
 
 namespace Icarus
 {

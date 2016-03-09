@@ -56,7 +56,7 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
     nu.clear();
     p.clear();
 
-    for(int i=0; i<MAX_ITER; i++)
+    for(long long i=0; i<MAX_ITER; i++)
     {
         rho = r_hat.scal_prod(r);
         beta = (rho/rho_)*(alpha/omega);
