@@ -26,7 +26,7 @@ namespace Icarus
 		
 		for (size_t loc = 0; loc < mat.get_dim_local(); loc++)
 		{
-			size_t glob = loc + mat.first_row_on_node();
+			const size_t glob = loc + mat.first_row_on_node();
 			if (glob == 0)
 			{
 				mat.sequential_fill(0, 4);
@@ -74,23 +74,41 @@ namespace Icarus
 	template <class Matrix>
 	class SolverBench
 	{
-		unsigned _node_min, _node_max, _m_min, _m_max;
+		std::vector<unsigned> _nlist, _mlist;
 		std::vector<std::vector<long> > _exec_times; // _exec_times[#nodes_idx][#m_idx]
 
 	public:
 		SolverBench(unsigned node_min, unsigned node_max, unsigned m_min, unsigned m_max) :
-			_node_min(node_min),
-			_node_max(node_max),
-			_m_min(m_min),
-			_m_max(m_max),
+			_nlist(node_max - node_min + 1),
+			_mlist(m_max - m_min + 1),
 			_exec_times(node_max - node_min + 1, std::vector<long>(m_max - m_min + 1))
-		{ }
+		{
+			int nnodes;
+			MPI_Comm_size(MPI_COMM_WORLD, &nnodes);
+			if(nnodes < (int)node_max)
+				LOG_ERROR("Not enough nodes available for ths benchmark (", nnodes, " provided, ", node_max, " required).");
+			// listen füllen
+			for(unsigned n = node_min; n <= node_max; n++) _nlist[n-node_min] = n;	
+			for(unsigned m = m_min; m <= m_max; m++) _mlist[m-m_min] = m;	
+		}
+
+		SolverBench(const std::vector<unsigned>& nlist, const std::vector<unsigned>& mlist) :
+			_nlist(nlist),
+			_mlist(mlist),
+			_exec_times(nlist.size(), std::vector<long>(mlist.size()))
+		{
+			int nnodes;
+			MPI_Comm_size(MPI_COMM_WORLD, &nnodes);
+			for(unsigned n : nlist) if((int)n > nnodes)
+				LOG_ERROR("Not enough nodes available for ths benchmark (", nnodes, " provided, >=", n, " required).");
+		}
 
 		// Starte den Benchmark
 		void run()
 		{
-			for (unsigned nodes = _node_min; nodes < _node_max; nodes++)
+			for (unsigned nctr = 0; nctr < _nlist.size(); nctr++)
 			{
+				const unsigned nodes = _nlist[nctr];
 				MPI_Barrier(MPI_COMM_WORLD);
 				LOG_INFO("Now starting benchmark with ", nodes, " node(s).");
 
@@ -114,8 +132,9 @@ namespace Icarus
 				{
 				
 				// messschleife
-				for (unsigned m = _m_min; m < _m_max; m++)
+				for (unsigned mctr = 0; mctr < _mlist.size(); mctr++)
 				{
+					const unsigned m = _mlist[mctr]; 
 					// konstruiere matrix, startvektor und rechte seite
 					Matrix mat = construct_model_matrix<Matrix>(m, pcomm);
 					typename Matrix::VectorType rhs(m*m, pcomm);
@@ -134,7 +153,7 @@ namespace Icarus
 					solver.solve(res);
 					
 					// speichere ergebnis
-					_exec_times[nodes - _node_min][m - _m_min] = 
+					_exec_times[nctr][mctr] = 
 						std::chrono::duration_cast<std::chrono::milliseconds>(
 						std::chrono::high_resolution_clock::now() - start).count();
 					}
@@ -154,26 +173,26 @@ namespace Icarus
                         if(myrank != rank) return;
 
 			out << "STRONG SCALING RESULTS:" << std::endl;
-			for (unsigned m = _m_min; m < _m_max; m++)
-				out << m*m << "\t";
+			for (unsigned mctr = 0; mctr < _mlist.size(); mctr++)
+				out << _mlist[mctr]*_mlist[mctr] << "\t";
 			out << std::endl;
-			for (unsigned nodes = _node_min; nodes < _node_max; nodes++)
+			for (unsigned nctr = 0; nctr < _nlist.size(); nctr++)
 			{
 				// Drucke Zeile für #nodes [1. mwert 2.mwert ...]
-				for (unsigned m = _m_min; m < _m_max; m++)
-					out << 1.0/_exec_times[nodes - _node_min][m - _m_min] << '\t';
+				for (unsigned mctr = 0; mctr < _mlist.size(); mctr++)
+					out << 1.0/_exec_times[nctr][mctr] << '\t';
 				out << std::endl;
 			}
 
 			out << std::endl << "WEAK SCALING RESULTS:" << std::endl;
-			for (unsigned m = _m_min; m < _m_max; m++)
-				out << m*m << "\t";
+			for (unsigned mctr = 0; mctr < _mlist.size(); mctr++)
+				out << _mlist[mctr]*_mlist[mctr] << "\t";
 			out << std::endl;
-			for (unsigned nodes = _node_min; nodes < _node_max; nodes++)
+			for (unsigned nctr = 0; nctr < _nlist.size(); nctr++)
 			{
 				// Drucke Zeile für #nodes [1. mwert 2.mwert ...]
-				for (unsigned m = _m_min; m < _m_max; m++)
-					out << 1.0/(nodes * _exec_times[nodes - _node_min][m - _m_min]) << '\t';
+				for (unsigned mctr = 0; mctr < _mlist.size(); mctr++)
+					out << 1.0/(_nlist[nctr] * _exec_times[nctr][mctr]) << '\t';
 				out << std::endl;
 			}
 		}
