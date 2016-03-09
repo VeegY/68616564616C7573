@@ -2846,6 +2846,12 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     {
         for(int j = 0; j<7;j++)
         {
+
+            int indexval = indexMatrix[i][j];
+            if(indexval < 0 )
+            {
+                std::cout<<Nega
+            }
             A.sequential_fill(indexMatrix[i][j],valueMatrix[i][j]);
         }
         A.end_of_row();
