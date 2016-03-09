@@ -108,3 +108,23 @@ und ist daher ohne weiteres für die Halterung von Netzteilen verwendbar.
 
 
 \subsection{Dashbord}
+Um das Monitoring und die Fernwartung des Clusters möglichst komfortabel zu bewerkstelligen wurde ein Dashboard eingerichtet. Hierfür ist ein RaspberryPi der ersten Generation ausreichend.
+\subsubsection{Einrichtung Webserver}
+Um die gemessenen Daten verwalten und darstellen zu können wird auf dem RaspberryPi ein LAMP-Server eingerichtet (Linux-Apache-MySQL-PHP). Die Daten werden folglich in der MySQL Datenbank abgespeichert und über PHP-Skripte ausgelesen und verarbeitet. Die Darstellung der Daten erfolgt mittel HTML, CSS und Javascript. Des Weiteren muss der RaspberryPi so konfiguriert werden, dass erstens das Webinterface von außen einsehbar ist , und vor allem, dass man von außen in die Datenbank schreiben kann.
+
+\begin{minipage}{\textwidth}
+
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{./Bilder/Dashboard/Dashboard_frontend.png}
+		\captionof{figure}{Dashboard Frontend}
+	\label{fig:sample_figure}
+
+\end{center}	
+\end{minipage}
+
+\subsubsection{Sammeln der Messdaten}
+Die Temperaturen können lokal auf den einzelnen Boards ausgelesen werden. Dies wird verwendet um mittels C++ ein Programm laufen zu lassen, welches sich auf den einzelnen Rechenknoten nacheinander einloggt, die Temperatur Daten an verschiedenen Stellen des Jetson-Boards ausliest und anschließend eben jene in die MySQL-Datenbank auf dem Webserver einfügt.\\
+Um die restringierte Hardware des Raspberry Pi's nicht zu überlasten wird das Programm auf dem Gateway-Knoten des Clusters ausgeführt, weshalb der oben Genannte Zugriff von außen des RaspberryPi's wichtig ist. \\
+Um qualitative Aussagen über die Energieeffizienz machen zu können wurde eine PDU angeschafft, mit welcher man den Stromverbrauch der einzelnen Knoten messen können sollte. \\
+--- HIER TEXT WARUM DAS MIT DER PDU NICHT GEHT ---\\
+--- HIER TEXT BZGL NEUER MESSMETHODEN ---

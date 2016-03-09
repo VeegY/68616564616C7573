@@ -7,5 +7,7 @@
 \contentsline {subsubsection}{\numberline {3.2.1}Anordnung der Rechenknoten}{4}
 \contentsline {subsubsection}{\numberline {3.2.2}Strom und Netzwerkanbindung}{5}
 \contentsline {subsection}{\numberline {3.3}Dashbord}{6}
-\contentsline {section}{\numberline {4}Software}{7}
-\contentsline {section}{\numberline {5}Results}{8}
+\contentsline {subsubsection}{\numberline {3.3.1}Einrichtung Webserver}{6}
+\contentsline {subsubsection}{\numberline {3.3.2}Sammeln der Messdaten}{7}
+\contentsline {section}{\numberline {4}Software}{8}
+\contentsline {section}{\numberline {5}Results}{9}
