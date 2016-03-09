@@ -456,6 +456,8 @@ std::cout << Zeile << std::endl;
                     e[6]=Zeile; A[6]=0;
                     e[7]=Zeile -1; A[7]=1;
                     assemblyMatrixRow(e, A, column, value);
+                    //assemblyMatrixRow(std::vector<int>{Zeile-1-y-z, Zeile-y-z, Zeile-z, Zeile-1-z, Zeile-1-y, Zeile-y, Zeile, Zeile-1},
+                    //                  std::vector<int>{6, 7, 4, 5, 2, 3, 0, 1}, column, value);
                     for (int m(0); m<27; ++m)
                         Matrix.sequential_fill(column[m], value[m]);
                     Matrix.end_of_row();

@@ -18,10 +18,12 @@ std::vector<double> assembleFem::get_weight()  //Gibt die Gewichte der Quadratur
 std::vector<double> assembleFem::get_quadrature_xpoints(int e) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für d Wuerfel mit Kantenlaenge hx*hy*hz
 {
     //Berechnet die Translation und die Skalierung
-    double e_x=getx(e);
-    double a1=(1.0-sqrt(3.0/5.0))*_h/2.0 + e_x;
-    double a2=_h/2.0 + e_x;
-    double a3=(1.0+sqrt(3.0/5.0))*_h/2.0 + e_x;
+    double e_x(getx(e));
+    //double a1=(1.0-sqrt(3.0/5.0))*_h/2.0 + e_x;
+    double a1(0.11270166537925831148*_h + e_x);
+    double a2(_h/2.0 + e_x);
+    //double a3=(1.0+sqrt(3.0/5.0))*_h/2.0 + e_x;
+    double a3(0.88729833462074168852*_h + e_x);
 
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a1,a1,a1,a1,a1,a1,a1,a1, a2,a2,a2,a2,a2,a2,a2,a2,a2, a3,a3,a3,a3,a3,a3,a3,a3,a3};
@@ -30,23 +32,26 @@ std::vector<double> assembleFem::get_quadrature_xpoints(int e) //Berechnet die x
 std::vector<double> assembleFem::get_quadrature_ypoints(int e) //Berechnet die y-Koordinaten der Gauss-Quadraturpunkte fuer das Intervall für de Wuerfel mit Kantenlaenge hx*hy*h
 {
     //Berechnet die Translation und die Skalierung
-    double e_y=gety(e);
-    double a1=(1.0-sqrt(3.0/5.0))*_h/2.0 + e_y;
-    double a2=_h/2.0 + e_y;
-    double a3=(1.0+sqrt(3.0/5.0))*_h/2.0 + e_y;
+    double e_y(gety(e));
+    //double a1=(1.0-sqrt(3.0/5.0))*_h/2.0 + e_y;
+    double a1(0.11270166537925831148*_h + e_y);
+    double a2(_h/2.0 + e_y);
+    //double a3=(1.0+sqrt(3.0/5.0))*_h/2.0 + e_y;
+    double a3(0.88729833462074168852*_h + e_y);
 
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3, a1,a1,a1,a2,a2,a2,a3,a3,a3}; 
 }
 
-
 std::vector<double> assembleFem::get_quadrature_zpoints(int e) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte fuer das Intervall für den uerfel mit Kantenlaenge hx*hy*hz
 {
     //Berechnet die Translation und die Skalierung
-    double e_z=getz(e);
-    double a1=(1.0-sqrt(3.0/5.0))*_h/2.0 + e_z;
-    double a2=_h/2.0 + e_z;
-    double a3=(1.0+sqrt(3.0/5.0))*_h/2.0 + e_z;
+    double e_z(getz(e));
+    //double a1=(1.0-sqrt(3.0/5.0))*_h/2.0 + e_z;
+    double a1(0.11270166537925831148*_h + e_z);
+    double a2(_h/2.0 + e_z);
+    //double a3=(1.0+sqrt(3.0/5.0))*_h/2.0 + e_z;
+    double a3(0.88729833462074168852*_h + e_z);
 
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3, a1,a2,a3,a1,a2,a3,a1,a2,a3};

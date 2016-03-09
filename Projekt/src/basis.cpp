@@ -8,32 +8,19 @@ namespace Icarus
 
 double assembleFem::evaluate_Basis3d(int e, int A, double X, double Y, double Z)
 {
-    double x0(getx(e));
-    double y0(gety(e));
-    double z0(getz(e));
-    double zwsp(0.0);
-
     switch(A)
     {
-        case 0: zwsp = ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h);
-                break;
-        case 1: zwsp = ((x0 - X) / -_h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h);
-                break;
-        case 2: zwsp = ((x0 - X) / -_h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h);
-                break;
-        case 3: zwsp = ((x0 + _h - X) / _h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h);
-                break;
-        case 4: zwsp = ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h);
-                break;
-        case 5: zwsp = ((x0 - X) / -_h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h);
-                break;
-        case 6: zwsp = ((x0 - X) / -_h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h);
-                break;
-        case 7: zwsp = ((x0 + _h - X) / _h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h);
-                break;
-        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+        case 0: return ((getx(e) + _h - X) / _h) * ((gety(e) + _h - Y) / _h) * ((getz(e) + _h - Z) / _h);
+        case 1: return ((getx(e) - X) / -_h) * ((gety(e) + _h - Y) / _h) * ((getz(e) + _h - Z) / _h);
+        case 2: return ((getx(e) - X) / -_h) * ((gety(e) - Y) / -_h) * ((getz(e) + _h - Z) / _h);
+        case 3: return ((getx(e) + _h - X) / _h) * ((gety(e) - Y) / -_h) * ((getz(e) + _h - Z) / _h);
+        case 4: return ((getx(e) + _h - X) / _h) * ((gety(e) + _h - Y) / _h) * ((getz(e) - Z) / -_h);
+        case 5: return ((getx(e) - X) / -_h) * ((gety(e) + _h - Y) / _h) * ((getz(e) - Z) / -_h);
+        case 6: return ((getx(e) - X) / -_h) * ((gety(e) - Y) / -_h) * ((getz(e) - Z) / -_h);
+        case 7: return ((getx(e) + _h - X) / _h) * ((gety(e) - Y) / -_h) * ((getz(e) - Z) / -_h);
     }
-    return zwsp;
+    assert(A > 0 && A < 8);
+    //TODO Kompiler warnt natuerlich wegen evtl nicht erreichtem return. was machen?
 }
 
 
@@ -42,45 +29,36 @@ std::vector<double> assembleFem::evaluate_gradient_Basis3d(int e, int A, double 
     double x0(getx(e));
     double y0(gety(e));
     double z0(getz(e));
-    std::vector<double> zwsp{0.0, 0.0, 0.0};
 
     switch(A)
     {
-        case 0: zwsp[0] = (-1/_h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h);
-                zwsp[1] = (-1/_h) * ((x0 + _h - X) / _h) * ((z0 + _h - Z) / _h);
-                zwsp[2] = (-1/_h) * ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h);
-                break;
-        case 1: zwsp[0] = (1/_h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h);
-                zwsp[1] = (-1/_h) * ((x0 - X) / -_h) * ((z0 + _h - Z) / _h);
-                zwsp[2] = (-1/_h) * ((x0 - X) / -_h) * ((y0 + _h - Y) / _h);
-                break;
-        case 2: zwsp[0] = (1/_h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h);
-                zwsp[1] = (1/_h) * ((x0 - X) / -_h) * ((z0 + _h - Z) / _h);
-                zwsp[2] = (-1/_h) * ((x0 - X) / -_h) * ((y0 - Y) / -_h);
-                break;
-        case 3: zwsp[0] = (-1/_h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h);
-                zwsp[1] = (1/_h) * ((x0 + _h - X) / _h) * ((z0 + _h - Z) / _h);
-                zwsp[2] = (-1/_h) * ((x0 + _h - X) / _h) * ((y0 - Y) / -_h);
-                break;
-        case 4: zwsp[0] = (-1/_h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h);
-                zwsp[1] = (-1/_h) * ((x0 + _h - X) / _h) * ((z0 - Z) / -_h);
-                zwsp[2] = (1/_h) * ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h);
-                break;
-        case 5: zwsp[0] = (1/_h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h);
-                zwsp[1] = (-1/_h) * ((x0 - X) / -_h) * ((z0 - Z) / -_h);
-                zwsp[2] = (1/_h) * ((x0 - X) / -_h) * ((y0 + _h - Y) / _h);
-                break;
-        case 6: zwsp[0] = (1/_h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h);
-                zwsp[1] = (1/_h) * ((x0 - X) / -_h) * ((z0 - Z) / -_h);
-                zwsp[2] = (1/_h) * ((x0 - X) / -_h) * ((y0 - Y) / -_h);
-                break;
-        case 7: zwsp[0] = (-1/_h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h);
-                zwsp[1] = (1/_h) * ((x0 + _h - X) / _h) * ((z0 - Z) / -_h);
-                zwsp[2] = (1/_h) * ((x0 + _h - X) / _h) * ((y0 - Y) / -_h);
-                break;
-        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+        case 0: return {(-1/_h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h),
+                        (-1/_h) * ((x0 + _h - X) / _h) * ((z0 + _h - Z) / _h),
+                        (-1/_h) * ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h)};
+        case 1: return {(1/_h) * ((y0 + _h - Y) / _h) * ((z0 + _h - Z) / _h),
+                        (-1/_h) * ((x0 - X) / -_h) * ((z0 + _h - Z) / _h),
+                        (-1/_h) * ((x0 - X) / -_h) * ((y0 + _h - Y) / _h)};
+        case 2: return {(1/_h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h),
+                        (1/_h) * ((x0 - X) / -_h) * ((z0 + _h - Z) / _h),
+                        (-1/_h) * ((x0 - X) / -_h) * ((y0 - Y) / -_h)};
+        case 3: return {(-1/_h) * ((y0 - Y) / -_h) * ((z0 + _h - Z) / _h),
+                        (1/_h) * ((x0 + _h - X) / _h) * ((z0 + _h - Z) / _h),
+                        (-1/_h) * ((x0 + _h - X) / _h) * ((y0 - Y) / -_h)};
+        case 4: return {(-1/_h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h),
+                        (-1/_h) * ((x0 + _h - X) / _h) * ((z0 - Z) / -_h),
+                        (1/_h) * ((x0 + _h - X) / _h) * ((y0 + _h - Y) / _h)};
+        case 5: return {(1/_h) * ((y0 + _h - Y) / _h) * ((z0 - Z) / -_h),
+                        (-1/_h) * ((x0 - X) / -_h) * ((z0 - Z) / -_h),
+                        (1/_h) * ((x0 - X) / -_h) * ((y0 + _h - Y) / _h)};
+        case 6: return {(1/_h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h),
+                        (1/_h) * ((x0 - X) / -_h) * ((z0 - Z) / -_h),
+                        (1/_h) * ((x0 - X) / -_h) * ((y0 - Y) / -_h)};
+        case 7: return {(-1/_h) * ((y0 - Y) / -_h) * ((z0 - Z) / -_h),
+                        (1/_h) * ((x0 + _h - X) / _h) * ((z0 - Z) / -_h),
+                        (1/_h) * ((x0 + _h - X) / _h) * ((y0 - Y) / -_h)};
     }
-    return zwsp;
+    assert(A > 0 && A < 8);
+    //TODO Kompiler warnt natuerlich wegen evtl nicht erreichtem return. was machen?
 }
 
 double assembleFem::evaluate_Basis2d_1(int e, int A, double R1, double R2)
