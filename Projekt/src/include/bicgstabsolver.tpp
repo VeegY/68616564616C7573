@@ -17,7 +17,8 @@ BiCgStabSolver<MatrixType>::BiCgStabSolver(
     _A(A),
     _b(b),
     _K1inv(K1inv),
-    _K2inv(K2inv)
+    _K2inv(K2inv),
+    _comm(A.get_comm())
 {
     assert(_A.get_dim() == _b.get_dim());
 }
@@ -28,17 +29,17 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
     assert(x0.get_dim() == _b.get_dim());
     const size_t dim = x0.get_dim();
 
-    VectorType r_hat(dim), r(dim), nu(dim), s(dim), t(dim), p(dim);
+    VectorType r_hat(dim, _comm), r(dim, _comm), nu(dim, _comm), s(dim, _comm), t(dim, _comm), p(dim, _comm);
     std::unique_ptr<VectorType> K1inv_t, K1inv_s, y, z;
     if(_K1inv)
     {
-        K1inv_t.reset(new VectorType(dim));
-        K1inv_s.reset(new VectorType(dim));
+        K1inv_t.reset(new VectorType(dim, _comm));
+        K1inv_s.reset(new VectorType(dim, _comm));
     }
     if(_K1inv || _K2inv)
     {
-        y.reset(new VectorType(dim));
-        z.reset(new VectorType(dim));
+        y.reset(new VectorType(dim, _comm));
+        z.reset(new VectorType(dim, _comm));
     }
     ScalarType rho, rho_, alpha, beta, omega;
 

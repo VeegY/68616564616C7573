@@ -1,6 +1,7 @@
 #ifndef __BICGSTABSOLVER_HPP_
 #define __BICGSTABSOLVER_HPP_
 
+#include <mpi.h>
 #include "solver.hpp"
 #include "matrix.hpp"
 #include "vector.hpp"
@@ -32,6 +33,8 @@ private:
     const MatrixType &_A;
     const VectorType &_b;
     const MatrixType *_K1inv, *_K2inv;
+
+    MPI_Comm _comm;
 
 public:
     /// \brief  Anzahl der Iterationen, nach der abgebrochen wird, wenn die Toleranz nicht

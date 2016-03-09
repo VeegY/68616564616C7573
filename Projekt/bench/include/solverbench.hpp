@@ -7,6 +7,7 @@
 #include <chrono>
 #include "bicgstabsolver.hpp"
 #include "distellpackmatrix.hpp"
+#include "logger.hpp"
 
 namespace Icarus
 {
@@ -21,10 +22,6 @@ namespace Icarus
 		}
 
 		DistMatrix mat(m*m, comm);
-		int nprocs, myranki;
-		MPI_Comm_rank(comm, &myranki);
-		unsigned myrank = myranki;
-		MPI_Comm_size(comm, &nprocs);
 		mat.prepare_sequential_fill(5);
 		
 		for (size_t loc = 0; loc < mat.get_dim_local(); loc++)
@@ -37,7 +34,7 @@ namespace Icarus
 				mat.sequential_fill(m, -1);
 				// 4,-1 [...] -1
 			}
-			else if (myrank > 0 && myrank < m)
+			else if (glob > 0 && glob < m)
 			{
 				mat.sequential_fill(glob - 1, -1);
 				mat.sequential_fill(glob, 4);
@@ -45,7 +42,7 @@ namespace Icarus
 				mat.sequential_fill(glob + m, -1);
 				// -1, 4,-1 [...] - 1
 			}
-			else if (myrank >= m*(m - 1) && myrank != m*m - 1)
+			else if (glob >= m*(m - 1) && glob != m*m - 1)
 			{
 				mat.sequential_fill(glob - m, -1);
 				mat.sequential_fill(glob - 1, -1);
@@ -53,7 +50,7 @@ namespace Icarus
 				mat.sequential_fill(glob + 1, -1);
 				// -1 [...] -1 4 -1 
 			}
-			else if (myrank == m*m - 1)
+			else if (glob == m*m - 1)
 			{
 				mat.sequential_fill(glob - m, -1);
 				mat.sequential_fill(glob - 1, -1);
@@ -74,7 +71,7 @@ namespace Icarus
 		return mat;
 	}
 
-	template <class Matrix, class Vector>
+	template <class Matrix>
 	class SolverBench
 	{
 		unsigned _node_min, _node_max, _m_min, _m_max;
@@ -94,32 +91,36 @@ namespace Icarus
 		{
 			for (unsigned nodes = _node_min; nodes < _node_max; nodes++)
 			{
-				// sind wir an diesem benchmark beteiligt?
-				int myglobalrank;
-				MPI_Comm_rank(MPI_COMM_WORLD, &myglobalrank);
-				if (myglobalrank >= nodes) continue;
+				MPI_Barrier(MPI_COMM_WORLD);
+				LOG_INFO("Now starting benchmark with ", nodes, " node(s).");
 
 				// konstruiere prozessgruppe mit #procs = nodes
-				MPI_Barrier(MPI_COMM_WORLD);
 				MPI_Comm pcomm;
 				MPI_Group worldgroup, pgroup;
 				MPI_Comm_group(MPI_COMM_WORLD, &worldgroup);
 				int * ranks = new int[nodes];
-				for (int i = 0; i < nodes; i++) ranks[i] = i;
+				for (int i = 0; i < (int)nodes; i++) ranks[i] = i;
 				MPI_Group_incl(worldgroup, nodes, ranks, &pgroup);
 				delete ranks;
 				MPI_Comm_create_group(MPI_COMM_WORLD, pgroup, 0, &pcomm);
 				int myrank = -1;
 				MPI_Comm_rank(pcomm, &myrank);
+				LOG_DEBUG("Process group successfully created.");
 
+				// sind wir an diesem benchmark beteiligt?
+				int myglobalrank;
+				MPI_Comm_rank(MPI_COMM_WORLD, &myglobalrank);
+				if (myglobalrank < (int)nodes)
+				{
+				
 				// messschleife
 				for (unsigned m = _m_min; m < _m_max; m++)
 				{
 					// konstruiere matrix, startvektor und rechte seite
 					Matrix mat = construct_model_matrix<Matrix>(m, pcomm);
-					Vector rhs(m*m);
+					typename Matrix::VectorType rhs(m*m, pcomm);
 					rhs.fill_const(1.0);
-					Vector res(m*m);
+					typename Matrix::VectorType res(m*m, pcomm);
 					res.clear();
 
 					// Löser
@@ -130,12 +131,13 @@ namespace Icarus
 					start = std::chrono::high_resolution_clock::now();
 
 					// löser ausführen
-					solver.solve();
+					solver.solve(res);
 					
 					// speichere ergebnis
 					_exec_times[nodes - _node_min][m - _m_min] = 
 						std::chrono::duration_cast<std::chrono::milliseconds>(
 						std::chrono::high_resolution_clock::now() - start).count();
+					}
 				}
 
 				// communicator und gruppe freigeben
@@ -145,8 +147,12 @@ namespace Icarus
 		}
 
 		// Drucke performace vs. #procs und performance/proc vs. #procs
-		void print_results(std::ostream& out) const
+		void print_results(std::ostream& out, int rank = 0) const
 		{
+                        int myrank;
+			MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+                        if(myrank != rank) return;
+
 			out << "STRONG SCALING RESULTS:" << std::endl;
 			for (unsigned m = _m_min; m < _m_max; m++)
 				out << m*m << "\t";
