@@ -52,8 +52,11 @@ int main()
     rhs2.set_global(0, 1.0);
     rhs2.set_global(1, 0.0);
     rhs2.set_global(2, 1.0);
+    Icarus::print_sliced_object(rhs2);
     Icarus::SlicedVector<double> sol2(3);
     Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver2(matrix, rhs2);
+    sol2.clear();
+    sol2.set_local(0, 1e-6);
     solver2.solve(sol2);
 
     Icarus::SlicedVector<double> correctsol2(3);
