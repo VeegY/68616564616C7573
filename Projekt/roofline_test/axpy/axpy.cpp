@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
     //>>>KERNEL<<<
     //=========================================//
 
-    axpy_check_result_(result, vectorx_host, vectory_host, dimension);
+    axpy_check_result_(result, vectorx_host, scalar_host[0], vectory_host, dimension);
     cleanup(vectorx);
     cleanup(vectory);
 

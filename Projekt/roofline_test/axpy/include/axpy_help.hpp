@@ -11,7 +11,7 @@
 
 
 template <typename type>
-void axpy_check_result_(type *result, type *veconeh, type *vectwoh, size_t dim_local)
+void axpy_check_result_(type *result, type *veconeh, type scalar,  type *vectwoh, size_t dim_local)
 {
     //==========================================//
     // value is result of CPU function
@@ -24,18 +24,16 @@ void axpy_check_result_(type *result, type *veconeh, type *vectwoh, size_t dim_l
     //==========================================//
     for (int k = 0; k < dim_local; k++)
     {
-        value += veconeh[k] * vectwoh[k];
+        value = scalar * veconeh[k] + vectwoh[k];
+        diff = value - result[k];
+        if (diff > 1.0e-6 || diff < -1.0e-6)
+        {
+            check = false;
+        }
     }
     //==========================================//
     //diff needs to be small, pretty big atm
     //==========================================//
-    diff = value - result[0];
-    printf(GREEN "DIFF: %f\n" RESET, diff);
-    if (diff > 1.0e-6 || diff < -1.0e-6)
-    {
-        check = false;
-    }
-
     if (check)
     {
         printf(GREEN "Kernel outcome true\n" RESET);

@@ -24,16 +24,7 @@ void dotproduct_check_result_(type *result, type *veconeh, type *vectwoh, size_t
     //==========================================//
     for (int i = 0; i < dim_local; i++)
     {
-        type value = 0.0;
-        for (int k = 0; k < dim_local; k++)
-        {
-            value += veconeh[k] * vectwoh[k];
-        }
-        float diff = value - result[i];
-        if (diff > 1.0e-6 || diff < -1.0e-6)
-        {
-            check = false;
-        }
+        value += veconeh[k] * vectwoh[k];
     }
     //==========================================//
     //diff needs to be small, pretty big atm
