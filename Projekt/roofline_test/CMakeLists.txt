@@ -17,6 +17,7 @@ INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 ADD_SUBDIRECTORY(copy)
 ADD_SUBDIRECTORY(axpy)
+ADD_SUBDIRECTORY(dotproduct)
 
 #ADD_SUBDIRECTORY(src_ax)
 #ADD_SUBDIRECTORY(src_dotproduct)
