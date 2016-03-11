@@ -30,7 +30,7 @@ void dotproduct_check_result_(type *result, type *veconeh, type *vectwoh, size_t
     //diff needs to be small, pretty big atm
     //==========================================//
     diff = value - result[0];
-    printf(GREEN "DIFF: %f\n" RESET, diff);
+    printf(GREEN "DIFF: %d\n" RESET, diff);
     if (diff > 1.0e-6 || diff < -1.0e-6)
     {
         check = false;

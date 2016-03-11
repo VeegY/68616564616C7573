@@ -17,7 +17,7 @@ void axpy_check_result_(type *result, type *veconeh, type scalar,  type *vectwoh
     // value is result of CPU function
     // diff is difference between GPU & CPU result
     //==========================================//
-    type diff, value = 0.0;
+    type diff, value = 0.0, maxdiff = 0.0;
     bool check = true;
     //==========================================//
     //calculate CPU result
@@ -30,10 +30,19 @@ void axpy_check_result_(type *result, type *veconeh, type scalar,  type *vectwoh
         {
             check = false;
         }
+        if (diff <= 0)
+        {
+            diff = -diff;
+        }
+        if (maxdiff <= diff)
+        {
+            maxdiff = diff;
+        }
     }
     //==========================================//
     //diff needs to be small, pretty big atm
     //==========================================//
+    printf(GREEN "MAX.DIFF: %d\n" RESET, maxdiff);
     if (check)
     {
         printf(GREEN "Kernel outcome true\n" RESET);
