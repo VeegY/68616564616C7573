@@ -47,9 +47,9 @@ void dotproduct_check_result_(type *result, type *veconeh, type *vectwoh, size_t
 
     if (check)
     {
-        printf(GREEN "%c_Kernel outcome true\n" RESET, a);
+        printf(GREEN "Kernel outcome true\n" RESET);
     }
-    else printf(WARNING "%c_Kernel outcome false\n", a);
+    else printf(WARNING "Kernel outcome false\n");
 }
 
 
