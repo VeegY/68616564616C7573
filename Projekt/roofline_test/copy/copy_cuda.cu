@@ -41,7 +41,7 @@ template void allocation<double>(double **data, size_t size);
 ///                             KERNEL CONFIG                               ///
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
-void generate_config(int *num_threads, int *num_blocks)
+void generate_config(int *num_threads, int *num_blocks, int dim_local)
 {
     *num_blocks = ceil((double)dim_local / 1024);
     *num_threads = ceil(((double)dim_local / *num_blocks) / 32) * 32;
@@ -58,7 +58,7 @@ float invoke_gpu_time(type *vecin, type scalar, type *vecout, int dim, int runs)
     Timer timer;
     float elapsed_time = 0.0;
     int num_threads, num_blocks;
-    generate_config(&num_threads, &num_blocks);
+    generate_config(&num_threads, &num_blocks, dim);
 
     //=================================//
     timer.start();
@@ -85,7 +85,7 @@ template<typename type>
 void invoke_gpu_overall(type *vecin, type scalar, type *vecout, int dim)
 {
     int num_threads, num_blocks;
-    generate_config(&num_threads, &num_blocks);
+    generate_config(&num_threads, &num_blocks, dim);
 
     kernel<<<num_blocks, num_threads>>>(vecin,scalar,vecout,dim);
     cudaDeviceSynchronize();
