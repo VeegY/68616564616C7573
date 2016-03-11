@@ -13,7 +13,7 @@
 #define MAGENTA "\e[35;1m"
 
 template<typename type>
-void performance(int dim, float overall, float kernel, int runs, type schalter)
+void performance(int dim, float overall, float kernel, type schalter)
 {
     int bytes = 2 * sizeof(type) * dim;
     int flop = dim;
@@ -34,9 +34,9 @@ void performance(int dim, float overall, float kernel, int runs, type schalter)
     printf(        "-----------------------------------------------\n");
 
 }
-template void performance<int>(int dim, float overall, float kernel, int runs, int schalter);
-template void performance<float>(int dim, float overall, float kernel, int runs, float schalter);
-template void performance<double>(int dim, float overall, float kernel, int runs, double schalter);
+template void performance<int>(int dim, float overall, float kernel, int schalter);
+template void performance<float>(int dim, float overall, float kernel, float schalter);
+template void performance<double>(int dim, float overall, float kernel, double schalter);
 
 
 //=============================================================================

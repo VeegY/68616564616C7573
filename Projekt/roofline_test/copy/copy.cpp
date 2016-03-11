@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     set_data(vec_host, dimension);
     set_data(scalar_host, 1);
 
-    Timer timer_overall,timer_cpu;
+    Timer timer_overall;
 
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
