@@ -73,13 +73,13 @@ template void allocation<double>(double **data, size_t size);
 ///                             KERNEL CONFIG                               ///
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
-void generate_config(int *num_threads, int *num_blocks, int dim_local)
+void generate_config(int *num_threads, int *num_blocks, int dim)
 {
     
     *num_threads = 1024;
-    if (dim_local<1024)
+    if (dim<1024)
     {
-        int n = dim_local - 1;
+        int n = dim - 1;
         n |= n >> 1;
         n |= n >> 2;
         n |= n >> 4;
@@ -103,7 +103,7 @@ float invoke_gpu_time(type *vecx, type *vecy, type *result, int dim, int runs)
     Timer timer;
     float elapsed_time = 0.0;
     int num_threads, num_blocks;
-    generate_config(&num_threads, &num_blocks);
+    generate_config(&num_threads, &num_blocks, dim);
     printf("test %i\n", num_threads);
 
     type *placehold = NULL;
@@ -135,12 +135,14 @@ template<typename type>
 void invoke_gpu_overall(type *vecx, type *vecy, type *result, int dim)
 {
     int num_threads, num_blocks;
-    generate_config(&num_threads, &num_blocks);
+    generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
     cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
 
     kernel<<<num_blocks, num_threads>>>(vecx, vecy, placehold, dim);
+    resultreduce << <1, 1 >> >(result, placehold, num_blocks);
+    
     cudaDeviceSynchronize();
 }
 template void invoke_gpu_overall<float>(float *vecx, float *vecy, float *result, int dim);

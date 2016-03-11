@@ -30,7 +30,7 @@ void dotproduct_check_result_(type *result, type *veconeh, type *vectwoh, size_t
             value += veconeh[k] * vectwoh[k];
         }
         float diff = value - result[i];
-        if (diff > 1.0e-2 || diff < -1.0e-2)
+        if (diff > 1.0e-6 || diff < -1.0e-6)
         {
             check = false;
         }

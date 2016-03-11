@@ -13,8 +13,8 @@ using namespace std;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimension 1024
-#define iteration 1000
+#define dimension 65536
+#define iteration 10000
 
 template<typename type>
 float invoke_gpu_time(type *vecx, type *vecy, type *result, int dim, int runs);
@@ -60,13 +60,13 @@ int main(int argc, char* argv[])
         copy_data(vectorx_host, vectorx_dev, dimension);
         copy_data(vectory_host, vectory_dev, dimension);
 
-        invoke_gpu_time(vectorx_dev, vectory_dev, result, dimension);
+        invoke_gpu_overall(vectorx_dev, vectory_dev, result, dimension);
 
         cleanup(vectorx_dev);
         cleanup(vectory_dev);
         cleanup(result);
     }
-    float elapsed_overall = timer_overall.stop() / (float)iteration;
+    float elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
 
 
 //------------------------------------------------------------------------------------------------/
@@ -90,6 +90,7 @@ int main(int argc, char* argv[])
     //=========================================//
 
     
+    dotproduct_check_result_(result, vectorx_host, vectory_host, dim_local)
     cleanup(vectorx_dev);
     cleanup(vectory_dev);
     cleanup(result);
@@ -99,9 +100,10 @@ int main(int argc, char* argv[])
 //================================================================================================/
 
     double schalter = 0.0;
-    //performance(elapsed_kernel, elapsed_overall, schalter);
+    performance(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
   
-    delete[] data_host;
+    delete[] vectorx_host;
+    delete[] vectory_host;
 
     return 0;
 }
