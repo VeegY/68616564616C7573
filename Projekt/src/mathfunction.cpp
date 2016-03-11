@@ -23,19 +23,33 @@ double mathfunction::eval(double x, double y, double z)
                 return (0.5-x)*(0.5-y)*(0.5);
             if (z < 1.0+1e-5 && z > 1.0-1e-5)
                 return (0.5-x)*(0.5-y)*(-0.5);
-            assert(false || false); // nicht vorgesehen
+            assert(false); // nicht vorgesehen
     case 4: if (x < 1.0e-5 && x > -1e-5)
-                return 0.5 - 0.5*(y+z) + y*z;
+                return -(0.5-y)*(0.5-z);
             if (x < 1.0+1e-5 && x > 1.0-1e-5)
-                return - 0.5 + 0.5*(y+z) - y*z;
+                return -(0.5-y)*(0.5-z);
             if (y < 1.0e-5 && y > -1e-5)
-                return 0.5 - 0.5*(x+z) + x*z;
+                return -(0.5-x)*(0.5-z);
             if (y < 1.0+1e-5 && y > 1.0-1e-5)
-                return - 0.5 + 0.5*(x+z) - x*z;
+                return -(0.5-x)*(0.5-z);
             if (z < 1.0e-5 && z > -1e-5)
-                return 0.5 - 0.5*(y+x) + y*x;
+                return -(0.5-x)*(0.5-y);
             if (z < 1.0+1e-5 && z > 1.0-1e-5)
-                return - 0.5 + 0.5*(y+x) - y*x;
+                return -(0.5-x)*(0.5-y);
+            assert(false); // nicht vorgesehen
+//    case 4: if (x < 1.0e-5 && x > -1e-5)
+//                return 0.5 - 0.5*(y+z) + y*z;
+//            if (x < 1.0+1e-5 && x > 1.0-1e-5)
+//                return - 0.5 + 0.5*(y+z) - y*z;
+//            if (y < 1.0e-5 && y > -1e-5)
+//                return 0.5 - 0.5*(x+z) + x*z;
+//            if (y < 1.0+1e-5 && y > 1.0-1e-5)
+//                return - 0.5 + 0.5*(x+z) - x*z;
+//            if (z < 1.0e-5 && z > -1e-5)
+//                return 0.5 - 0.5*(y+x) + y*x;
+//            if (z < 1.0+1e-5 && z > 1.0-1e-5)
+//                return - 0.5 + 0.5*(y+x) - y*x;
+//            assert(false); // nicht vorgesehen
     // 5: u, 6: f, 7: dirichlet, 8: neumann
     case 5: return x*(1.0-x)*y*(1.0-y)*z*(1.0-z);
     case 6: return 2.0*(x*(1.0-x)*y*(1.0-y)+x*(1.0-x)*z*(1.0-z)+y*(1.0-y)*z*(1.0-z));
