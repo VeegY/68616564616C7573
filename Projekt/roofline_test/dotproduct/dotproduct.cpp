@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "include/axpy_help.hpp"
+#include "include/dotproduct_help.hpp"
 #include "include/roofline_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
     //=========================================//
 
     
-    dotproduct_check_result_(result, vectorx_host, vectory_host, dim_local)
+    dotproduct_check_result_(result, vectorx_host, vectory_host, dim_local);
     cleanup(vectorx_dev);
     cleanup(vectory_dev);
     cleanup(result);
