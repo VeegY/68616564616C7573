@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //=============================================================================
 template<typename type>
-__global__ void kernel(type *scalar, type *vector_x, type *vector_y, type *result, int dim)
+__global__ void kernel(type *vector_x, type scalar, type *vector_y, type *result, int dim)
 {
     idx = threadIdx.x + blockIdx.x*blockDim.x;
     type scale = scalar[0];
@@ -66,7 +66,7 @@ float invoke_gpu_time(type *vector_x, type scalar, type *vector_y, type *result,
     timer.start();
     for (int i = 0; i < runs; i++)
     {
-        kernel<<<num_blocks, num_threads>>>(scalar, vector_x, vector_y, result, dim);
+        kernel<<<num_blocks, num_threads>>>(vector_x, scalar, vector_y, result, dim);
     }
     cudaDeviceSynchronize();
     elapsed_time = timer.stop()*1.0e3;
