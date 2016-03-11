@@ -17,7 +17,7 @@ void performance(int dim, float overall, float kernel, type schalter)
 {
     int bytes = 2 * sizeof(type) * dim;
     int flop = dim;
-    double ai = (1 / 16);
+    double ai = ((double)1.0/(double)16.0);
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
@@ -29,7 +29,7 @@ void performance(int dim, float overall, float kernel, type schalter)
     printf(        "Overall Runtime:\t\t%f(ms)\n", overall);
     printf(        "Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (kernel*1.0e6));
     printf(        "Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop / (kernel*1.0e6));
-    printf(        "StreamBW * AI:\t\t\t%f\n", 50*ai);
+    printf(        "StreamBW * AI:\t\t\t%f\n", 13*ai);
     printf(GREY    "-----------------------------------------------\n");
     printf(        "-----------------------------------------------\n");
 
