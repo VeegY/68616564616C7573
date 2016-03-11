@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     set_data(vectory_host, dimension);
     set_data(scalar, 1);
 
-    Timer timer_overall,timer_cpu;
+    Timer timer_overall;
 
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
@@ -47,10 +47,6 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
 //                                   Zeitmessung Overall
 //------------------------------------------------------------------------------------------------/
-    if (method == unified_vs_zero) 
-    { 
-        memory_option = unified; 
-    }
 
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
@@ -91,10 +87,11 @@ int main(int argc, char* argv[])
     copy_data(vectory_host, vectory, dimension);
 
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
-    float elapsed_kernel = invoke_gpu_time(vectorx, scalar_host[0], vectory, result, dimension, iteration)
+    float elapsed_kernel = invoke_gpu_time(vectorx, scalar_host[0], vectory, result, dimension, iteration);
     //>>>KERNEL<<<
     //=========================================//
 
+    axpy_check_result_(result, vectorx_host, vectory_host, dimension);
     cleanup(vectorx);
     cleanup(vectory);
 
