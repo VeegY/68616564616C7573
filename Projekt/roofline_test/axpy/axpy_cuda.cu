@@ -55,7 +55,7 @@ void generate_config(int *num_threads, int *num_blocks, int dim)
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
 template<typename type>
-float invoke_gpu_time(type scalar, type *vector_x, type *vector_y, type *result, int dim, int runs)
+float invoke_gpu_time(type *vector_x, type scalar, type *vector_y, type *result, int dim, int runs)
 {
     Timer timer;
     float elapsed_time = 0.0;
