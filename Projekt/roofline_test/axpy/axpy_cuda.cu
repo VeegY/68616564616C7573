@@ -14,11 +14,10 @@
 template<typename type>
 __global__ void kernel(type *vector_x, type scalar, type *vector_y, type *result, int dim)
 {
-    idx = threadIdx.x + blockIdx.x*blockDim.x;
-    type scale = scalar[0];
+    int idx = threadIdx.x + blockIdx.x*blockDim.x;
     if (idx < dim)
     {
-        result[idx] = scale*vector_x[idx] + vector_y[idx];
+        result[idx] = scalar*vector_x[idx] + vector_y[idx];
     }
 
 }
