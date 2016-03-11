@@ -6,23 +6,17 @@
 namespace Icarus
 {
 
-void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f)
+void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f, mathfunction g, mathfunction h)
 {
     //TODO: vorlaeufig, wieder loeschen
     bool Dirichlet(true);
     bool Neumann(false);
-    double RHSVAL(1.0);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
 
     int Zeile;
-    //std::vector<int> e(1);
-    //std::vector<int> A(1);
     std::vector<double> RHS(_nx*_ny*_nz);
-
-    //std::vector<int> column(27);
-    //std::vector<double> value(27);
 
     //Ecke 1
     _e.clear(); _e.resize(1);
@@ -32,7 +26,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -45,11 +39,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         if(Neumann)
         {
             _e[0]=Zeile; _A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]=Zeile; _A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]=Zeile; _A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 
@@ -59,12 +53,12 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
 
     for(int i(1); i<_nx-1;i++)
     {
-        Zeile++;;
+        Zeile++;
         if(Dirichlet)
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile] = RHSVAL;
+            RHS[Zeile] = g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -79,10 +73,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 _e[0]=Zeile-1; _A[0]=1;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]=Zeile-1; _A[0]=1;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
             }
         }
     }//close I-Schleife (X-Achse)
@@ -95,7 +89,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -108,11 +102,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         if(Neumann)
         {
             _e[0]=Zeile-1; _A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]=Zeile-1; _A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]=Zeile; _A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 
@@ -127,7 +121,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -142,10 +136,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 _e[0]=Zeile-y; _A[0]=3;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]=Zeile-y; _A[0]=1;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
 
@@ -159,7 +153,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= RHSVAL;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
@@ -178,7 +172,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     _e[1]=Zeile -y; _A[1]=3;
                     _e[2]=Zeile; _A[2]=0;
                     _e[3]=Zeile -1; _A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(1);
+                    RHS[Zeile] += assemblyRHSNeumann(1, h);
                 }
             }
         } //close I-Schleife (X-Achse)
@@ -191,7 +185,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -206,10 +200,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 _e[0]=Zeile-y-1; _A[0]=2;
                 _e[1]=Zeile-1; _A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]=Zeile-y; _A[0]=1;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
     } //close J-Schleife (Y-Achse)
@@ -222,7 +216,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -235,11 +229,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         if(Neumann)
         {
             _e[0]=Zeile-y; _A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]=Zeile; _A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]=Zeile-y; _A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 
@@ -253,7 +247,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -268,10 +262,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 _e[0]=Zeile-y-1; _A[0]=2;
                 _e[1]=Zeile-y; _A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]=Zeile-1; _A[0]=1;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
             }
         }
     }//close I-Schleife (X-Achse)
@@ -284,7 +278,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -297,11 +291,11 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         if(Neumann)
         {
             _e[0]=Zeile-1-y; _A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]=Zeile-1; _A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]=Zeile-y; _A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 
@@ -315,7 +309,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -330,10 +324,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 _e[0]=Zeile-z; _A[0]=3;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
                 _e[0]=Zeile-z; _A[0]=3;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
 
@@ -347,7 +341,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= RHSVAL;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
@@ -366,7 +360,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     _e[1]=Zeile -z; _A[1]=3;
                     _e[2]=Zeile; _A[2]=0;
                     _e[3]=Zeile -1; _A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(2);
+                    RHS[Zeile] += assemblyRHSNeumann(2, h);
                 }
             }
         }//close I-Schleife (X-Achse)
@@ -379,7 +373,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -394,10 +388,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 _e[0]=Zeile-1-z; _A[0]=2;
                 _e[1]=Zeile-1; _A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
                 _e[0]=Zeile-z; _A[0]=3;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
 
@@ -411,7 +405,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= RHSVAL;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
@@ -430,7 +424,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                     _e[1]=Zeile -z; _A[1]=3;
                     _e[2]=Zeile; _A[2]=0;
                     _e[3]=Zeile -y; _A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(3);
+                    RHS[Zeile] += assemblyRHSNeumann(3, h);
                 }
             }
 
@@ -444,11 +438,10 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
                 //{
                 //    Matrix.sequential_fill(Zeile, 1.0);
                 //    Matrix.end_of_row();
-                //    RHS[Zeile]= RHSVAL;
+                //    RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
                 //}
                 //else
                 {
-std::cout << Zeile << std::endl;
                     _e[0]=Zeile -1-y-z; _A[0]=6;
                     _e[1]=Zeile -y-z; _A[1]=7;
                     _e[2]=Zeile -z; _A[2]=4;
@@ -458,8 +451,6 @@ std::cout << Zeile << std::endl;
                     _e[6]=Zeile; _A[6]=0;
                     _e[7]=Zeile -1; _A[7]=1;
                     assemblyMatrixRow();
-                    //assemblyMatrixRow(std::vector<int>{Zeile-1-y-z, Zeile-y-z, Zeile-z, Zeile-1-z, Zeile-1-y, Zeile-y, Zeile, Zeile-1},
-                    //                  std::vector<int>{6, 7, 4, 5, 2, 3, 0, 1}, column, value);
                     for (int m(0); m<27; ++m)
                         Matrix.sequential_fill(_column[m], _value[m]);
                     Matrix.end_of_row();
@@ -477,7 +468,7 @@ std::cout << Zeile << std::endl;
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= RHSVAL;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
@@ -496,7 +487,7 @@ std::cout << Zeile << std::endl;
                     _e[1]=Zeile -z; _A[1]=3;
                     _e[2]=Zeile; _A[2]=0;
                     _e[3]=Zeile -y; _A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(3);
+                    RHS[Zeile] += assemblyRHSNeumann(3, h);
                 }
             }
         } //close J-Schleife (Y-Achse)
@@ -509,7 +500,7 @@ std::cout << Zeile << std::endl;
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -524,10 +515,10 @@ std::cout << Zeile << std::endl;
             {
                 _e[0]=Zeile-z; _A[0]=3;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
                 _e[0]=Zeile-z-y; _A[0]=2;
                 _e[1]=Zeile-y; _A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
 
@@ -541,7 +532,7 @@ std::cout << Zeile << std::endl;
             {
                 Matrix.sequential_fill( Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= RHSVAL;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
@@ -560,7 +551,7 @@ std::cout << Zeile << std::endl;
                     _e[1]= Zeile -z; _A[1]=3;
                     _e[2]= Zeile; _A[2]=0;
                     _e[3]= Zeile -1; _A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(2);
+                    RHS[Zeile] += assemblyRHSNeumann(2, h);
                 }
             }
         }//Close I-Schleife (X-Achse)
@@ -573,7 +564,7 @@ std::cout << Zeile << std::endl;
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -588,10 +579,10 @@ std::cout << Zeile << std::endl;
             {
                 _e[0]=Zeile-1-z; _A[0]=2;
                 _e[1]=Zeile-1; _A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
                 _e[0]=Zeile-z-y; _A[0]=2;
                 _e[1]=Zeile-y; _A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
     } //close K-schleife (Z-Achse)
@@ -604,7 +595,7 @@ std::cout << Zeile << std::endl;
     {
         Matrix.sequential_fill( Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -617,11 +608,11 @@ std::cout << Zeile << std::endl;
         if(Neumann)
         {
             _e[0]= Zeile; _A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]= Zeile-z; _A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]= Zeile-z; _A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 
@@ -635,7 +626,7 @@ std::cout << Zeile << std::endl;
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -650,10 +641,10 @@ std::cout << Zeile << std::endl;
             {
                 _e[0]=Zeile-1; _A[0]=1;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]=Zeile-z -1; _A[0]=2;
                 _e[1]=Zeile-z; _A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
             }
         }
     }//Close I-Schleife (X-Achse)
@@ -666,7 +657,7 @@ std::cout << Zeile << std::endl;
     {
         Matrix.sequential_fill( Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -679,11 +670,11 @@ std::cout << Zeile << std::endl;
         if(Neumann)
         {
             _e[0]= Zeile-1; _A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]= Zeile-1-z; _A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]= Zeile-z; _A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 
@@ -697,7 +688,7 @@ std::cout << Zeile << std::endl;
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -712,10 +703,10 @@ std::cout << Zeile << std::endl;
             {
                 _e[0]=Zeile-y; _A[0]=3;
                 _e[1]=Zeile; _A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]=Zeile-y-z; _A[0]=2;
                 _e[1]=Zeile-z; _A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
 
@@ -729,7 +720,7 @@ std::cout << Zeile << std::endl;
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= RHSVAL;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
@@ -748,7 +739,7 @@ std::cout << Zeile << std::endl;
                     _e[1]=Zeile -y; _A[1]=3;
                     _e[2]=Zeile; _A[2]=0;
                     _e[3]=Zeile -1; _A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(1);
+                    RHS[Zeile] += assemblyRHSNeumann(1, h);
                 }
             }
         }//Close I-Schleife (X-Achse)
@@ -761,7 +752,7 @@ std::cout << Zeile << std::endl;
         {
             Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -776,10 +767,10 @@ std::cout << Zeile << std::endl;
             {
                 _e[0]=Zeile-y-1; _A[0]=2;
                 _e[1]=Zeile-1; _A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]=Zeile-y-z; _A[0]=2;
                 _e[1]=Zeile-z; _A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(3);
+                RHS[Zeile] += assemblyRHSNeumann(3, h);
             }
         }
     }//Close J-Schleife (Y-Achse)
@@ -792,7 +783,7 @@ std::cout << Zeile << std::endl;
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -805,11 +796,11 @@ std::cout << Zeile << std::endl;
         if(Neumann)
         {
             _e[0]=Zeile-y; _A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]=Zeile-z; _A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]=Zeile-y-z; _A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 
@@ -823,7 +814,7 @@ std::cout << Zeile << std::endl;
         {
             Matrix.sequential_fill( Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= RHSVAL;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
@@ -838,10 +829,10 @@ std::cout << Zeile << std::endl;
             {
                 _e[0]= Zeile-1-y; _A[0]=2;
                 _e[1]= Zeile-y; _A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(1);
+                RHS[Zeile] += assemblyRHSNeumann(1, h);
                 _e[0]= Zeile-1-z; _A[0]=2;
                 _e[1]= Zeile-z; _A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(2);
+                RHS[Zeile] += assemblyRHSNeumann(2, h);
             }
         }
     }//Close I-Schleife (X-Achse)
@@ -854,7 +845,7 @@ std::cout << Zeile << std::endl;
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= RHSVAL;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
@@ -867,11 +858,11 @@ std::cout << Zeile << std::endl;
         if(Neumann)
         {
             _e[0]=Zeile-y-1; _A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(1);
+            RHS[Zeile] += assemblyRHSNeumann(1, h);
             _e[0]=Zeile-z-1; _A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(2);
+            RHS[Zeile] += assemblyRHSNeumann(2, h);
             _e[0]=Zeile-z-y; _A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(3);
+            RHS[Zeile] += assemblyRHSNeumann(3, h);
         }
     }
 

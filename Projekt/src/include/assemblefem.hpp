@@ -27,7 +27,8 @@ public:
         _az = {-a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a}; //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
     }
 
-    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f=mathfunction(0));
+    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
+            mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
 
 private:
     void assemblyMatrixRow();
