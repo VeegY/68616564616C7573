@@ -13,8 +13,8 @@ using namespace std;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimension 32768
-#define iteration 1000
+#define dimension 65536
+#define iteration 10000
 
 template<typename type>
 float invoke_gpu_time(type *vecin, type scalar, type *vecout, int dim, int runs);
