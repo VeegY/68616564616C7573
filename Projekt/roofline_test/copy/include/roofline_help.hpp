@@ -13,7 +13,7 @@
 #define MAGENTA "\e[35;1m"
 
 template<typename type>
-void performance(int dim, float overall, float kernel, type schalter)
+void performance(int dim, float overall, float kernel, type schalter, int runs)
 {
     int bytes = 2 * sizeof(type) * dim;
     int flop = dim;
@@ -24,6 +24,7 @@ void performance(int dim, float overall, float kernel, type schalter)
     printf(        "                COPY KERNEL\n");
     printf(GREY    "===============================================\n");
     printf(        "-----------------------------------------------\n");
+    printf(BLUE    "        dim %i ##  iter. %i\n", dim, runs);
     printf(GREY    "-----------------------------------------------\n");
     printf(CYAN    "Kernel Runtime:\t\t\t%f(ms)\n", kernel);
     printf(        "Overall Runtime:\t\t%f(ms)\n", overall);
@@ -34,9 +35,9 @@ void performance(int dim, float overall, float kernel, type schalter)
     printf(        "-----------------------------------------------\n");
 
 }
-template void performance<int>(int dim, float overall, float kernel, int schalter);
-template void performance<float>(int dim, float overall, float kernel, float schalter);
-template void performance<double>(int dim, float overall, float kernel, double schalter);
+template void performance<int>(int dim, float overall, float kernel, int schalter, int runs);
+template void performance<float>(int dim, float overall, float kernel, float schalter, int runs);
+template void performance<double>(int dim, float overall, float kernel, double schalter, int runs);
 
 
 //=============================================================================

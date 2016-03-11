@@ -13,14 +13,14 @@ using namespace std;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimension 1024
-#define iteration 1000
+#define dimension 65536
+#define iteration 10000
 
 template<typename type>
-float invoke_gpu_time(type scalar, type *vector_x, type *vector_y, type *result, int dim, int runs);
+float invoke_gpu_time(type *vector_x, type scalar, type *vector_y, type *result, int dim, int runs);
 
 template<typename type>
-void invoke_gpu_overall(type scalar, type *vector_x, type *vector_y, type *result, int dim);
+void invoke_gpu_overall(type *vector_x, type scalar, type *vector_y, type *result, int dim);
 
 template<typename type>
 void allocation(type **data, size_t size);
@@ -55,52 +55,48 @@ int main(int argc, char* argv[])
     timer_overall.start();
     for(int r = 0;r<iteration;r++)
     {
-        double *scalar = NULL;
+
         double *vectorx = NULL;
         double *vectory = NULL;
         double *result = NULL;
       
-        allocation(&scalar, 1);
         allocation(&vectorx, dimension);
         allocation(&vectory, dimension);
         allocation(&result, dimension);
 
-        copy_data(scalar_host, scalar, 1);
         copy_data(vectorx_host, vectorx, dimension);
         copy_data(vectory_host, vectory, dimension);
         
-        >>>KERNEL<<<<
+        invoke_gpu_overall(vectorx, scalar_host[0], vectory, result, dimension)
 
-        cleanup(scalar);
         cleanup(vectorx);
         cleanup(vectory);
     }
-    float elapsed_overall = timer_overall.stop() / (float)iteration;
+    float elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
 
 
 //------------------------------------------------------------------------------------------------/
 //                                   Zeitmessung Kernel
 //------------------------------------------------------------------------------------------------/
     
-    double *scalar = NULL;
     double *vectorx = NULL;
     double *vectory = NULL;
     double *result = NULL;
 
-    allocation(&scalar, 1);
     allocation(&vectorx, dimension);
     allocation(&vectory, dimension);
     allocation(&result, dimension);
 
-    copy_data(scalar_host, scalar, 1);
     copy_data(vectorx_host, vectorx, dimension);
     copy_data(vectory_host, vectory, dimension);
 
     //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
-    float elapsed_kernel =
-        >>>KERNEL<<<
+    float elapsed_kernel = invoke_gpu_time(vectorx, scalar_host[0], vectory, result, dimension, iteration)
+    //>>>KERNEL<<<
     //=========================================//
 
+    cleanup(vectorx);
+    cleanup(vectory);
 
  
 //================================================================================================/
@@ -108,7 +104,7 @@ int main(int argc, char* argv[])
 //================================================================================================/
 
     double schalter = 0.0;
-    performance(elapsed_kernel, elapsed_overall, dimension, schalter);
+    performance(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
   
     delete[] vectorx_host;
     delete[] vectory_host;

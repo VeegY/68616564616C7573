@@ -41,10 +41,10 @@ template void allocation<double>(double **data, size_t size);
 ///                             KERNEL CONFIG                               ///
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
-void generate_config(int *num_threads, int *num_blocks, int dim_local)
+void generate_config(int *num_threads, int *num_blocks, int dim)
 {
-    *num_blocks = ceil((double)dim_local / 1024);
-    *num_threads = ceil(((double)dim_local / *num_blocks) / 32) * 32;
+    *num_blocks = ceil((double)dim / 1024);
+    *num_threads = ceil(((double)dim / *num_blocks) / 32) * 32;
 }
 
 //=============================================================================

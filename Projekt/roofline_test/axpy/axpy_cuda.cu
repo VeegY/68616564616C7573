@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //=============================================================================
 template<typename type>
-__global__ void gpu_axpy(type *scalar, type *vector_x, type *vector_y, type *result, int dim)
+__global__ void kernel(type *scalar, type *vector_x, type *vector_y, type *result, int dim)
 {
     idx = threadIdx.x + blockIdx.x*blockDim.x;
     type scale = scalar[0];
@@ -43,9 +43,10 @@ template void allocation<double>(double **data, size_t size);
 ///                             KERNEL CONFIG                               ///
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
-void generate_config(int *num_threads, int *num_blocks)
+void generate_config(int *num_threads, int *num_blocks, int dim)
 {
-
+    *num_blocks = ceil((double)dim / 1024);
+    *num_threads = ceil(((double)dim / *num_blocks) / 32) * 32;
 }
 
 //=============================================================================
@@ -59,13 +60,13 @@ float invoke_gpu_time(type scalar, type *vector_x, type *vector_y, type *result,
     Timer timer;
     float elapsed_time = 0.0;
     int num_threads, num_blocks;
-    generate_config(&num_threads, &num_blocks);
+    generate_config(&num_threads, &num_blocks, dim);
 
     //=================================//
     timer.start();
     for (int i = 0; i < runs; i++)
     {
-        gpu_axpy<<<num_blocks, num_threads>>>(scalar, vector_x, vector_y, result, dim);
+        kernel<<<num_blocks, num_threads>>>(scalar, vector_x, vector_y, result, dim);
     }
     cudaDeviceSynchronize();
     elapsed_time = timer.stop()*1.0e3;
@@ -73,8 +74,8 @@ float invoke_gpu_time(type scalar, type *vector_x, type *vector_y, type *result,
             
     return elapsed_time / runs;
 }
-template float invoke_gpu_time<float>(float scalar, float *vector_x, float *vector_y, float *result, int dim, int runs);
-template float invoke_gpu_time<double>(double scalar, double *vector_x, double *vector_y, double *result, int dim, int runs);
+template float invoke_gpu_time<float>(float *vector_x, float scalar, float *vector_y, float *result, int dim, int runs);
+template float invoke_gpu_time<double>(double *vector_x, double scalar, double *vector_y, double *result, int dim, int runs);
 
 
 //=============================================================================
@@ -83,16 +84,16 @@ template float invoke_gpu_time<double>(double scalar, double *vector_x, double *
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
 template<typename type>
-void invoke_gpu_overall(type scalar, type *vector_x, type *vector_y, type *result, int dim)
+void invoke_gpu_overall(type *vector_x, type scalar, type *vector_y, type *result, int dim)
 {
     int num_threads, num_blocks;
-    generate_config(&num_threads, &num_blocks);
+    generate_config(&num_threads, &num_blocks, dim);
 
-    gpu_axpy<<<num_blocks, num_threads>>>();
+    kernel<<<num_blocks, num_threads>>>(vector_x, scalar, vector_y, result, dim);
     cudaDeviceSynchronize();
 }
-template void invoke_gpu_overall<float>(float scalar, float *vector_x, float *vector_y, float *result, int dim);
-template void invoke_gpu_overall<double>(double scalar, double *vector_x, double *vector_y, double *result, int dim);
+template void invoke_gpu_overall<float>(float *vector_x, float scalar, float *vector_y, float *result, int dim);
+template void invoke_gpu_overall<double>(double *vector_x, double scalar, double *vector_y, double *result, int dim);
 
 
 

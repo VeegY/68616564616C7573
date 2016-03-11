@@ -31,16 +31,16 @@ void axpy_check_result_(type *result, type *veconeh, type *vectwoh, size_t dim_l
     //==========================================//
     diff = value - result[0];
     printf(GREEN "DIFF: %f\n" RESET, diff);
-    if (diff > 1.0e-2 || diff < -1.0e-2)
+    if (diff > 1.0e-6 || diff < -1.0e-6)
     {
         check = false;
     }
 
     if (check)
     {
-        printf(GREEN "%c_Kernel outcome true\n" RESET, a);
+        printf(GREEN "Kernel outcome true\n" RESET);
     }
-    else printf(WARNING "%c_Kernel outcome false\n", a);
+    else printf(WARNING "Kernel outcome false\n");
 }
 
 
