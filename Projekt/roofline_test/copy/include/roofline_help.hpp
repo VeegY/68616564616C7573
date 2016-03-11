@@ -27,8 +27,8 @@ void performance(int dim, float overall, float kernel, int runs, type schalter)
     printf(GREY    "-----------------------------------------------\n");
     printf(CYAN    "Kernel Runtime:\t\t\t%f(ms)\n", kernel);
     printf(        "Overall Runtime:\t\t%f(ms)\n", overall);
-    printf(        "Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (time_ku*1.0e6));
-    printf(        "Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop / (time_ku*1.0e6));
+    printf(        "Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (kernel*1.0e6));
+    printf(        "Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop / (kernel*1.0e6));
     printf(        "StreamBW * AI:\t\t\t%f\n", 50 * (ai));
     printf(GREY    "-----------------------------------------------\n");
     printf(        "-----------------------------------------------\n");
@@ -72,6 +72,6 @@ void print_data(type *data, std::string str, size_t size)
     using std::string;
     for (int k = 0; k < size; k++)
     {
-        printf("%s\t%i\t%d\n", str.c.str(), k, data[k]);
+        printf("%s\t%i\t%d\n", str.c_str(), k, data[k]);
     }
 }
