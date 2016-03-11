@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
         cleanup(vecin_dev);
         cleanup(vecout_dev);
     }
-    float elapsed_overall = timer_overall.stop() / (float)iteration;
+    float elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
 
 
 //------------------------------------------------------------------------------------------------/
