@@ -48,7 +48,7 @@ void allocation(Scalar **vecone, Scalar **vectwo, Scalar **result, int dim_local
 /*DONE*/template <typename Scalar>
 void cleanup(Scalar *one, Scalar *two, Scalar *result, int method);
 
-int main(int argc, char* argv[])
+int main(int argc, +char* argv[])
 {
     //Array zur Zeitmessung
     //Generiere data/Indices Int-Array sowie fvec Int Array
