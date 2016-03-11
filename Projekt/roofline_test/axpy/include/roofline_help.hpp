@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <string>
 #define GREEN "\e[32;1m"
 #define RESET "\e[0m"
 #define BLUE "\e[34;1m"
@@ -67,11 +68,11 @@ void copy_data(type *h_data, type *d_data, size_t size)
 }
 
 template <typename type>
-void print_data(type *data, string str, size_t size)
+void print_data(type *data, std::string str, size_t size)
 {
     using std::string;
     for (int k = 0; k < size; k++)
     {
-        printf("%s\t%i\t%d\n", str.c.str(), k, data[k]);
+        printf("%s\t%i\t%d\n", str.c_str(), k, data[k]);
     }
 }
