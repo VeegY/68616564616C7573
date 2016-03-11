@@ -16,7 +16,7 @@ void performance(int dim, float overall, float kernel, type schalter, int runs)
 {
     int bytes = 2 * sizeof(type) * dim + 8;
     int flop = 2*dim-1;
-    double ai = ((double)1.0 / (double)8.0);
+    double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");

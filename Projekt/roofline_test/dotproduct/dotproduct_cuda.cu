@@ -21,8 +21,8 @@ __global__ void kernel(type *vectorx, type *vectory, type *placehold, int dim_lo
     type value = 0;
     if (idx < dim_local)
     {
-        value = one[idx];
-        value *= two[idx];
+        value = vectorx[idx];
+        value *= vectory[idx];
     }
     shar[sidx] = value;
     __syncthreads();
@@ -89,7 +89,7 @@ void generate_config(int *num_threads, int *num_blocks, int dim)
         n |= n >> 16;
         *num_threads = n + 1;
     }
-    *num_blocks = ceil((double)dim_local / 1024);
+    *num_blocks = ceil((double)dim / 1024);
 }
 
 //=============================================================================
@@ -104,7 +104,6 @@ float invoke_gpu_time(type *vecx, type *vecy, type *result, int dim, int runs)
     float elapsed_time = 0.0;
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
-    printf("test %i\n", num_threads);
 
     type *placehold = NULL;
     cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
@@ -113,7 +112,7 @@ float invoke_gpu_time(type *vecx, type *vecy, type *result, int dim, int runs)
     timer.start();
     for (int i = 0; i < runs; i++)
     {
-        kernel<<<num_blocks, num_threads>>>(vecx,vecy,placehold,dim);
+        kernel<<<num_blocks, num_threads, sizeof(double)*num_threads>>>(vecx,vecy,placehold,dim);
         resultreduce<<<1, 1>>>(result, placehold, num_blocks);
     }
     cudaDeviceSynchronize();
@@ -140,7 +139,7 @@ void invoke_gpu_overall(type *vecx, type *vecy, type *result, int dim)
     type *placehold = NULL;
     cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
 
-    kernel<<<num_blocks, num_threads>>>(vecx, vecy, placehold, dim);
+    kernel<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vecx, vecy, placehold, dim);
     resultreduce << <1, 1 >> >(result, placehold, num_blocks);
     
     cudaDeviceSynchronize();
