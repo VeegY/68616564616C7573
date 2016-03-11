@@ -11,7 +11,7 @@
 
 
 template <typename type>
-void copy_check_result_(type *vecin, type scalar, type *vecout_d,  size_t dim_local)
+void copy_check_result(type *vecin, type scalar, type *vecout_d,  size_t dim_local)
 {
     //==========================================//
     // value is result of CPU function
