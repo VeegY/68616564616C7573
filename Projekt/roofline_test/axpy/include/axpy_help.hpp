@@ -42,7 +42,7 @@ void axpy_check_result_(type *result, type *veconeh, type scalar,  type *vectwoh
     //==========================================//
     //diff needs to be small, pretty big atm
     //==========================================//
-    printf(GREEN "MAX.DIFF: %d\n" RESET, maxdiff);
+    printf(GREEN "MAX.DIFF: %f\n" RESET, maxdiff);
     if (check)
     {
         printf(GREEN "Kernel outcome true\n" RESET);
