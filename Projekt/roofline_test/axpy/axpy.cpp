@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
     set_data(vectorx_host, dimension);
     set_data(vectory_host, dimension);
-    set_data(scalar, 1);
+    set_data(scalar_host, 1);
 
     Timer timer_overall;
 
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
         copy_data(vectorx_host, vectorx, dimension);
         copy_data(vectory_host, vectory, dimension);
         
-        invoke_gpu_overall(vectorx, scalar_host[0], vectory, result, dimension)
+        invoke_gpu_overall(vectorx, scalar_host[0], vectory, result, dimension);
 
         cleanup(vectorx);
         cleanup(vectory);
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
   
     delete[] vectorx_host;
     delete[] vectory_host;
-    delete[] scalar;
+    delete[] scalar_host;
 
     return 0;
 }
