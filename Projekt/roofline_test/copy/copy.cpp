@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 //================================================================================================/
 
     double schalter = 0.0;
-    performance(dim, elapsed_overall, elapsed_kernel, schalter);
+    performance(dimension, elapsed_overall, elapsed_kernel, schalter);
   
     delete[] vec_host;
     delete[] scalar_host;
