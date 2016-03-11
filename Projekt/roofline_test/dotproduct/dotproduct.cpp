@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     set_data(vectorx_host, dimension);
     set_data(vectory_host, dimension);
 
-    Timer timer_overall,timer_cpu;
+    Timer timer_overall;
 
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
     //=========================================//
 
     
-    dotproduct_check_result_(result, vectorx_host, vectory_host, dim_local);
+    dotproduct_check_result_(result, vectorx_host, vectory_host, dimension);
     cleanup(vectorx_dev);
     cleanup(vectory_dev);
     cleanup(result);
