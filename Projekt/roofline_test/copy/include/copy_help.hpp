@@ -33,9 +33,9 @@ void copy_check_result_(type *vecin, type scalar, type *vecout_d,  size_t dim_lo
     }
     if (check)
     {
-        printf(GREEN "%c_Kernel outcome true\n" RESET, a);
+        printf(GREEN "Kernel outcome true\n" RESET);
     }
-    else printf(WARNING "%c_Kernel outcome false\n", a);
+    else printf(WARNING "Kernel outcome false\n");
 }
 
 
