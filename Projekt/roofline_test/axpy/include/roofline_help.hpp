@@ -32,7 +32,7 @@ void performance(int dim, float overall, float kernel, type schalter, int runs)
     printf("Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop / (kernel*1.0e6));
     printf("StreamBW * AI:\t\t\t%f\n", 13 * ai);
     printf(GREY    "-----------------------------------------------\n");
-    printf("-----------------------------------------------\n");
+    printf("-----------------------------------------------\n" RESET);
 
 }
 template void performance<int>(int dim, float overall, float kernel, int schalter, int runs);
