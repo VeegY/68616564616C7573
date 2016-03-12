@@ -1,1 +1,42 @@
 \section{Software}
+
+
+Das als Löser verwendete Verfahren des Projektes ist das sogenannte BiCGStab-Verfahren (engl: „biconjugate gradient stabilized method“), welches zur Klasse der Krylov-Unterraum-Verfahren zählt. Diese iterative Methode wurde von H.A. van der Horst als Löser für nicht-symmetrische lineare Gleichungssysteme entwickelt und benötigt somit keine zusätzlichen Anforderungen an die Systemmatrix A wie zum Beispiel beim CG-Verfahren. Sein Name ist davon abgeleitet, dass die im nicht-vorkonditionierten Algorithmus verwendeten Residuen biorthogonal sind, also $(r_i,\hat{r}_j)=\,0$ $\forall i\neq j$, und die Suchrichtungen bikonjugiert sind bezüglich der Systemmatrix $A$, also $(Ap_i,\hat{p}_j)=\,0$ $ \forall i \neq j$.  Man entschied sich für dieses Verfahren, da das konkurrierende GMRES-Verfahren weniger speichereffizient arbeitet und das BiCGStab-Verfahren leichter zu implementieren ist.  Au\ss{}erdem kann es mit beliebigem Vorkonditionierer und ohne Vorkonditionierer implementiert werden. Der Nachteil des angewendeten Verfahrens ist, dass die Konvergenz nicht allgemein bewiesen ist. So kann es im Falle von einer Systemmatrix mit großen komplexen Eigenwerten zur Stagnation des Algorithmus kommen, ohne dass eine gute Näherungslösung ermittelt wurde. 
+
+
+\begin{enumerate}
+	\setlength{\itemsep}{0cm}
+	\setlength{\parsep}{0cm}
+	
+	
+	\item $r_0$=$b$-$A$$x_0$\\
+	\item $\hat{r}_0$=$r_0$\\
+	\item $\rho_0$=$\alpha$=$\omega_0$=1\\
+	\item $v_0$=$p_0$=0\\
+	\item for $i$=1,2,\dots
+	\par
+	\begingroup
+	\leftskip=1cm 
+	\noindent 
+	\item$\rho_i=$\,($\hat{r_0}$,$r_{i-1}$)\\
+	\item$\beta=$\,($\rho_i$/$\rho_{i-1}$)($\alpha$/$\omega{i-1}$)\\
+	\item$p_i=$\,$r_{i-1}$+$\beta$($p_{i-1}-\omega_{i-1}v_{i-1}$)	\\
+	\item$y=$\,$K^{-1}p_i$\\
+	\item$v_i=$\,$Ay$\\
+	\item$\alpha=$\,$\rho_i/(\hat{r_0},v_i)$\\
+	\item$s=$\,$r_{i-1}-\alpha$$v_i$\\
+	\item Wenn $\parallel s \parallel$ klein genug, setze $x_i=$\,$x_{i-1}+\alpha$$p_i$ und beende das Verfahren \\
+	\item$z=$\,$K^{-1}s$\\
+	\item$t=$\,$Az$\\
+	\item$\omega_i=$\,$(K^{-1}_1$$t,K^{-1}_1$$s)/(K^{-1}_1$$t,K^{-1}_1$$t)$ \\
+	\item$x_i=$\,$x_{i-1}+\alpha$$y+\omega_i$$z$\\
+	Wenn $\parallel x-x_i \parallel < TOL $ wird das Verfahren beendet \\
+	\item$r_i=$\,$s-\omega_i$$t$\\
+	
+	
+	\par
+	\endgroup 
+\end{enumerate}
+Der von rechts vorkonditionierte BiCGSTAB-Algorithmus NUMMER startet ausgehend von einem Anfangsvektor $x_0$, welcher immer als Nullvektor implementiert wurde. Des Weiteren wurde die maximale Iterationszahl auf $10.000.000.000$ gesetzt und die Toleranz mit $TOL= 10^{-9}$ festgelegt. Der Vorkonditionierer hat dabei die allgemeine Form: 
+$K = K_1 K_2 \approx A $
+
