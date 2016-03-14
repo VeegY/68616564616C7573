@@ -44,11 +44,6 @@ void matvec_check_result(type *result,type *vector_host, type *data_host, int *i
     }
     //==========================================//
     printf(GREEN "MAX.DIFF: %f\n" RESET, maxdiff);
-    if (diff > 1.0e-6 || diff < -1.0e-6)
-    {
-        check = false;
-    }
-
     if (check)
     {
         printf(GREEN "Kernel outcome true\n" RESET);

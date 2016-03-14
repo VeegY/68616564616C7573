@@ -22,7 +22,7 @@ void maxnorm_check_result_(type *result, type *vector_host, size_t dim_local)
     //==========================================//
     for (int i = 0; i < dim_local; i++)
     {
-        current = vector[i];
+        current = vector_host[i];
         if (current <= 0)
         {
             current = -current;
@@ -33,7 +33,7 @@ void maxnorm_check_result_(type *result, type *vector_host, size_t dim_local)
         }
     }
     //==========================================//
-    diff = value) - result[0];
+    diff = value - result[0];
     printf(GREEN "DIFF: %f\n" RESET, diff);
     if (diff > 1.0e-6 || diff < -1.0e-6)
     {

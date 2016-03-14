@@ -59,8 +59,7 @@ int main(int argc, char* argv[])
 
             invoke_gpu_overall(vector_dev, result, dimension);
 
-            cleanup(vectorx_dev);
-            cleanup(vectory_dev);
+            cleanup(vector_dev);
             cleanup(result);
         }
         elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
