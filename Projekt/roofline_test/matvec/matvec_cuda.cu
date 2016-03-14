@@ -21,8 +21,8 @@ __global__ void kernel(type *vector, type *data, int *indices, type *result, int
         type svalue = 0, value;
         for (int i = 0; i < max_row_length; i++)
         {
-            value = data[i*dim_local + idx];
-            col = indices[i*dim_local + idx];
+            value = data[i*dim + idx];
+            col = indices[i*dim + idx];
             svalue += value*vector[col];
         }
         result[idx] = svalue;
