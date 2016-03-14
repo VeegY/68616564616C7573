@@ -3,12 +3,12 @@
 namespace Icarus
 {
 
-double assembleFem::assemblyRHSNeumann(int Ebene, mathfunction g)
+double assembleFem::assemblyRHSNeumann(int Ebene, int leftright, mathfunction g)
 {
     int n(_e.size());
     double RHS(0.0);
 
-    std::vector<double> R1(27), R2(27);
+    std::vector<double> R1(9), R2(9);
 
     //X-Y-Ebene
     if(Ebene == 1)
@@ -20,7 +20,7 @@ double assembleFem::assemblyRHSNeumann(int Ebene, mathfunction g)
             R2 = get_quadrature_ypoints_2d_1(_e[i]);
             int nqp(R1.size());
 
-            double e_z(getz(_e[i]));
+            double e_z(getz(_e[i]) + _h*static_cast<double>(leftright));
             for(int q(0); q<nqp; q++)
                 RHS += evaluate_Basis2d_1(_e[i], _A[i], R1[q], R2[q]) * g.eval(R1[q], R2[q], e_z) * _weight_2d[q];
         }
@@ -35,7 +35,7 @@ double assembleFem::assemblyRHSNeumann(int Ebene, mathfunction g)
             R2 = get_quadrature_zpoints_2d_2(_e[i]);
             int nqp(R1.size());
 
-            double e_y(gety(_e[i]));
+            double e_y(gety(_e[i]) + _h*static_cast<double>(leftright));
             for(int q(0); q<nqp; q++)
                 RHS += evaluate_Basis2d_2(_e[i], _A[i], R1[q], R2[q]) * g.eval(R1[q], e_y, R2[q]) * _weight_2d[q];
         }
@@ -50,11 +50,12 @@ double assembleFem::assemblyRHSNeumann(int Ebene, mathfunction g)
             R2 = get_quadrature_zpoints_2d_3(_e[i]);
             int nqp(R1.size());
 
-            double e_x(getx(_e[i]));
+            double e_x(getx(_e[i]) + _h*static_cast<double>(leftright));
             for(int q(0); q<nqp; q++)
                 RHS += evaluate_Basis2d_3(_e[i], _A[i], R1[q], R2[q]) * g.eval(e_x, R1[q], R2[q]) * _weight_2d[q];
         }
     }
+    assert(Ebene == 1 || Ebene == 2 || Ebene ==3);
     return RHS;
 }//assemblyRHSNeumann
 

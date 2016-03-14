@@ -92,7 +92,7 @@ std::vector<double> assembleFem::get_quadrature_ypoints_2d_1(int e) //Berechnet 
     return std::vector<double>{a1,a2,a3, a1,a2,a3, a1,a2,a3};
 }
 
-std::vector<double> assembleFem::get_quadrature_xpoints_2d_2(int e) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für die Seitenflaeche (Y-Z-Ebene)
+std::vector<double> assembleFem::get_quadrature_xpoints_2d_2(int e) //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für die Seitenflaeche (X-Z-Ebene)
 {
     //Berechnet die Translation und die Skalierung
     double e_x(getx(e));
@@ -107,7 +107,7 @@ std::vector<double> assembleFem::get_quadrature_xpoints_2d_2(int e) //Berechnet 
 std::vector<double> assembleFem::get_quadrature_zpoints_2d_2(int e) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte für das Intervall für e Seitenflaeche (X-Z-Ebene)
 {
     //Berechnet die Translation und die Skalierung
-    double e_z(gety(e));
+    double e_z(getz(e));
     double a1((1.0-sqrt(3.0/5.0))*_h/2.0 + e_z);
     double a2(_h/2.0 + e_z);
     double a3((1.0+sqrt(3.0/5.0))*_h/2.0 + e_z);
@@ -131,7 +131,7 @@ std::vector<double> assembleFem::get_quadrature_ypoints_2d_3(int e) //Berechnet 
 std::vector<double> assembleFem::get_quadrature_zpoints_2d_3(int e) //Berechnet die z-Koordinaten der Gauss-Quadraturpunkte für das Intervall für d Seitenflaeche (Y-Z-Ebene)
 {
     //Berechnet die Translation und die Skalierung
-    double e_z=gety(e);
+    double e_z=getz(e);
     double a1=(1.0-sqrt(3.0/5.0))*_h/2.0 + e_z;
     double a2=_h/2.0 + e_z;
     double a3=(1.0+sqrt(3.0/5.0))*_h/2.0 + e_z;

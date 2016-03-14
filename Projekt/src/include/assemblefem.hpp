@@ -34,7 +34,7 @@ private:
     void assemblyMatrixRow();
 
     double assemblyRHSLoad(mathfunction f=mathfunction(0));
-    double assemblyRHSNeumann(int Ebene, mathfunction g=mathfunction(0));
+    double assemblyRHSNeumann(int Ebene, int leftright, mathfunction g=mathfunction(0));
 
     double getx(size_t index);
     double gety(size_t index);

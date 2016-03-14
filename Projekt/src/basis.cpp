@@ -77,6 +77,11 @@ double assembleFem::evaluate_Basis2d_1(int e, int A, double R1, double R2)
                 break;
         case 3: zwsp = ((x0 + _h - R1) / _h) * ((y0 - R2) / -_h);
                 break;
+        case 4:
+        case 5:
+        case 6:
+        case 7: zwsp = 0.0;
+                break;
         default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
     }
     return zwsp;
@@ -94,9 +99,14 @@ double assembleFem::evaluate_Basis2d_2(int e, int A, double R1, double R2)
                 break;
         case 1: zwsp = ((x0 - R1) / -_h) * ((z0 + _h - R2) / _h);
                 break;
-        case 2: zwsp = ((x0 - R1) / -_h) * ((z0 - R2) / -_h);
+        case 5: zwsp = ((x0 - R1) / -_h) * ((z0 - R2) / -_h);
                 break;
-        case 3: zwsp = ((x0 + _h - R1) / _h) * ((z0 - R2) / -_h);
+        case 4: zwsp = ((x0 + _h - R1) / _h) * ((z0 - R2) / -_h);
+                break;
+        case 2:
+        case 3:
+        case 6:
+        case 7: zwsp = 0.0;
                 break;
         default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
     }
@@ -113,11 +123,16 @@ double assembleFem::evaluate_Basis2d_3(int e, int A, double R1, double R2)
     {
         case 0: zwsp = ((y0 + _h - R1) / _h) * ((z0 + _h - R2) / _h);
                 break;
-        case 1: zwsp = ((y0 - R1) / -_h) * ((z0 + _h - R2) / _h);
+        case 3: zwsp = ((y0 - R1) / -_h) * ((z0 + _h - R2) / _h);
                 break;
-        case 2: zwsp = ((y0 - R1) / -_h) * ((z0 - R2) / -_h);
+        case 7: zwsp = ((y0 - R1) / -_h) * ((z0 - R2) / -_h);
                 break;
-        case 3: zwsp = ((y0 + _h - R1) / _h) * ((z0 - R2) / -_h);
+        case 4: zwsp = ((y0 + _h - R1) / _h) * ((z0 - R2) / -_h);
+                break;
+        case 1:
+        case 2:
+        case 5:
+        case 6: zwsp = 0.0;
                 break;
         default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
     }
