@@ -30,7 +30,7 @@ void performance(int dim, int max_row_length, float overall, float kernel, type 
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf("            SCALARPRODUCT KERNEL\n");
+    printf(        "              MatVecMult KERNEL\n");
     printf(GREY    "===============================================\n");
     printf("-----------------------------------------------\n");
     printf(BLUE    "        dim %i ##  iter. %i\n", dim, runs);

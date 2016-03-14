@@ -21,7 +21,7 @@ void performance(int dim, float overall, float kernel, type schalter, int runs)
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf(        "            SCALARPRODUCT KERNEL\n");
+    printf(        "              eukl. NORM KERNEL\n");
     printf(GREY    "===============================================\n");
     printf("-----------------------------------------------\n");
     printf(BLUE    "        dim %i ##  iter. %i\n", dim, runs);
