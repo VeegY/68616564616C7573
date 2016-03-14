@@ -5,23 +5,24 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "include/dotproduct_help.hpp"
+#include "include/matvec_help.hpp"
 #include "include/roofline_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
 
-//------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
 #define dimension 32768
+#define maxrowlength 7
 #define iteration 1000
 bool get_overall = false;
+//------------------------------------------------------------------------------------------------/
 
 template<typename type>
-float invoke_gpu_time(type *vecx, type *vecy, type *result, int dim, int runs);
+float invoke_gpu_time(type *vector, type *result, int dim, int runs);
 
 template<typename type>
-void invoke_gpu_overall(type *vecx, type *vecy, type *result, int dim);
+void invoke_gpu_overall(type *vector, type *result, int dim);
 
 template<typename type>
 void allocation(type **data, size_t size);
@@ -33,14 +34,15 @@ void cleanup(type *data);
 int main(int argc, char* argv[])
 {
    
-    double *vectorx_host = new double[dimension];
-    double *vectory_host = new double[dimension];
-    set_data(vectorx_host, dimension);
-    set_data(vectory_host, dimension);
+    double *vector_host = new double[dimension];
+    double *data_host = new double[dimension*maxrowlength];
+    int *indices_host = new int[dimension*maxrowlength];
+    
+    set_data(vector_host, dimension);
+    ellpack_fill_seven_diagonals(data_host, indices_host, maxrowlength, dimension);
 
     Timer timer_overall;
     float elapsed_overall = 0.0;
-
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
 //================================================================================================/
@@ -52,21 +54,25 @@ int main(int argc, char* argv[])
         timer_overall.start();
         for (int r = 0; r < iteration; r++)
         {
-            double *vectorx_dev = NULL;
-            double *vectory_dev = NULL;
+            double *vector_dev = NULL;
+            double *data_dev = NULL;
+            int *indices_dev = NULL;
             double *result = NULL;
 
-            allocation(&vectorx_dev, dimension);
-            allocation(&vectory_dev, dimension);
-            allocation(&result, 1);
+            allocation(&vector_dev, dimension);
+            allocation(&data_dev, dimension*maxrowlength);
+            allocation(&indices_dev, dimension*maxrowlength);
+            allocation(&result, dimension);
 
-            copy_data(vectorx_host, vectorx_dev, dimension);
-            copy_data(vectory_host, vectory_dev, dimension);
+            copy_data(vector_host, vector_dev, dimension);
+            copy_data(data_host, data_dev, dimension*maxrowlength);
+            copy_data(indices_host, indices_dev, dimension*maxrowlength);
 
-            invoke_gpu_overall(vectorx_dev, vectory_dev, result, dimension);
+            invoke_gpu_overall(vector_dev, data_dev, indices_dev, result, dimension);
 
-            cleanup(vectorx_dev);
-            cleanup(vectory_dev);
+            cleanup(vector_dev);
+            cleanup(data_dev);
+            cleanup(indices_dev);
             cleanup(result);
         }
         elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
@@ -76,26 +82,30 @@ int main(int argc, char* argv[])
 //                                   Zeitmessung Kernel
 //------------------------------------------------------------------------------------------------/
     
-    double *vectorx_dev = NULL;
-    double *vectory_dev = NULL;
+    double *vector_dev = NULL;
+    double *data_dev = NULL;
+    int *indices_dev = NULL;
     double *result = NULL;
 
-    allocation(&vectorx_dev, dimension);
-    allocation(&vectory_dev, dimension);
-    allocation(&result, 1);
+    allocation(&vector_dev, dimension);
+    allocation(&data_dev, dimension*maxrowlength);
+    allocation(&indices_dev, dimension*maxrowlength);
+    allocation(&result, dimension);
 
-    copy_data(vectorx_host, vectorx_dev, dimension);
-    copy_data(vectory_host, vectory_dev, dimension);
+    copy_data(vector_host, vector_dev, dimension);
+    copy_data(data_host, data_dev, dimension*maxrowlength);
+    copy_data(indices_host, indices_dev, dimension*maxrowlength);
 
-    //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
-    float elapsed_kernel = invoke_gpu_time(vectorx_dev, vectory_dev, result, dimension, iteration);
+    //=========================================//
+    float elapsed_kernel = invoke_gpu_time(vector_dev, data_dev, indices_dev, result, dimension, iteration);
     //>>>KERNEL<<<
     //=========================================//
 
     
-    dotproduct_check_result_(result, vectorx_host, vectory_host, dimension);
-    cleanup(vectorx_dev);
-    cleanup(vectory_dev);
+    matvec_check_result(result, vector_host, data_host, indices_host, dimension, maxrowlength);
+    cleanup(vector_dev);
+    cleanup(data_dev);
+    cleanup(indices_dev);
     cleanup(result);
  
 //================================================================================================/
@@ -105,8 +115,9 @@ int main(int argc, char* argv[])
     double schalter = 0.0;
     performance(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
   
-    delete[] vectorx_host;
-    delete[] vectory_host;
+    delete[] vector_host;
+    delete[] data_host;
+    delete[] indices_host;
 
     return 0;
 }

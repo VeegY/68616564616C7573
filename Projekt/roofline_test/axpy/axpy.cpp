@@ -15,6 +15,7 @@ using namespace std;
 //------------------------------------------------------------------------------------------------/
 #define dimension 32768
 #define iteration 1000
+bool get_overall = false;
 
 template<typename type>
 float invoke_gpu_time(type *vector_x, type scalar, type *vector_y, type *result, int dim, int runs);
@@ -40,6 +41,7 @@ int main(int argc, char* argv[])
     set_data(scalar_host, 1);
 
     Timer timer_overall;
+    float elapsed_overall = 0.0;
 
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
@@ -47,29 +49,30 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------------------------------/
 //                                   Zeitmessung Overall
 //------------------------------------------------------------------------------------------------/
-
-    timer_overall.start();
-    for(int r = 0;r<iteration;r++)
+    if (get_overall)
     {
+        timer_overall.start();
+        for (int r = 0; r < iteration; r++)
+        {
 
-        double *vectorx = NULL;
-        double *vectory = NULL;
-        double *result = NULL;
-      
-        allocation(&vectorx, dimension);
-        allocation(&vectory, dimension);
-        allocation(&result, dimension);
+            double *vectorx = NULL;
+            double *vectory = NULL;
+            double *result = NULL;
 
-        copy_data(vectorx_host, vectorx, dimension);
-        copy_data(vectory_host, vectory, dimension);
-        
-        invoke_gpu_overall(vectorx, scalar_host[0], vectory, result, dimension);
+            allocation(&vectorx, dimension);
+            allocation(&vectory, dimension);
+            allocation(&result, dimension);
 
-        cleanup(vectorx);
-        cleanup(vectory);
+            copy_data(vectorx_host, vectorx, dimension);
+            copy_data(vectory_host, vectory, dimension);
+
+            invoke_gpu_overall(vectorx, scalar_host[0], vectory, result, dimension);
+
+            cleanup(vectorx);
+            cleanup(vectory);
+        }
+        elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
     }
-    float elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
-
 
 //------------------------------------------------------------------------------------------------/
 //                                   Zeitmessung Kernel

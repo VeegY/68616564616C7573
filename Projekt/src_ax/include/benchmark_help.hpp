@@ -8,29 +8,30 @@
 #define GREEN "\e[32;1m"
 #define RESET "\e[0m"
 
-void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, int dim_local, int dim_fvec)
+template<typename type>
+void ellpack_fill_seven_diagonals(type *data, int *indices, int max_row_length, int dim)
 {
     srand(static_cast <unsigned> (time(0)));
     int diag[7];
-    diag[0] = -floor(pow(dim_local, (2.0/3.0)));
-    diag[1] = -floor(pow(dim_local, (1.0/3.0)));
+    diag[0] = -floor(pow(dim, (2.0/3.0)));
+    diag[1] = -floor(pow(dim, (1.0/3.0)));
     diag[2] = -1;
     diag[3] = 0;
     diag[4] = 1;
-    diag[5] = floor(pow(dim_local, (1.0/3.0)));
-    diag[6] = floor(pow(dim_local, (2.0/3.0)));
+    diag[5] = floor(pow(dim, (1.0/3.0)));
+    diag[6] = floor(pow(dim, (2.0/3.0)));
 
-    for (int i = 0; i < dim_local;i++)
+    for (int i = 0; i < dim;i++)
     {
         int offset=0;
         for (int j = 0; j < max_row_length; j++)
         {
-            float value = 0;
-            if (diag[j] >= 0 && diag[j] < dim_local)
+            type value = 0;
+            if (diag[j] >= 0 && diag[j] < dim)
             {
-                value = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
-                data[i+offset*dim_local] = value;
-                indices[i+offset*dim_local] = diag[j];
+                value = static_cast <type> (rand()) / (static_cast <type> (RAND_MAX / 100));
+                data[i+offset*dim] = value;
+                indices[i+offset*dim] = diag[j];
                 offset++;
             }
         diag[j] = diag[j]+1;
@@ -38,17 +39,10 @@ void diagonal_float(float *data, int *indices, float *fvec, int max_row_length, 
         }
         for (int off = offset; off < max_row_length; off++)
         {
-            data[i+offset*dim_local] = 0;
-            indices[i+offset*dim_local] = 0;
+            data[i+offset*dim] = 0;
+            indices[i+offset*dim] = 0;
         }
-
-
     }
-    for (int k = 0; k < dim_fvec; k++)
-    {
-        fvec[k]= static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 100));
-    }
-
 }
 
 void random_ints(int *data,int *indices, int* fvec, int dim)

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "include/copy_help.hpp"
+#include "include/maxnorm_help.hpp"
 #include "include/roofline_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
@@ -13,15 +13,15 @@ using namespace std;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimension 65536
-#define iteration 10000
+#define dimension 32768
+#define iteration 1000
 bool get_overall = false;
 
 template<typename type>
-float invoke_gpu_time(type *vecin, type scalar, type *vecout, int dim, int runs);
+float invoke_gpu_time(type *vector, type *result, int dim, int runs);
 
 template<typename type>
-void invoke_gpu_overall(type *vecin, type scalar, type *vecout, int dim);
+void invoke_gpu_overall(type *vector, type *result, int dim);
 
 template<typename type>
 void allocation(type **data, size_t size);
@@ -33,14 +33,11 @@ void cleanup(type *data);
 int main(int argc, char* argv[])
 {
    
-    double *vec_host = new double[dimension];
-    double *scalar_host = new double[1];
-    set_data(vec_host, dimension);
-    set_data(scalar_host, 1);
+    double *vector_host = new double[dimension];
+    set_data(vector_host, dimension);
 
     Timer timer_overall;
     float elapsed_overall = 0.0;
-
 //================================================================================================/
 //									THE MAGIC HAPPENS HERE
 //================================================================================================/
@@ -52,18 +49,19 @@ int main(int argc, char* argv[])
         timer_overall.start();
         for (int r = 0; r < iteration; r++)
         {
-            double *vecin_dev = NULL;
-            double *vecout_dev = NULL;
+            double *vector_dev = NULL;
+            double *result = NULL;
 
-            allocation(&vecin_dev, dimension);
-            allocation(&vecout_dev, dimension);
+            allocation(&vector_dev, dimension);
+            allocation(&result, 1);
 
-            copy_data(vec_host, vecin_dev, dimension);
+            copy_data(vector_host, vector_dev, dimension);
 
-            invoke_gpu_overall(vecin_dev, scalar_host[0], vecout_dev, dimension);
+            invoke_gpu_overall(vector_dev, result, dimension);
 
-            cleanup(vecin_dev);
-            cleanup(vecout_dev);
+            cleanup(vectorx_dev);
+            cleanup(vectory_dev);
+            cleanup(result);
         }
         elapsed_overall = (timer_overall.stop()*1.0e3) / (float)iteration;
     }
@@ -72,23 +70,23 @@ int main(int argc, char* argv[])
 //                                   Zeitmessung Kernel
 //------------------------------------------------------------------------------------------------/
     
-    double *vecin_dev = NULL;
-    double *vecout_dev = NULL;
+    double *vector_dev = NULL;
+    double *result = NULL;
 
-    allocation(&vecin_dev, dimension);
-    allocation(&vecout_dev, dimension);
+    allocation(&vector_dev, dimension);
+    allocation(&result, 1);
 
-    copy_data(vec_host, vecin_dev, dimension);
+    copy_data(vector_host, vector_dev, dimension);
 
-    //=========================================//Hier muss vielleicht die Zeitmessung innerhalb der aufgerufenen Funktion stattfinden
-    float elapsed_kernel = invoke_gpu_time(vecin_dev, scalar_host[0], vecout_dev, dimension, iteration);
-        //>>>KERNEL<<<
+    //=========================================//
+    float elapsed_kernel = invoke_gpu_time(vector_dev, result, dimension, iteration);
+    //>>>KERNEL<<<
     //=========================================//
 
-    copy_check_result(vec_host, scalar_host[0], vecout_dev, dimension);
-    cleanup(vecin_dev);
-    cleanup(vecout_dev);
-
+    
+    maxnorm_check_result_(result, vector_host, dimension);
+    cleanup(vector_dev);
+    cleanup(result);
  
 //================================================================================================/
 //                                         Evaluieren
@@ -97,8 +95,7 @@ int main(int argc, char* argv[])
     double schalter = 0.0;
     performance(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
   
-    delete[] vec_host;
-    delete[] scalar_host;
+    delete[] vector_host;
 
     return 0;
 }
