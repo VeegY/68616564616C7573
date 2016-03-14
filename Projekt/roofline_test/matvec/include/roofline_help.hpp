@@ -13,7 +13,7 @@
 #define MAGENTA "\e[35;1m"
 
 template<typename type>
-void performance(int dim,int max_row_length, float overall, float kernel, type schalter, int runs)
+void performance(int dim, int max_row_length, float overall, float kernel, type schalter, int runs)
 {
     //GENERELL folgt. Markus fragen wie mit Nulleinträgen umzugehen ist
     //generell: NM + N(M-1)  = NM + NM - N = 2NM-N = N(2M-1)
@@ -25,12 +25,12 @@ void performance(int dim,int max_row_length, float overall, float kernel, type s
     //N
     //MN + N + N = N(M+2)
     int bytes = (dim*(max_row_length + 1))*sizeof(type);
-    int flop = dim*(2*max_row_length-1);
+    int flop = dim*(2 * max_row_length - 1);
     double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf(        "            SCALARPRODUCT KERNEL\n");
+    printf("            SCALARPRODUCT KERNEL\n");
     printf(GREY    "===============================================\n");
     printf("-----------------------------------------------\n");
     printf(BLUE    "        dim %i ##  iter. %i\n", dim, runs);
@@ -44,9 +44,6 @@ void performance(int dim,int max_row_length, float overall, float kernel, type s
     printf("-----------------------------------------------\n" RESET);
 
 }
-template void performance<int>(int dim, float overall, float kernel, int schalter, int runs);
-template void performance<float>(int dim, float overall, float kernel, float schalter, int runs);
-template void performance<double>(int dim, float overall, float kernel, double schalter, int runs);
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////

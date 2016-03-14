@@ -28,7 +28,7 @@ void matvec_check_result(type *result,type *vector_host, type *data_host, int *i
             value += data_host[i + dim*j] * vector_host[indices_host[i + dim*j]];
         }
 
-        diff = value - result[k];
+        diff = value - result[i];
         if (diff > 1.0e-6 || diff < -1.0e-6)
         {
             check = false;
@@ -43,7 +43,6 @@ void matvec_check_result(type *result,type *vector_host, type *data_host, int *i
         }
     }
     //==========================================//
-    diff = sqrt(value) - result[0];
     printf(GREEN "MAX.DIFF: %f\n" RESET, maxdiff);
     if (diff > 1.0e-6 || diff < -1.0e-6)
     {
