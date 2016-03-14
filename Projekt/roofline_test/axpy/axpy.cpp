@@ -13,8 +13,8 @@ using namespace std;
 //------------------------------------------------------------------------------------------------/
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
-#define dimension 32768
-#define iteration 1000
+#define dimension 65536
+#define iteration 10000
 bool get_overall = false;
 
 template<typename type>
