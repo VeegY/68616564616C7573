@@ -12,10 +12,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 //=============================================================================
 template<typename type>
-__global__ void kernel(type *vector, type *data, int *indices, type *result, int dim)
+__global__ void kernel(type *vector, type *data, int *indices, type *result, int dim, int max_row_length)
 {
     int idx = threadIdx.x + blockDim.x*blockIdx.x;
-    if (idx<dim_local)
+    if (idx<dim)
     {
         int col;
         type svalue = 0, value;
@@ -62,21 +62,18 @@ void generate_config(int *num_threads, int *num_blocks, int dim)
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
 template<typename type>
-float invoke_gpu_time(type *vector ,type *data, int * indices, type *result, int dim, int runs)
+float invoke_gpu_time(type *vector ,type *data, int * indices, type *result, int dim, int max_row_length, int runs)
 {
     Timer timer;
     float elapsed_time = 0.0;
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
 
-    type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-
     //=================================//
     timer.start();
     for (int i = 0; i < runs; i++)
     {
-        kernel<<<num_blocks, num_threads>>>(vector, data, indices, result, dim);
+        kernel<<<num_blocks, num_threads>>>(vector, data, indices, result, dim, max_row_length);
     }
     cudaDeviceSynchronize();
     elapsed_time = timer.stop()*1.0e3;
@@ -84,8 +81,8 @@ float invoke_gpu_time(type *vector ,type *data, int * indices, type *result, int
             
     return elapsed_time / runs;
 }
-template float invoke_gpu_time<float>(float *vector, float *data, int * indices, float *result, int dim, int runs);
-template float invoke_gpu_time<double>(double *vector, double *data, int * indices, double *result, int dim, int runs);
+template float invoke_gpu_time<float>(float *vector, float *data, int * indices, float *result, int dim, int max_row_length, int runs);
+template float invoke_gpu_time<double>(double *vector, double *data, int * indices, double *result, int dim, int max_row_length, int runs);
 
 
 //=============================================================================
@@ -94,7 +91,7 @@ template float invoke_gpu_time<double>(double *vector, double *data, int * indic
 ///////////////////////////////////////////////////////////////////////////////                       
 //=============================================================================
 template<typename type>
-void invoke_gpu_overall(type *vector, type *data, int * indices, type *result, int dim)
+void invoke_gpu_overall(type *vector, type *data, int * indices, type *result, int dim, int max_row_length)
 {
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
@@ -102,12 +99,12 @@ void invoke_gpu_overall(type *vector, type *data, int * indices, type *result, i
     type *placehold = NULL;
     cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
 
-    kernel<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vector, data, indices, result, dim);
+    kernel<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vector, data, indices, result, dim, max_row_length);
     
     cudaDeviceSynchronize();
 }
-template void invoke_gpu_overall<float>(float *vector, float *data, int * indices, float *result, int dim);
-template void invoke_gpu_overall<double>(double *vector, double *data, int * indices, double *result, int dim);
+template void invoke_gpu_overall<float>(float *vector, float *data, int * indices, float *result, int dim, int max_row_length);
+template void invoke_gpu_overall<double>(double *vector, double *data, int * indices, double *result, int dim, int max_row_length);
 
 
 

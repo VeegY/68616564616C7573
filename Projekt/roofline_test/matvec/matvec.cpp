@@ -19,10 +19,10 @@ bool get_overall = false;
 //------------------------------------------------------------------------------------------------/
 
 template<typename type>
-float invoke_gpu_time(type *vector, type *result, int dim, int runs);
+float invoke_gpu_time(type *vector, type *data, int * indices, type *result, int dim, int max_row_length, int runs);
 
 template<typename type>
-void invoke_gpu_overall(type *vector, type *result, int dim);
+void invoke_gpu_overall(type *vector, type *data, int * indices, type *result, int dim, int max_row_length);
 
 template<typename type>
 void allocation(type **data, size_t size);
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
             copy_data(data_host, data_dev, dimension*maxrowlength);
             copy_data(indices_host, indices_dev, dimension*maxrowlength);
 
-            invoke_gpu_overall(vector_dev, data_dev, indices_dev, result, dimension);
+            invoke_gpu_overall(vector_dev, data_dev, indices_dev, result, dimension, maxrowlength);
 
             cleanup(vector_dev);
             cleanup(data_dev);
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
     copy_data(indices_host, indices_dev, dimension*maxrowlength);
 
     //=========================================//
-    float elapsed_kernel = invoke_gpu_time(vector_dev, data_dev, indices_dev, result, dimension, iteration);
+    float elapsed_kernel = invoke_gpu_time(vector_dev, data_dev, indices_dev, result, dimension, maxrowlength, iteration);
     //>>>KERNEL<<<
     //=========================================//
 
