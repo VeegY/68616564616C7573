@@ -15,8 +15,8 @@
 template<typename type>
 void performance(int dim, float overall, float kernel, type schalter, int runs)
 {
-    int bytes = 2 * sizeof(type) * dim + 8;
-    int flop = 2*dim-1;
+    unsigned long int bytes = sizeof(type) * (dim+1);
+    unsigned long int flop = 2*dim;
     double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");

@@ -15,9 +15,9 @@
 template<typename type>
 void performance(int dim, float overall, float kernel, type schalter, int runs)
 {
-    int bytes = 3 * sizeof(type) * dim;
-    int flop = 2 * dim;
-    double ai = ((double)1.0 / (double)12.0);
+    unsigned long int bytes = 3 * sizeof(type) * dim;
+    unsigned long int flop = 2 * dim;
+    double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");

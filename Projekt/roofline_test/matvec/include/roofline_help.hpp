@@ -13,10 +13,19 @@
 #define MAGENTA "\e[35;1m"
 
 template<typename type>
-void performance(int dim, float overall, float kernel, type schalter, int runs)
+void performance(int dim,int max_row_length, float overall, float kernel, type schalter, int runs)
 {
-    int bytes = 2 * sizeof(type) * dim + 8;
-    int flop = 2*dim-1;
+    //GENERELL folgt. Markus fragen wie mit Nulleinträgen umzugehen ist
+    //generell: NM + N(M-1)  = NM + NM - N = 2NM-N = N(2M-1)
+    //          mult   add 
+    //read
+    //M*N + N
+    // Mat   vec    N(M+1)
+    //write 
+    //N
+    //MN + N + N = N(M+2)
+    int bytes = (dim*(max_row_length + 1))*sizeof(type);
+    int flop = dim*(2*max_row_length-1);
     double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");

@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
 //================================================================================================/
 
     double schalter = 0.0;
-    performance(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
+    performance(dimension, maxrowlength, elapsed_overall, elapsed_kernel, schalter, iteration);
   
     delete[] vector_host;
     delete[] data_host;
