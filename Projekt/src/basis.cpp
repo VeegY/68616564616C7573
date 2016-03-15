@@ -6,137 +6,253 @@
 namespace Icarus
 {
 
-double assembleFem::evaluate_Basis3d(int e, int A, double X, double Y, double Z)
+//Basis auf Referenzelement [0,h]^3 evaluiert in den Gauspunkten
+std::vector<double> assembleFem::evaluated_Basis3d(int A)
 {
-    switch(A)
-    {
-        case 0: return ((getx(e) + _h - X) / _h) * ((gety(e) + _h - Y) / _h) * ((getz(e) + _h - Z) / _h);
-        case 1: return ((getx(e) - X) / -_h) * ((gety(e) + _h - Y) / _h) * ((getz(e) + _h - Z) / _h);
-        case 2: return ((getx(e) - X) / -_h) * ((gety(e) - Y) / -_h) * ((getz(e) + _h - Z) / _h);
-        case 3: return ((getx(e) + _h - X) / _h) * ((gety(e) - Y) / -_h) * ((getz(e) + _h - Z) / _h);
-        case 4: return ((getx(e) + _h - X) / _h) * ((gety(e) + _h - Y) / _h) * ((getz(e) - Z) / -_h);
-        case 5: return ((getx(e) - X) / -_h) * ((gety(e) + _h - Y) / _h) * ((getz(e) - Z) / -_h);
-        case 6: return ((getx(e) - X) / -_h) * ((gety(e) - Y) / -_h) * ((getz(e) - Z) / -_h);
-        case 7: return ((getx(e) + _h - X) / _h) * ((gety(e) - Y) / -_h) * ((getz(e) - Z) / -_h);
-    }
-    assert(A > 0 && A < 8);
-    //TODO Kompiler warnt natuerlich wegen evtl nicht erreichtem return. was machen?
-}
-
-
-std::vector<double> assembleFem::evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z)
-{
-    double x0(getx(e) - X);
-    double y0(gety(e) - Y);
-    double z0(getz(e) - Z);
+    //Fuer Quadraturpunkte
+    std::vector<double> X(27), Y(27), Z(27), zwsp(27);
+    X = get_quadrature_xpoints();
+    Y = get_quadrature_ypoints();
+    Z = get_quadrature_zpoints();
 
     switch(A)
     {
-        case 0: return {- (y0 + _h) * (z0 + _h) / (_h*_h*_h),
-                        - (x0 + _h) * (z0 + _h) / (_h*_h*_h),
-                        - (x0 + _h) * (y0 + _h) / (_h*_h*_h)};
-        case 1: return {(y0 + _h) * (z0 + _h) / (_h*_h*_h),
-                        x0 * (z0 + _h) / (_h*_h*_h),
-                        x0 * (y0 + _h) / (_h*_h*_h)};
-        case 2: return {- y0 * (z0 + _h) / (_h*_h*_h),
-                        - x0 * (z0 + _h) / (_h*_h*_h),
-                        - x0 * y0 / (_h*_h*_h)};
-        case 3: return {y0 * (z0 + _h) / (_h*_h*_h),
-                        (x0 + _h) * (z0 + _h) / (_h*_h*_h),
-                        (x0 + _h) * y0 / (_h*_h*_h)};
-        case 4: return {(y0 + _h) * z0 / (_h*_h*_h),
-                        (x0 + _h) * z0 / (_h*_h*_h),
-                        (x0 + _h) * (y0 + _h) / (_h*_h*_h)};
-        case 5: return {- (y0 + _h) * z0 / (_h*_h*_h),
-                        - x0 * z0 / (_h*_h*_h),
-                        - x0 * (y0 + _h) / (_h*_h*_h)};
-        case 6: return {y0 * z0 / (_h*_h*_h),
-                        x0 * z0 / (_h*_h*_h),
-                        x0 * y0 / (_h*_h*_h)};
-        case 7: return {- y0 * z0 / (_h*_h*_h),
-                        - (x0 + _h) * z0 / (_h*_h*_h),
-                        - (x0 + _h) * y0 / (_h*_h*_h)};
-    }
-    assert(A > 0 && A < 8);
-    //TODO Kompiler warnt natuerlich wegen evtl nicht erreichtem return. was machen?
-}
-
-double assembleFem::evaluate_Basis2d_1(int e, int A, double R1, double R2)
-{
-    double x0(getx(e));
-    double y0(gety(e));
-    double zwsp(0.0);
-
-    switch (A)
-    {
-        case 0: zwsp = ((x0 + _h - R1) / _h) * ((y0 + _h - R2) / _h);
-                break;
-        case 1: zwsp = ((x0 - R1) / -_h) * ((y0 + _h - R2) / _h);
-                break;
-        case 2: zwsp = ((x0 - R1) / -_h) * ((y0 - R2) / -_h);
-                break;
-        case 3: zwsp = ((x0 + _h - R1) / _h) * ((y0 - R2) / -_h);
-                break;
-        case 4:
-        case 5:
-        case 6:
-        case 7: zwsp = 0.0;
-                break;
-        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
-    }
-    return zwsp;
-}
-
-double assembleFem::evaluate_Basis2d_2(int e, int A, double R1, double R2)
-{
-    double x0(getx(e));
-    double z0(getz(e));
-    double zwsp(0.0);
-
-    switch (A)
-    {
-        case 0: zwsp = ((x0 + _h - R1) / _h) * ((z0 + _h - R2) / _h);
-                break;
-        case 1: zwsp = ((x0 - R1) / -_h) * ((z0 + _h - R2) / _h);
-                break;
-        case 5: zwsp = ((x0 - R1) / -_h) * ((z0 - R2) / -_h);
-                break;
-        case 4: zwsp = ((x0 + _h - R1) / _h) * ((z0 - R2) / -_h);
-                break;
-        case 2:
-        case 3:
-        case 6:
-        case 7: zwsp = 0.0;
-                break;
-        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
-    }
-    return zwsp;
-}
-
-double assembleFem::evaluate_Basis2d_3(int e, int A, double R1, double R2)
-{
-    double y0(gety(e));
-    double z0(getz(e));
-    double zwsp(0.0);
-
-    switch (A)
-    {
-        case 0: zwsp = ((y0 + _h - R1) / _h) * ((z0 + _h - R2) / _h);
-                break;
-        case 3: zwsp = ((y0 - R1) / -_h) * ((z0 + _h - R2) / _h);
-                break;
-        case 7: zwsp = ((y0 - R1) / -_h) * ((z0 - R2) / -_h);
-                break;
-        case 4: zwsp = ((y0 + _h - R1) / _h) * ((z0 - R2) / -_h);
+        case 0:
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((_h - X[i]) / _h) * ((_h - Y[i]) / _h) * ((_h - Z[i]) / _h);
                 break;
         case 1:
-        case 2:
-        case 5:
-        case 6: zwsp = 0.0;
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((- X[i]) / -_h) * ((_h - Y[i]) / _h) * ((_h - Z[i]) / _h);
                 break;
+        case 2:
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((_h - X[i]) / _h) * ((- Y[i]) / -_h) * ((_h - Z[i]) / _h);
+                break;
+        case 3:
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((- X[i]) / -_h) * ((- Y[i]) / -_h) * ((_h - Z[i]) / _h);
+                break;
+        case 4:
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((_h - X[i]) / _h) * ((_h - Y[i]) / _h) * ((- Z[i]) / -_h);
+                break;
+        case 5:
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((- X[i]) / -_h) * ((_h - Y[i]) / _h) * ((- Z[i]) / -_h);
+                break;
+        case 6:
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((_h - X[i]) / _h) * ((- Y[i]) / -_h) * ((- Z[i]) / -_h);
+                break;
+        case 7:
+                for(int i=0; i<27; i++)
+                zwsp[i]= ((- X[i]) / -_h) * ((- Y[i]) / -_h) * ((- Z[i]) / -_h);
+                break;
+        default: assert(A >= 0 && A < 8);
+    }
+
+    return zwsp;
+    //TODO Kompiler warnt natuerlich wegen evtl nicht erreichtem return. was machen?
+}
+
+
+
+//Gradienten der Basis auf Referenzelement [0,h]^3 evaluiert in den Gauspunkten
+//ALTERNATIV: Matrix mit Dimension 3x27
+std::vector<std::vector<double>> assembleFem::evaluated_gradient_Basis3d(int A)
+{
+    //Fuer Quadraturpunkte
+    std::vector<double> X(27), Y(27), Z(27), zwsp1(27), zwsp2(27), zwsp3(27);
+    X = get_quadrature_xpoints();
+    Y = get_quadrature_ypoints();
+    Z = get_quadrature_zpoints();
+
+    //TODO: Pruefe die Funktionen
+    //TODO _h*_h*_h ersetzen
+    switch(A)
+    {
+        case 0:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = - (-Y[i] + _h) * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp2[i] = - (-X[i] + _h) * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp3[i] = - (-X[i] + _h) * (-Y[i] + _h) / (_h*_h*_h);
+                }
+                break;
+        case 1:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = (-Y[i] + _h) * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp2[i] = -X[i] * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp3[i] = -X[i] * (-Y[i] + _h) / (_h*_h*_h);
+                }
+                break;
+        case 2:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = -Y[i] * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp2[i] = (-X[i] + _h) * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp3[i] = (-X[i] + _h) * -Y[i] / (_h*_h*_h);
+                }
+                break;
+        case 3:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = Y[i] * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp2[i] = X[i] * (-Z[i] + _h) / (_h*_h*_h);
+                    zwsp3[i] = X[i] * -Y[i] / (_h*_h*_h);
+                }
+                break;
+        case 4:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = (-Y[i] + _h) * -Z[i] / (_h*_h*_h);
+                    zwsp2[i] = (-X[i] + _h) * -Z[i] / (_h*_h*_h);
+                    zwsp3[i] = (-X[i] + _h) * (-Y[i] + _h) / (_h*_h*_h);
+                }
+                break;
+        case 5:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = - (-Y[i] + _h) * -Z[i] / (_h*_h*_h);
+                    zwsp2[i] = X[i] * -Z[i] / (_h*_h*_h);
+                    zwsp3[i] = X[i] * (-Y[i] + _h) / (_h*_h*_h);
+                }
+                break;
+        case 6:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = Y[i] * -Z[i] / (_h*_h*_h);
+                    zwsp2[i] = - (-X[i] + _h) * -Z[i] / (_h*_h*_h);
+                    zwsp3[i] = - (-X[i] + _h) * -Y[i] / (_h*_h*_h);
+                }
+                break;
+        case 7:
+                //evaluieren in den Gauspunkten
+                for(int i=0; i<27; i++)
+                {
+                    zwsp1[i] = -Y[i] * -Z[i] / (_h*_h*_h);
+                    zwsp2[i] = -X[i] * -Z[i] / (_h*_h*_h);
+                    zwsp3[i] = -X[i] * -Y[i] / (_h*_h*_h);
+                }
+                break;
+        default: assert(A >= 0 && A < 8);
+    }
+    return {zwsp1, zwsp2, zwsp3};
+    //TODO Kompiler warnt natuerlich wegen evtl nicht erreichtem return. was machen?
+}
+
+
+//Basis auf Referenzelement [0,h]^2 evaluiert in den Gauspunkten
+//X-Y-Ebene
+std::vector<double> assembleFem::evaluated_Basis2d_1(int A)
+{
+    //Fuer Quadraturpunkte
+    std::vector<double> R1(27), R2(27), zwsp(27);
+    R1 = get_quadrature_xpoints_2d_1();
+    R2 = get_quadrature_ypoints_2d_1();
+
+
+    switch (A)
+    {
+        case 0:
+            for(int i=0; i<27; i++)
+                zwsp[i] = ((_h - R1[i])/ _h) * ((_h - R2[i]) / _h);
+            break;
+        case 1:
+            for(int i=0; i<27; i++)
+                zwsp[i] = (R1[i] / -_h) * ((_h - R2[i]) / _h);
+            break;
+        case 2:
+            for(int i=0; i<27; i++)
+               zwsp[i] = ((_h - R1[i]) / _h) * ((- R2[i]) / -_h);
+            break;
+        case 3:
+            for(int i=0; i<27; i++)
+                zwsp[i] = ((- R1[i]) / -_h) * ((- R2[i]) / -_h);
+            break;
+        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+    }
+    return zwsp;
+}
+
+//Basis auf Referenzelement [0,h]^2 evaluiert in den Gauspunkten
+//X-Z-Ebene
+std::vector<double> assembleFem::evaluated_Basis2d_2(int A)
+{
+    //Fuer Quadraturpunkte
+    std::vector<double> R1(27), R2(27), zwsp(27);
+    R1 = get_quadrature_xpoints_2d_2();
+    R2 = get_quadrature_zpoints_2d_2();
+
+    switch (A)
+    {
+        case 0:
+            for(int i=0; i<27; i++)
+                zwsp[i] = ((_h - R1[i])/ _h) * ((_h - R2[i]) / _h);
+            break;
+        case 1:
+            for(int i=0; i<27; i++)
+                zwsp[i] = (R1[i] / -_h) * ((_h - R2[i]) / _h);
+            break;
+        case 4:
+            for(int i=0; i<27; i++)
+               zwsp[i] = ((_h - R1[i]) / _h) * ((- R2[i]) / -_h);
+            break;
+        case 5:
+            for(int i=0; i<27; i++)
+                zwsp[i] = ((- R1[i]) / -_h) * ((- R2[i]) / -_h);
+            break;
+        default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
+    }
+    return zwsp;
+}
+
+std::vector<double> assembleFem::evaluated_Basis2d_3(int A)
+{
+    //Fuer Quadraturpunkte
+    std::vector<double> R1(27), R2(27), zwsp(27);
+    R1 = get_quadrature_ypoints_2d_3();
+    R2 = get_quadrature_zpoints_2d_3();
+
+    switch (A)
+    {
+        case 0:
+            for(int i=0; i<27; i++)
+                {
+                zwsp[i] = ((_h - R1[i])/ _h) * ((_h - R2[i]) / _h);
+                }
+            break;
+        case 2:
+            for(int i=0; i<27; i++)
+                {
+                zwsp[i] = (R1[i] / -_h) * ((_h - R2[i]) / _h);
+                }
+            break;
+        case 4:
+            for(int i=0; i<27; i++)
+                {
+               zwsp[i] = ((_h - R1[i]) / _h) * ((- R2[i]) / -_h);
+                }
+            break;
+        case 6:
+            for(int i=0; i<27; i++)
+                {
+                zwsp[i] = ((- R1[i]) / -_h) * ((- R2[i]) / -_h);
+                }
+            break;
         default: std::cout << "Fehler: kein lokaler Knoten" << std::endl;
     }
     return zwsp;
 }
 
 }//namespace Icarus
+

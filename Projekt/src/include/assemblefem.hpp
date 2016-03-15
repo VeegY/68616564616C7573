@@ -40,23 +40,24 @@ private:
     double gety(size_t index);
     double getz(size_t index);
 
-    double evaluate_Basis3d(int e, int A, double X, double Y, double Z);
-    std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z);
+    std::vector<double> evaluated_Basis3d(int A);
+    std::vector<std::vector<double>> evaluated_gradient_Basis3d(int A);
     std::vector<double> get_weight();
-    std::vector<double> get_quadrature_xpoints(int e);
-    std::vector<double> get_quadrature_ypoints(int e);
-    std::vector<double> get_quadrature_zpoints(int e);
 
-    double evaluate_Basis2d_1(int e, int A, double R1, double R2);
-    double evaluate_Basis2d_2(int e, int A, double R1, double R2);
-    double evaluate_Basis2d_3(int e, int A, double R1, double R2);
+    std::vector<double> get_quadrature_xpoints();
+    std::vector<double> get_quadrature_ypoints();
+    std::vector<double> get_quadrature_zpoints();
+
+    std::vector<double> evaluated_Basis2d_1(int A);
+    std::vector<double> evaluated_Basis2d_2(int A);
+    std::vector<double> evaluated_Basis2d_3(int A);
     std::vector<double> get_weight_2d();
-    std::vector<double> get_quadrature_xpoints_2d_1(int e);
-    std::vector<double> get_quadrature_ypoints_2d_1(int e);
-    std::vector<double> get_quadrature_xpoints_2d_2(int e);
-    std::vector<double> get_quadrature_zpoints_2d_2(int e);
-    std::vector<double> get_quadrature_ypoints_2d_3(int e);
-    std::vector<double> get_quadrature_zpoints_2d_3(int e);
+    std::vector<double> get_quadrature_xpoints_2d_1();
+    std::vector<double> get_quadrature_ypoints_2d_1();
+    std::vector<double> get_quadrature_xpoints_2d_2();
+    std::vector<double> get_quadrature_zpoints_2d_2();
+    std::vector<double> get_quadrature_ypoints_2d_3();
+    std::vector<double> get_quadrature_zpoints_2d_3();
 
     double _h;
     int _nx, _ny, _nz;

@@ -26,12 +26,15 @@ void assembleFem::assemblyMatrixRow()
     std::vector<bool> Belegt(length, false);
 
     //std::vector<int> a(8); //Hilfsvektor um auf die Ecken (global gezaehlt) eines Element zu kommen
-    //a[0]=0; a[1]=1; a[2]= 1+y; a[3]=y; a[4]= z; a[5]=1+z; a[6]= 1+y+z; a[7]=y+z;
-    static std::vector<int> a{0, 1, 1+y, y, z, 1+z, 1+y+z, y+z};
+    //a[0]=0; a[1]=1; a[2]= y; a[3]=1+y; a[4]= z; a[5]=1+z; a[6]= y+z; a[7]=1+y+z;
+    static std::vector<int> a{0, 1, y, 1+y, z, 1+z, y+z, 1+y+z};
 
-//    std::vector<std::vector<double>> grad_Basis1(27, std::vector<double>(3)); // 27 Mal so viel Speicher fuer 8 Mal weniger evalgradbasis aufrufen...
-    std::vector<double> grad_Basis1(3);
-    std::vector<double> grad_Basis2(3);
+    std::vector<std::vector<double>> grad_Basis1(3, std::vector<double>(27)); // 27 Mal so viel Speicher fuer 8 Mal weniger evalgradbasis aufrufen...
+    std::vector<std::vector<double>> grad_Basis2(3, std::vector<double>(27));
+    //std::vector<double> grad_Basis1(3);
+    //std::vector<double> grad_Basis2(3);
+
+
 
     double zwsp(0.0);
 
@@ -41,30 +44,24 @@ void assembleFem::assemblyMatrixRow()
     //Schleife ueber alle Elemente
     for (int i(0); i < n; i++)
     {
-        //Quadraturpunkte festlegen
-        X = get_quadrature_xpoints(_e[i]);
-        Y = get_quadrature_ypoints(_e[i]);
-        Z = get_quadrature_zpoints(_e[i]);
-//        for (int q(0); q < 27; q++)
-//            grad_Basis1[q] = evaluate_gradient_Basis3d(_e[i], _A[i], X[q], Y[q], Z[q]);
+        //Berechne Grad_Basis3d fuer die Ecke A[i] vom Referenzelement
+        grad_Basis1 = evaluated_gradient_Basis3d(_A[i]);
 
-        //Schleife ueber alle Ecken von e
+        //Schleife ueber alle Ecken vom Referenzelement
         for (int B(0); B < 8; B++)
         {
+            //Systematisch alle Ecken des Referenzelemets
+            grad_Basis2 = evaluated_gradient_Basis3d(B);
+
             //Quadratur
             zwsp = 0.0;
             for (int q(0); q < 27; q++)
             {
-                //Berechne Grad_Basis3d fuer die Ecke A[i] von Element e[i]. Dies sollte immer der momentane Raumpunkt ('Zeile') sein.
-                grad_Basis1 = evaluate_gradient_Basis3d(_e[i], _A[i], X[q], Y[q], Z[q]);
-                //Systematisch alle Ecken des Elemets e[i]
-                grad_Basis2 = evaluate_gradient_Basis3d(_e[i], B, X[q], Y[q], Z[q]);
-
                 //zwsp += grad_Basis1.dot(grad_Basis2) * weight[q]; (Also die Quadratursumme)
-                //zwsp += (grad_Basis1[q][0]*grad_Basis2[0] + grad_Basis1[q][1]*grad_Basis2[1]
-                //    + grad_Basis1[q][2]*grad_Basis2[2]) * _weight[q];
-                zwsp += (grad_Basis1[0]*grad_Basis2[0] + grad_Basis1[1]*grad_Basis2[1]
-                    + grad_Basis1[2]*grad_Basis2[2]) * _weight[q];
+                zwsp += (grad_Basis1[0][q]*grad_Basis2[0][q] + grad_Basis1[1][q]*grad_Basis2[1][q]
+                    + grad_Basis1[2][q]*grad_Basis2[2][q]) * _weight[q];
+                //zwsp += (grad_Basis1[0]*grad_Basis2[0] + grad_Basis1[1]*grad_Basis2[1]
+                //    + grad_Basis1[2]*grad_Basis2[2]) * _weight[q];
             }
 
             //Berechneter Wert an die richtige Stelle von Column und Value aufaddieren. Ich schätze, dass hier irgenwo der Fehler liegt.
