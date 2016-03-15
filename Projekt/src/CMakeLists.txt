@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
 project(stuprotm1516)
 
+FIND_PACKAGE(CUDA REQUIRED) # Lade CUDA
+FIND_PACKAGE(MPI REQUIRED)  # Lade MPI
+
+INCLUDE(FindCUDA)
+INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
+
 #========================================================================
 #               Executables         
 #========================================================================
@@ -8,8 +14,8 @@ project(stuprotm1516)
 FILE(GLOB SOURCES "*.cu" "*.cpp")# "*.c" "*.h" "*.hpp") # adding all source files
 SET(SRCFILES ${SOURCES})        # there must be a
 ADD_LIBRARY(SRCLIB ${SRCFILES}) # more compact way
-FILE(GLOB DEMO "*_demo.cpp")
-CUDA_ADD_EXECUTABLE(icarus ${DEMO})
+
+CUDA_ADD_EXECUTABLE(icarus ${SOURCES})
 TARGET_LINK_LIBRARIES(icarus SRCLIB ${MPI_LIBRARIES})
 
 
