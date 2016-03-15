@@ -14,7 +14,7 @@ using namespace std;
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
 //16384 - 65536 - 262144 - 1048576 - 4194304
-#define dimension 16384
+#define dimension 65536
 #define iteration 10000
 bool get_overall = false;
 
