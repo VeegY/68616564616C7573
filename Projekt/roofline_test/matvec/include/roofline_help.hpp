@@ -16,16 +16,11 @@ template<typename type>
 void performance(int dim, int max_row_length, float overall, float kernel, type schalter, int runs)
 {
     //GENERELL folgt. Markus fragen wie mit Nulleinträgen umzugehen ist
-    //generell: NM + N(M-1)  = NM + NM - N = 2NM-N = N(2M-1)
+    //generell: MN  + M(N-1)  = MN + MN - M = 2MN - M
     //          mult   add 
-    //read
-    //M*N + N
-    // Mat   vec    N(M+1)
-    //write 
-    //N
-    //MN + N + N = N(M+2)
-    int bytes = (dim*(max_row_length + 1))*sizeof(type);
-    int flop = dim*(2 * max_row_length - 1);
+
+    unsigned long int bytes = (dim*max_row_length)*(sizeof(type) + sizeof(int)) + dim * 2 * sizeof(type);
+    unsigned long int flop = 2 * dim*max_row_length - dim;
     double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");
@@ -39,7 +34,7 @@ void performance(int dim, int max_row_length, float overall, float kernel, type 
     printf("Overall Runtime:\t\t%f(ms)\n", overall);
     printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (kernel*1.0e6));
     printf("Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop / (kernel*1.0e6));
-    printf("StreamBW * AI:\t\t\t%f\n", 13 * ai);
+    printf("StreamBW * AI:\t\t\t%f\n", 13.02 * ai);
     printf(GREY    "-----------------------------------------------\n");
     printf("-----------------------------------------------\n" RESET);
 
