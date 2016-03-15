@@ -23,7 +23,7 @@
 
 #include "mpihandler.hpp"
 #include "vector.hpp"
-#include "distellpackmatrixgpu.hpp"
+//#include "distellpackmatrixgpu.hpp"
 
 namespace Icarus
 {
@@ -56,8 +56,8 @@ public:
     typedef Scalar ScalarType;
     typedef typename ScalarTraits<Scalar>::RealType RealType;
 
-    friend DistEllpackMatrixGpu<SlicedVectorGpu>::mult_vec_impl(const FullVectorGpu&, SlicedVectorGpu&);
-    
+    //friend DistEllpackMatrixGpu<SlicedVectorGpu>::mult_vec_impl(const FullVectorGpu&, SlicedVectorGpu&);
+
    /**
      * \brief   Standardkonstruktor.
      *
@@ -171,6 +171,8 @@ public:
     {
         return _data[pos];
     }
+
+	Scalar* getDataPointer() { return _data; }
 
 private:
     void swap_impl(SlicedVectorGpu& other);
