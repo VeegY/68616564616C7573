@@ -30,7 +30,7 @@ void performance(int dim, float overall, float kernel, type schalter, int runs)
     printf("Overall Runtime:\t\t%f(ms)\n", overall);
     printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (kernel*1.0e6));
     printf("Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop / (kernel*1.0e6));
-    printf("StreamBW * AI:\t\t\t%f\n", 13 * ai);
+    printf("StreamBW * AI:\t\t\t%f\n", 13.02 * ai);
     printf(GREY    "-----------------------------------------------\n");
     printf("-----------------------------------------------\n" RESET);
 
