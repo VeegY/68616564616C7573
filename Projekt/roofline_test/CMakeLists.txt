@@ -22,7 +22,7 @@ INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 LIST(APPEND CMAKE_CXX_FLAGS "-std=c++0x -O3 -ffast-math -Wall")
 
-LIST(APPEND CUDA_NVCC_FLAGS --compiler-options --restrict -use_fast_math)
+LIST(APPEND CUDA_NVCC_FLAGS --compiler-options -restrict -use_fast_math)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
 LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
