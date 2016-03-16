@@ -2871,6 +2871,7 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     {
         for(int j = 0; j<7;j++)
         {
+            std::cout <<"Matrix index: "<<indexMatrix[i][j] << " zu schreibender Wert: " << valueMatrix[i][j]<<std::endl;
             A.sequential_fill(indexMatrix[i][j],valueMatrix[i][j]);
         }
         A.end_of_row();
