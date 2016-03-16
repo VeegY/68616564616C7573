@@ -1,6 +1,6 @@
 \section{Software}
 \subsection{Löser}
-Das als Löser verwendete Verfahren des Projektes ist das sogenannte BiCGStab-Verfahren (engl: „biconjugate gradient stabilized method“), welches zur Klasse der Krylov-Unterraum-Verfahren zählt. Diese iterative Methode wurde von H.A. van der Horst als Löser für nicht-symmetrische lineare Gleichungssysteme entwickelt und benötigt somit keine zusätzlichen Anforderungen an die Systemmatrix A wie zum Beispiel beim CG-Verfahren. Sein Name ist davon abgeleitet, dass die im nicht-vorkonditionierten Algorithmus verwendeten Residuen biorthogonal sind, also $(r_i,\hat{r}_j)=\,0$ $\forall i\neq j$, und die Suchrichtungen bikonjugiert sind bezüglich der Systemmatrix $A$, also $(Ap_i,\hat{p}_j)=\,0$ $ \forall i \neq j$.  Man entschied sich für dieses Verfahren, da das konkurrierende GMRES-Verfahren weniger speichereffizient arbeitet und das BiCGStab-Verfahren leichter zu implementieren ist.  Au\ss{}erdem kann es mit beliebigem Vorkonditionierer und ohne Vorkonditionierer implementiert werden. Der Nachteil des angewendeten Verfahrens ist, dass die Konvergenz nicht allgemein bewiesen ist. So kann es im Falle von einer Systemmatrix mit großen komplexen Eigenwerten zur Stagnation des Algorithmus kommen, ohne dass eine gute Näherungslösung ermittelt wurde. \\
+Das als Löser verwendete Verfahren des Projektes ist das sogenannte BiCGStab-Verfahren (engl: „biconjugate gradient stabilized method“), welches zur Klasse der Krylov-Unterraum-Verfahren zählt. Diese iterative Methode wurde von H.A. van der Horst als Löser für nicht-symmetrische lineare Gleichungssysteme entwickelt und benötigt keine zusätzlichen Anforderungen an die Systemmatrix A wie zum Beispiel beim CG-Verfahren. Sein Name ist davon abgeleitet, dass die im nicht-vorkonditionierten Algorithmus verwendeten Residuen biorthogonal sind, also $(r_i,\hat{r}_j)=\,0$ $\forall i\neq j$, und die Suchrichtungen bikonjugiert sind bezüglich der Systemmatrix $A$, also $(Ap_i,\hat{p}_j)=\,0$ $ \forall i \neq j$.  Man entschied sich in unserem Fall für dieses Verfahren, da das konkurrierende GMRES-Verfahren weniger speichereffizient arbeitet und das BiCGStab-Verfahren leichter zu implementieren ist.  Au\ss{}erdem kann es mit beliebigem Vorkonditionierer und ohne Vorkonditionierer implementiert werden. Der Nachteil des angewendeten Verfahrens ist, dass die Konvergenz nicht allgemein bewiesen ist. So kann es im Falle von einer Systemmatrix mit großen komplexen Eigenwerten zur Stagnation des Algorithmus kommen, ohne dass eine gute Näherungslösung ermittelt wurde. \\
 
 
 
@@ -25,12 +25,11 @@ Das als Löser verwendete Verfahren des Projektes ist das sogenannte BiCGStab-Ve
 	\item$v_i=$\,$Ay$
 	\item$\alpha=$\,$\rho_i/(\hat{r_0},v_i)$
 	\item$s=$\,$r_{i-1}-\alpha$$v_i$
-	\item Wenn $||s||$ klein genug, setze $x_i=$\,$x_{i-1}+\alpha$$p_i$ und beende 
+	\item Wenn $||s|| < TOL$, setze $x_i=$\,$x_{i-1}+\alpha$$p_i$ und beende 
 	\item$z=$\,$K^{-1}s$
 	\item$t=$\,$Az$
 	\item$\omega_i=$\,$(K^{-1}_1$$t,K^{-1}_1$$s)/(K^{-1}_1$$t,K^{-1}_1$$t)$ 
-	\item$x_i=$\,$x_{i-1}+\alpha$$y+\omega_i$$z$\\
-	Wenn $||x-x_i|| < TOL $ wird das Verfahren beendet 
+	\item$x_i=$\,$x_{i-1}+\alpha$$y+\omega_i$$z$
 	\item$r_i=$\,$s-\omega_i$$t$\\
 	
 	\hrule\hrule
@@ -41,5 +40,5 @@ Das als Löser verwendete Verfahren des Projektes ist das sogenannte BiCGStab-Ve
 
 
 
-Der von rechts vorkonditionierte BiCGSTAB-Algorithmus NUMMER startet ausgehend von einem Anfangsvektor $x_0$, welcher immer als Nullvektor implementiert wurde. Des Weiteren wurde die maximale Iterationszahl auf $10.000.000.000$ gesetzt und die Toleranz mit $TOL= 10^{-9}$ festgelegt. Der Vorkonditionierer hat dabei die allgemeine Form: 
+Der von rechts vorkonditionierte BiCGSTAB-Algorithmus NUMMER startet ausgehend von einem Anfangsvektor $x_0$, welcher immer als Nullvektor implementiert wurde. Des Weiteren wurde die Toleranz mit $TOL= 10^{-9}$ festgelegt. Der Vorkonditionierer hat dabei die allgemeine Form: 
 $K = K_1 K_2 \approx A $
