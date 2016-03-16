@@ -1,4 +1,3 @@
-/*
 #include "../src/include/slicedvector.hpp"
 #include "../src/include/bicgstabsolver.hpp"
 #include "../src/include/distellpackmatrix.hpp"
@@ -47,9 +46,4 @@ int poisson_demo()
 int main()
 {
     return poisson_demo();
-}
-*/
-int main()
-{
-    return 1;
 }
