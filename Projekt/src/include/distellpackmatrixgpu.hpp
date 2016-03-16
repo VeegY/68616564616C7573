@@ -4,6 +4,7 @@
 #include "matrix.hpp"
 #include "utility.hpp"
 #include "mpihandler.hpp"
+#include "fullvectorgpu.hpp"
 #include <fstream>
 #include <iterator>
 #include <algorithm>

@@ -120,7 +120,7 @@ namespace Icarus
 				int * ranks = new int[nodes];
 				for (int i = 0; i < (int)nodes; i++) ranks[i] = i;
 				MPI_Group_incl(worldgroup, nodes, ranks, &pgroup);
-				delete ranks;
+				delete[] ranks;
 				MPI_Comm_create_group(MPI_COMM_WORLD, pgroup, 0, &pcomm);
 				int myrank = -1;
 				MPI_Comm_rank(pcomm, &myrank);
@@ -135,6 +135,8 @@ namespace Icarus
 				// messschleife
 				for (unsigned mctr = 0; mctr < _mlist.size(); mctr++)
 				{
+					LOG_INFO("Now starting benchmark with m = ", _mlist[mctr]);
+					
 					const unsigned m = _mlist[mctr]; 
 					// konstruiere matrix, startvektor und rechte seite
 					Matrix mat = construct_model_matrix<Matrix>(m, pcomm);
@@ -146,6 +148,7 @@ namespace Icarus
 					// Löser
 					BiCgStabSolver<Matrix> solver(mat, rhs);
 
+					MPI_Barrier(pcomm);
 					// starte zeitmessung
 					std::chrono::high_resolution_clock::time_point start;
 					start = std::chrono::high_resolution_clock::now();
