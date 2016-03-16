@@ -24,7 +24,7 @@
 #ifndef __LOGGER_HPP_
 #define __LOGGER_HPP_
 
-#define LOGGING_LEVEL 2
+#define LOGGING_LEVEL 3
 
 #include <string>
 #include <iostream>
