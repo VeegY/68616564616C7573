@@ -98,6 +98,6 @@ namespace Icarus
 
 }
 
-#include "assemble.tmp.hpp"
+#include "assemble.tpp"
 
 #endif // __ASSEMBLE_HPP_
