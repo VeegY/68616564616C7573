@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(stuprotm1516)
 
-CUDA_ADD_EXECUTABLE(solverbench "solverbench.cpp")
+CUDA_ADD_EXECUTABLE(solverbench "solverbench.cpp;../src/benchmark_ax_cuda.cu")
 TARGET_LINK_LIBRARIES(solverbench SRCLIB ${MPI_LIBRARIES})
 
 target_include_directories(solverbench 
