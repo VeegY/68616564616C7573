@@ -10,8 +10,8 @@ namespace Icarus
 void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f, mathfunction g, mathfunction h)
 {
     //TODO: vorlaeufig, wieder loeschen
-    bool Dirichlet(false);
-    bool Neumann(true);
+    bool Dirichlet(true);
+    bool Neumann(!Dirichlet);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
@@ -777,7 +777,7 @@ LOG_INFO("assembled 100%");
 
     //TODO rhs direkt fuellen (erst wenn alles laeuft)
     for (int i(0); i<_nx*_ny*_nz; ++i)
-        rhs.set_global(i, 0.0);//RHS[i]);
+        rhs.set_global(i, RHS[i]);
 
     LOG_INFO("Matrix succesfully assembled");
 
