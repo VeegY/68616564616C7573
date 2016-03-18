@@ -3,6 +3,7 @@
 
 #include "distellpackmatrix.hpp"
 #include "slicedvector.hpp"
+#include "fullvector.hpp"
 
 #include "mathfunction.hpp"
 
@@ -29,6 +30,8 @@ public:
 
     void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
             mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
+
+    double calcL2Error(mathfunction realsol, FullVector<double> calcsol);
 
 private:
     void assemblyMatrixRow();
