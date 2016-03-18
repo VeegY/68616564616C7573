@@ -9,10 +9,10 @@ std::vector<double> assembleFem::get_weight()  //Gibt die Gewichte der Quadratur
 {
     double c(5.0/9.0);
     double d(8.0/9.0);
-    double e(c*c*c);
-    double f((c*c)*d);
-    double g(c*(d*d));
-    return {e, f, e, f, g, f, e, f, e, f, g, f, g, d*d*d, g, f, g, f, e, f, e, f, g, f, e, f, e};
+    double e(_h*_h*_h/8.0*c*c*c);
+    double f(_h*_h*_h/8.0*(c*c)*d);
+    double g(_h*_h*_h/8.0*c*(d*d));
+    return {e, f, e, f, g, f, e, f, e, f, g, f, g, _h*_h*_h/8.0*d*d*d, g, f, g, f, e, f, e, f, g, f, e, f, e};
 }
 
 //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Referenzelement [0,h]^3
@@ -60,9 +60,9 @@ std::vector<double> assembleFem::get_weight_2d()  //Gibt die Gewichte der Quadra
 {
     double c(5.0/9.0);
     double d(8.0/9.0);
-    double e(c*c);
-    double f(c*d);
-    return {e,f,e, f,d*d,f, e,f,e};
+    double e(_h*_h/4.0*c*c);
+    double f(_h*_h/4.0*c*d);
+    return {e,f,e, f,_h*_h/4.0*d*d,f, e,f,e};
 }
 
 std::vector<double> assembleFem::get_quadrature_xpoints_2d_1() //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für die Seitenflaeche (X-Y-Ebene)
