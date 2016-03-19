@@ -4,7 +4,7 @@ namespace Icarus
 {
 
 //TODO TOCHECK Superkonvergenz??
-double assembleFem::calcL2Error(mathfunction realsol, FullVector<double> calcsol)
+double assembleFem::calcL2Error(mathfunction realsol, FullVector<double>& calcsol)
 {
     double l2norm(0.0);
     std::vector<double> quadrature_X(27), quadrature_Y(27), quadrature_Z(27), basis3d(27);

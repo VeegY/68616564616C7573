@@ -7,7 +7,7 @@
 #include "../src/include/distellpackmatrix.hpp"
 
 #include "../src/include/vtkwriter.hpp"
-//#include "../src/include/discretizer.hpp"
+#include "../src/include/discretizer.hpp"
 
 int main()
 {

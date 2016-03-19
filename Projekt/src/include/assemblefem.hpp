@@ -19,14 +19,14 @@ class assembleFem
 public:
     assembleFem(double sh, int sx, int sy, int sz):
         _h(sh), _nx(sx), _ny(sy), _nz(sz), z(_nx*_ny), y(_nx),
-        _weight(get_weight), _weight_2d(get_weight_2d),
-        _quadpoints_2d_1(get_quadrature_xpoints_2d_1), _quadpoints_2d_2(get_quadrature_ypoints_2d_1)
+        _weight(get_weight()), _weight_2d(get_weight_2d()),
+        _quadpoints_2d_1(get_quadrature_xpoints_2d_1()), _quadpoints_2d_2(get_quadrature_ypoints_2d_1())
     { }
 
     void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, std::vector<char>& disc_points,
         mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
 
-    double calcL2Error(mathfunction realsol, FullVector<double> calcsol);
+    double calcL2Error(mathfunction realsol, FullVector<double>& calcsol);
 
 private:
     void assemblyMatrixRow();
