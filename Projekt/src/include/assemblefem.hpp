@@ -18,18 +18,13 @@ class assembleFem
 {
 public:
     assembleFem(double sh, int sx, int sy, int sz):
-        _h(sh), _nx(sx), _ny(sy), _nz(sz), z(_nx*_ny), y(_nx)
-    {
-        _weight = get_weight(); //TODO weight Vektor direkt bei Initialisierung setzen?
-        _weight_2d = get_weight_2d(); //TODO weight Vektor direkt bei Initialisierung setzen?
-        double a(sqrt(0.6));
-        _ax = {-a, -a, -a, -a, -a, -a, -a, -a, -a, 0, 0, 0, 0, 0, 0, 0, 0, 0, a, a, a, a, a, a, a, a, a}; //x-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-        _ay = {-a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a, -a, -a, -a, 0, 0, 0, a, a, a}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-        _az = {-a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a, -a, 0, a}; //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-    }
+        _h(sh), _nx(sx), _ny(sy), _nz(sz), z(_nx*_ny), y(_nx),
+        _weight(get_weight), _weight_2d(get_weight_2d),
+        _quadpoints_2d_1(get_quadrature_xpoints_2d_1), _quadpoints_2d_2(get_quadrature_ypoints_2d_1)
+    { }
 
-    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
-            mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
+    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, std::vector<char>& disc_points,
+        mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
 
     double calcL2Error(mathfunction realsol, FullVector<double> calcsol);
 
@@ -66,7 +61,7 @@ private:
     int _nx, _ny, _nz;
     int z, y;
     std::vector<double> _weight, _weight_2d;
-    std::vector<double> _ax, _ay, _az;
+    std::vector<double> _quadpoints_2d_1, _quadpoints_2d_2;
     std::vector<int> _e, _A;
     std::vector<int> _column;
     std::vector<double> _value;
