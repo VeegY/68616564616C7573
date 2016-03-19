@@ -20,6 +20,7 @@ public:
     assembleFem(double sh, int sx, int sy, int sz):
         _h(sh), _nx(sx), _ny(sy), _nz(sz), z(_nx*_ny), y(_nx),
         _weight(get_weight()), _weight_2d(get_weight_2d()),
+        _quadpoints_3d_x(get_quadrature_xpoints()), _quadpoints_3d_y(get_quadrature_ypoints()), _quadpoints_3d_z(get_quadrature_zpoints()),
         _quadpoints_2d_1(get_quadrature_xpoints_2d_1()), _quadpoints_2d_2(get_quadrature_ypoints_2d_1())
     { }
 
@@ -61,6 +62,7 @@ private:
     int _nx, _ny, _nz;
     int z, y;
     std::vector<double> _weight, _weight_2d;
+    std::vector<double> _quadpoints_3d_x, _quadpoints_3d_y, _quadpoints_3d_z;
     std::vector<double> _quadpoints_2d_1, _quadpoints_2d_2;
     std::vector<int> _e, _A;
     std::vector<int> _column;
