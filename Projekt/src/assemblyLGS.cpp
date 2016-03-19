@@ -7,7 +7,8 @@
 namespace Icarus
 {
 
-void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, mathfunction f, mathfunction g, mathfunction h)
+void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
+    std::vector<char>& disc_points, mathfunction f, mathfunction g, mathfunction h)
 {
     //TODO: vorlaeufig, wieder loeschen
     bool Dirichlet(true);

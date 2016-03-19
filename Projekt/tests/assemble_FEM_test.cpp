@@ -11,9 +11,10 @@
 
 int main()
 {
-    int nn(20);
-    double h(1.0/static_cast<double>(nn));
-    int nx(nn+1), ny(nn+1), nz(nn+1);
+    const int nn(20);
+    const double h(1.0/static_cast<double>(nn));
+    const int nx(nn+1), ny(nn+1), nz(nn+1);
+    std::vector<char> disc = Icarus::discretizer("leer.obj", h, nx, ny, nz);
 
     // ***** ***** ***** ***** TEST 0 DIRICHLET ***** ***** ***** ***** //
     // u = 0
@@ -29,7 +30,7 @@ int main()
     sol_0d.clear(); sol_0d.set_local(0, 0.1);
 
     Icarus::assembleFem assembler_0d(h, nx, ny, nz);
-    assembler_0d.assemble(matrix_0d, rhs_0d, f_0, d_0);
+    assembler_0d.assemble(matrix_0d, rhs_0d, disc, f_0, d_0);
 
     Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_0d(matrix_0d, rhs_0d);
     solver_0d.solve(sol_0d);
@@ -53,7 +54,7 @@ int main()
     sol_0n.clear(); sol_0n.set_local(0, 0.1);
 
     Icarus::assembleFem assembler_0n(h, nx, ny, nz);
-    assembler_0n.assemble(matrix_0n, rhs_0n, f_0, d_0, n_0);
+    assembler_0n.assemble(matrix_0n, rhs_0n, disc, f_0, d_0, n_0);
 
     Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_0n(matrix_0n, rhs_0n);
     solver_0n.solve(sol_0n);
@@ -78,7 +79,7 @@ int main()
     sol_1d.clear(); sol_1d.set_local(0, 0.1);
 
     Icarus::assembleFem assembler_1d(h, nx, ny, nz);
-    assembler_1d.assemble(matrix_1d, rhs_1d, f_1, d_1);
+    assembler_1d.assemble(matrix_1d, rhs_1d, disc, f_1, d_1);
 
     Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_1d(matrix_1d, rhs_1d);
     solver_1d.solve(sol_1d);
@@ -102,7 +103,7 @@ int main()
     sol_1n.clear(); sol_1n.set_local(0, 0.1);
 
     Icarus::assembleFem assembler_1n(h, nx, ny, nz);
-    assembler_1n.assemble(matrix_1n, rhs_1n, f_1, d_1, n_1);
+    assembler_1n.assemble(matrix_1n, rhs_1n, disc, f_1, d_1, n_1);
 
     Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_1n(matrix_1n, rhs_1n);
     solver_1n.solve(sol_1n);
@@ -127,7 +128,7 @@ int main()
     sol_2d.clear(); sol_2d.set_local(0, 0.1);
 
     Icarus::assembleFem assembler_2d(h, nx, ny, nz);
-    assembler_2d.assemble(matrix_2d, rhs_2d, f_2, d_2);
+    assembler_2d.assemble(matrix_2d, rhs_2d, disc, f_2, d_2);
 
     Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_2d(matrix_2d, rhs_2d);
     solver_2d.solve(sol_2d);
@@ -151,7 +152,7 @@ int main()
     sol_2n.clear(); sol_2n.set_local(0, 0.1);
 
     Icarus::assembleFem assembler_2n(h, nx, ny, nz);
-    assembler_2n.assemble(matrix_2n, rhs_2n, f_2, d_2, n_2);
+    assembler_2n.assemble(matrix_2n, rhs_2n, disc, f_2, d_2, n_2);
 
     Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_2n(matrix_2n, rhs_2n);
     solver_2n.solve(sol_2n);
