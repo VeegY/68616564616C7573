@@ -153,7 +153,7 @@ float invoke_gpu_time_dotproduct(type *vecx, type *vecy, type *placehold, int di
     return elapsed_time / runs;
 }
 template float invoke_gpu_time_dotproduct<float>(float *vecx, float *vecy, float *placehold, int dim, int runs);
-template float invoke_gpu_time_dotpruduct<double>(double *vecx, double *vecy, double *placehold, int dim, int runs);
+template float invoke_gpu_time_dotproduct<double>(double *vecx, double *vecy, double *placehold, int dim, int runs);
 
 
 template<typename type>
