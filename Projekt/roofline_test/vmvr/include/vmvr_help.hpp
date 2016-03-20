@@ -97,7 +97,7 @@ void l2norm_check_result(type *placehold, type *vector, size_t dim_local)
 }
 
 template <typename type>
-void reduce_check_result(type *result, type *placehold_two, size_t dim_local)
+void reduce_check_result(type *result, type *placehold, size_t dim_local)
 {
     //==========================================//
     // value is result of CPU function
@@ -110,7 +110,7 @@ void reduce_check_result(type *result, type *placehold_two, size_t dim_local)
     //==========================================//
     for (int i = 0; i < dim_local; i++)
     {
-        value += veconeh[i] * vectwoh[i];
+        value += placehold[i];
     }
     //==========================================//
     //diff needs to be small, pretty big atm
