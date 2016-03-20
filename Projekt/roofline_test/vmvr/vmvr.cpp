@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     //COMPUTE TIME OF REDUCE KERNEL
     double *result = NULL;
     allocation(&result, 1);
-    elapsed_kernel = invoke_gpu_time_reduce(placehold_two,result,numblock);
+    elapsed_kernel = invoke_gpu_time_reduce(placehold_two,result,numblock,iteration);
     reduce_check_result(result, placehold_two, numblock);
     
     //performance_l2norm(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
