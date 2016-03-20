@@ -14,7 +14,7 @@ using namespace std;
 //                                   APPLICATION SETTINGS
 //------------------------------------------------------------------------------------------------/
 //16384 - 65536 - 262144 - 1048576 - 4194304
-#define dimension 4194304
+#define dimension 16384
 #define iteration 10000
 bool get_overall = false;
 
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
         cleanup(placehold);
 
     double schalter = 0.0;
-    performance_dotproduct(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
+    //performance_dotproduct(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
   
     //------------------------------------------------------------------------------------------------/
     //                                   l2Norm Block Result
@@ -131,9 +131,6 @@ int main(int argc, char* argv[])
     //                                         Evaluieren
     //================================================================================================/
 
-    double schalter = 0.0;
-    performance_l2norm(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
-    
     delete[] vectorx_host;
     delete[] vectory_host;
 
