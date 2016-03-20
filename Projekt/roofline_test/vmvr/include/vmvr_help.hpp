@@ -13,7 +13,7 @@
 template <typename type>
 void dotproduct_check_result(type *placehold, type *veconeh, type *vectwoh, size_t dim_local)
 {
-    int numblock = ceil((double)dim / 1024);
+    int numblock = ceil((double)dim_local / 1024);
     //==========================================//
     // value is result of CPU function
     // diff is difference between GPU & CPU result
@@ -56,7 +56,7 @@ void dotproduct_check_result(type *placehold, type *veconeh, type *vectwoh, size
 template <typename type>
 void l2norm_check_result(type *placehold, type *vector, size_t dim_local)
 {
-    int numblock = ceil((double)dim / 1024);
+    int numblock = ceil((double)dim_local / 1024);
     //==========================================//
     // value is result of CPU function
     // diff is difference between GPU & CPU result

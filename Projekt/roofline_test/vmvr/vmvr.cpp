@@ -39,7 +39,7 @@ void cleanup(type *data);
 
 int main(int argc, char* argv[])
 {
-    int numblock = ceil((double)dim / 1024);
+    int numblock = ceil((double)dimension / 1024);
    
     double *vectorx_host = new double[dimension];
     double *vectory_host = new double[dimension];

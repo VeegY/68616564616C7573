@@ -35,9 +35,7 @@ void performance_dotproduct(int dim, float overall, float kernel, type schalter,
     printf("-----------------------------------------------\n" RESET);
 
 }
-template void performance<int>(int dim, float overall, float kernel, int schalter, int runs);
-template void performance<float>(int dim, float overall, float kernel, float schalter, int runs);
-template void performance<double>(int dim, float overall, float kernel, double schalter, int runs);
+
 
 
 template<typename type>
@@ -63,9 +61,7 @@ void performance_l2norm(int dim, float overall, float kernel, type schalter, int
     printf("-----------------------------------------------\n" RESET);
 
 }
-template void performance<int>(int dim, float overall, float kernel, int schalter, int runs);
-template void performance<float>(int dim, float overall, float kernel, float schalter, int runs);
-template void performance<double>(int dim, float overall, float kernel, double schalter, int runs);
+
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
