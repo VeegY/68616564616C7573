@@ -47,7 +47,7 @@ __global__ void kernel_dot(type *vectorx, type *vectory, type *placehold, int di
 //=================================================================//
 //=================================================================//
 template<typename type>
-__global__ void kernel(type *vector, type *placehold, int dim_local)
+__global__ void kernel_l2norm(type *vector, type *placehold, int dim_local)
 {
     extern __shared__ double array[];
     type* shar = (type*)array;
@@ -198,8 +198,8 @@ float invoke_gpu_time_reduce(type *placehold, type *result, int dim, int runs)
 
     return elapsed_time / runs;
 }
-template float invoke_gpu_time_reduce<float>(float *vecx, float *vecy, float *result, int dim, int runs);
-template float invoke_gpu_time_reduce<double>(double *vecx, double *vecy, double *result, int dim, int runs);
+template float invoke_gpu_time_reduce<float>(float *placehold, float *result, int dim, int runs);
+template float invoke_gpu_time_reduce<double>(double *placehold, double *result, int dim, int runs);
 
 
 //=============================================================================
@@ -216,7 +216,7 @@ void invoke_gpu_overall(type *vecx, type *vecy, type *result, int dim)
     type *placehold = NULL;
     cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
 
-    kernel<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vecx, vecy, placehold, dim);
+    kernel_dot<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vecx, vecy, placehold, dim);
     resultreduce << <1, 1 >> >(result, placehold, num_blocks);
     
     cudaDeviceSynchronize();
