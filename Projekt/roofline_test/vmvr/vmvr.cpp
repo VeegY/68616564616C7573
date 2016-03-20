@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
     //------------------------------------------------------------------------------------------------/
 
     double *vector_dev = NULL;
-    double *placehold_two_two = NULL;
+    double *placehold_two = NULL;
         allocation(&vector_dev, dimension);
         allocation(&placehold_two, numblock);
     copy_data(vectorx_host, vector_dev, dimension);
