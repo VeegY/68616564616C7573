@@ -115,6 +115,7 @@ void reduce_check_result(type *result, type *placehold, size_t dim_local)
     //==========================================//
     //diff needs to be small, pretty big atm
     //==========================================//
+    value = sqrt(value);
     diff = value - result[0];
     printf(GREEN "DIFF: %f\n" RESET, diff);
     if (diff > 1.0e-6 || diff < -1.0e-6)

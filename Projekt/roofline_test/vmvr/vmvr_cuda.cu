@@ -88,7 +88,7 @@ __global__ void resultreduce(type *result, type *placehold, int num_blocks)
     {
         value += placehold[i];
     }
-    result[0] = value;
+    result[0] = sqrt(value);
 }
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
