@@ -106,25 +106,25 @@ int main(int argc, char* argv[])
     //------------------------------------------------------------------------------------------------/
 
     double *vector_dev = NULL;
-    double *placehold = NULL;
+    double *placehold_two_two = NULL;
         allocation(&vector_dev, dimension);
-        allocation(&placehold, numblock);
+        allocation(&placehold_two, numblock);
     copy_data(vectorx_host, vector_dev, dimension);
-        elapsed_kernel = invoke_gpu_time_l2norm(vector_dev, placehold, dimension, iteration);
-    l2norm_check_result_(placehold, vector_host, dimension);
+        elapsed_kernel = invoke_gpu_time_l2norm(vector_dev, placehold_two, dimension, iteration);
+    l2norm_check_result(placehold_two, vectorx_host, dimension);
 
     //performance_l2norm(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
     
     //COMPUTE TIME OF REDUCE KERNEL
     double *result = NULL;
     allocation(&result, 1);
-    elapsed_kernel = invoke_gpu_time_reduce(placehold,reduce,numblocks);
-    reduce_check_result(result, placehold, numblock);
+    elapsed_kernel = invoke_gpu_time_reduce(placehold_two,result,numblock);
+    reduce_check_result(result, placehold_two, numblock);
     
     //performance_l2norm(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
     
     cleanup(vector_dev);
-    cleanup(placehold);
+    cleanup(placehold_two);
     cleanup(result);
 
     //================================================================================================/

@@ -97,7 +97,7 @@ void l2norm_check_result(type *placehold, type *vector, size_t dim_local)
 }
 
 template <typename type>
-void reduce_check_result(type *result, type *veconeh, type *vectwoh, size_t dim_local)
+void reduce_check_result(type *result, type *placehold_two, size_t dim_local)
 {
     //==========================================//
     // value is result of CPU function
