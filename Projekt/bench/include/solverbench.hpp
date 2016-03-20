@@ -85,7 +85,7 @@ namespace Icarus
 			_exec_times(node_max - node_min + 1, std::vector<long>(m_max - m_min + 1))
 		{
 			int nnodes;
-			MPI_Comm_size(MPI_COMM_WORLD, &nnodes);
+			MPI_SCALL(MPI_Comm_size(MPI_COMM_WORLD, &nnodes));
 			if(nnodes < (int)node_max)
 				LOG_ERROR("Not enough nodes available for ths benchmark (", nnodes, " provided, ", node_max, " required).");
 			// listen füllen
@@ -99,7 +99,7 @@ namespace Icarus
 			_exec_times(nlist.size(), std::vector<long>(mlist.size()))
 		{
 			int nnodes;
-			MPI_Comm_size(MPI_COMM_WORLD, &nnodes);
+			MPI_SCALL(MPI_Comm_size(MPI_COMM_WORLD, &nnodes));
 			for(unsigned n : nlist) if((int)n > nnodes)
 				LOG_ERROR("Not enough nodes available for ths benchmark (", nnodes, " provided, >=", n, " required).");
 		}
@@ -110,25 +110,23 @@ namespace Icarus
 			for (unsigned nctr = 0; nctr < _nlist.size(); nctr++)
 			{
 				const unsigned nodes = _nlist[nctr];
-				MPI_Barrier(MPI_COMM_WORLD);
+				MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
 				LOG_INFO("Now starting benchmark with ", nodes, " node(s).");
 
 				// konstruiere prozessgruppe mit #procs = nodes
 				MPI_Comm pcomm;
 				MPI_Group worldgroup, pgroup;
-				MPI_Comm_group(MPI_COMM_WORLD, &worldgroup);
+				MPI_SCALL(MPI_Comm_group(MPI_COMM_WORLD, &worldgroup));
 				int * ranks = new int[nodes];
 				for (int i = 0; i < (int)nodes; i++) ranks[i] = i;
-				MPI_Group_incl(worldgroup, nodes, ranks, &pgroup);
+				MPI_SCALL(MPI_Group_incl(worldgroup, nodes, ranks, &pgroup));
 				delete[] ranks;
-				MPI_Comm_create_group(MPI_COMM_WORLD, pgroup, 0, &pcomm);
-				int myrank = -1;
-				MPI_Comm_rank(pcomm, &myrank);
+				MPI_SCALL(MPI_Comm_create_group(MPI_COMM_WORLD, pgroup, 0, &pcomm));
 				LOG_DEBUG("Process group successfully created.");
 
 				// sind wir an diesem benchmark beteiligt?
 				int myglobalrank;
-				MPI_Comm_rank(MPI_COMM_WORLD, &myglobalrank);
+				MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myglobalrank));
 				if (myglobalrank < (int)nodes)
 				{
 				
@@ -136,19 +134,20 @@ namespace Icarus
 				for (unsigned mctr = 0; mctr < _mlist.size(); mctr++)
 				{
 					LOG_INFO("Now starting benchmark with m = ", _mlist[mctr]);
-					
+			                pcomm = MPI_COMM_WORLD;		
 					const unsigned m = _mlist[mctr]; 
 					// konstruiere matrix, startvektor und rechte seite
 					Matrix mat = construct_model_matrix<Matrix>(m, pcomm);
+					
 					typename Matrix::VectorType rhs(m*m, pcomm);
 					rhs.fill_const(1.0);
 					typename Matrix::VectorType res(m*m, pcomm);
 					res.clear();
-
+					
 					// Löser
 					BiCgStabSolver<Matrix> solver(mat, rhs);
 
-					MPI_Barrier(pcomm);
+					MPI_SCALL(MPI_Barrier(pcomm));
 					// starte zeitmessung
 					std::chrono::high_resolution_clock::time_point start;
 					start = std::chrono::high_resolution_clock::now();
@@ -160,12 +159,14 @@ namespace Icarus
 					_exec_times[nctr][mctr] = 
 						std::chrono::duration_cast<std::chrono::milliseconds>(
 						std::chrono::high_resolution_clock::now() - start).count();
-					}
+				
 				}
-
-				// communicator und gruppe freigeben
-				MPI_Comm_free(&pcomm);
-				MPI_Group_free(&pgroup);
+				}
+				    MPI_Barrier(MPI_COMM_WORLD);
+				    // communicator und gruppe freigeben
+			 	    //if(pcomm != MPI_COMM_NULL) MPI_SCALL(MPI_Comm_free(&pcomm));
+			   	    //MPI_SCALL(MPI_Group_free(&pgroup));
+                                    //MPI_SCALL(MPI_Group_free(&worldgroup));
 			}
 		}
 
@@ -173,7 +174,7 @@ namespace Icarus
 		void print_results(std::ostream& out, int rank = 0) const
 		{
                         int myrank;
-			MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
+			MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
                         if(myrank != rank) return;
 
 			out << "STRONG SCALING RESULTS:" << std::endl;

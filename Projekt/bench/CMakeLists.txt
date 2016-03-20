@@ -3,7 +3,8 @@ project(stuprotm1516)
 
 
 CUDA_ADD_EXECUTABLE(solverbench "solverbench.cpp")
-TARGET_LINK_LIBRARIES(solverbench SRCLIB ${MPI_LIBRARIES} cuda ${CUDA_LIBRARIES})
+#TARGET_LINK_LIBRARIES(solverbench SRCLIB ${MPI_LIBRARIES} cuda ${CUDA_LIBRARIES})
+TARGET_LINK_LIBRARIES(solverbench SRCLIB ${MPI_LIBRARIES})
 
 target_include_directories(solverbench 
      PUBLIC "include" 
