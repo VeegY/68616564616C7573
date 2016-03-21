@@ -81,14 +81,46 @@ __global__ void kernel_l2norm(type *vector, type *placehold, int dim_local)
 //=================================================================//
 //=================================================================//
 template<typename type>
-__global__ void resultreduce(type *result, type *placehold, int num_blocks)
+__global__ void resultreduce(type *result, type *placehold, int num_blocks, int loops)
 {
-    type value = (double)0;
+    extern __shared__ double array[];
+    type* shar = (type*)array;
+    int idx = threadIdx.x;
+    type value = (type)0;
+    
+    for (int i = 0; i < loops; i++)
+    {
+        if (idx+i*1024 < dim_local)
+        {
+            value += placehold[idx+i*1024];
+        }
+    }
+    shar[idx] = value;
+    __syncthreads();
+    
+    for (int offset = blockDim.x / 2; offset >0; offset >>= 1)
+    {
+        if (idx < offset)
+        {
+            shar[idx] += shar[idx + offset];
+        }
+        __syncthreads();
+    }
+
+    if (idx == 0)
+    {
+        result[0] = sqrt(shar[0]);
+    }
+}
+    
+    
+    
+    /*type value = (double)0;
     for (int i = 0; i < num_blocks; i++)
     {
         value += placehold[i];
     }
-    result[0] = sqrt(value);
+    result[0] = sqrt(value);*/
 }
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,12 +217,13 @@ float invoke_gpu_time_reduce(type *placehold, type *result, int dim, int runs)
     float elapsed_time = 0.0;
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
+    int loops = ceil((double)num_blocks / 1024);
     
     //=================================//
     timer.start();
     for (int i = 0; i < runs; i++)
     {
-        resultreduce << <1, 1 >> >(result, placehold, num_blocks);
+        resultreduce << <1, 1024,sizeof(double)*1024 >> >(result, placehold, num_blocks);
     }
     cudaDeviceSynchronize();
     elapsed_time = timer.stop()*1.0e3;

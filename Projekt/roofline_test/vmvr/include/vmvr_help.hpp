@@ -110,7 +110,7 @@ void reduce_check_result(type *result, type *placehold, size_t dim_local)
     //==========================================//
     for (int i = 0; i < dim_local; i++)
     {
-        printf("placehold %i :%f\n", i, placehold[i]);
+        //printf("placehold %i :%f\n", i, placehold[i]);
         value += placehold[i];
     }
     //==========================================//
