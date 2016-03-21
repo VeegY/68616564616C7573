@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
         cleanup(placehold);
 
     double schalter = 0.0;
-    //performance_dotproduct(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
+    performance_dotproduct(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
   
     //------------------------------------------------------------------------------------------------/
     //                                   l2Norm Block Result
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
         elapsed_kernel = invoke_gpu_time_l2norm(vector_dev, placehold_two, dimension, iteration);
     l2norm_check_result(placehold_two, vectorx_host, dimension);
 
-    //performance_l2norm(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
+    performance_l2norm(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
     
     //COMPUTE TIME OF REDUCE KERNEL
     double *result = NULL;

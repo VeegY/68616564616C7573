@@ -15,13 +15,14 @@
 template<typename type>
 void performance_dotproduct(int dim, float overall, float kernel, type schalter, int runs)
 {
-    unsigned long int bytes = 2 * sizeof(type) * dim + 8;
-    unsigned long int flop = 2 * dim-1;
+    int N = ceil((double)dim / 1024);
+    unsigned long int bytes = (2*dim + N)*sizeof(type); ;
+    unsigned long int flop = 2 * dim - N;
     double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf(        "            SCALARPRODUCT KERNEL\n");
+    printf(        "            SCALARPRODUCT EXTENSION\n");
     printf(GREY    "===============================================\n");
     printf("-----------------------------------------------\n");
     printf(BLUE    "        dim %i ##  iter. %i\n", dim, runs);
@@ -41,13 +42,14 @@ void performance_dotproduct(int dim, float overall, float kernel, type schalter,
 template<typename type>
 void performance_l2norm(int dim, float overall, float kernel, type schalter, int runs)
 {
-    unsigned long int bytes = 2 * sizeof(type) * dim + 8;
-    unsigned long int flop = 2 * dim - 1;
+    int N = ceil((double)dim / 1024);
+    unsigned long int bytes = (dim + N)*sizeof(type); ;
+    unsigned long int flop = 2 * dim - N;
     double ai = ((double)flop / (double)bytes);
 
     printf(GREY    "===============================================\n");
     printf(MAGENTA "                PERFORMANCE\n");
-    printf("            SCALARPRODUCT KERNEL\n");
+    printf(        "              L2NORM EXTENSION \n");
     printf(GREY    "===============================================\n");
     printf("-----------------------------------------------\n");
     printf(BLUE    "        dim %i ##  iter. %i\n", dim, runs);
