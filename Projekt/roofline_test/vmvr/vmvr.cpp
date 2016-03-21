@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
     elapsed_kernel = invoke_gpu_time_reduce(placehold_two,result,numblock,iteration);
     reduce_check_result(result, placehold_two, numblock);
     
-    //performance_l2norm(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
+    performance_reduce(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
     
     cleanup(vector_dev);
     cleanup(placehold_two);

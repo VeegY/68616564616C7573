@@ -64,6 +64,30 @@ void performance_l2norm(int dim, float overall, float kernel, type schalter, int
 
 }
 
+template<typename type>
+void performance_reduce(int dim, float overall, float kernel, type schalter, int runs)
+{
+    int N = ceil((double)dim / 1024);
+    unsigned long int bytes = (N+1)*sizeof(type);
+    unsigned long int flop = N;
+    double ai = ((double)flop / (double)bytes);
+
+    printf(GREY    "===============================================\n");
+    printf(MAGENTA "                PERFORMANCE\n");
+    printf(        "              REDUCE EXTENSION \n");
+    printf(GREY    "===============================================\n");
+    printf("-----------------------------------------------\n");
+    printf(BLUE    "        dim %i ##  iter. %i\n", dim, runs);
+    printf(GREY    "-----------------------------------------------\n");
+    printf(CYAN    "Kernel Runtime:\t\t\t%f(ms)\n", kernel);
+    printf("Overall Runtime:\t\t%f(ms)\n", overall);
+    printf("Bandwith(th. Peak):\t\t%.2f(14.9)(GB/s)\n", bytes / (kernel*1.0e6));
+    printf("Flops(th. Peak):\t\t%.6f(326)(GFLOPS/s)\n", flop / (kernel*1.0e6));
+    printf("StreamBW * AI:\t\t\t%f\n", 13.02 * ai);
+    printf(GREY    "-----------------------------------------------\n");
+    printf("-----------------------------------------------\n" RESET);
+
+}
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////

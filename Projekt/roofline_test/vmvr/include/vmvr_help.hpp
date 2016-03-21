@@ -128,5 +128,5 @@ void reduce_check_result(type *result, type *placehold, size_t dim_local)
     {
         printf(GREEN "Kernel outcome true\n" RESET);
     }
-    else printf(WARNING "Kernel outcome false\n");
+    else printf("Kernel outcome false\n");
 }
