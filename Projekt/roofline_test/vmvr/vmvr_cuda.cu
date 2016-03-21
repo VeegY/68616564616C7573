@@ -90,7 +90,7 @@ __global__ void resultreduce(type *result, type *placehold, int num_blocks, int 
     
     for (int i = 0; i < loops; i++)
     {
-        if (idx+i*1024 < numblocks)
+        if (idx+i*1024 < num_blocks)
         {
             value += placehold[idx+i*1024];
         }
