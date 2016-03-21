@@ -250,7 +250,7 @@ void invoke_gpu_overall(type *vecx, type *vecy, type *result, int dim)
     cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
 
     kernel_dot<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vecx, vecy, placehold, dim);
-    resultreduce << <1, 1 >> >(result, placehold, num_blocks);
+    //resultreduce << <1, 1 >> >(result, placehold, num_blocks);
     
     cudaDeviceSynchronize();
 }
