@@ -121,7 +121,7 @@ __global__ void resultreduce(type *result, type *placehold, int num_blocks, int 
         value += placehold[i];
     }
     result[0] = sqrt(value);*/
-}
+
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 ///                             ALLOCATION                                  ///
@@ -223,7 +223,7 @@ float invoke_gpu_time_reduce(type *placehold, type *result, int dim, int runs)
     timer.start();
     for (int i = 0; i < runs; i++)
     {
-        resultreduce << <1, 1024,sizeof(double)*1024 >> >(result, placehold, num_blocks);
+        resultreduce << <1, 1024,sizeof(double)*1024 >> >(result, placehold, num_blocks, loops);
     }
     cudaDeviceSynchronize();
     elapsed_time = timer.stop()*1.0e3;
