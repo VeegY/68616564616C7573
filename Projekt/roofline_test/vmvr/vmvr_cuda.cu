@@ -12,33 +12,45 @@
 ///////////////////////////////////////////////////////////////////////////////
 //=============================================================================
 //=================================================================//
+template <typename type>
+__device__ void warpReduce(volatile type *sdata, int tid) {
+    sdata[tid] += sdata[tid + 32];
+    sdata[tid] += sdata[tid + 16];
+    sdata[tid] += sdata[tid + 8];
+    sdata[tid] += sdata[tid + 4];
+    sdata[tid] += sdata[tid + 2];
+    sdata[tid] += sdata[tid + 1];
+}
+
 template<typename type>
 __global__ void kernel_dot(type *vectorx, type *vectory, type *placehold, int dim_local)
 {
     extern __shared__ double array[];
     type* shar = (type*)array;
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
-    int sidx = threadIdx.x;
+    int th_idx = threadIdx.x;
     type value = 0;
     if (idx < dim_local)
     {
         value = vectorx[idx];
         value *= vectory[idx];
     }
-    shar[sidx] = value;
+    shar[th_idx] = value;
     __syncthreads();
 
     //reduce kernel
-    for (int offset = blockDim.x / 2; offset >0; offset >>= 1)
+    for (int offset = blockDim.x / 2; offset >32; offset >>= 1)
     {
-        if (sidx < offset)
+        if (th_idx < offset)
         {
-            shar[sidx] += shar[sidx + offset];
+            shar[th_idx] += shar[th_idx + offset];
         }
         __syncthreads();
     }
 
-    if (sidx == 0)
+    if (th_idx < 32) warpReduce(shar, th_idx);
+
+    if (th_idx == 0)
     {
         placehold[blockIdx.x] = shar[0];
     }
@@ -52,27 +64,29 @@ __global__ void kernel_l2norm(type *vector, type *placehold, int dim_local)
     extern __shared__ double array[];
     type* shar = (type*)array;
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
-    int sidx = threadIdx.x;
+    int th_idx = threadIdx.x;
     type value = (type)0;
     if (idx < dim_local)
     {
         value = vector[idx];
         value *= value;
     }
-    shar[sidx] = value;
+    shar[th_idx] = value;
     __syncthreads();
 
     //reduce kernel
-    for (int offset = blockDim.x / 2; offset >0; offset >>= 1)
+    for (int offset = blockDim.x / 2; offset >32; offset >>= 1)
     {
-        if (sidx < offset)
+        if (th_idx < offset)
         {
-            shar[sidx] += shar[sidx + offset];
+            shar[th_idx] += shar[th_idx + offset];
         }
         __syncthreads();
     }
 
-    if (sidx == 0)
+    if (th_idx < 32) warpReduce(shar, th_idx);
+
+    if (th_idx == 0)
     {
         placehold[blockIdx.x] = shar[0];
     }
