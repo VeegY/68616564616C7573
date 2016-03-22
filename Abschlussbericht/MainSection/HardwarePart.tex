@@ -1,8 +1,8 @@
 \section{Hardware}
 Der zweite wichtige Aspekt beim Aufbau eines unkonventionellen 
 Supercomputers ist der physikalische Aufbau des Computers.
-Hierbei muss man darauf achten ein Gleichgewicht zwischen den Faktoren: 
-Energieverbrauch, Rechengeschwindigkeit und Kühlung zu finden.
+Hierbei muss man darauf achten ein Gleichgewicht zwischen den Faktoren 
+Energieverbrauch, Rechengeschwindigkeit, und Kühlung zu finden.
 Zusätzlich soll unabhängig von der Größe des Clusters eine
 einfache Lösung für das Monitoring bereitgestellt werden.
 
@@ -12,24 +12,24 @@ HIER NOCH INHALT EINFÜGEN! (wenn nicht redundant mit der Einleitung)
 
 \subsection{Aufbau des Clusters}
 Für ein Jetson-TK1-Cluster mit insulärer Stromversorgung
-ist das Design des Racks der entschiedene Punkt um 
+ist das Design des Racks der entscheidene Punkt um 
 auch unter dauerhafter Höchstbelastung eine
-stabile Funktion der Rechenknoten zu gewährleisten.
+stabile Funktion der Rechenknoten, zu gewährleisten.
 Durch die Verwendung eines Lithium-Ion-Akkus zur Energiespeicherung
 und das Risiko eines Kurzschlusses durch Kondensionswasser muss
-ein geschickt aufgebautes Rechencluster gewährleißten, dass die Temperatur
-der gesamten Anlage in dem stark restringierten Bereich von 
+ein geschickt aufgebautes Rechencluster gewährleisten, dass die Temperatur
+der gesamten Anlage in dem Bereich von 
 $18^\circ\text{C}~\text{bis}~40^\circ \text{C}$ gehalten wird. 
 %Besonders beim Aufbau eines insulären Jetson-TK1-Clusters ist die Kühlung ein
 %heikles Thema, da sowohl die Temperatur des Rechenclusters als auch 
 %die Temperatur des Energiespeichers in seinem stark restringierten Bereich liegen müssen.
 \subsubsection{Anordnung der Rechenknoten}
 Hinsichtlich der oben beschriebenen Problematik ist die Anordnung der Knoten 
-das zentrale Instrument mit dem Man die Bildung potenzieller Wärmenester 
+das zentrale Instrument mit dem man die Bildung potenzieller Wärmenester 
 gegen den Platzverbrauch des Clusters abwägen kann.~\\
 Wegen zu hoher Energiekosten muss auf den Einsatz einer
-Wasserkühlung verzichtet werden um eine möglichst hohe Energieeffizienz 
-er erreichen.
+Wasserkühlung verzichtet werden, um eine möglichst 
+hohe Energieeffizienz zu erreichen.
 Die einfachsten Ansätze zum Aufbau des Supercomputers, 
 welche sich mittels Luftkühlung umsetzen lassen, sind:
 \begin{itemize}
@@ -43,67 +43,68 @@ Wärmebildern gezeigt werden.\\
 \centering
 	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/convective-horizontal-2.png}
 	\captionof{figure}{Horizontaler Aufbau}
-	\label{fig:sample_figure}
+	\label{fig:HWPabb1}
+
 \end{minipage}
 \hfill
 \begin{minipage}{0.50\textwidth}
 \centering
 	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/convective-vertical-2.png}
 	\captionof{figure}{Vertikaler Aufbau}
-	\label{fig:sample_figure}
+	\label{fig:HWPabb2}
 \end{minipage}
 ~\\
-Vergleicht man diese Beiden Ansätze, so sieht man, dass im horizontalen Szenario zwischen den 
-Platten, auf denen die Rechenknoten angebracht sind, Wärme-Nester entstehen. Zudem liefert die
-Analyse des Stromlinien Diagramms, dass besonders in der Mitte der Platten die Wärme nur schlecht  
+Vergleicht man diese beiden Ansätze, so sieht man, dass im horizontalen Szenario (\ref{fig:HWPabb1}) zwischen den 
+Platten, auf denen die Rechenknoten angebracht sind, Wärmenester entstehen. Zudem liefert die
+Analyse des Stromlinien-Diagramms, dass besonders in der Mitte der Platten die Wärme nur schlecht  
 abtransportiert werden kann.\\
-Im Gegensatz dazu ist der Wärmeabtransport beim vertikalem Ansatz durch aufsteigende warme Luft
+Im Gegensatz dazu ist der Wärmeabtransport beim vertikalem Ansatz (\ref{fig:HWPabb2}) durch aufsteigende warme Luft
 besser möglich. Hierbei sollte allerdings bemerkt werden, dass durch die schiefe Lage des Ventilators
-die Gravitationskraft Unregelmäßigkeiten bei der Rotation verursachen könnte, was schlussendlich zu einer verkürzten Lebensdauer des Ventilators führen könnte.\\
-Um die Vorteile der Beiden Ansätze zu kombinieren und gleichzeitig für Wartbarkeit des 
-Rechenclusters zu erhöhen wählt man einen Ansatz, bei dem die Bords in einer Doppelhelix-Struktur 
+die Gravitationskraft Unregelmäßigkeiten bei der Rotation verursachen würde, was schlussendlich zu einer verkürzten Lebensdauer des Ventilators führen könnte.\\
+Um die Vorteile der beiden Ansätze zu kombinieren und gleichzeitig für Wartbarkeit des 
+Rechenclusters zu sorgen, wählt man einen Ansatz, bei dem die Boards in einer Doppelhelix-Struktur 
 angeordnet werden.\\
 ~\\
 \begin{minipage}{0.50\textwidth}
 \centering
 	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/render3.jpg}
 	\captionof{figure}{Render des Serveraufbaus}
-	\label{fig:sample_figure}
+	\label{fig:HWPabb3}
 \end{minipage}
 \hfill
 \begin{minipage}{0.50\textwidth}
 \centering
 	\includegraphics[width=0.99\textwidth]{./Bilder/Icarus/20160307_161232.jpg}
 	\captionof{figure}{Serveraufbau (7. März 2016)}
-	\label{fig:sample_figure}
+	\label{fig:HWPabb4}
 \end{minipage}
 ~\\
-Wie auf diesen Abbildungen zu erkennen ist wird durch die Verwendung der Doppelhelix-Struktur
+Wie auf diesen Abbildungen (\ref{fig:HWPabb3} , \ref{fig:HWPabb4}) zu erkennen ist, wird durch die Verwendung der Doppelhelix-Struktur
 ein größerer Abstand zwischen den Bords für eine verbesserte Kühlung, bei gleichzeitig geringem
 Platzverbrauch ermöglicht.\\ 
 \subsubsection{Strom und Netzwerkanbindung}
 Über die Anordnung hinaus muss nun die Stromversorgung und die Netzwerkanbindung
 der Bords geregelt werden. Eine besondere Herausforderung hierbei ist die 
-Anordnung der Netzteile der einzelnen Rechenknoten. 
+Anordnung der Netzteile, der einzelnen Rechenknoten. 
 Um zu gewährleisten, dass sich durch das Aufheizen der Netzteile keine gefährlichen
-Wärmenester bilden wird eine spezielle Halterung verwendet.
-Unter nutzung moderner 3D-Druck Technologien, wie sind häufig in der 'Maker-Szene' eingesetzt werden,
-wurde eine Halterung produziert, welche trotz geringem Materialaufwand eine sehr hohe stabiliät 
-und eine gute Luftzufuhr ermöglicht.
+Wärmenester bilden, wird eine spezielle Halterung verwendet.
+Unter Nutzung moderner 3D-Druck Technologien, wie sie häufig in der 'Maker-Szene' eingesetzt werden,
+wurde eine Halterung (\ref{fig:HWPabb5})entworfen und produziert, welche trotz geringem Materialaufwand eine sehr hohe Stabiliät 
+und eine gute Luftzufuhr ermöglicht.~\\
 \begin{minipage}{\textwidth}
-
 \begin{center}
 	\includegraphics[width=0.7\textwidth]{./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png}
-		\captionof{figure}{Halterung für die Netzteile}
-	\label{fig:sample_figure}
+	\captionof{figure}{Halterung für die Netzteile}
+	%\captionof{figure}{Halterung für die Netzteile}
+	\label{fig:HWPabb5}
 
 \end{center}	
 \end{minipage}
 ~\\
 
-Hinsichtlich des Aspektes 'Green-Computing' ist es wichtig ein Druck Filament zu verwenden, 
-welche Bio-Kompatibel ist. Hierfür bietet sich der aus Mais-stärke gewonnene Biokunststoff PLA
-(Polylactide) an. Polyacide hat einen Schmelzpunkt von $150^\circ\text{C}~\text{bis}~160^\circ \text{C}$
+Hinsichtlich des Aspektes 'Green-Computing' ist es wichtig, ein Druckfilament zu verwenden, 
+welches biokompatibel ist. Hierfür bietet sich der aus Maisstärke gewonnene Biokunststoff Polylactide (PLA) an.
+Dieser hat einen Schmelzpunkt von $150^\circ\text{C}~\text{bis}~160^\circ \text{C}$
 und ist daher ohne weiteres für die Halterung von Netzteilen verwendbar.
 
 
