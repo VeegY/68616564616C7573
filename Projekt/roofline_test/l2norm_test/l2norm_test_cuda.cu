@@ -11,31 +11,30 @@
 ///                             KERNEL                                      ///
 ///////////////////////////////////////////////////////////////////////////////
 //=============================================================================
-/*__device__ inline
-double __shfl_down(double var, unsigned int srcLane, int width = 32) 
+__device__ inline
+double _shfl_down(double var, unsigned int srcLane, int width = 32) 
 {
     int2 a = *reinterpret_cast<int2*>(&var);
     a.x = __shfl_down(a.x, srcLane, width);
     a.y = __shfl_down(a.y, srcLane, width);
     return *reinterpret_cast<double*>(&a);
-}*/
+}
 
-template<typename type>
+
 __inline__ __device__
-double warpReduceSum(type val) 
+double warpReduceSum(double val) 
 {
     for (int offset = warpSize / 2; offset > 0; offset /= 2)
-        val += __shfl_down(val, offset);
+        val += _shfl_down(val, offset);
     return val;
 }
 
-template<typename type>
+
 __inline__ __device__
-double blockReduceSum(type val) 
+double blockReduceSum(double val) 
 {
 
-    static __shared__ double array[32]; // Shared mem for 32 partial sums
-    type* shared = (type*)array;
+    static __shared__ double shared[32]; // Shared mem for 32 partial sums
     int lane = threadIdx.x % warpSize;
     int wid = threadIdx.x / warpSize;
 
@@ -53,11 +52,11 @@ double blockReduceSum(type val)
     return val;
 }
 
-template<typename type>
-__global__ void deviceReduceKernel(type *in, type *out, int N) 
+
+__global__ void deviceReduceKernel(double *in, double *out, int N) 
 {
-  type sum = 0;
-  type value = 0;
+  double sum = 0;
+  double value = 0;
   //reduce multiple elements per thread
   for (int i = blockIdx.x * blockDim.x + threadIdx.x; 
        i < N; 
