@@ -34,7 +34,7 @@ __inline__ __device__
 type blockReduceSum(type val) 
 {
 
-    static __shared__ int double array[]; // Shared mem for 32 partial sums
+    static __shared__ double array[]; // Shared mem for 32 partial sums
     type* shared = (type*)array;
     int lane = threadIdx.x % warpSize;
     int wid = threadIdx.x / warpSize;
@@ -202,8 +202,8 @@ void invoke_gpu_overall(type *vector, type *result, int dim)
     type *placehold = NULL;
     cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
 
-    kernel<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vector, placehold, dim);
-    resultreduce << <1, 1 >> >(result, placehold, num_blocks);
+    //kernel<<<num_blocks, num_threads, sizeof(double)*num_threads >>>(vector, placehold, dim);
+    //resultreduce << <1, 1 >> >(result, placehold, num_blocks);
     
     cudaDeviceSynchronize();
 }
