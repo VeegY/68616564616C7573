@@ -1,0 +1,5 @@
+Warning: The selected output language "german" has not been updated
+since release 1.6.0.  As a result some sentences may appear in English.
+
+Warning: source ../src is not a readable file or directory... skipping.
+Warning: source ../tests is not a readable file or directory... skipping.
