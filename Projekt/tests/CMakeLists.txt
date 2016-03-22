@@ -11,7 +11,7 @@ FILE(GLOB UNIT_MPITESTS "*_mpitest.cpp")
 #========================================================================
 #               Custom_Target/Unit_Test
 #========================================================================
-CUDA_ADD_LIBRARY(cuda SHARED "../src/benchmark_ax_cuda.cu")
+CUDA_ADD_LIBRARY(cuda "../src/benchmark_ax_cuda.cu")
 
 # alle Testfunktionen werden ctest "bereitgestellt"
 FOREACH(testpath ${UNIT_TESTS})
