@@ -1,12 +1,51 @@
 \section{Motivation und Problembeschreibung}
+Im Bereich des wissenschaftlichen Hochleistungsrechnen gibt es seit 1993 die
+\glqq TOP500 List\grqq, welche die Supercomputer, geordnet nach ihrer Leistung 
+in Floating Point Operationen pro Sekunde auflistet. Der momentane Spitzenreiter, 
+der Tianhe-2, erreicht dabei bei voller Auslastung einen Energieverbrauch von 155.998,08 MWh 
+jährlich. Dieser extrem hohe Wert bedeutet gleichzeitig große Betriebskosten,
+ welche im Zeitalter der Energiewende kaum zu rechtfertigen sind. Daher wurde 
+als Konkurrenzobjekt im Jahr 2007 die \glqq Green500 List\grqq eröffnet, welche 
+die Supercomputer entsprechend ihrer Rechenleistung pro Watt sortiert. Und genau 
+an dieser setzt das Studienprojekt Technomathematik 2015/2016 der TU Dortmund an, 
+welches begleitend zum I.C.A.R.U.S.-Projekt des Lehrstuhl 3 der Fakultät Mathematik der TU Dortmund läuft. 
+Ziel ist es, die Hardware- und Softwareentwicklung eines energieeffizienten 
+\textit{High-Performance Computing} (HPC) Systems nachzuvollziehen und zu begleiten. 
+Grundlage dafür ist der mobile Grafikprozessor NVIDIA Tegra K1, 
+welcher höchste Energieeffizienz verspricht und, nach dem Vorbild der Energiewende, 
+durch Solarzellen betrieben wird. Die Nutzung dieses mobilen, 
+auch eingebetteten Systems genannt (engl:\glqq embedded systems\grqq), 
+erklärt sich durch die Anwendungsgebiete dieser Geräte. 
+Sie werden in der Unterhaltungsindustrie, Automobilindustrie oder sogar als Herzschrittmacher in der Medizin eingesetzt. 
+Diese Anwendungsbereiche verlangen ein enorm energiesparsames Verhalten, da die mobile Energiezufuhr über Batterien nicht endlos ist.
+Daher sind diese Systeme eine attraktive Möglichkeit beim sogenannten \textit{Green Computing}. 
+Das Hochleistungsrechnen spielt in der Mathematik eine große Rolle,
+ da Differentialgleichungen Naturvorgänge verschiedener Art, wie zum Beispiel Schwingungen,
+ Wellenausbreitungen oder Strömungen beschreiben können. Die Lösung dieser Gleichungen erfordert einen,
+ je nach Genauigkeit des Resultats, erheblichen numerischen Aufwand,
+ welcher nur mit Hilfe von geeigneter Hardware erreichbar ist. Da es das Vorhaben unseres Studienprojekts ist,
+ den Luftstrom und die Wärmeleitung um und in einem geometrischen Körper wie dem des Tegra K1-Boards zu simulieren,
+ spielen Differentialgleichungen eine wichtige Rolle für uns. Außerdem ist es dafür wichtig,
+ die Software nach dem Paradigma der hardware-orientierten Numerik zu konstruieren,
+ um die Leistung des Grafikprozessors effizient auszunutzen. Dazu werden 60 der NVIDIA Boards zu drei Racks angeordnet,
+ um den Code parallelisiert laufen lassen zu können. Man kann also im Umkehrschluss auch davon sprechen,
+ dass die Hardware der Software angepasst wird, also \textit{software-orientierte Hardware}. 
+
+Der Aufbau des Hauptteils des Berichts lässt sich dabei in drei große Themen gliedern.
+ Zunächst die Hardware in seinen Einzelteilen, also die Hardwareauswahl,
+ der Aufbau des Racks und die Energieverbrauchsmessung erklärt.
+ Darauffolgend werden die Softwarekomponenten, welche die Assemblierung mit finiten Elementen und finiten Differenzen,
+ sowie den Löser umfassen, erläutert. Abschließend werden verschiedene Testergebnisse,
+ welche mit der Anordnung des Studienprojekts erzielt wurden, vorgestellt und die Rechenleistung anhand dieser Resultate bewertet. 
+
 
 
 \section{Einleitung}
 
 
-Im Bereich der hardware-orientierten Numerik wurden bereits in den vergangenen Jahren einige Untersuchungen gemacht. So wurde in den Jahren 2010 und 2011 durch Geveler et al. die Lattice-Boltzmann-Methode zur Lösung von Navier-Stokes- und Flachwassergleichungen auf unterschiedlicher Hardware analysiert. Es stellte sich heraus, dass GPUs Multi-Core CPUs mit einem Speedup von bis zu acht überlegen sind, ohne dabei an Genauigkeit der numerischen Lösung einzubü\ss en. 
-In \glqq Efficient Finite Element Geometric Multigrid Solvers for Unstructured Grids on GPUs\grqq\, wurde bereits 2011 nach dem Paradigma der hardware-orientierten Numerik ein geometrisches Mehrgitterverfahren mit finiter Elemente Assemblierung entwickelt, welches nur aus einer Reihe von Sparse Matrix-Vektor Multiplikationen besteht. Durch diese Implementierung, welche keinen Leistungsverlust nach sich zog, war es möglich, die Parallelität von Rechenarchitekturen noch besser auszunutzen. Besonders durch die Verwendung von GPUs anstatt von Multi-Core CPUs ergab sich ein durchschnittlicher Speedup von 8.
+Im Bereich der hardware-orientierten Numerik wurden bereits in den vergangenen Jahren einige Untersuchungen gemacht. So wurde in den Jahren 2010 und 2011 durch Geveler et al. die Lattice-Boltzmann-Methode zur Lösung von Navier-Stokes- und Flachwassergleichungen auf unterschiedlicher Hardware analysiert. Dabei stellte sich heraus, dass GPUs Multi-Core CPUs mit einem Speedup von bis zu acht überlegen sind, ohne dabei an Genauigkeit der numerischen Lösung einzubü\ss en. 
+In \glqq Efficient Finite Element Geometric Multigrid Solvers for Unstructured Grids on GPUs\grqq\, wurde bereits 2011 nach dem Paradigma der hardware-orientierten Numerik ein geometrisches Mehrgitterverfahren mit finiter Elemente Assemblierung entwickelt, welches nur aus einer Reihe von Sparse Matrix-Vektor Multiplikationen besteht. Durch diese Implementierung, welche keinen Leistungsverlust nach sich zog, war es möglich, die Parallelität von Rechenarchitekturen noch besser auszunutzen. Besonders durch die Verwendung von GPUs statt Multi-Core CPUs ergab sich auch hier ein durchschnittlicher Speedup von acht.
 Geveler et al. betrachtete 2013 in \glqq 
-Towards a complete FEM-based simulation toolkit on GPUs: Geometric Multigrid solver\grqq\, die Lösung partieller Differentialgleichungen mit finiten Elementen und Mehrgitterverfahren auf unstrukturierten Gittern. Es wurde gezeigt, dass sich die Laufzeit der Anwendung erheblich verbessern lässt, sobald GPUs anstatt von Multi-Core CPUs benutzt wurden. 
-Des Weiteren wurde in \glqq Energy efficieny vs. Performance of the numerical solution of PDEs: An application study on a low-power ARM-based cluster\grqq\, ein Cluster aus 96 ARM Cortex-A9 Dual-Core Prozessoren einer Rechenarchitektur, basierend auf x86-Prozessoren gegenüber gestellt. Dabei wurde die verbrauchte Energie zur Lösung von drei wissenschaftlichen Anwendungen, einem Finite-Elemente Code mit Mehrgitter-Löser, einer strömungsmechanischen Anwendung und einem Code zur Ausbreitung von Schallwellen mit Hilfe der Spektral-Elemente Methode, analysiert. Schließlich wurde gezeigt, dass die verbrauchte Energie zur Lösung erheblich gesenkt werden kann, im Einklang mit einer akzeptablen Erhöhung der Laufzeit. 
-In \glqq Porting FEASTFLOW to the Intel Xeon Phi: Lessons Learned\grqq\, zeigte Geveler et al. die Leistungsverbesserung von axpy-Vektor Operationen und Sparse Matrix-Vektor Multiplikationen durch Nutzung des Intel Xeon Phi Koprozessors. Diese Analyse, sowie in \glqq FFF2: Future-proof High Performance Numerical Simulation for CFD with FEASTFLOW (2)\grqq\, durchgeführten Untersuchungen, welche sich mit der Entwicklung von numerischen Methoden zur parallelen Lösung von partiellen Differentialgleichungen für realitätsnahe industrielle und wissenschaftliche Probleme befassen, basierten auf der Software Infrastruktur \glqq FEASTFLOW\grqq. Dieses Paket umfasst Software zur numerischen Lösung der Navier-Stokes-Gleichungen in 2D und 3D. 
+Towards a complete FEM-based simulation toolkit on GPUs: Geometric Multigrid solver\grqq\, die Lösung partieller Differentialgleichungen mit finiten Elementen und Mehrgitterverfahren auf unstrukturierten Gittern. Es wurde gezeigt, dass sich die Laufzeit der Anwendung erheblich reduzieren lässt, sobald GPUs anstatt von Multi-Core CPUs benutzt wurden. 
+Des Weiteren wurde in \glqq Energy efficieny vs. Performance of the numerical solution of PDEs: An application study on a low-power ARM-based cluster\grqq\, ein Cluster aus 96 ARM Cortex-A9 Dual-Core Prozessoren einer Rechenarchitektur, basierend auf x86-Prozessoren gegenüber gestellt. Dabei wurde die verbrauchte Energie zur Lösung von drei wissenschaftlichen Anwendungen, einem Finite-Elemente Code mit Mehrgitter-Löser, einer strömungsmechanischen Anwendung und einem Code zur Ausbreitung von Schallwellen mit Hilfe der Spektral-Elemente Methode analysiert. Schließlich wurde gezeigt, dass die verbrauchte Energie zur Lösung erheblich gesenkt werden kann, im Einklang mit einer akzeptablen Erhöhung der Laufzeit. 
+In \glqq Porting FEASTFLOW to the Intel Xeon Phi: Lessons Learned\grqq\, zeigten Geveler et al. die Leistungsverbesserung von axpy-Vektor Operationen und Sparse Matrix-Vektor Multiplikationen durch Nutzung des Intel Xeon Phi Koprozessors. Diese Analyse, sowie die in \glqq FFF2: Future-proof High Performance Numerical Simulation for CFD with FEASTFLOW (2)\grqq\, durchgeführten Untersuchungen, welche sich mit der Entwicklung von numerischen Methoden zur parallelen Lösung von partiellen Differentialgleichungen für realitätsnahe industrielle und wissenschaftliche Probleme befassen, basierten auf der Software Infrastruktur \glqq FEASTFLOW\grqq. Dieses Paket umfasst Software zur numerischen Lösung der Navier-Stokes-Gleichungen in 2D und 3D. 

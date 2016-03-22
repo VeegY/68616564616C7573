@@ -2768,6 +2768,20 @@ void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fr
 	}
 }
 
+void printIndexMatrix(int** indexMatrix, int msize)
+{
+
+    for (int i=0;i< msize;i++)
+    {
+        for(int j = 0;j<6;j++)
+        {
+            std::cout <<indexMatrix[i][j];    
+        }
+    std::cout <<" "<<std::endl;
+    }
+}
+
+
 
 
 template<typename Scalar>
@@ -2865,13 +2879,15 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     assembleEckeObenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    printIndexMatrix(indexMatrix,msize);
 
     A.prepare_sequential_fill(7);
+    
     for(int i =0;i< msize;i++)
     {
         for(int j = 0; j<7;j++)
         {
-            std::cout <<"Matrix index: "<<indexMatrix[i][j] << " zu schreibender Wert: " << valueMatrix[i][j]<<std::endl;
+
             A.sequential_fill(indexMatrix[i][j],valueMatrix[i][j]);
         }
         A.end_of_row();

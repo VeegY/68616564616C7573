@@ -1,43 +1,43 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.12)  16 MAR 2016 15:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.8.20)  22 MAR 2016 13:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **Abschlussbericht.tex
 (./Abschlussbericht.tex
-LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 78 languages loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrartcl.cls
-Document Class: scrartcl 2013/12/19 v3.12 KOMA-Script document class (article)
-(/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrkbase.sty
-Package: scrkbase 2013/12/19 v3.12 KOMA-Script package (KOMA-Script-dependent b
+LaTeX2e <2015/01/01> patch level 2
+Babel <3.9m> and hyphenation patterns for 79 languages loaded.
+(/sfw/texlive/2015/texmf-dist/tex/latex/koma-script/scrartcl.cls
+Document Class: scrartcl 2015/07/02 v3.18 KOMA-Script document class (article)
+(/sfw/texlive/2015/texmf-dist/tex/latex/koma-script/scrkbase.sty
+Package: scrkbase 2015/07/02 v3.18 KOMA-Script package (KOMA-Script-dependent b
 asics and keyval usage)
 
-(/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrbase.sty
-Package: scrbase 2013/12/19 v3.12 KOMA-Script package (KOMA-Script-independent 
+(/sfw/texlive/2015/texmf-dist/tex/latex/koma-script/scrbase.sty
+Package: scrbase 2015/07/02 v3.18 KOMA-Script package (KOMA-Script-independent 
 basics and keyval usage)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+(/sfw/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlfile.sty
-Package: scrlfile 2013/12/19 v3.12 KOMA-Script package (loading files)
+(/sfw/texlive/2015/texmf-dist/tex/latex/koma-script/scrlfile.sty
+Package: scrlfile 2015/07/02 v3.18 KOMA-Script package (loading files)
 
-Package scrlfile, 2013/12/19 v3.12 KOMA-Script package (loading files)
+Package scrlfile, 2015/07/02 v3.18 KOMA-Script package (loading files)
                   Copyright (C) Markus Kohm
 
-))) (/usr/share/texlive/texmf-dist/tex/latex/koma-script/tocbasic.sty
-Package: tocbasic 2013/12/19 v3.12 KOMA-Script package (handling toc-files)
+))) (/sfw/texlive/2015/texmf-dist/tex/latex/koma-script/tocbasic.sty
+Package: tocbasic 2015/07/02 v3.18 KOMA-Script package (handling toc-files)
 )
 Package tocbasic Info: omitting babel extension for `toc'
 (tocbasic)             because of feature `nobabel' available
-(tocbasic)             for `toc' on input line 115.
+(tocbasic)             for `toc' on input line 123.
 Package tocbasic Info: omitting babel extension for `lof'
 (tocbasic)             because of feature `nobabel' available
-(tocbasic)             for `lof' on input line 116.
+(tocbasic)             for `lof' on input line 124.
 Package tocbasic Info: omitting babel extension for `lot'
 (tocbasic)             because of feature `nobabel' available
-(tocbasic)             for `lot' on input line 117.
+(tocbasic)             for `lot' on input line 125.
 Package scrartcl Info: You've used standard option `12pt'.
 (scrartcl)             This is correct!
 (scrartcl)             Internally I'm using `fontsize=12pt'.
@@ -50,24 +50,17 @@ Class scrartcl Info: You've used standard option `oneside'.
 (scrartcl)           If you'd like to set the option with \KOMAoptions,
 (scrartcl)           you'd have to use `twoside=false' there
 (scrartcl)           instead of `oneside', too.
-Package scrbase Info: Unknown processing state.
-(scrbase)             Processing option `twoside=false'
-(scrbase)             of member `.scrartcl.cls'
-(scrbase)             of family `KOMA'
-(scrbase)             doesn't set a valid state.
-(scrbase)             This will be interpreted
-(scrbase)             as \FamilyKeyStateProcessed on input line 1150.
 Class scrartcl Info: File `scrsize12pt.clo' used to setup font sizes on input l
-ine 1531.
+ine 2027.
 
-(/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrsize12pt.clo
-File: scrsize12pt.clo 2013/12/19 v3.12 KOMA-Script font size class option (12pt
+(/sfw/texlive/2015/texmf-dist/tex/latex/koma-script/scrsize12pt.clo
+File: scrsize12pt.clo 2015/07/02 v3.18 KOMA-Script font size class option (12pt
 )
 )
-(/usr/share/texlive/texmf-dist/tex/latex/koma-script/typearea.sty
-Package: typearea 2013/12/19 v3.12 KOMA-Script package (type area)
+(/sfw/texlive/2015/texmf-dist/tex/latex/koma-script/typearea.sty
+Package: typearea 2015/07/02 v3.18 KOMA-Script package (type area)
 
-Package typearea, 2013/12/19 v3.12 KOMA-Script package (type area)
+Package typearea, 2015/07/02 v3.18 KOMA-Script package (type area)
                   Copyright (C) Frank Neukam, 1992-1994
                   Copyright (C) Markus Kohm, 1994-
 
@@ -105,7 +98,7 @@ Package typearea Info: These are the values describing the layout:
 (typearea)              \topskip        = 12.0pt
 (typearea)              \footskip       = 50.75pt
 (typearea)              \baselineskip   = 14.5pt
-(typearea)              on input line 1330.
+(typearea)              on input line 1506.
 )
 \c@part=\count80
 \c@section=\count81
@@ -113,41 +106,45 @@ Package typearea Info: These are the values describing the layout:
 \c@subsubsection=\count83
 \c@paragraph=\count84
 \c@subparagraph=\count85
+LaTeX Info: Redefining \textsubscript on input line 3836.
 \abovecaptionskip=\skip46
 \belowcaptionskip=\skip47
 \c@pti@nb@sid@b@x=\box26
 \c@figure=\count86
 \c@table=\count87
 \bibindent=\dimen102
-) (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2013/12/03 3.9h The Babel package
+) (/sfw/texlive/2015/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2015/08/03 3.9m The Babel package
 
-(/usr/share/texlive/texmf-dist/tex/generic/babel-german/ngermanb.ldf
+(/sfw/texlive/2015/texmf-dist/tex/generic/babel-german/ngerman.ldf
+Language: ngerman 2013/12/13 v2.7 German support for babel (new orthography)
+
+(/sfw/texlive/2015/texmf-dist/tex/generic/babel-german/ngermanb.ldf
 Language: ngermanb 2013/12/13 v2.7 German support for babel (new orthography)
 
-(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
-File: babel.def 2013/12/03 3.9h Babel common definitions
+(/sfw/texlive/2015/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2015/08/03 3.9m Babel common definitions
 \babel@savecnt=\count88
 \U@D=\dimen103
 )
 \l@naustrian = a dialect from \language\l@ngerman 
 \l@nswissgerman = a dialect from \language\l@ngerman 
 Package babel Info: Making " an active character on input line 88.
-))
-(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
-Package: inputenc 2008/03/30 v1.1d Input encoding file
+)))
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2015/03/17 v1.2c Input encoding file
 \inpenc@prehook=\toks15
 \inpenc@posthook=\toks16
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
-File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/utf8.def
+File: utf8.def 2015/06/27 v1.1n UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
-File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/t1enc.dfu
+File: t1enc.dfu 2015/06/27 v1.1n UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00AB (decimal 171)
@@ -296,8 +293,8 @@ File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
-File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/ot1enc.dfu
+File: ot1enc.dfu 2015/06/27 v1.1n UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00B8 (decimal 184)
@@ -327,8 +324,8 @@ File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
-File: omsenc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/omsenc.dfu
+File: omsenc.dfu 2015/06/27 v1.1n UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
    defining Unicode char U+00B7 (decimal 183)
@@ -351,27 +348,27 @@ Now handling font encoding U ...
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+(/sfw/texlive/2015/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+(/sfw/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
+(/sfw/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
-Package graphics Info: Driver file: pdftex.def on input line 91.
+Package graphics Info: Driver file: pdftex.def on input line 94.
 
-(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/sfw/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+(/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+(/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count89
@@ -379,29 +376,29 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen104
 \Gin@req@width=\dimen105
 )
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+(/sfw/texlive/2015/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2014/10/28 v1.1a Standard LaTeX Color (DPC)
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
+(/sfw/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
-Package color Info: Driver file: pdftex.def on input line 130.
+Package color Info: Driver file: pdftex.def on input line 142.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/eurosym/eurosym.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/eurosym/eurosym.sty
 Package: eurosym 1998/08/06 v1.1 European currency symbol ``Euro''
 \@eurobox=\box27
 )
-(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks17
 \symAMSa=\mathgroup4
@@ -409,24 +406,24 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2013/01/14 v2.14 AMS math features
 \@mathmargin=\skip48
 
 For additional information on amsmath, use the `?' option.
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01
 
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks18
 \ex@=\dimen106
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen107
 )
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count90
@@ -467,8 +464,8 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
 LaTeX Info: Redefining \[ on input line 2665.
 LaTeX Info: Redefining \] on input line 2666.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty
-Package: amsthm 2004/08/06 v2.20
+(/sfw/texlive/2015/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2015/03/04 v2.20.2
 \thm@style=\toks23
 \thm@bodyfont=\toks24
 \thm@headfont=\toks25
@@ -479,25 +476,27 @@ Package: amsthm 2004/08/06 v2.20
 \thm@headsep=\skip53
 \dth@everypar=\toks28
 )
-(/usr/share/texlive/texmf-dist/tex/latex/mh/mathtools.sty
-Package: mathtools 2013/02/12 v1.13 mathematical typesetting tools
+(/sfw/texlive/2015/texmf-dist/tex/latex/mathtools/mathtools.sty
+Package: mathtools 2015/06/17 v1.17 mathematical typesetting tools
 
-(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
+(/sfw/texlive/2015/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count102
 \calc@Bcount=\count103
 \calc@Adimen=\dimen115
 \calc@Bdimen=\dimen116
 \calc@Askip=\skip54
 \calc@Bskip=\skip55
-LaTeX Info: Redefining \setlength on input line 76.
-LaTeX Info: Redefining \addtolength on input line 77.
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count104
 \calc@Cskip=\skip56
 )
-(/usr/share/texlive/texmf-dist/tex/latex/mh/mhsetup.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2010/01/21 v1.2a programming setup (MH)
 )
+LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 129.
+LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 \g_MT_multlinerow_int=\count105
@@ -510,14 +509,14 @@ LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 \l_MT_above_shortintertext_sep=\dimen122
 \l_MT_below_shortintertext_sep=\dimen123
 )
-(/usr/share/texlive/texmf-dist/tex/latex/doublestroke/dsfont.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/doublestroke/dsfont.sty
 Package: dsfont 1995/08/01 v0.1 Double stroke roman fonts
 )
-(/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/algorithms/algorithm.sty
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
 nment
 
-(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count106
 \float@exts=\toks29
@@ -525,16 +524,16 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks30
 \@floatcapt=\box31
 )
-(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 \@float@every@algorithm=\toks31
 \c@algorithm=\count107
 )
-(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
 Package: algpseudocode 
 
-(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
 Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
 
 Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
@@ -550,28 +549,30 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 \ALG@tmplength=\skip60
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
-) (/usr/share/texlive/texmf-dist/tex/latex/pstricks-add/pstricks-add.sty
-(/usr/share/texlive/texmf-dist/tex/latex/pstricks/pstricks.sty
+) (/sfw/texlive/2015/texmf-dist/tex/latex/pstricks-add/pstricks-add.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/pstricks/pstricks.sty
 Package: pstricks 2013/12/12 v0.60 LaTeX wrapper for `PSTricks' (RN,HV)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+(/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
-(/usr/share/texlive/texmf-dist/tex/generic/pstricks/pstricks.tex
-(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/pst-xkey.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pstricks/pstricks.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/xkeyval/pst-xkey.tex
 File: pst-xkey.tex 2005/11/25 v1.6 PSTricks specialization of xkeyval (HA)
 
-(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
-Package: xkeyval 2012/10/14 v2.6b package option processing (HA)
+(/sfw/texlive/2015/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 
-(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/xkeyval/xkvutils.tex
 \XKV@toks=\toks32
 \XKV@tempa@toks=\toks33
+)
 \XKV@depth=\count115
-File: xkeyval.tex 2012/10/14 v2.6b key=value parser (HA)
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 )))
-(/usr/share/texlive/texmf-dist/tex/generic/pstricks/pst-fp.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pstricks/pst-fp.tex
 `pst-fp' v0.05, 2010/01/17 (hv)
 \pstFP@xs=\count116
 \pstFP@xia=\count117
@@ -583,79 +584,128 @@ File: xkeyval.tex 2012/10/14 v2.6b key=value parser (HA)
 \pstFP@regs=\count123
 \pstFP@times=\count124
 )
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfutil-common.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
 \pgfutil@everybye=\toks34
-)
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfutil@tempdima=\dimen124
+\pgfutil@tempdimb=\dimen125
+
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.te
+x)) (/sfw/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
 \pgfkeys@pathtoks=\toks35
 \pgfkeys@temptoks=\toks36
 
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.te
+x
 \pgfkeys@tmptoks=\toks37
+)) (/sfw/texlive/2015/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex
+\pgf@x=\dimen126
+\pgf@xa=\dimen127
+\pgf@xb=\dimen128
+\pgf@xc=\dimen129
+\pgf@y=\dimen130
+\pgf@ya=\dimen131
+\pgf@yb=\dimen132
+\pgf@yc=\dimen133
+\c@pgf@counta=\count125
+\c@pgf@countb=\count126
+\c@pgf@countc=\count127
+\c@pgf@countd=\count128
+\pgfutil@tempcnta=\count129
+\pgfutil@tempcntb=\count130
+)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+\pgfmath@dimen=\dimen134
+\pgfmath@count=\count131
+\pgfmath@box=\box32
+\pgfmath@toks=\toks38
+\pgfmath@stack@operand=\toks39
+\pgfmath@stack@operation=\toks40
+)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.
+tex)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometr
+ic.code.tex)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code
+.tex)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.
+code.tex)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.t
+ex)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.
+tex)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.t
+ex)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarit
+hmetics.code.tex)))
+(/sfw/texlive/2015/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count132
 ))
-(/usr/share/texmf/tex/generic/pgf/utilities/pgffor.code.tex
-\pgffor@iter=\dimen124
-\pgffor@skip=\dimen125
-\pgffor@stack=\toks38
-\pgffor@toks=\toks39
+\pgffor@iter=\dimen135
+\pgffor@skip=\dimen136
+\pgffor@stack=\toks41
+\pgffor@toks=\toks42
 )
-\psLoopIndex=\count125
+\psLoopIndex=\count133
 
-`PSTricks' v2.51  <2014/02/03> (tvz)
-\pst@dima=\dimen126
-\pst@dimb=\dimen127
-\pst@dimc=\dimen128
-\pst@dimd=\dimen129
-\pst@dimg=\dimen130
-\pst@dimh=\dimen131
-\pst@dimm=\dimen132
-\pst@dimn=\dimen133
-\pst@dimo=\dimen134
-\pst@dimp=\dimen135
-\pst@hbox=\box32
-\pst@ibox=\box33
-\pst@boxg=\box34
-\pst@cnta=\count126
-\pst@cntb=\count127
-\pst@cntc=\count128
-\pst@cntd=\count129
-\pst@cntg=\count130
-\pst@cnth=\count131
-\pst@cntm=\count132
-\pst@cntn=\count133
-\pst@cnto=\count134
-\pst@cntp=\count135
-\@zero=\count136
-\pst@toks=\toks40
-(/usr/share/texlive/texmf-dist/tex/generic/pstricks/pstricks.con)
-\psunit=\dimen136
-\psxunit=\dimen137
-\psyunit=\dimen138
-\pst@C@@rType=\count137
-\pslinewidth=\dimen139
-\psk@startLW=\dimen140
-\psk@endLW=\dimen141
-\pst@customdefs=\toks41
-\pslinearc=\dimen142
-\pst@symbolStep=\dimen143
-\pst@symbolWidth=\dimen144
-\pst@symbolLinewidth=\dimen145
-\everypsbox=\toks42
-\psframesep=\dimen146
-\pslabelsep=\dimen147
-\sh@wgridXunit=\dimen148
-\sh@wgridYunit=\dimen149
-\pst@shift=\dimen150
+`PSTricks' v2.62  <2015/07/25> (tvz)
+\pst@dima=\dimen137
+\pst@dimb=\dimen138
+\pst@dimc=\dimen139
+\pst@dimd=\dimen140
+\pst@dimg=\dimen141
+\pst@dimh=\dimen142
+\pst@dimm=\dimen143
+\pst@dimn=\dimen144
+\pst@dimo=\dimen145
+\pst@dimp=\dimen146
+\pst@hbox=\box33
+\pst@ibox=\box34
+\pst@boxg=\box35
+\pst@cnta=\count134
+\pst@cntb=\count135
+\pst@cntc=\count136
+\pst@cntd=\count137
+\pst@cntg=\count138
+\pst@cnth=\count139
+\pst@cntm=\count140
+\pst@cntn=\count141
+\pst@cnto=\count142
+\pst@cntp=\count143
+\@zero=\count144
+\pst@toks=\toks43
+(/sfw/texlive/2015/texmf-dist/tex/generic/pstricks/pstricks.con)
+\psunit=\dimen147
+\psxunit=\dimen148
+\psyunit=\dimen149
+\pst@C@@rType=\count145
+\pslinewidth=\dimen150
+\psk@startLW=\dimen151
+\psk@endLW=\dimen152
+\pst@customdefs=\toks44
+\pslinearc=\dimen153
+\pst@symbolStep=\dimen154
+\pst@symbolWidth=\dimen155
+\pst@symbolLinewidth=\dimen156
+\everypsbox=\toks45
+\psframesep=\dimen157
+\pslabelsep=\dimen158
+\sh@wgridXunit=\dimen159
+\sh@wgridYunit=\dimen160
+\pst@shift=\dimen161
 )
-File: pstricks.tex 2014/02/03 v2.51 `PSTricks' (tvz,hv)
+File: pstricks.tex 2015/07/25 v2.62 `PSTricks' (tvz,hv)
 
-(/usr/share/texlive/texmf-dist/tex/generic/pstricks/pst-fp.tex)
-File: pst-fp.tex 2014/02/03 v2.51 `PST-fp' (hv)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pstricks/pst-fp.tex)
+File: pst-fp.tex 2015/07/25 v2.62 `PST-fp' (hv)
 
-(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
+(/sfw/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
@@ -670,114 +720,116 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/pst-plot/pst-plot.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/pst-plot/pst-plot.sty
 Package: pst-plot 2011/06/05 v1.00 LaTeX wrapper for `pst-plot' (HV)
 
-(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/pst-xkey.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/xkeyval/pst-xkey.sty
 Package: pst-xkey 2005/11/25 v1.6 package wrapper for pst-xkey.tex (HA)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/multido/multido.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/multido/multido.sty
 Package: multido 2004/05/17 package wrapper for PSTricks `multido.tex', (HV/RN)
 
 
-(/usr/share/texlive/texmf-dist/tex/generic/multido/multido.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/multido/multido.tex
  v1.42, 2010/05/14 <tvz>
-\multido@count=\count138
-\multidocount=\count139
-\multido@stuff=\toks43
+\multido@count=\count146
+\multidocount=\count147
+\multido@stuff=\toks46
 )
 File: multido.tex 2010/05/14 v1.42 `multido' (tvz,hv)
 )
 Package: pst-plot 2011/04/13 package wrapper for pst-plot.tex (hv)
 
-(/usr/share/texlive/texmf-dist/tex/generic/pst-plot/pst-plot.tex
- v1.58, 2014/01/16 (tvz,hv)
-\pstRadUnit=\dimen151
-\pstRadUnitInv=\dimen152
-\pst@linecnt=\count140
+(/sfw/texlive/2015/texmf-dist/tex/generic/pst-plot/pst-plot.tex
+(/sfw/texlive/2015/texmf-dist/tex/generic/pst-tools/pst-tools.tex
+`PST-tools' v0.05, 2014/05/12 (hv))  v1.70, 2014/08/23 (tvz,hv)
+\pstRadUnit=\dimen162
+\pstRadUnitInv=\dimen163
+\pst@linecnt=\count148
 \RCD@file=\read1
-\psxlabelsep=\dimen153
-\psylabelsep=\dimen154
-\psk@subticksize=\dimen155
-\pst@xticksizeA=\dimen156
-\pst@xticksizeB=\dimen157
-\pst@xticksizeC=\dimen158
-\pst@yticksizeA=\dimen159
-\pst@yticksizeB=\dimen160
-\pst@yticksizeC=\dimen161
-\@digitcounter=\count141
-\psk@llx=\dimen162
-\psk@lly=\dimen163
-\psk@urx=\dimen164
-\psk@ury=\dimen165
-\pst@xunit=\dimen166
-\pst@yunit=\dimen167
+\psxlabelsep=\dimen164
+\psylabelsep=\dimen165
+\psk@subticksize=\dimen166
+\pst@xticksizeA=\dimen167
+\pst@xticksizeB=\dimen168
+\pst@xticksizeC=\dimen169
+\pst@yticksizeA=\dimen170
+\pst@yticksizeB=\dimen171
+\pst@yticksizeC=\dimen172
+\@digitcounter=\count149
+\psk@llx=\dimen173
+\psk@lly=\dimen174
+\psk@urx=\dimen175
+\psk@ury=\dimen176
+\pst@xunit=\dimen177
+\pst@yunit=\dimen178
 )
-File: pst-plot.tex 2014/01/16 1.58 `pst-plot' (tvz,hv)
+File: pst-plot.tex 2014/08/23 1.70 `pst-plot' (tvz,hv)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/pst-node/pst-node.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/pst-node/pst-node.sty
 Package: pst-node 2012/09/18 v1.01 LaTeX wrapper for `pst-node' (HV)
 Package: pst-node 2010/04/22 package wrapper for pst-node.tex
 
-(/usr/share/texlive/texmf-dist/tex/generic/pst-node/pst-node.tex
- v1.32, 2014/02/03
-\psrow=\count142
-\pscol=\count143
-\psmatrixcnt=\count144
+(/sfw/texlive/2015/texmf-dist/tex/generic/pst-node/pst-node.tex
+ v1.35, 2014/08/04
+\psrow=\count150
+\pscol=\count151
+\psmatrixcnt=\count152
 \psrowsep=\skip61
 \pscolsep=\skip62
-\pst@args=\count145
-\num@pts=\count146
-\pst@argcnt=\count147
+\pst@args=\count153
+\num@pts=\count154
+\pst@argcnt=\count155
 )
-File: pst-node.tex 2014/02/03 1.32 `pst-node' (tvz,hv)
-) (/usr/share/texlive/texmf-dist/tex/latex/pst-3d/pst-3d.sty
+File: pst-node.tex 2014/08/04 1.35 `pst-node' (tvz,hv)
+) (/sfw/texlive/2015/texmf-dist/tex/latex/pst-3d/pst-3d.sty
 Package: pst-3d 2009/07/28 package wrapper for pst-3d.tex (hv)
-(/usr/share/texlive/texmf-dist/tex/generic/pst-3d/pst-3d.tex
+
+(/sfw/texlive/2015/texmf-dist/tex/generic/pst-3d/pst-3d.tex
 `PST-3d' v1.11, 2010/02/14 (tvz))
 File: pst-3d.tex 2010/02/14 v1.11 `PST-3d' (hv)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/pst-math/pst-math.sty
-Package: pst-math 2009/01/20 package wrapper for PSTricks pst-math.tex
+(/sfw/texlive/2015/texmf-dist/tex/latex/pst-math/pst-math.sty
+Package: pst-math 2014/07/30 package wrapper for PSTricks pst-math.tex
 
-(/usr/share/texlive/texmf-dist/tex/generic/pst-math/pst-math.tex
-`pst-math' v0.62 , (CJ,hv))
-File: pst-math.tex 2010/10/20 v0.62 `PST-math' (hv)
+(/sfw/texlive/2015/texmf-dist/tex/generic/pst-math/pst-math.tex
+`pst-math' v0.63 , (CJ,hv))
+File: pst-math.tex 2014/07/30 v0.63 `PST-math' (hv)
 )
 Package: pstricks-add 2010/02/11 v. 0.14 package wrapper for pstricks-add.tex (
 hv)
 
-(/usr/share/texlive/texmf-dist/tex/generic/pstricks-add/pstricks-add.tex
-`pstricks-add' v3.65, 2014/01/21 (dr,hv)
-\psparallelogramsep=\dimen168
-\pshooklength=\dimen169
-\pshookwidth=\dimen170
-\pst@cntC=\count148
-\chart@ColorIndex=\dimen171
-\chart@ColorStep=\dimen172
-\pst@chartHeight=\dimen173
-\pst@chartStackDepth=\dimen174
-\pst@chartStackWidth=\dimen175
-\chart@Toggle=\count149
-\psVectorCtr=\count150
+(/sfw/texlive/2015/texmf-dist/tex/generic/pstricks-add/pstricks-add.tex
+`pstricks-add' v3.77, 2014/12/08 (dr,hv)
+\psparallelogramsep=\dimen179
+\pshooklength=\dimen180
+\pshookwidth=\dimen181
+\pst@cntC=\count156
+\chart@ColorIndex=\dimen182
+\chart@ColorStep=\dimen183
+\pst@chartHeight=\dimen184
+\pst@chartStackDepth=\dimen185
+\pst@chartStackWidth=\dimen186
+\chart@Toggle=\count157
+\psVectorCtr=\count158
 )
-File: pstricks-add.tex 2014/01/21 v3.65 `PSTricks-add' (hv)
+File: pstricks-add.tex 2014/12/08 v3.77 `PSTricks-add' (hv)
 Package pstricks-add Info: Local config file pstricks-add.cfg used on input lin
 e 20.
 
-(/usr/share/texlive/texmf-dist/tex/latex/pstricks-add/pstricks-add.cfg
+(/sfw/texlive/2015/texmf-dist/tex/latex/pstricks-add/pstricks-add.cfg
 File: pstricks-add.cfg 2005/01/10 v0.1 addtional user stuff (hv)
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/units/units.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/units/units.sty
 Package: units 1998/08/04 v0.9b Typesetting units
 
-(/usr/share/texlive/texmf-dist/tex/latex/units/nicefrac.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/units/nicefrac.sty
 Package: nicefrac 1998/08/04 v0.9b Nice fractions
 \L@UnitsRaiseDisplaystyle=\skip63
 \L@UnitsRaiseTextstyle=\skip64
 \L@UnitsRaiseScriptstyle=\skip65
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
 Package textcomp Info: Sub-encoding information:
 (textcomp)               5 = only ISO-Adobe without \textcurrency
@@ -790,15 +842,15 @@ Package textcomp Info: Sub-encoding information:
 (textcomp)             only a restricted character set as indicated.
 (textcomp)             Family '?' is the default used for unknown fonts.
 (textcomp)             See the documentation for details.
-Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 71.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/ts1enc.def
 File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
 Now handling font encoding TS1 ...
 ... processing UTF-8 mapping file for font encoding TS1
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu
-File: ts1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/ts1enc.dfu
+File: ts1enc.dfu 2015/06/27 v1.1n UTF-8 support for inputenc
    defining Unicode char U+00A2 (decimal 162)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00A4 (decimal 164)
@@ -869,137 +921,138 @@ File: ts1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+25EF (decimal 9711)
    defining Unicode char U+266A (decimal 9834)
 ))
-LaTeX Info: Redefining \oldstylenums on input line 266.
-Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 281.
-Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 282.
-Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 283.
-Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 284.
-Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 285.
-Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 286.
-Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 287.
-Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 288.
-Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 289.
-Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 290.
-Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 291.
-Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 292.
-Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 293.
-Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 294.
-Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 295.
-Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 296.
-Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 297.
-Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 298.
-Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 299.
-Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 300.
-Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 301.
-Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 302.
-Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 303.
-Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 304.
+LaTeX Info: Redefining \oldstylenums on input line 334.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
 
-Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 305.
-Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 306.
-Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 307.
-Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 308.
-Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 309.
-Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 310.
-Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 311.
-Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 312.
-Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 313.
-Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 314.
-Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 315.
-Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 316.
-Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 317.
-Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 318.
-Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 319.
-Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 320.
-Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 321.
-Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 322.
-Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 323.
-Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 324.
-Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 325.
-Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 326.
-Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 327.
-Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 328.
-Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 329.
-Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 330.
-Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 331.
-Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 332.
-Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 333.
-Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 334.
-Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 335.
-Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 336.
-Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 337.
-Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 338.
-Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 339.
-Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 340.
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
+Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
+Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
+Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
+Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
+Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
+Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
+Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
+Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
+Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
+Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
+Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
+Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
+Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
+Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
+Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/subfigure/subfigure.sty
 Package: subfigure 2002/03/15 v2.1.5 subfigure package
 \subfigtopskip=\skip66
 \subfigcapskip=\skip67
-\subfigcaptopadj=\dimen176
+\subfigcaptopadj=\dimen187
 \subfigbottomskip=\skip68
-\subfigcapmargin=\dimen177
+\subfigcapmargin=\dimen188
 \subfiglabelskip=\skip69
-\c@subfigure=\count151
-\c@lofdepth=\count152
-\c@subtable=\count153
-\c@lotdepth=\count154
+\c@subfigure=\count159
+\c@lofdepth=\count160
+\c@subtable=\count161
+\c@lotdepth=\count162
 
 ****************************************
 * Local config file subfigure.cfg used *
 ****************************************
-(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.cfg)
+(/sfw/texlive/2015/texmf-dist/tex/latex/subfigure/subfigure.cfg)
 \subfig@top=\skip70
 \subfig@bottom=\skip71
 )
-(/usr/share/texlive/texmf-dist/tex/latex/mwe/mwe.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/mwe/mwe.sty
 Package: mwe 2012/05/15 v0.3 Package to support minimal working examples (MWE)
 
-(/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
-Package: lipsum 2011/04/14 v1.2 150 paragraphs of Lorem Ipsum dummy text
-\c@lips@count=\count155
+(/sfw/texlive/2015/texmf-dist/tex/latex/lipsum/lipsum.sty
+Package: lipsum 2014/07/27 v1.3 150 paragraphs of Lorem Ipsum dummy text
+\c@lips@count=\count163
 )
-(/usr/share/texlive/texmf-dist/tex/latex/blindtext/blindtext.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/blindtext/blindtext.sty
 Package: blindtext 2012/01/06 V2.0 blindtext-Package
 
-(/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
-Package: xspace 2009/10/20 v1.13 Space after command names (DPC,MH)
+(/sfw/texlive/2015/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 )
-\c@blindtext=\count156
-\c@Blindtext=\count157
-\c@blind@countparstart=\count158
-\blind@countxx=\count159
-\blindtext@numBlindtext=\count160
-\blind@countyy=\count161
-\c@blindlist=\count162
-\c@blindlistlevel=\count163
-\c@blindlist@level=\count164
-\blind@listitem=\count165
-\c@blind@listcount=\count166
-\c@blind@levelcount=\count167
-\blind@mathformula=\count168
-\blind@Mathformula=\count169
-\c@blind@randomcount=\count170
-\c@blind@randommax=\count171
-\c@blind@pangramcount=\count172
-\c@blind@pangrammax=\count173
+\c@blindtext=\count164
+\c@Blindtext=\count165
+\c@blind@countparstart=\count166
+\blind@countxx=\count167
+\blindtext@numBlindtext=\count168
+\blind@countyy=\count169
+\c@blindlist=\count170
+\c@blindlistlevel=\count171
+\c@blindlist@level=\count172
+\blind@listitem=\count173
+\c@blind@listcount=\count174
+\c@blind@levelcount=\count175
+\blind@mathformula=\count176
+\blind@Mathformula=\count177
+\c@blind@randomcount=\count178
+\c@blind@randommax=\count179
+\c@blind@pangramcount=\count180
+\c@blind@pangrammax=\count181
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 57.
-\captionmargin=\dimen178
-\captionmargin@=\dimen179
-\captionwidth=\dimen180
-\caption@tempdima=\dimen181
-\caption@indent=\dimen182
-\caption@parindent=\dimen183
-\caption@hangindent=\dimen184
+\captionmargin=\dimen189
+\captionmargin@=\dimen190
+\captionwidth=\dimen191
+\caption@tempdima=\dimen192
+\caption@indent=\dimen193
+\caption@parindent=\dimen194
+\caption@hangindent=\dimen195
 )
 Package caption Info: KOMA-Script document class.
-\c@ContinuedFloat=\count174
+\c@ContinuedFloat=\count182
 Package caption Info: float package is loaded.
 Package caption Info: subfigure package is loaded.
 )
@@ -1038,29 +1091,29 @@ LaTeX Font Info:    ... okay on input line 31.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 31.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 31.
 
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+(/sfw/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count175
-\scratchdimen=\dimen185
-\scratchbox=\box35
-\nofMPsegments=\count176
-\nofMParguments=\count177
-\everyMPshowfont=\toks44
-\MPscratchCnt=\count178
-\MPscratchDim=\dimen186
-\MPnumerator=\count179
-\makeMPintoPDFobject=\count180
-\everyMPtoPDFconversion=\toks45
-) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+\scratchcounter=\count183
+\scratchdimen=\dimen196
+\scratchbox=\box36
+\nofMPsegments=\count184
+\nofMParguments=\count185
+\everyMPshowfont=\toks47
+\MPscratchCnt=\count186
+\MPscratchDim=\dimen197
+\MPnumerator=\count187
+\makeMPintoPDFobject=\count188
+\everyMPtoPDFconversion=\toks48
+) (/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+(/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
@@ -1069,22 +1122,22 @@ Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+(/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/sfw/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+(/sfw/texlive/2015/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
@@ -1096,7 +1149,7 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/sfw/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
@@ -1104,17 +1157,17 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Try loading font information for T1+cmss on input line 34.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
-File: t1cmss.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+(/sfw/texlive/2015/texmf-dist/tex/latex/base/t1cmss.fd
+File: t1cmss.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Try loading font information for U+msa on input line 34.
 
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 34.
 
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+(/sfw/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 Non-PDF special ignored!
@@ -1132,10 +1185,8 @@ Non-PDF special ignored!
 Non-PDF special ignored!
 Non-PDF special ignored!
 
-
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-(./Abschlussbericht.toc)
+{/sfw/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./Abschlussb
+ericht.toc)
 \tf@toc=\write3
 \openout3 = `Abschlussbericht.toc'.
 
@@ -1145,12 +1196,12 @@ Non-PDF special ignored!
 
 (./MotivationIntroduction/MotivationIntroduction.tex) [3
 
-]
+] [4]
 \openout2 = `./MainSection/HardwarePart.aux'.
 
 
 (./MainSection/HardwarePart.tex
-<./Bilder/Server-Aufbau/convective-horizontal-2.png, id=19, 1927.2pt x 915.42pt
+<./Bilder/Server-Aufbau/convective-horizontal-2.png, id=23, 1927.2pt x 915.42pt
 >
 File: ./Bilder/Server-Aufbau/convective-horizontal-2.png Graphic file (type png
 )
@@ -1159,7 +1210,7 @@ Package pdftex.def Info: ./Bilder/Server-Aufbau/convective-horizontal-2.png use
 d on input line 44.
 (pdftex.def)             Requested size: 221.82605pt x 105.36188pt.
 
-<./Bilder/Server-Aufbau/convective-vertical-2.png, id=20, 1927.2pt x 915.42pt>
+<./Bilder/Server-Aufbau/convective-vertical-2.png, id=24, 1927.2pt x 915.42pt>
 File: ./Bilder/Server-Aufbau/convective-vertical-2.png Graphic file (type png)
 
 <use ./Bilder/Server-Aufbau/convective-vertical-2.png>
@@ -1167,7 +1218,7 @@ Package pdftex.def Info: ./Bilder/Server-Aufbau/convective-vertical-2.png used
 on input line 51.
 (pdftex.def)             Requested size: 221.82605pt x 105.36188pt.
 
-<./Bilder/Server-Aufbau/render3.jpg, id=21, 1927.2pt x 1084.05pt>
+<./Bilder/Server-Aufbau/render3.jpg, id=25, 1927.2pt x 1084.05pt>
 File: ./Bilder/Server-Aufbau/render3.jpg Graphic file (type jpg)
 
 <use ./Bilder/Server-Aufbau/render3.jpg>
@@ -1175,7 +1226,7 @@ Package pdftex.def Info: ./Bilder/Server-Aufbau/render3.jpg used on input line
 69.
 (pdftex.def)             Requested size: 221.82605pt x 124.77065pt.
 
-<./Bilder/Icarus/20160307_161232.jpg, id=22, 5331.92pt x 2999.205pt>
+<./Bilder/Icarus/20160307_161232.jpg, id=26, 5331.92pt x 2999.205pt>
 File: ./Bilder/Icarus/20160307_161232.jpg Graphic file (type jpg)
 
 <use ./Bilder/Icarus/20160307_161232.jpg>
@@ -1217,12 +1268,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--84
 
  []
 
-[4
+[5
 
 
  <./Bilder/Server-Aufbau/convective-horizontal-2.png (PNG copy)> <./Bilder/Serv
 er-Aufbau/convective-vertical-2.png (PNG copy)>]
-<./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png, id=28, 1927.2pt x 1084.05pt
+<./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png, id=32, 1927.2pt x 1084.05pt
 >
 File: ./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png Graphic file (type png)
 
@@ -1240,53 +1291,72 @@ Underfull \hbox (badness 10000) in paragraph at lines 85--103
 
  []
 
-[5 <./Bilder/Server-Aufbau/render3.jpg> <./Bilder/Icarus/20160307_161232.jpg>]
+[6 <./Bilder/Server-Aufbau/render3.jpg> <./Bilder/Icarus/20160307_161232.jpg>]
 Overfull \hbox (13.01381pt too wide) in paragraph at lines 104--108
 \T1/cmr/m/n/12 Bio-kunst-stoff PLA (Po-ly-lac-ti-de) an. Po-ly-aci-de hat einen
  Schmelz-punkt von $\OT1/cmr/m/n/12 150[][] [] 160[][]$
  []
 
-<./Bilder/Dashboard/Dashboard_frontend.png, id=33, 1445.4pt x 504.38437pt>
+<./Bilder/Dashboard/Dashboard_frontend.png, id=37, 1445.4pt x 504.38437pt>
 File: ./Bilder/Dashboard/Dashboard_frontend.png Graphic file (type png)
 
 <use ./Bilder/Dashboard/Dashboard_frontend.png>
 Package pdftex.def Info: ./Bilder/Dashboard/Dashboard_frontend.png used on inpu
 t line 118.
 (pdftex.def)             Requested size: 313.69029pt x 109.46413pt.
-) [6 <./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png> <./Bilder/Dashboard/Da
-shboard_frontend.png>] [7]
+) [7 <./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png> <./Bilder/Dashboard/Da
+shboard_frontend.png>] [8]
 \openout2 = `./MainSection/SoftwarePart.aux'.
 
 
 (./MainSection/SoftwarePart.tex
-Overfull \hbox (3.4145pt too wide) in paragraph at lines 3--4
-\T1/cmr/m/n/12 Das als Lö-ser ver-wen-de-te Ver-fah-ren des Pro-jek-tes ist das
- so-ge-nann-te BiCGStab-Verfahren
- []
-
-
-Overfull \hbox (10.26086pt too wide) in paragraph at lines 3--4
-\T1/cmr/m/n/12 (engl: ^^Rbi-con-ju-ga-te gra-di-ent sta-bi-li-zed me-thod^^P), 
-wel-ches zur Klas-se der Krylov-Unterraum-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 3--4
+Underfull \hbox (badness 10000) in paragraph at lines 4--5
 
  []
 
+<./Bilder/draft.jpg, id=46, 2601.72pt x 1557.82pt>
+File: ./Bilder/draft.jpg Graphic file (type jpg)
+ <use ./Bilder/draft.jpg>
+Package pdftex.def Info: ./Bilder/draft.jpg used on input line 8.
+(pdftex.def)             Requested size: 390.24117pt x 233.66292pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 34--35
+Underfull \hbox (badness 10000) in paragraph at lines 14--16
+
+ []
+
+[9
+
+
+ <./Bilder/draft.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 27--29
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
+
+ []
+
+
+Overfull \hbox (2.75578pt too wide) in paragraph at lines 39--40
+\T1/cmr/m/n/12 Verfahren (engl: ^^Rbi-con-ju-ga-te gra-di-ent sta-bi-li-zed me-
+thod^^P), wel-ches zur Klas-se der Krylov-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
+
+ []
+
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 69--70
  
  []
 
-) [8
-
-
-]
+) [11]
 \openout2 = `./Results/Results.aux'.
 
- (./Results/Results.tex) [9
+ (./Results/Results.tex) [12
 
 
 ] (./Abschlussbericht.aux
@@ -1298,29 +1368,33 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 12614 strings out of 493304
- 196226 string characters out of 6139871
- 478515 words of memory out of 5000000
- 15758 multiletter control sequences out of 15000+600000
- 18701 words of font info for 51 fonts, out of 8000000 for 9000
- 957 hyphenation exceptions out of 8191
- 57i,7n,100p,1343b,418s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb>
-</usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fo
-nts/type1/public/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-
-super/sfsx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfsx1440.pfb><
-/usr/share/texmf/fonts/type1/public/cm-super/sfsx1728.pfb></usr/share/texmf/fon
-ts/type1/public/cm-super/sfsx2488.pfb>
-Output written on Abschlussbericht.pdf (9 pages, 9415444 bytes).
+ 17380 strings out of 493091
+ 293261 string characters out of 6137646
+ 584484 words of memory out of 5000000
+ 20493 multiletter control sequences out of 15000+600000
+ 19385 words of font info for 52 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 57i,8n,100p,1165b,472s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/sfw/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</sfw/
+texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></sfw/texlive
+/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></sfw/texlive/2015/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></sfw/texlive/2015/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr12.pfb></sfw/texlive/2015/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr8.pfb></sfw/texlive/2015/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmsy10.pfb></sfw/texlive/2015/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmsy8.pfb></sfw/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/sy
+mbols/msbm10.pfb></sfw/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfbx
+1728.pfb></sfw/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb
+></sfw/texlive/2015/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></sfw/t
+exlive/2015/texmf-dist/fonts/type1/public/cm-super/sfsx1200.pfb></sfw/texlive/2
+015/texmf-dist/fonts/type1/public/cm-super/sfsx1440.pfb></sfw/texlive/2015/texm
+f-dist/fonts/type1/public/cm-super/sfsx1728.pfb></sfw/texlive/2015/texmf-dist/f
+onts/type1/public/cm-super/sfsx2488.pfb></sfw/texlive/2015/texmf-dist/fonts/typ
+e1/public/cm-super/sfti1200.pfb>
+Output written on Abschlussbericht.pdf (12 pages, 10013339 bytes).
 PDF statistics:
- 95 PDF objects out of 1000 (max. 8388607)
- 63 compressed objects within 1 object stream
+ 117 PDF objects out of 1000 (max. 8388607)
+ 78 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
