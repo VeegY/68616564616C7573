@@ -2112,7 +2112,7 @@ void assembleKanteUntenHinten(int** indexMatrix, double** valueMatrix,int fron, 
     }
 }
 
-void assembleKantenUntenLinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
+void assembleKanteUntenLinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
@@ -2856,7 +2856,7 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     assembleKanteUntenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteUntenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteUntenVorne(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-    assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteUntenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     //mittlere Kanten
     assembleKanteHintenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteHintenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
@@ -2866,7 +2866,7 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     assembleKanteObenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKantenObenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-    assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteObenVorne(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
 
     //Fuelle nun die Ecken:
     //untere ecken:
