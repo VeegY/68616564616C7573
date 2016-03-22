@@ -17,7 +17,7 @@
 /// \file Logger.hpp
 /// \author David
 /// \brief
-/// Stellt zentrale Loggingfunktionalitäten zur Verfügung.
+/// Stellt zentrale Loggingfunktionalitaeten zur Verfuegung.
 
 //TODO: Dokumentation
 
