@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "include/l2norm_help.hpp"
+#include "include/l2norm_test_help.hpp"
 #include "include/roofline_help.hpp"
 #include "include/timer.hpp"
 using namespace std;
