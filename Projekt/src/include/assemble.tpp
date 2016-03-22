@@ -2775,7 +2775,7 @@ void printIndexMatrix(int** indexMatrix, int msize)
     {
         for(int j = 0;j<6;j++)
         {
-            std::cout <<indexMatrix[i][j];    
+            std::cout <<indexMatrix[i][j]<<" \t";    
         }
     std::cout <<" "<<std::endl;
     }
