@@ -2480,10 +2480,14 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 
 void assembleEckeuntenvornerechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	if(nx-1 <= fron && nx-1 <= lron)
+	if(fron <= nx-1 && nx-1 <= lron)
 	{
 		//int Eckenidx = nx-1;
+<<<<<<< HEAD
 		std::cout<<"Debug-A1"<<std::endl;
+=======
+        std::cout<<"A1"<<std::endl;
+>>>>>>> d71a73fc7d90bdeca73c100abbbc068355c66cbc
 		int vtx_global = nx-1;
 		int vtx_local = vtx_global - fron;
 
@@ -2522,7 +2526,7 @@ void assembleEckeuntenvornerechts(int** indexMatrix, double** valueMatrix,int fr
 
 void assembleEckeuntenhintenlinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	if(nx*(ny - 1)  <= fron && nx*(ny - 1)  <= lron)
+	if(fron <= nx*(ny - 1) && nx*(ny - 1)  <= lron)
 	{
 		//int Eckenidx = nx*(ny - 1) ;
 
@@ -2563,7 +2567,7 @@ void assembleEckeuntenhintenlinks(int** indexMatrix, double** valueMatrix,int fr
 
 void assembleEckeuntenhintenrechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	if(nx*ny - 1 <= fron && nx*ny - 1 <= lron)
+	if(fron <= nx*ny - 1 && nx*ny - 1 <= lron)
 	{
 		//int Eckenidx = nx*ny - 1 ;
 
@@ -2645,7 +2649,7 @@ void assembleEckeObenvornelinks(int** indexMatrix, double** valueMatrix,int fron
 void assembleEckeObenvornerechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int Eckenidx = nx-1+(nx*ny*(nz-1));
-	if(Eckenidx <= fron && Eckenidx <= lron)
+	if(fron <= Eckenidx && Eckenidx <= lron)
 	{
 
 
@@ -2688,7 +2692,7 @@ void assembleEckeObenvornerechts(int** indexMatrix, double** valueMatrix,int fro
 void assembleEckeObenhintenlinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int Eckenidx = nx*(ny - 1) +nx*ny*(nz-1);
-	if(Eckenidx <= fron && Eckenidx  <= lron)
+	if(fron <= Eckenidx && Eckenidx  <= lron)
 	{
 
 
@@ -2730,7 +2734,7 @@ void assembleEckeObenhintenlinks(int** indexMatrix, double** valueMatrix,int fro
 void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int Eckenidx = nx*ny - 1 +nx*ny*(nz-1);
-	if(Eckenidx <= fron && Eckenidx <= lron)
+	if(fron <= Eckenidx && Eckenidx <= lron)
 	{
 
 
