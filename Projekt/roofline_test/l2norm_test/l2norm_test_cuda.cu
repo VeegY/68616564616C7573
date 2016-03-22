@@ -16,8 +16,8 @@ static __inline__ __device__ double __shfl_down(double var, int laneMask, int wi
 {
     int hi, lo;
     asm volatile("mov.b64 { %0, %1 }, %2;" : "=r"(lo), "=r"(hi) : "d"(var));
-    hi = __shfl_down(hi, laneMask, width);
-    lo = __shfl_down(lo, laneMask, width);
+    hi = __shfl_down(hi, (unsigned int)laneMask, width);
+    lo = __shfl_down(lo, (unsigned int)laneMask, width);
     return __hiloint2double(hi, lo);
 }
 
