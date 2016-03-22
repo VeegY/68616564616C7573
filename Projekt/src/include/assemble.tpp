@@ -2483,7 +2483,7 @@ void assembleEckeuntenvornerechts(int** indexMatrix, double** valueMatrix,int fr
 	if(nx-1 <= fron && nx-1 <= lron)
 	{
 		//int Eckenidx = nx-1;
-
+		std::cout<<"Debug-A1"<<std::endl;
 		int vtx_global = nx-1;
 		int vtx_local = vtx_global - fron;
 
@@ -2773,9 +2773,9 @@ void printIndexMatrix(int** indexMatrix, int msize)
 
     for (int i=0;i< msize;i++)
     {
-        for(int j = 0;j<6;j++)
+        for(int j = 0;j<7;j++)
         {
-            std::cout <<indexMatrix[i][j]<<" ";    
+            std::cout <<indexMatrix[i][j]<<"|";    
         }
     std::cout <<" "<<std::endl;
     }
