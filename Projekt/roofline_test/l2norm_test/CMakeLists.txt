@@ -16,9 +16,8 @@ CUDA_ADD_EXECUTABLE(l2norm_test ${SOURCES})
 LIST(APPEND CMAKE_CXX_FLAGS "-std=c++0x -O3 -ffast-math -Wall")
 
 LIST(APPEND CUDA_NVCC_FLAGS -use_fast_math -O3)
-LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_20,code=sm_20)
-LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_30,code=sm_30)
-LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
+LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_32,code=sm_32)
+#LIST(APPEND CUDA_NVCC_FLAGS -gencode arch=compute_35,code=sm_35)
 
 TARGET_LINK_LIBRARIES(l2norm_test ${MPI_LIBRARIES})
 
