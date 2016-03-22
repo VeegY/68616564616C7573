@@ -2873,6 +2873,28 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
 
     }
 
+//Setze eine Ladung in die Mitte:
+if(fron <= 555 && 555 <= lron)
+{
+	indexMatrix[555-fron][0] = 555; 
+	indexMatrix[555-fron][1] = 556;
+	indexMatrix[555-fron][2] = 557;
+	indexMatrix[555-fron][3] = 565;
+	indexMatrix[555-fron][4] = 545;
+	indexMatrix[555-fron][5] = 655;
+	indexMatrix[555-fron][6] = 455;
+
+	valueMatrix[555-fron][0] = 1.0;
+	valueMatrix[555-fron][1] = 0.0;
+        valueMatrix[555-fron][2] = 0.0;
+        valueMatrix[555-fron][3] = 0.0;
+        valueMatrix[555-fron][4] = 0.0;
+        valueMatrix[555-fron][5] = 0.0;
+        valueMatrix[555-fron][6] = 0.0;
+
+}
+
+
     //Fuelle nun die Seiten:
     //Links
     assembleLeftSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
