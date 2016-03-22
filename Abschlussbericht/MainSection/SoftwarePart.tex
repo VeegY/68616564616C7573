@@ -78,3 +78,14 @@ Das als Löser verwendete Verfahren des Projektes ist das sogenannte BiCGStab-\n
 
 Der von rechts vorkonditionierte BiCGSTAB-Algorithmus startet ausgehend von einem Anfangsvektor $x_0$, welcher immer als Nullvektor implementiert wurde. Des Weiteren wurde die Toleranz mit $TOL= 10^{-9}$ festgelegt. Der Vorkonditionierer hat dabei die allgemeine Form: 
 $K = K_1 K_2 \approx A $
+
+\subsection{Matrixformat}
+
+Sowohl mit der Finite-Elemente-Methode, als auch mit Finiten Differenzen als Diskretisierungsansatz, entstehen bei der Übersetzung Partieller Differentialgleichungen in Lineare Gleichungssysteme Systemmatrizen $A \in \mathbb{R}^{M \times M},~M \in \mathbb{N}$  mit hochgradig dünnbesetzer Struktur. Auf $M^2$ Gesamteinträge kommen, bei Verwendung der Finiten-Elemente-Methode, etwa $27M$ Nichtnull-Einträge, bei Finiten Differenzen $7M$. Diese sind bei durchgehender globaler Nummerierung und konstanten Gitterweiten $N_x,N_y,N_z$ auf einem Band der Breite $\sim 2 N_x (N_y+1)$ bzw. $\sim 2 N_xN_y$ verteilt. Abbildung xy zeigt schematisch die Besetzungsstrukturen der Matrizen.\\
+
+\textit{Abbildung zur Besetzungsstruktur folgt}\\
+
+Um nun auch große Probleme lösen zu können, ist es wichtig die Sparse-Eigenschaft der Matrizen beim Speichern zu respektieren. Das ELLPACK Speicherformat erfüllt eben dies und erlaubt die im BiCGStab auftretenden Sparsematrix-Vektor Operationen auf mehreren Knoten verteilt zu berechnen.\\
+In der praktischen Umsetzung werden dazu mehrere Zeilen der Systemmatrix einer Node zugeordnet und dort im ELLPACK Format gespeichert. Dabei werden alle Nulleinträge aus der Matrix entfernt, sodass die übrigen Einträge zeilenweise linksbündig anliegen. Die längste Zeile bestimmt die Breite der Matrix - eventuelle Lücken in anderen Zeilen werden mit Nullen aufgefüllt. Die Spaltenindizes zu jedem Eintrag werden in einer zweiten Matrix gespeichert. Die enstandenen Matrizen werden dann von oben nach unten orientiert gespeichert. Sparsematrix-Vektor Multiplikation $y=Ax$ können nun elementweise als $y_i = \sum \limits_{nz=0}^{nz_i} A_{i,nz} x_{j_{nz}}$ berechnet werden, wobei $nz_i$ die Anzahl der Nichtnull Einträge in Zeile $i$ ist. Da dies vollkommen unabhängig für jede Zeile - und damit für jede Node - geschieht, gibt es eine Antiproportionalität zwischen Rechenzeit und Anzahl der Nodes. Zu beachten ist aber der erhöhte kommunikative Aufwand zwischen den Nodes, da der Ergebnisvektor y ausschließlich verteilt gespeichert ist.\\
+
+\textit{Abbildung zur ELLPACK-Funktionsweise folgt}\\
