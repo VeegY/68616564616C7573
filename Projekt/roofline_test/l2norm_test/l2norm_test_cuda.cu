@@ -184,7 +184,7 @@ float invoke_gpu_time(type *vector, type *result, int dim, int runs)
             
     return elapsed_time / runs;
 }
-template float invoke_gpu_time<float>(float *vector, float *result, int dim, int runs);
+//template float invoke_gpu_time<float>(float *vector, float *result, int dim, int runs);
 template float invoke_gpu_time<double>(double *vector, double *result, int dim, int runs);
 
 
