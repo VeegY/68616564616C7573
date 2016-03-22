@@ -5,6 +5,7 @@
 #include <cuda_runtime.h>
 #include <cmath>
 #include "include/timer.hpp"
+#include <cstdio>
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,7 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //=============================================================================
 __device__ inline
-double _shfl_down(double var, unsigned int srcLane, int width = 32) 
+double __shfl_d_down(double var, unsigned int srcLane, int width = 32) 
 {
     int2 a = *reinterpret_cast<int2*>(&var);
     a.x = __shfl_down(a.x, srcLane, width);
@@ -25,7 +26,7 @@ __inline__ __device__
 double warpReduceSum(double val) 
 {
     for (int offset = warpSize / 2; offset > 0; offset /= 2)
-        val += _shfl_down(val, offset);
+        val += __shfl_d_down(val, offset);
     return val;
 }
 
