@@ -34,7 +34,7 @@ __inline__ __device__
 double blockReduceSum(type val) 
 {
 
-    static __shared__ double array[]; // Shared mem for 32 partial sums
+    static __shared__ double array[32]; // Shared mem for 32 partial sums
     type* shared = (type*)array;
     int lane = threadIdx.x % warpSize;
     int wid = threadIdx.x / warpSize;
