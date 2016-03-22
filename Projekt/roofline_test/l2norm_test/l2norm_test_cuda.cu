@@ -12,13 +12,17 @@
 ///                             KERNEL                                      ///
 ///////////////////////////////////////////////////////////////////////////////
 //=============================================================================
-__device__ inline
-double __shfl_d_down(double var, unsigned int srcLane, int width = 32) 
+__device__ __inline__ double shfl(double x, int lane)
 {
-    int2 a = *reinterpret_cast<int2*>(&var);
-    a.x = __shfl_down(a.x, srcLane, width);
-    a.y = __shfl_down(a.y, srcLane, width);
-    return *reinterpret_cast<double*>(&a);
+    // Split the double number into 2 32b registers.
+    int lo, hi;
+    asm volatile(“mov.b32{ % 0, % 1 }, % 2; ”: “ = r”(lo), “ = r”(hi) : “d”(x));
+    // Shuffle the two 32b registers.
+    lo = __shfl_down(lo, lane,32);
+    hi = __shfl_down(hi, lane, 32);
+    // Recreate the 64b number.
+    asm volatile(“mov.b64 % 0, { % 1, % 2 }; ”: “ = d”(x) : “r”(lo), “r”(hi));
+    return x;
 }
 
 
@@ -26,7 +30,7 @@ __inline__ __device__
 double warpReduceSum(double val) 
 {
     for (int offset = warpSize / 2; offset > 0; offset /= 2)
-        val += __shfl_d_down(val, offset);
+        val += shfl(val, offset);
     return val;
 }
 
