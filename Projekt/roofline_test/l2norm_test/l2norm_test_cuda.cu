@@ -22,7 +22,7 @@ double __shfl_down(double var, unsigned int srcLane, int width = 32)
 
 template<typename type>
 __inline__ __device__
-int warpReduceSum(type val) 
+type warpReduceSum(type val) 
 {
     for (int offset = warpSize / 2; offset > 0; offset /= 2)
         val += __shfl_down(val, offset);
@@ -31,7 +31,7 @@ int warpReduceSum(type val)
 
 template<typename type>
 __inline__ __device__
-int blockReduceSum(type val) 
+type blockReduceSum(type val) 
 {
 
     static __shared__ int double array[]; // Shared mem for 32 partial sums
@@ -54,7 +54,7 @@ int blockReduceSum(type val)
 }
 
 template<typename type>
-__global__ void deviceReduceKernel(type *in, type* out, int N) 
+__global__ void deviceReduceKernel(type *in, type *out, int N) 
 {
   type sum = 0;
   type value = 0;
