@@ -10,7 +10,7 @@ einfache Lösung für das Monitoring bereitgestellt werden.
 HIER NOCH INHALT EINFÜGEN! (wenn nicht redundant mit der Einleitung)
 
 
-\subsection{Rackdesign}
+\subsection{Aufbau des Clusters}
 Für ein Jetson-TK1-Cluster mit insulärer Stromversorgung
 ist das Design des Racks der entschiedene Punkt um 
 auch unter dauerhafter Höchstbelastung eine
@@ -107,7 +107,9 @@ welche Bio-Kompatibel ist. Hierfür bietet sich der aus Mais-stärke gewonnene B
 und ist daher ohne weiteres für die Halterung von Netzteilen verwendbar.
 
 
-\subsection{Dashbord}
+%\subsection{Wartung und Instandhaltung}
+%\subsection{Dashboard} %(Ist gem dict.cc auch OK)
+\subsection{Übersichtsseite}
 Um das Monitoring und die Fernwartung des Clusters möglichst komfortabel zu bewerkstelligen wurde ein Dashboard eingerichtet. Hierfür ist ein RaspberryPi der ersten Generation ausreichend.
 \subsubsection{Einrichtung Webserver}
 Um die gemessenen Daten verwalten und darstellen zu können wird auf dem RaspberryPi ein LAMP-Server eingerichtet (Linux-Apache-MySQL-PHP). Die Daten werden folglich in der MySQL Datenbank abgespeichert und über PHP-Skripte ausgelesen und verarbeitet. Die Darstellung der Daten erfolgt mittel HTML, CSS und Javascript. Des Weiteren muss der RaspberryPi so konfiguriert werden, dass erstens das Webinterface von außen einsehbar ist , und vor allem, dass man von außen in die Datenbank schreiben kann.

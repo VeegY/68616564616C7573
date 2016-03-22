@@ -1,8 +1,42 @@
 \section{Motivation und Problembeschreibung}
-Im Bereich des wissenschaftlichen Hochleistungsrechnen gibt es seit 1993 die \glqq TOP500 List\grqq, welche die Supercomputer, geordnet nach ihrer Leistung in Floating Point Operationen pro Sekunde auflistet. Der momentane Spitzenreiter, der Tianhe-2, erreicht dabei bei voller Auslastung einen Energieverbrauch von 155.998,08 MWh jährlich. Dieser extrem hohe Wert bedeutet gleichzeitig große Betriebskosten, welche im Zeitalter der Energiewende kaum zu rechtfertigen sind. Daher wurde als Konkurrenzobjekt im Jahr 2007 die \glqq Green500 List\grqq eröffnet, welche die Supercomputer entsprechend ihrer Rechenleistung pro Watt sortiert. Und genau an dieser setzt das Studienprojekt Technomathematik 2015/2016 der TU Dortmund an, welches begleitend zum I.C.A.R.U.S.-Projekt des Lehrstuhl 3 der Fakultät Mathematik der TU Dortmund läuft. 
-Ziel ist es, die Hardware- und Softwareentwicklung eines energieeffizienten \texti{High-Performance Computing} (HPC) Systems nachzuvollziehen und zu begleiten. Grundlage dafür ist der mobile Grafikprozessor NVIDIA Tegra K1, welcher höchste Energieeffizienz verspricht und, nach dem Vorbild der Energiewende, durch Solarzellen betrieben wird. Die Nutzung dieses mobilen, auch eingebetteten Systems genannt (engl:\glqq embedded systems\grqq), erklärt sich durch die Anwendungsgebiete dieser Geräte. Sie werden in der Unterhaltungsindustrie, Automobilindustrie oder sogar als Herzschrittmacher in der Medizin eingesetzt. Diese Anwendungsbereiche verlangen ein enorm energiesparsames Verhalten, da die mobile Energiezufuhr über Batterien nicht endlos ist. Daher sind diese Systeme eine attraktive Möglichkeit beim sogenannten \texti{Green Computing}.
-Das Hochleistungsrechnen spielt in der Mathematik eine große Rolle, da Differentialgleichungen Naturvorgänge verschiedener Art, wie zum Beispiel Schwingungen, Wellenausbreitungen oder Strömungen beschreiben können. Die Lösung dieser Gleichungen erfordert einen, je nach Genauigkeit des Resultats, erheblichen numerischen Aufwand, welcher nur mit Hilfe von geeigneter Hardware erreichbar ist. Da es das Vorhaben unseres Studienprojekts ist, den Luftstrom und die Wärmeleitung um und in einem geometrischen Körper wie dem des Tegra K1-Boards zu simulieren, spielen Differentialgleichungen eine wichtige Rolle für uns. Außerdem ist es dafür wichtig, die Software nach dem Paradigma der hardware-orientierten Numerik zu konstruieren, um die Leistung des Grafikprozessors effizient auszunutzen. Dazu werden 60 der NVIDIA Boards zu drei Racks angeordnet, um den Code parallelisiert laufen lassen zu können. Man kann also im Umkehrschluss auch davon sprechen, dass die Hardware der Software angepasst wird, also \textit{software-orientierte Hardware}. 
-Der Aufbau des Hauptteils des Berichts lässt sich dabei in drei große Themen gliedern. Zunächst die Hardware in seinen Einzelteilen, also die Hardwareauswahl, der Aufbau des Racks und die Energieverbrauchsmessung erklärt. Darauffolgend werden die Softwarekomponenten, welche die Assemblierung mit finiten Elementen und finiten Differenzen, sowie den Löser umfassen, erläutert. Abschließend werden verschiedene Testergebnisse, welche mit der Anordnung des Studienprojekts erzielt wurden, vorgestellt und die Rechenleistung anhand dieser Resultate bewertet. 
+Im Bereich des wissenschaftlichen Hochleistungsrechnen gibt es seit 1993 die
+\glqq TOP500 List\grqq, welche die Supercomputer, geordnet nach ihrer Leistung 
+in Floating Point Operationen pro Sekunde auflistet. Der momentane Spitzenreiter, 
+der Tianhe-2, erreicht dabei bei voller Auslastung einen Energieverbrauch von 155.998,08 MWh 
+jährlich. Dieser extrem hohe Wert bedeutet gleichzeitig große Betriebskosten,
+ welche im Zeitalter der Energiewende kaum zu rechtfertigen sind. Daher wurde 
+als Konkurrenzobjekt im Jahr 2007 die \glqq Green500 List\grqq eröffnet, welche 
+die Supercomputer entsprechend ihrer Rechenleistung pro Watt sortiert. Und genau 
+an dieser setzt das Studienprojekt Technomathematik 2015/2016 der TU Dortmund an, 
+welches begleitend zum I.C.A.R.U.S.-Projekt des Lehrstuhl 3 der Fakultät Mathematik der TU Dortmund läuft. 
+Ziel ist es, die Hardware- und Softwareentwicklung eines energieeffizienten 
+\textit{High-Performance Computing} (HPC) Systems nachzuvollziehen und zu begleiten. 
+Grundlage dafür ist der mobile Grafikprozessor NVIDIA Tegra K1, 
+welcher höchste Energieeffizienz verspricht und, nach dem Vorbild der Energiewende, 
+durch Solarzellen betrieben wird. Die Nutzung dieses mobilen, 
+auch eingebetteten Systems genannt (engl:\glqq embedded systems\grqq), 
+erklärt sich durch die Anwendungsgebiete dieser Geräte. 
+Sie werden in der Unterhaltungsindustrie, Automobilindustrie oder sogar als Herzschrittmacher in der Medizin eingesetzt. 
+Diese Anwendungsbereiche verlangen ein enorm energiesparsames Verhalten, da die mobile Energiezufuhr über Batterien nicht endlos ist.
+Daher sind diese Systeme eine attraktive Möglichkeit beim sogenannten \textit{Green Computing}. 
+Das Hochleistungsrechnen spielt in der Mathematik eine große Rolle,
+ da Differentialgleichungen Naturvorgänge verschiedener Art, wie zum Beispiel Schwingungen,
+ Wellenausbreitungen oder Strömungen beschreiben können. Die Lösung dieser Gleichungen erfordert einen,
+ je nach Genauigkeit des Resultats, erheblichen numerischen Aufwand,
+ welcher nur mit Hilfe von geeigneter Hardware erreichbar ist. Da es das Vorhaben unseres Studienprojekts ist,
+ den Luftstrom und die Wärmeleitung um und in einem geometrischen Körper wie dem des Tegra K1-Boards zu simulieren,
+ spielen Differentialgleichungen eine wichtige Rolle für uns. Außerdem ist es dafür wichtig,
+ die Software nach dem Paradigma der hardware-orientierten Numerik zu konstruieren,
+ um die Leistung des Grafikprozessors effizient auszunutzen. Dazu werden 60 der NVIDIA Boards zu drei Racks angeordnet,
+ um den Code parallelisiert laufen lassen zu können. Man kann also im Umkehrschluss auch davon sprechen,
+ dass die Hardware der Software angepasst wird, also \textit{software-orientierte Hardware}. 
+
+Der Aufbau des Hauptteils des Berichts lässt sich dabei in drei große Themen gliedern.
+ Zunächst die Hardware in seinen Einzelteilen, also die Hardwareauswahl,
+ der Aufbau des Racks und die Energieverbrauchsmessung erklärt.
+ Darauffolgend werden die Softwarekomponenten, welche die Assemblierung mit finiten Elementen und finiten Differenzen,
+ sowie den Löser umfassen, erläutert. Abschließend werden verschiedene Testergebnisse,
+ welche mit der Anordnung des Studienprojekts erzielt wurden, vorgestellt und die Rechenleistung anhand dieser Resultate bewertet. 
 
 
 
