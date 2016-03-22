@@ -2441,7 +2441,7 @@ void assembleKanteObenRechts(int** indexMatrix, double** valueMatrix,int fron, i
 void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
 	//int Eckenidx = 0;
-
+    /*
 	if(fron <= 0 && 0 <= lron)
 	{
 		int vtx_global = 0;
@@ -2474,6 +2474,35 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
+	}
+	*/
+	
+	//Die D-RB:
+	if(fron <= 0 && 0 <= lron)
+	{
+		int vtx_global = 0;
+		int vtx_local = vtx_global - fron;
+
+        indexMatrix[vtx_local][0] = vtx_global;
+		indexMatrix[vtx_local][1] = vtx_global+1;
+		indexMatrix[vtx_local][2] = vtx_global+2;
+		indexMatrix[vtx_local][3] = vtx_global + nx;
+		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
+		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
+		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
+
+		//zentraler Differenzenquotient gar nicht möglich
+		//modifizierter Differenzenquotient in x/y/z-Richtung
+		valueMatrix[vtx_local][0] = 0*3.0 * 11.0 / 38.0;
+		valueMatrix[vtx_local][1] = 0*-28.0/38.0;
+		valueMatrix[vtx_local][2] = 0*17.0/38.0;
+		valueMatrix[vtx_local][3] = 0*-28.0 / 38.0;
+		valueMatrix[vtx_local][4] = 0*17.0 / 38.0;
+		valueMatrix[vtx_local][5] = 0*-28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 0*17.0 / 38.0;
+
+		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalte
 	}
 }
 
