@@ -1,0 +1,22 @@
+I.C.A.R.U.S.:
+
+Das Studienprojekt „Mathematisches Modellieren und Simulieren“, ist nur ein kleiner Teil vom gesamten „Insular Compute-center for Applied Mathematics with Renewables-provided power supply based on Unconventional compute hardware empaired with Simulation Software for Technical Processes“ (kurz: I.C.A.R.U.S) Projekt, dessen Ziel es ist, einen Supercomputer mit erneuerbaren Energien zu entwickeln. Dieses Ziel wird durch eine High-End Photovoltaikanlage und energiearmen Komponenten, wie NVIDIA Tegra K1-Prozessoren und eines speziell entwickelten Niedrigenergiedatenspeicher-Subsystem basierend auf dem Banana-Pi Board verwirklicht.
+ 
+Die Motivation hinter diesem Projekt ist die Energiewende, mit dem Hauptaugenmerk auf erneuerbaren Energien und Energieeffizienz. Die schnellsten Supercomputer besitzen tausende von Rechenknoten und ausgeklügelte Kühlsysteme, welche aber zu einem enormen Stromverbrauch führen. Das „National Super Computer Center in Guangzhou China“ zum Beispiel, welches die Liste der Top 500 HPCs anführt, erreicht 33862 Terraflops pro Sekunde benötigt jedoch 17808 Kilowatt an Energie, um dies zu erreichen. (siehe Abbildung 1)
+
+
+Abbildung 1: Top 3 Supercomputer von November 2015
+Bildquelle: http://www.top500.org/lists/2015/11/
+
+Mehrere Supercomputer basieren auf CPUs, doch unser Projekt geht davon aus, dass die CPU im Green HPC Bereich keine Zukunft mehr besitzt, da sie von grenzenloser Energieversorgung ausgehen, im Gegensatz zu den Mobil-Prozessoren, die in Smartphones verwendet werden. Diese basieren auf eingebetteten Systemen, welche auf Grund der ihnen begrenzten Stromversorgung (Akku), auf Energieeffizienz ausgelegt sind. So besteht in diesen sehr preiswerten Prozessoren eine mögliche Zukunft für das HPC.
+Das I.C.A.R.U.S. Projekt arbeitet an einem gut ausbalancierten Supercomputer zwischen Flops pro Sekunde und Energieverbrauch, mit einer angeschlossenen Photovoltaikanlage um keine fortlaufenden Kosten tragen zu müssen.[1]
+
+Aufbau:
+Die Photovoltaikanlage und der Container, in dem der Cluster mit den 60 Tegra K1 Chips und das Subsystem ist, stehen hinter dem Pavillion 10 der TU Dortmund. Der Container ist mit extra angefertigten Fächern auf der Nord- und Südseite ausgerüstet, die zum Kühlen auf der Nordseite und zum Wärmen auf der Südseite genutzt werden. Zusätzlich sind Solarzellen an der oberen Kante der Südseite montiert, die ebenfalls zum Kühlen/Wärmen verwendet werden. Die auf Abbildung 2 zu erkennende Photovoltaikanlage lieferte 3kW an gemessener Energie, obwohl die durch die winterlichen Bedingungen nur zur Hälfte von der Sonne bedeckt war.
+
+       Abbildung 2: Photovoltaikanlage und Container mit Cluster
+Bildquelle: https://www.mathematik.tu-dortmund.de/sites/icarus-green-hpc
+
+
+Quellen:
+[1] I.C.A.R.U.S Homepage: Abgerufen von https://www.mathematik.tu-dortmund.de/sites/icarus-green-hpc/project (zugegriffen am 22.03.2016)
