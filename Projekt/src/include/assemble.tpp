@@ -2484,8 +2484,8 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		int vtx_local = vtx_global - fron;
 
         indexMatrix[vtx_local][0] = vtx_global;
-		indexMatrix[vtx_local][1] = vtx_global+1;
-		indexMatrix[vtx_local][2] = vtx_global+2;
+		indexMatrix[vtx_local][1] = vtx_global + 1;
+		indexMatrix[vtx_local][2] = vtx_global + 2;
 		indexMatrix[vtx_local][3] = vtx_global + nx;
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
@@ -2493,16 +2493,23 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 
 		//zentraler Differenzenquotient gar nicht möglich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
-		valueMatrix[vtx_local][0] = 0*3.0 * 11.0 / 38.0;
-		valueMatrix[vtx_local][1] = 0*-28.0/38.0;
-		valueMatrix[vtx_local][2] = 0*17.0/38.0;
-		valueMatrix[vtx_local][3] = 0*-28.0 / 38.0;
-		valueMatrix[vtx_local][4] = 0*17.0 / 38.0;
-		valueMatrix[vtx_local][5] = 0*-28.0 / 38.0;
-		valueMatrix[vtx_local][6] = 0*17.0 / 38.0;
+		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
+		valueMatrix[vtx_local][1] = -28.0/38.0;
+		valueMatrix[vtx_local][2] = 17.0/38.0;
+		valueMatrix[vtx_local][3] = -28.0 / 38.0;
+		valueMatrix[vtx_local][4] = 17.0 / 38.0;
+		valueMatrix[vtx_local][5] = -28.0 / 38.0;
+		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
 		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
-		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalte
+		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
+		valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
 	}
 }
 
