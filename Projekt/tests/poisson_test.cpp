@@ -36,7 +36,7 @@ int poisson_demo()
 	MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
 	if (myrank == 0)
 	{
-		Icarus::vtkWriter writer("out", "Testdatensatz", Nx, Ny, Nz, 1);
+		Icarus::vtkWriter writer("out/poisson", "Testdatensatz", Nx, Ny, Nz, 1);
 		writer.addPointDataToTimestep(fullsol, 0, "Potential");
 	}
 	MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
