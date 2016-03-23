@@ -2,9 +2,10 @@
 #include "../src/include/bicgstabsolver.hpp"
 #include "../src/include/distellpackmatrix.hpp"
 
-#include "../src/include/logger.hpp"
-
 #include <cmath>
+
+#define LOGGING_LEVEL 3
+#include "../src/include/logger.hpp"
 
 int main()
 {

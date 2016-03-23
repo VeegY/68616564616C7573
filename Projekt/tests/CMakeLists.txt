@@ -11,14 +11,17 @@ FILE(GLOB UNIT_MPITESTS "*_mpitest.cpp")
 #========================================================================
 #               Custom_Target/Unit_Test
 #========================================================================
+CUDA_ADD_LIBRARY(cuda SHARED "../src/benchmark_ax_cuda.cu")
 
 # alle Testfunktionen werden ctest "bereitgestellt"
 FOREACH(testpath ${UNIT_TESTS})
     # nicht unbedingt optimal, aber es funktioniert fuers erste
     string(REGEX REPLACE "([^ ]*)/tests/" "" filename ${testpath})
     string(REPLACE ".cpp" "" testname ${filename})
-    add_executable(${testname} ${filename})
+    #LIST(APPEND filename "../src/benchmark_ax_cuda.cu") got replaced by cuda_add_library, see above
+    CUDA_ADD_EXECUTABLE(${testname} ${filename})
     TARGET_LINK_LIBRARIES(${testname} SRCLIB ${MPI_LIBRARIES})
+    TARGET_LINK_LIBRARIES(${testname} cuda ${CUDA_LIBARIES})
     add_test(${testname} ${testname})
 ENDFOREACH(testpath)
 
@@ -26,8 +29,10 @@ FOREACH(testpath ${UNIT_MPITESTS})
     # nicht unbedingt optimal, aber es funktioniert fuers erste
     string(REGEX REPLACE "([^ ]*)/tests/" "" filename ${testpath})
     string(REPLACE ".cpp" "" testname ${filename})
-    add_executable(${testname} ${filename})
+    #LIST(APPEND filename "../src/benchmark_ax_cuda.cu") got replaced by cuda_add_library
+    CUDA_ADD_EXECUTABLE(${testname} ${filename})
     TARGET_LINK_LIBRARIES(${testname} SRCLIB ${MPI_LIBRARIES})
+    TARGET_LINK_LIBRARIES(${testname} cuda ${CUDA_LIBRARIES})
     add_test(${testname} mpirun -np 4 ${testname})
 ENDFOREACH(testpath)
 

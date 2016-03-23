@@ -17,14 +17,16 @@
 /// \file Logger.hpp
 /// \author David
 /// \brief
-/// Stellt zentrale Loggingfunktionalitäten zur Verfügung.
+/// Stellt zentrale Loggingfunktionalitaeten zur Verfuegung.
 
 //TODO: Dokumentation
 
 #ifndef __LOGGER_HPP_
 #define __LOGGER_HPP_
 
-#define LOGGING_LEVEL 2
+#ifndef LOGGING_LEVEL
+#define LOGGING_LEVEL 3
+#endif
 
 #include <string>
 #include <iostream>

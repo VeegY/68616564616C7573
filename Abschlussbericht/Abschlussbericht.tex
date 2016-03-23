@@ -15,16 +15,17 @@
 \usepackage{subfigure}
 \usepackage{mwe} % new package from Martin scharrer
 \usepackage{caption}
-
+\usepackage{hyperref} 
+%\usepackage[figure]{hypcap} 
 
 
 \setlength{\parindent}{0pt}%gegen Einrücken nach Bildern
 
-\subject{TU-Dortmund Faktultät für Mathematik}
-\title{Abschlussbericht}
-\subtitle{Studienprojekt-Technomathematik 2015-2016}
-\author{Studienprojektgruppe Technomathematik}
-\publishers{\parbox[b][12cm]{\textwidth}{\centering Betreuer: Dipl.-Inf. Markus Geveler}}
+\subject{Abschlussbericht im Rahmen desStudienprojekts Technomathematik 2015/2016 (Bachelor) TU Dortmund}
+\title{\large{Technische-, numerische- und Implementierungsaspekte des Designs einer Niedrigenergie-HPC-Plattform für den Betrieb durch erneuerbare Energien}}
+%\subtitle{\small{Studiengang Technomathematik, Bachelor Lehrstuhl für Angewandte Mathematik und Numerik (LS3) Fakultät für Mathematik, TU Dortmund}}
+\publishers{Vorgelegt von: Dario Jansen, Heiko Poelstra, Enno Tiemann, Kevin Hollmann, Justus Altmeyer, Daniel Tomaschewski, Marius Milcarek, Simon Vogel,  Thomas Helmich, Micha Weimann, Christoph Maria Höppke
+\parbox[b][8cm]{\textwidth}{\centering Betreuer: Dipl.-Inf. M. Geveler und Prof. Dr. S. Turek}}
 \date{\today}
 
 
@@ -39,6 +40,14 @@
 \include{./MainSection/HardwarePart}
 \include{./MainSection/SoftwarePart}
 \include{./Results/Results}
+%\include{./Anhang/Anhang}
+
+\section{Anhang}
+
+\subsection{Dokumentation}
+\include{refman.pdf}
+
+
 
 
 \end{document}
