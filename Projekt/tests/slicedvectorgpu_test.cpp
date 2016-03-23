@@ -1,5 +1,6 @@
 #include "../src/include/slicedvectorgpu.hpp"
 #include "../src/include/vtkwriter.hpp"
+#include "../src/include/scalartraits.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
@@ -16,7 +17,7 @@ int slicedvectorgputest()
 	Icarus::SlicedVectorGpu<double> vec1(N), vec2(N), vec4(N);
 	Icarus::SlicedVectorGpu<double> vec6(N), vec7(N), vec8(N);
 	size_t dimloc = vec1.get_dim_local();
-	if (vec1.get_dim!=N){
+	if (vec1.get_dim()!=N){
         LOG_ERROR("get_dim failed");
 	}
 	double constdouble (static_cast <double> (rand()) / static_cast <double> (RAND_MAX));
@@ -25,24 +26,23 @@ int slicedvectorgputest()
     {
         double r = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
         int sign=2*(rand()%2)-1;
-        vec1[i]=r;
-        vec6[i]=sign*r;
+        vec1.set_local(i, r);
+        vec6.set_local(i, sign*r);
     }
     Icarus::SlicedVectorGpu<double> vec3(vec1); //test copy constructor
 	vec2=vec1;
-	size_t dimloc = vec1.get_dim_local();
 
 	for (size_t i(0); i<dimloc; i++)
     {
-        if (vec2[i]!=vec1[i])
+        if (vec2.get_local(i)!=vec1.get_local(i))
         {
              LOG_ERROR("copy-constructor failed");
         }
-        if (vec3[i]!=vec1[i])
+        if (vec3.get_local(i)!=vec1.get_local(i))
         {
              LOG_ERROR("assignment operator failed");
         }
-        if (vec4[i]!=constdouble)
+        if (vec4.get_local(i)!=constdouble)
         {
              LOG_ERROR("fill_const failed");
         }
@@ -57,25 +57,25 @@ int slicedvectorgputest()
     vec8.axpy(randdouble, vec7);
     for (size_t i(0); i<dimloc; i++)
     {
-        l2norm2+=vec6[i]*vec6[i];
-        if (std::abs(vec6[i]) > maxnorm )
+        l2norm2+=vec6.get_local(i)*vec6.get_local(i);
+        if (std::abs(vec6.get_local(i)) > maxnorm )
         {
-            maxnorm=std::abs(vec6[i]);
+            maxnorm=std::abs(vec6.get_local(i));
         }
-        if (vec7[i]!=randdouble*vec6[i])
+        if (vec7.get_local(i)!=randdouble*vec6.get_local(i))
         {
-             LOG_ERROR("scal failed ; value: ",vec7[i], "  reference value: ", randdouble*vec6[i]);
+             LOG_ERROR("scal failed ; value: ",vec7.get_local(i), "  reference value: ", randdouble*vec6.get_local(i));
         }
-        if (vec8[i]!=vec6[i]+randdouble*vec7[i])
+        if (vec8.get_local(i)!=vec6.get_local(i)+randdouble*vec7.get_local(i))
         {
-             LOG_ERROR("axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
+             LOG_ERROR("axpy failed; value: ",vec8.get_local(i), "  reference value: ", randdouble*vec6.get_local(i)+vec7.get_local(i));
         }
     }
-    /*
+
     double checktol = std::numeric_limits<double>::epsilon();
     double maxnorm_glob, l2norm2_glob;
-    MPI_SCALL(MPI_Allreduce(&maxnorm, &maxnorm_glob, 1, ScalarTraits<double>::mpi_type, MPI_SUM, _my_comm));
-    MPI_SCALL(MPI_Allreduce(&l2norm2, &l2norm2_glob, 1, ScalarTraits<double>::mpi_type, MPI_SUM, _my_comm));
+    MPI_SCALL(MPI_Allreduce(&maxnorm, &maxnorm_glob, 1, Icarus::ScalarTraits<double>::mpi_type, MPI_SUM, MPI_COMM_WORLD));
+    MPI_SCALL(MPI_Allreduce(&l2norm2, &l2norm2_glob, 1, Icarus::ScalarTraits<double>::mpi_type, MPI_SUM, MPI_COMM_WORLD));
     if (maxnorm!=vec6.maxnorm())
     {
         LOG_ERROR("maxnorm failed; value: ",vec6.maxnorm(), "  reference value: ", maxnorm);
@@ -89,7 +89,7 @@ int slicedvectorgputest()
     {
         LOG_ERROR("L2norm failed; value: ",vec6.l2norm(), "  reference value: ", l2norm, "  difference: ",l2norm-vec6.l2norm());
     }
-    */
+
     return 0;
 }
 
