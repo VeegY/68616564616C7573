@@ -27,10 +27,16 @@ void assembleFem::assemblyMatrixRow()
     _value.resize(length);
     std::vector<bool> Belegt(length, false);
 
+    //TODO TOCHECK fatal bei mehreren Objekten der Klasse, die unterschiedliche nx,ny und nz haben, oder?
     static std::vector<int> a{0, 1, y, 1+y, z, 1+z, y+z, 1+y+z}; //Hilfsvektor um auf die Ecken (global gezaehlt) eines Element zu kommen
 
-    std::vector<std::vector<double>> grad_Basis1(3, std::vector<double>(27)); // 27 Mal so viel Speicher fuer 8 Mal weniger evalgradbasis aufrufen...
-    std::vector<std::vector<double>> grad_Basis2(3, std::vector<double>(27));
+//    std::vector<std::vector<double>> grad_Basis1(3, std::vector<double>(27)); // 27 Mal so viel Speicher fuer 8 Mal weniger evalgradbasis aufrufen...
+//    std::vector<std::vector<double>> grad_Basis2(3, std::vector<double>(27));
+    static std::vector<std::vector<std::vector<double>>> grad_Basis(8, std::vector<std::vector<double>>(3, std::vector<double>(27)));
+    static bool calced(false);
+    if (!calced)
+        for (int B(0); B < 8; B++)
+            grad_Basis[B] = evaluated_gradient_Basis3d(B);
 
     double zwsp(0.0);
 
@@ -38,21 +44,23 @@ void assembleFem::assemblyMatrixRow()
     for (int i(0); i < n; i++)
     {
         //Berechne Grad_Basis3d fuer die Ecke A[i] vom Referenzelement
-        grad_Basis1 = evaluated_gradient_Basis3d(_A[i]);
+//        grad_Basis1 = evaluated_gradient_Basis3d(_A[i]);
 
         //Schleife ueber alle Ecken vom Referenzelement
         for (int B(0); B < 8; B++)
         {
             //Systematisch alle Ecken des Referenzelemets
-            grad_Basis2 = evaluated_gradient_Basis3d(B);
+//            grad_Basis2 = evaluated_gradient_Basis3d(B);
 
             //Quadratur
             zwsp = 0.0;
             for (int q(0); q < 27; q++)
             {
                 // Quadratursumme
-                zwsp += (grad_Basis1[0][q]*grad_Basis2[0][q] + grad_Basis1[1][q]*grad_Basis2[1][q]
-                    + grad_Basis1[2][q]*grad_Basis2[2][q]) * _weight[q];
+//                zwsp += (grad_Basis1[0][q]*grad_Basis2[0][q] + grad_Basis1[1][q]*grad_Basis2[1][q]
+//                    + grad_Basis1[2][q]*grad_Basis2[2][q]) * _weight[q];
+                zwsp += (grad_Basis[_A[i]][0][q]*grad_Basis[B][0][q] + grad_Basis[_A[i]][1][q]*grad_Basis[B][1][q]
+                    + grad_Basis[_A[i]][2][q]*grad_Basis[B][2][q]) * _weight[q];
             }
 
             //Berechneter Wert an die richtige Stelle von Column und Value aufaddieren. Ich schätze, dass hier irgenwo der Fehler liegt.

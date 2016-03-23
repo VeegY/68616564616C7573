@@ -11,7 +11,7 @@
 
 int main()
 {
-    const int nn(20);
+    const int nn(10);
     const double h(1.0/static_cast<double>(nn));
     const int nx(nn+1), ny(nn+1), nz(nn+1);
     std::vector<char> disc = Icarus::discretizer("leer.obj", h, nx, ny, nz);
@@ -23,7 +23,7 @@ int main()
     Icarus::mathfunction u_0(0, 0.0);
     Icarus::mathfunction f_0(0, 0.0);
     Icarus::mathfunction d_0(0, 0.0);
-
+/*
     Icarus::DistEllpackMatrix<double> matrix_0d(nx*ny*nz);
     Icarus::SlicedVector<double> rhs_0d(nx*ny*nz);
     Icarus::SlicedVector<double> sol_0d(nx*ny*nz);
@@ -40,14 +40,14 @@ int main()
     writer_0d.addPointDataToTimestep(fullsol_0d, 0, "Potential");
 
     LOG_INFO("L2norm_0d = ", assembler_0d.calcL2Error(u_0, fullsol_0d));
-
+*/
     // ***** ***** ***** ***** TEST 0 NEUMANN ***** ***** ***** ***** //
     // u = 0
     // f = 0
     // d = 0
     // n = 0
     Icarus::mathfunction n_0(0, 0.0);
-
+/*
     Icarus::DistEllpackMatrix<double> matrix_0n(nx*ny*nz);
     Icarus::SlicedVector<double> rhs_0n(nx*ny*nz);
     Icarus::SlicedVector<double> sol_0n(nx*ny*nz);
@@ -64,7 +64,7 @@ int main()
     writer_0n.addPointDataToTimestep(fullsol_0n, 0, "Potential");
 
     LOG_INFO("L2norm_0n = ", assembler_0n.calcL2Error(u_0, fullsol_0n));
-
+*/
     // ***** ***** ***** ***** TEST 1 DIRICHLET ***** ***** ***** ***** //
     // u = (0.5-x)(0.5-y)(0.5-z)
     // f = 0
@@ -72,7 +72,7 @@ int main()
     Icarus::mathfunction u_1(1);
     Icarus::mathfunction f_1(2);
     Icarus::mathfunction d_1(3);
-
+/*
     Icarus::DistEllpackMatrix<double> matrix_1d(nx*ny*nz);
     Icarus::SlicedVector<double> rhs_1d(nx*ny*nz);
     Icarus::SlicedVector<double> sol_1d(nx*ny*nz);
@@ -89,7 +89,7 @@ int main()
     writer_1d.addPointDataToTimestep(fullsol_1d, 0, "Potential");
 
     LOG_INFO("L2norm_1d = ", assembler_1d.calcL2Error(u_1, fullsol_1d));
-
+*/
     // ***** ***** ***** ***** TEST 1 NEUMANN ***** ***** ***** ***** //
     // u = (0.5-x)(0.5-y)(0.5-z)
     // f = 0
@@ -113,6 +113,7 @@ int main()
     writer_1n.addPointDataToTimestep(fullsol_1n, 0, "Potential");
 
     LOG_INFO("L2norm_1n = ", assembler_1n.calcL2Error(u_1, fullsol_1n));
+//    matrix_1n.print_local_data(std::cout);
 
     // ***** ***** ***** ***** TEST 2 DIRICHLET ***** ***** ***** ***** //
     // u = x*(1.0-x)*y*(1.0-y)*z*(1.0-z)
@@ -121,7 +122,7 @@ int main()
     Icarus::mathfunction u_2(5);
     Icarus::mathfunction f_2(6);
     Icarus::mathfunction d_2(7);
-
+/*
     Icarus::DistEllpackMatrix<double> matrix_2d(nx*ny*nz);
     Icarus::SlicedVector<double> rhs_2d(nx*ny*nz);
     Icarus::SlicedVector<double> sol_2d(nx*ny*nz);
@@ -138,14 +139,14 @@ int main()
     writer_2d.addPointDataToTimestep(fullsol_2d, 0, "Potential");
 
     LOG_INFO("L2norm_2d = ", assembler_2d.calcL2Error(u_2, fullsol_2d));
-
+*/
     // ***** ***** ***** ***** TEST 2 NEUMANN ***** ***** ***** ***** //
     // u = x*(1.0-x)*y*(1.0-y)*z*(1.0-z)
     // f = 2.0*(x*(1.0-x)*y*(1.0-y)+x*(1.0-x)*z*(1.0-z)+y*(1.0-y)*z*(1.0-z))
     // d = 0
     // n = Fallunterscheidung
     Icarus::mathfunction n_2(8);
-
+/*
     Icarus::DistEllpackMatrix<double> matrix_2n(nx*ny*nz);
     Icarus::SlicedVector<double> rhs_2n(nx*ny*nz);
     Icarus::SlicedVector<double> sol_2n(nx*ny*nz);
@@ -162,6 +163,7 @@ int main()
     writer_2n.addPointDataToTimestep(fullsol_2n, 0, "Potential");
 
     LOG_INFO("L2norm_2n = ", assembler_2n.calcL2Error(u_2, fullsol_2n));
-
+//    matrix_2n.print_local_data(std::cout);
+*/
     return 0;
 }

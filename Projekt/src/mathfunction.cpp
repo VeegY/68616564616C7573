@@ -33,7 +33,7 @@ double mathfunction::eval(double x, double y, double z, int plane)
             assert(false); // nicht vorgesehen
     // 5: u, 6: f, 7: dirichlet, 8: neumann
     case 5: return x*(1.0-x)*y*(1.0-y)*z*(1.0-z);
-    case 6: return 2.0*(x*(1.0-x)*y*(1.0-y)+x*(1.0-x)*z*(1.0-z)+y*(1.0-y)*z*(1.0-z));
+    case 6: return -2.0*(x*(1.0-x)*y*(1.0-y)+x*(1.0-x)*z*(1.0-z)+y*(1.0-y)*z*(1.0-z));
     case 7: return 0.0;
     case 8: if (plane == 1)
                 return (1.0-2.0*x)*y*(1.0-y)*z*(1.0-z);

@@ -27,9 +27,14 @@ double assembleFem::assemblyRHSNeumann(int Ebene, int leftright, mathfunction g)
             Basis2d = evaluated_Basis2d_1(_A[i] - 4*leftright);
 
             for(int q(0); q < 9; q++)
+            {
                 //Zum auswerten von g, translatiere die Gauspunkte zum Element e[i]
                 //RHS += Basis2d[q] * g.eval(R1[q] + e_x, R2[q] + e_y, e_z) * _weight_2d[q];
+            if (leftright == 0)
                 RHS += Basis2d[q] * g.eval(_quadpoints_2d_1[q] + e_x, _quadpoints_2d_2[q] + e_y, e_z, Ebene) * _weight_2d[q];
+            else
+                RHS -= Basis2d[q] * g.eval(_quadpoints_2d_1[q] + e_x, _quadpoints_2d_2[q] + e_y, e_z, Ebene) * _weight_2d[q];
+            }
         }
     }
     //X-Z-Ebene
@@ -46,9 +51,14 @@ double assembleFem::assemblyRHSNeumann(int Ebene, int leftright, mathfunction g)
             Basis2d = evaluated_Basis2d_2(_A[i] - 2*leftright);
 
             for(int q(0); q < 9; q++)
+            {
                 //Zum auswerten von g, translatiere die Gauspunkte zum Element e[i]
                 //RHS += Basis2d[q] * g.eval(R1[q] + e_x, e_y, R2[q] + e_z) * _weight_2d[q];
+            if (leftright == 0)
                 RHS += Basis2d[q] * g.eval(_quadpoints_2d_1[q] + e_x, e_y, _quadpoints_2d_2[q] + e_z, Ebene) * _weight_2d[q];
+            else
+                RHS -= Basis2d[q] * g.eval(_quadpoints_2d_1[q] + e_x, e_y, _quadpoints_2d_2[q] + e_z, Ebene) * _weight_2d[q];
+            }
         }
     }
     //Y-Z-Ebene
@@ -65,9 +75,14 @@ double assembleFem::assemblyRHSNeumann(int Ebene, int leftright, mathfunction g)
             Basis2d = evaluated_Basis2d_3(_A[i] - leftright);
 
             for(int q(0); q < 9; q++)
+            {
                 //Zum auswerten von g, translatiere die Gauspunkte zum Element e[i]
                 //RHS += Basis2d[q] * g.eval(e_x, R1[q] + e_y, R2[q] + e_z) * _weight_2d[q];
+            if (leftright == 0)
                 RHS += Basis2d[q] * g.eval(e_x, _quadpoints_2d_1[q] + e_y, _quadpoints_2d_2[q] + e_z, Ebene) * _weight_2d[q];
+            else
+                RHS -= Basis2d[q] * g.eval(e_x, _quadpoints_2d_1[q] + e_y, _quadpoints_2d_2[q] + e_z, Ebene) * _weight_2d[q];
+            }
         }
     }
 
