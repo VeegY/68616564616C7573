@@ -118,7 +118,7 @@ SlicedVectorGpu<Scalar>::
 operator=(const SlicedVectorGpu& other)
 {
     // selbst
-    if (this == &other) return this;
+    if (this == &other) return *this;
     // fremd
     if(_data) delete[] _data;
 	_my_comm = other._my_comm;
@@ -140,7 +140,7 @@ SlicedVectorGpu<Scalar>::
 operator=(SlicedVectorGpu&& other)
 {
     // selbst
-    if (this == &other) return this;
+    if (this == &other) return *this;
     // fremd
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;
