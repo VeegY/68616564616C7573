@@ -6,3 +6,5 @@
 build/
 documentation/
 !documentation/doxygen_config
+# Ignoriert alle pdf-Dateien um pull-Zeiten zu verringern
+*.pdf
