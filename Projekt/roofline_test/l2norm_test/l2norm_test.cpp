@@ -73,22 +73,22 @@ int main(int argc, char* argv[])
     double *vector_dev = NULL;
     double *result = NULL;
     int size_result = ceil((double)dimension / 1024);
-
+    printf("0\n");
     allocation(&vector_dev, dimension);
     allocation(&result, size_result);
-
+    printf("1\n");
     copy_data(vector_host, vector_dev, dimension);
-
+    printf("2\n");
     //=========================================//
     float elapsed_kernel = invoke_gpu_time(vector_dev, result, dimension, iteration);
     //>>>KERNEL<<<
     //=========================================//
-
+    printf("3\n");
     
     //l2norm_check_result_(result, vector_host, dimension);
     cleanup(vector_dev);
     cleanup(result);
- 
+    printf("4\n");
 //================================================================================================/
 //                                         Evaluieren
 //================================================================================================/
