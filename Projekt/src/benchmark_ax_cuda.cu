@@ -8,6 +8,12 @@
 #include <string>
 
 
+template<typename Scalar>
+void alloc_unified(Scalar **fvec, size_t dim_fvec);
+
+template <typename Scalar>
+void cleanupgpu(Scalar *data);
+
 
 //KERNEL Matrix Vecotr Produkt
 template<typename mtype, typename vtype, typename rtype>
