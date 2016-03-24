@@ -15,18 +15,29 @@
 // nur für intellisense
 #include "slicedvectorgpu.hpp"
 
-
 template<typename Scalar>
 void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local);
+
+template<typename type>
+void gpu_dot_(type *vecx, type *vecy, size_t dim, type erg);
+
+template<typename type>
+void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim);
+
+template<typename type>
+void gpu_l2(type *vec, size_t dim, type erg);
+
+template<typename type>
+void gpumaxnorm(type *vec, size_t dim, type erg);
+
+template<typename type>
+void copygpu_(type *vecin, type *vecout, size_t dim);
 
 template <typename Scalar>
 void cleanupgpu(Scalar *data);
 
 template<typename Scalar>
-void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local);
-
-template<typename Scalar>
-void alloc_unifiedV(Scalar **fvec, int dim_fvec);
+void alloc_unified(Scalar **fvec, size_t dim_fvec);
 
 namespace Icarus
 {
@@ -65,7 +76,7 @@ SlicedVectorGpu(size_t dim_global, MPI_Comm my_comm) :
     // allokiere lokalen speicher
     try
     {
-        alloc_unifiedV(& _data, _dim_local);
+        alloc_unified(& _data, _dim_local);
     }
     catch(...)
     {
@@ -234,8 +245,14 @@ axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
 {
     assert(_dim_global == y._dim_global);
 
-    for(size_t i=0; i<_dim_local; i++)
-        _data[i] = _data[i] + alpha*y._data[i];
+    Scalar alpha2(alpha);
+    SlicedVectorGpu<Scalar> yvec(y);
+    alloc_unified((Scalar **)&alpha2, (size_t)1.0);
+
+    gpu_axpy(_data, alpha2, yvec.getDataPointer(), _dim_local);
+
+    cleanupgpu(&alpha2);
+
 }
 
 template<typename Scalar>
@@ -262,7 +279,8 @@ copy_impl(const SlicedVectorGpu &other)
 {
     assert(_dim_global == other._dim_global);
 
-    for(size_t i=0; i<_dim_local; i++) _data[i] = other._data[i];
+    copygpu_(_data, other.getDataPointer(), _dim_local);
+
 }
 
 
