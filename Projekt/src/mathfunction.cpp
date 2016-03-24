@@ -43,6 +43,17 @@ double mathfunction::eval(double x, double y, double z, int plane)
             if (plane == 3)
                 return x*(1.0-x)*y*(1.0-y)*(1.0-2.0*z);
             assert(false); // nicht vorgesehen
+    // 9: u, 10: f, 11: dirichlet, 12: neumann
+    case 9: return x*x;
+    case 10:return 2.0;
+    case 11:return x*x;
+    case 12:if (plane == 1)
+                return 2*x;
+            if (plane == 2)
+                return 0.0;
+            if (plane == 3)
+                return 0.0
+            assert(false); // nicht vorgesehen
     }
     assert(!true); // nicht vorgesehen
     return 0.0;

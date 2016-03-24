@@ -9,6 +9,10 @@
 #include "../src/include/vtkwriter.hpp"
 #include "../src/include/discretizer.hpp"
 
+#include <string>
+
+void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx, int ny, int nz);
+
 int main()
 {
     const int nn(20);
@@ -16,6 +20,13 @@ int main()
     const int nx(nn+1), ny(nn+1), nz(nn+1);
     std::vector<char> disc = Icarus::discretizer("leer.obj", h, nx, ny, nz);
 
+    for (int i(1); i <= 3; ++i)
+    {
+        test(i, false, disc, h, nx, ny, nz);
+        test(i, true, disc, h, nx, ny, nz);
+    }
+
+/*
     // ***** ***** ***** ***** TEST 0 DIRICHLET ***** ***** ***** ***** //
     // u = 0
     // f = 0
@@ -23,7 +34,7 @@ int main()
     Icarus::mathfunction u_0(0, 0.0);
     Icarus::mathfunction f_0(0, 0.0);
     Icarus::mathfunction d_0(0, 0.0);
-/*
+
     Icarus::DistEllpackMatrix<double> matrix_0d(nx*ny*nz);
     Icarus::SlicedVector<double> rhs_0d(nx*ny*nz);
     Icarus::SlicedVector<double> sol_0d(nx*ny*nz);
@@ -40,14 +51,14 @@ int main()
     writer_0d.addPointDataToTimestep(fullsol_0d, 0, "Potential");
 
     LOG_INFO("L2norm_0d = ", assembler_0d.calcL2Error(u_0, fullsol_0d));
-*/
+
     // ***** ***** ***** ***** TEST 0 NEUMANN ***** ***** ***** ***** //
     // u = 0
     // f = 0
     // d = 0
     // n = 0
     Icarus::mathfunction n_0(0, 0.0);
-/*
+
     Icarus::DistEllpackMatrix<double> matrix_0n(nx*ny*nz);
     Icarus::SlicedVector<double> rhs_0n(nx*ny*nz);
     Icarus::SlicedVector<double> sol_0n(nx*ny*nz);
@@ -65,105 +76,31 @@ int main()
 
     LOG_INFO("L2norm_0n = ", assembler_0n.calcL2Error(u_0, fullsol_0n));
 */
-    // ***** ***** ***** ***** TEST 1 DIRICHLET ***** ***** ***** ***** //
-    // u = (0.5-x)(0.5-y)(0.5-z)
-    // f = 0
-    // d = Fallunterscheidung...
-    Icarus::mathfunction u_1(1);
-    Icarus::mathfunction f_1(2);
-    Icarus::mathfunction d_1(3);
-/*
-    Icarus::DistEllpackMatrix<double> matrix_1d(nx*ny*nz);
-    Icarus::SlicedVector<double> rhs_1d(nx*ny*nz);
-    Icarus::SlicedVector<double> sol_1d(nx*ny*nz);
-    sol_1d.clear(); sol_1d.set_local(0, 0.1);
-
-    Icarus::assembleFem assembler_1d(h, nx, ny, nz);
-    assembler_1d.assemble(matrix_1d, rhs_1d, disc, f_1, d_1);
-
-    Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_1d(matrix_1d, rhs_1d);
-    solver_1d.solve(sol_1d);
-
-    Icarus::FullVector<double> fullsol_1d(sol_1d);
-    Icarus::vtkWriter writer_1d("case1d", "case1d", nx, ny, nz, h, 1);
-    writer_1d.addPointDataToTimestep(fullsol_1d, 0, "Potential");
-
-    LOG_INFO("L2norm_1d = ", assembler_1d.calcL2Error(u_1, fullsol_1d));
-*/
-    // ***** ***** ***** ***** TEST 1 NEUMANN ***** ***** ***** ***** //
-    // u = (0.5-x)(0.5-y)(0.5-z)
-    // f = 0
-    // d = Fallunterscheidung...
-    // n = Fallunterscheidung...
-    Icarus::mathfunction n_1(4);
-
-    Icarus::DistEllpackMatrix<double> matrix_1n(nx*ny*nz);
-    Icarus::SlicedVector<double> rhs_1n(nx*ny*nz);
-    Icarus::SlicedVector<double> sol_1n(nx*ny*nz);
-    sol_1n.clear(); sol_1n.set_local(0, 0.1);
-
-    Icarus::assembleFem assembler_1n(h, nx, ny, nz);
-    assembler_1n.assemble(matrix_1n, rhs_1n, disc, f_1, d_1, n_1);
-
-    Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_1n(matrix_1n, rhs_1n);
-    solver_1n.solve(sol_1n);
-
-    Icarus::FullVector<double> fullsol_1n(sol_1n);
-    Icarus::vtkWriter writer_1n("case1n", "case1n", nx, ny, nz, h, 1);
-    writer_1n.addPointDataToTimestep(fullsol_1n, 0, "Potential");
-
-    LOG_INFO("L2norm_1n = ", assembler_1n.calcL2Error(u_1, fullsol_1n));
-//    matrix_1n.print_local_data(std::cout);
-
-    // ***** ***** ***** ***** TEST 2 DIRICHLET ***** ***** ***** ***** //
-    // u = x*(1.0-x)*y*(1.0-y)*z*(1.0-z)
-    // f = 2.0*(x*(1.0-x)*y*(1.0-y)+x*(1.0-x)*z*(1.0-z)+y*(1.0-y)*z*(1.0-z))
-    // d = 0
-    Icarus::mathfunction u_2(5);
-    Icarus::mathfunction f_2(6);
-    Icarus::mathfunction d_2(7);
-/*
-    Icarus::DistEllpackMatrix<double> matrix_2d(nx*ny*nz);
-    Icarus::SlicedVector<double> rhs_2d(nx*ny*nz);
-    Icarus::SlicedVector<double> sol_2d(nx*ny*nz);
-    sol_2d.clear(); sol_2d.set_local(0, 0.1);
-
-    Icarus::assembleFem assembler_2d(h, nx, ny, nz);
-    assembler_2d.assemble(matrix_2d, rhs_2d, disc, f_2, d_2);
-
-    Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_2d(matrix_2d, rhs_2d);
-    solver_2d.solve(sol_2d);
-
-    Icarus::FullVector<double> fullsol_2d(sol_2d);
-    Icarus::vtkWriter writer_2d("case2d", "case2d", nx, ny, nz, h, 1);
-    writer_2d.addPointDataToTimestep(fullsol_2d, 0, "Potential");
-
-    LOG_INFO("L2norm_2d = ", assembler_2d.calcL2Error(u_2, fullsol_2d));
-*/
-    // ***** ***** ***** ***** TEST 2 NEUMANN ***** ***** ***** ***** //
-    // u = x*(1.0-x)*y*(1.0-y)*z*(1.0-z)
-    // f = 2.0*(x*(1.0-x)*y*(1.0-y)+x*(1.0-x)*z*(1.0-z)+y*(1.0-y)*z*(1.0-z))
-    // d = 0
-    // n = Fallunterscheidung
-    Icarus::mathfunction n_2(8);
-/*
-    Icarus::DistEllpackMatrix<double> matrix_2n(nx*ny*nz);
-    Icarus::SlicedVector<double> rhs_2n(nx*ny*nz);
-    Icarus::SlicedVector<double> sol_2n(nx*ny*nz);
-    sol_2n.clear(); sol_2n.set_local(0, 0.1);
-
-    Icarus::assembleFem assembler_2n(h, nx, ny, nz);
-    assembler_2n.assemble(matrix_2n, rhs_2n, disc, f_2, d_2, n_2);
-
-    Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver_2n(matrix_2n, rhs_2n);
-    solver_2n.solve(sol_2n);
-
-    Icarus::FullVector<double> fullsol_2n(sol_2n);
-    Icarus::vtkWriter writer_2n("case2n", "case2n", nx, ny, nz, h, 1);
-    writer_2n.addPointDataToTimestep(fullsol_2n, 0, "Potential");
-
-    LOG_INFO("L2norm_2n = ", assembler_2n.calcL2Error(u_2, fullsol_2n));
-//    matrix_2n.print_local_data(std::cout);
-*/
     return 0;
+}
+
+void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx, int ny, int nz)
+{
+    Icarus::mathfunction u((testcase-1)*4+1);
+    Icarus::mathfunction f((testcase-1)*4+2);
+    Icarus::mathfunction d((testcase-1)*4+3);
+    Icarus::mathfunction n((testcase-1)*4+4);
+
+    Icarus::DistEllpackMatrix<double> matrix(nx*ny*nz);
+    Icarus::SlicedVector<double> rhs(nx*ny*nz);
+    Icarus::SlicedVector<double> sol(nx*ny*nz);
+    sol.clear(); sol.set_local(0, 0.1);
+
+    Icarus::assembleFem assembler(h, nx, ny, nz);
+    assembler.assemble(matrix, rhs, disc, f, d, n);
+
+    Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(matrix, rhs);
+    solver.solve(sol);
+
+    Icarus::FullVector<double> fullsol(sol);
+    std::string casename = "case" + std::string(testcase) + (neumann ? "n" : "d");
+    Icarus::vtkWriter writer(casename, casename, nx, ny, nz, h, 1);
+    writer.addPointDataToTimestep(fullsol, 0, "Potential");
+
+    LOG_INFO("L2norm_", testcase, (neumann ? "n" : "d"), " = ", assembler.calcL2Error(u, fullsol));
 }
