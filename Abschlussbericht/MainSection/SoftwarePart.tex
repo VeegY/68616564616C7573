@@ -1,5 +1,76 @@
 \section{Software}
 
+\subsection{Problemstellung}
+Ziel des Projektes ist es, das physikalische Modell der Wärmekonvektion zu berechnen.
+Zuerst muss dafür der Luftstrom modelliert werden. Als Geometrie wurde hier ein Quader gewählt.
+
+\subsubsection{Vereinfachende Annahmen}
+
+Die Luft sei inkompressibel. Das heißt $\rho$ (Dichte der Luft) ist konstant.
+Effekte der Viskosität und Turbulenzen werden vernachlässigt.
+Das Geschwindigkeitsfeld der Luftmoleküle ist ein wirbelfreies Potentialfeld.
+$\nabla \times v =0$ und $v= \nabla \phi$, wobei $\phi$ eine skalare Funktion ist.
+
+\subsubsection{Herleitung der Poisson-Gleichung}
+
+Einsetzen dieser Annahme in die Kontinuitätsgleichung
+\begin{align*}
+\frac{\partial \rho}{\partial t}+\nabla \cdot (\rho v)=0
+\end{align*}
+
+und Ausnutzen, dass $\rho$ konstant ist, liefert die Poisson-Gleichung
+\begin{align*}
+\Delta \phi = \frac{\partial^2 \phi}{\partial x^2}+\frac{\partial^2 \phi}{\partial y^2}+\frac{\partial^2 \phi}{\partial z^2}=0
+\end{align*}
+
+\subsubsection{Randbedingungen}
+An den Rändern nehmen wir Neumann-Randbedingungen an:
+\begin{align*}
+n \cdot \nabla \phi =v_N
+\end{align*}
+Für Punkte an der Wand gilt, dass $v_N=0$ ist. Bei Lüftern variiert dieser Wert.
+
+Aus Gründen der Eindeutigkeit muss $\phi$ an einer Stelle bekannt sein. 
+
+\subsection{Finite-Differenzen}
+Zum Lösen der Poisson-Gleichung wird der Laplace-Operator mittels des zentralen Differenzenquotientens approximiert.
+Für Randpunkte geht dies aber nicht.
+
+\subsubsection{Differenzenquotient für Randpunkte}
+An den Randpunkten kann der zentrale Differenzenquotient nicht mehr benutzt werden.
+Deshalb muss ein einseitiger Differenzenquotient der Ordnung 2 konstruiert werden.
+Wir benutzen folgenden DIfferenzenquotient:
+\begin{align*}
+\frac{\partial^2}{\partial x^2}f(x,y,z)=\frac{11f(x,y,z)-28f(x-h,y,z)+17f(x-2h,y,z)}{38h^2}+\mathcal O(h^2)
+\end{align*}
+bzw.
+\begin{align*}
+\frac{\partial^2}{\partial x^2}f(xy,z,)=\frac{11f(x,y,z)-28f(x+h,y,z)+17f(x+2h,y,z)}{38h^2}+\mathcal O(h^2)
+\end{align*}
+Der Laplace-Operator ist eine Zusammensetzung dieser Ableitungen, wobei an einfachen Randpunkten die anderen Richtungen mit Hilfe des zentralen Differenzenquotienten berechnet werden.
+An den zweifachen Randpunkten benötigt man zweimal den einseitigen Differenzenquotienten und an dreifachen sogar dreimal.
+
+\subsubsection{Neumann-Randbedingungen}
+Zur Berechnung des einseitigen Differenzenquotienten der ersten Ableitung kann dieser Differenzenquotient benutzt werden.
+\begin{align*}
+\frac{\partial}{\partial x}f(x,y,z)=\frac{3f(x,y,z)-f(x-h,y,z)+4f(x-2h,y,z)}{2h}+\mathcal O(h^2)
+\end{align*}
+bzw.
+\begin{align*}
+\frac{\partial}{\partial x}f(x,y,z)=\frac{3f(x,y,z)-f(x+h,y,z)+4f(x+2h,y,z)}{2h}+\mathcal O(h^2)
+\end{align*} 
+In den Neumann-Randbedingungen wird $n \cdot \nabla f(x,y,z)$ benötigt. Da $n$ abhängig von der Art des Randpunktes ist, kann ein Ergebnis allgemein nicht angegeben werden.
+
+\subsubsection{Assemblierung}
+Die Assemblierung liefert ein Gleichungssystem der Gestalt $Ax=b$ und erfolgt folgendermaßen:
+Der Quader wird mit einem äquidistanten Gitter überlegt, sodass der Rand dieses Gitters auf dem Rand des Quaders liegt.
+Sämtliche Gitterpunkte werden in einer trivialen Weise sukzessive durchnummeriert.
+Anschließend wird in jedem Punkt der Laplace-Operator gebildet. Dies entspricht einer Zeile in der entstehenden Matrix. Dabei ist es relevant, in welcher Position sich der Gitterpunkt befindet (d.h. innerer Punkt, Ecke, Kante, Seitenwand).
+Die Positionsabfrage erfolgt über verschiedene Fallunterscheidungen. Abhängig davon wird
+ein entsprechender Differenzenquotient benutzt.
+Abschließend wird für jeden Randpunkt noch die Neumann-Randbedingung berechnet und auf die entsprechende Zeile addiert um die quadratische Struktur des Gleichungssystems beizubehalten.
+
+ 
 \subsection{Finite-Elemente-Methode (FEM)}
 Zur Diskretisierung des Poisson-Problems, das betrachtet wird, kann man mit der implementierten FEM ein LGS $A u = b$ aufstellen, welches zur näherungsweisen Berechnung der Lösung dient. \\
 
