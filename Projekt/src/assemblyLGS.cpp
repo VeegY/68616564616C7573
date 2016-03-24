@@ -131,7 +131,7 @@ LOG_INFO("assembled 0%");
             }
         }
 
-        //Fläche 1
+        //Flaeche 1
         _e.resize(4);
         _A.resize(4);
         for(int i(1); i<_nx-1;i++)
@@ -356,7 +356,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
 
         for(int j(1); j<_ny-1; j++)
         {
-            //Fläche 5:
+            //Flaeche 5:
             _e.resize(4);
             _A.resize(4);
             Zeile++;
@@ -416,7 +416,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 }
             } //Close I-Schleife (X-Achse)
 
-            //Fläche 6:
+            //Flaeche 6:
             _e.resize(4);
             _A.resize(4);
             Zeile++;
@@ -470,7 +470,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             }
         }
 
-        //Fläche 4
+        //Flaeche 4
         _e.resize(4);
         _A.resize(4);
         for(int i(1); i< _nx-1; i++)
@@ -637,7 +637,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
             }
         }
 
-        //Fläche 2:
+        //Flaeche 2:
         _e.resize(4);
         _A.resize(4);
         for(int i(1); i<_nx-1; i++)

@@ -147,7 +147,7 @@ std::vector<double> assembleFem::evaluated_Basis2d_1(int A)
                 zwsp[i] = ((_h - R1[i]) * R2[i]) / (_h*_h);
             break;
     case 3: for(int i(0); i < 9; ++i)
-               zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
+                zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
             break;
     }
 

@@ -25,7 +25,6 @@ double assembleFem::assemblyRHSNeumann(int Ebene, int leftright, mathfunction g)
             double e_y(gety(_e[i]));
             double e_z(getz(_e[i]) + _h*static_cast<double>(leftright));
             Basis2d = evaluated_Basis2d_1(_A[i] - 4*leftright);
-
             for(int q(0); q < 9; q++)
             {
                 //Zum auswerten von g, translatiere die Gauspunkte zum Element e[i]

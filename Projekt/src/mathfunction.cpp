@@ -48,7 +48,7 @@ double mathfunction::eval(double x, double y, double z, int plane)
     case 10:return 2.0;
     case 11:return x*x;
     case 12:if (plane == 1)
-                return 2*x;
+                return 2.0*x;
             if (plane == 2)
                 return 0.0;
             if (plane == 3)

@@ -28,13 +28,13 @@ void assembleFem::assemblyMatrixRow()
     std::vector<bool> Belegt(length, false);
 
     //TODO TOCHECK fatal bei mehreren Objekten der Klasse, die unterschiedliche nx,ny und nz haben, oder?
-    static std::vector<int> a{0, 1, y, 1+y, z, 1+z, y+z, 1+y+z}; //Hilfsvektor um auf die Ecken (global gezaehlt) eines Element zu kommen
+    /*static*/ std::vector<int> a{0, 1, y, 1+y, z, 1+z, y+z, 1+y+z}; //Hilfsvektor um auf die Ecken (global gezaehlt) eines Element zu kommen
 
 //    std::vector<std::vector<double>> grad_Basis1(3, std::vector<double>(27)); // 27 Mal so viel Speicher fuer 8 Mal weniger evalgradbasis aufrufen...
 //    std::vector<std::vector<double>> grad_Basis2(3, std::vector<double>(27));
-    static std::vector<std::vector<std::vector<double>>> grad_Basis(8, std::vector<std::vector<double>>(3, std::vector<double>(27)));
-    static bool calced(false);
-    if (!calced)
+    /*static*/ std::vector<std::vector<std::vector<double>>> grad_Basis(8, std::vector<std::vector<double>>(3, std::vector<double>(27)));
+//    static bool calced(false);
+//    if (!calced)
         for (int B(0); B < 8; B++)
             grad_Basis[B] = evaluated_gradient_Basis3d(B);
 

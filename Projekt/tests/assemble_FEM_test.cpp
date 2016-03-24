@@ -15,14 +15,14 @@ void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx,
 
 int main()
 {
-    const int nn(20);
+    const int nn(10);
     const double h(1.0/static_cast<double>(nn));
     const int nx(nn+1), ny(nn+1), nz(nn+1);
     std::vector<char> disc = Icarus::discretizer("leer.obj", h, nx, ny, nz);
 
     for (int i(1); i <= 3; ++i)
     {
-        test(i, false, disc, h, nx, ny, nz);
+//        test(i, false, disc, h, nx, ny, nz);
         test(i, true, disc, h, nx, ny, nz);
     }
 
