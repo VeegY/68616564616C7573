@@ -2,14 +2,14 @@
 \contentsline {section}{\numberline {1}Motivation und Problembeschreibung}{3}{section.1}
 \contentsline {section}{\numberline {2}Einleitung}{4}{section.2}
 \contentsline {section}{\numberline {3}Hardware}{5}{section.3}
-\contentsline {subsection}{\numberline {3.1}Hardwareauswahl und Motivation}{5}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Aufbau des Clusters}{5}{subsection.3.2}
-\contentsline {subsubsection}{\numberline {3.2.1}Anordnung der Rechenknoten}{5}{subsubsection.3.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2}Strom und Netzwerkanbindung}{6}{subsubsection.3.2.2}
-\contentsline {subsection}{\numberline {3.3}\IeC {\"U}bersichtsseite}{7}{subsection.3.3}
-\contentsline {subsubsection}{\numberline {3.3.1}Einrichtung Webserver}{7}{subsubsection.3.3.1}
-\contentsline {subsubsection}{\numberline {3.3.2}Sammeln der Messdaten}{8}{subsubsection.3.3.2}
-\contentsline {subsubsection}{\numberline {3.3.3}Weitere Funktionen des Dashboards}{8}{subsubsection.3.3.3}
+\contentsline {subsection}{\numberline {3.1}Zielsetzung des Hardwareaspekts}{5}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Vorbereitung und Hardwareauswahl}{5}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}Planung der Stromversorgung}{6}{subsubsection.3.2.1}
+\contentsline {subsection}{\numberline {3.3}Umsetzung und Ergebnisse}{6}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}\IeC {\"U}bersichtsseite}{7}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}Einrichtung Webserver}{7}{subsubsection.3.4.1}
+\contentsline {subsubsection}{\numberline {3.4.2}Sammeln der Messdaten}{8}{subsubsection.3.4.2}
+\contentsline {subsubsection}{\numberline {3.4.3}Weitere Funktionen des Dashboards}{8}{subsubsection.3.4.3}
 \contentsline {section}{\numberline {4}Software}{9}{section.4}
 \contentsline {subsection}{\numberline {4.1}Finite-Elemente-Methode (FEM)}{9}{subsection.4.1}
 \contentsline {subsection}{\numberline {4.2}L\IeC {\"o}ser}{10}{subsection.4.2}
