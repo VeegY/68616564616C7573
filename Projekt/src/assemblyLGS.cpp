@@ -12,7 +12,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
 {
     //TODO: vorlaeufig, wieder loeschen
     bool Dirichlet(true);
-    bool Neumann(!Dirichlet);
+    bool Neumann(false);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
@@ -25,27 +25,27 @@ LOG_INFO("assembled 0%");
     _e.clear(); _e.resize(1);
     _A.clear(); _A.resize(1);
     Zeile=0;
-//    if(Dirichlet)
+    if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
-//    else
-//    {
-//        _e[0]=Zeile; _A[0]=0;
-//        assemblyMatrixRow();
-//        for (int m(0); m<8; ++m)
-//            Matrix.sequential_fill(_column[m], _value[m]);
-//        Matrix.end_of_row();
-//        RHS[Zeile] = assemblyRHSLoad(f);
-//        if(Neumann)
-//        {
-//            RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-//            RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
-//            RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
-//        }
-//    }
+    else
+    {
+        _e[0]=Zeile; _A[0]=0;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+        }
+    }
 
     //Kante 1:
     _e.resize(2);
@@ -131,7 +131,7 @@ LOG_INFO("assembled 0%");
             }
         }
 
-        //Fläche 1:
+        //Fläche 1
         _e.resize(4);
         _A.resize(4);
         for(int i(1); i<_nx-1;i++)

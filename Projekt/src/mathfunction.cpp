@@ -11,7 +11,8 @@ double mathfunction::eval(double x, double y, double z, int plane)
     // 1: u, 2: f, 3: dirichlet, 4: neumann
     case 1: return (0.5-x)*(0.5-y)*(0.5-z);
     case 2: return 0.0;
-    case 3: if (x < 1.0e-5 && x > -1.0e-5)
+    case 3: return (0.5-x)*(0.5-y)*(0.5-z);
+            if (x < 1.0e-5 && x > -1.0e-5)
                 return (0.5)*(0.5-y)*(0.5-z);
             if (x < 1.0+1.0e-5 && x > 1.0-1.0e-5)
                 return (-0.5)*(0.5-y)*(0.5-z);

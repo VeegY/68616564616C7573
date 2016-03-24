@@ -11,7 +11,7 @@
 
 int main()
 {
-    const int nn(10);
+    const int nn(20);
     const double h(1.0/static_cast<double>(nn));
     const int nx(nn+1), ny(nn+1), nz(nn+1);
     std::vector<char> disc = Icarus::discretizer("leer.obj", h, nx, ny, nz);

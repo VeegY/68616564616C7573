@@ -131,22 +131,22 @@ std::vector<double> assembleFem::evaluated_Basis2d_1(int A)
     assert(A >= 0 && A < 4);
 
     // Fuer Quadraturpunkte
-    std::vector<double> R1(27), R2(27), zwsp(27);
+    std::vector<double> R1(9), R2(9), zwsp(9);
     R1 = get_quadrature_xpoints_2d_1();
     R2 = get_quadrature_ypoints_2d_1();
 
     switch (A)
     {
-    case 0: for(int i(0); i < 27; ++i)
+    case 0: for(int i(0); i < 9; ++i)
                 zwsp[i] = ((_h - R1[i]) * (_h - R2[i])) / (_h*_h);
             break;
-    case 1: for(int i(0); i < 27; ++i)
+    case 1: for(int i(0); i < 9; ++i)
                 zwsp[i] = (R1[i] * (_h - R2[i])) / (_h*_h);
             break;
-    case 2: for(int i(0); i < 27; ++i)
+    case 2: for(int i(0); i < 9; ++i)
                 zwsp[i] = ((_h - R1[i]) * R2[i]) / (_h*_h);
             break;
-    case 3: for(int i(0); i < 27; ++i)
+    case 3: for(int i(0); i < 9; ++i)
                zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
             break;
     }
@@ -160,22 +160,22 @@ std::vector<double> assembleFem::evaluated_Basis2d_2(int A)
     assert(A == 0 || A == 1 || A == 4 || A == 5);
 
     // Fuer Quadraturpunkte
-    std::vector<double> R1(27), R2(27), zwsp(27);
+    std::vector<double> R1(9), R2(9), zwsp(9);
     R1 = get_quadrature_xpoints_2d_2();
     R2 = get_quadrature_zpoints_2d_2();
 
     switch (A)
     {
-    case 0: for(int i(0); i < 27; ++i)
+    case 0: for(int i(0); i < 9; ++i)
                 zwsp[i] = ((_h - R1[i]) * (_h - R2[i])) / (_h*_h);
             break;
-    case 1: for(int i(0); i < 27; ++i)
+    case 1: for(int i(0); i < 9; ++i)
                 zwsp[i] = (R1[i] * (_h - R2[i])) / (_h*_h);
             break;
-    case 4: for(int i(0); i < 27; ++i)
+    case 4: for(int i(0); i < 9; ++i)
                 zwsp[i] = ((_h - R1[i]) * R2[i]) / (_h*_h);
             break;
-    case 5: for(int i(0); i < 27; ++i)
+    case 5: for(int i(0); i < 9; ++i)
                zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
             break;
     }
@@ -188,22 +188,22 @@ std::vector<double> assembleFem::evaluated_Basis2d_3(int A)
     assert(A == 0 || A == 2 || A == 4 || A == 6);
 
     // Fuer Quadraturpunkte
-    std::vector<double> R1(27), R2(27), zwsp(27);
+    std::vector<double> R1(9), R2(9), zwsp(9);
     R1 = get_quadrature_ypoints_2d_3();
     R2 = get_quadrature_zpoints_2d_3();
 
     switch (A)
     {
-    case 0: for(int i(0); i < 27; ++i)
+    case 0: for(int i(0); i < 9; ++i)
                 zwsp[i] = ((_h - R1[i]) * (_h - R2[i])) / (_h*_h);
             break;
-    case 2: for(int i(0); i < 27; ++i)
+    case 2: for(int i(0); i < 9; ++i)
                 zwsp[i] = (R1[i] * (_h - R2[i])) / (_h*_h);
             break;
-    case 4: for(int i(0); i < 27; ++i)
+    case 4: for(int i(0); i < 9; ++i)
                 zwsp[i] = ((_h - R1[i]) * R2[i]) / (_h*_h);
             break;
-    case 6: for(int i(0); i < 27; ++i)
+    case 6: for(int i(0); i < 9; ++i)
                zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
             break;
     }
