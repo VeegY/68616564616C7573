@@ -202,24 +202,23 @@ SlicedVectorGpu<Scalar>::
 l2norm2_impl() const
 {
     RealType res(0), res_global;
-    for(size_t i=0; i<_dim_local; i++)
-        res += ScalarTraits<Scalar>::abs2(_data[i]);
+
+    gpu_l2(_data,_dim_local,res);
+
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
 }
+
 
 template<typename Scalar>
 typename SlicedVectorGpu<Scalar>::RealType
 SlicedVectorGpu<Scalar>::
 maxnorm_impl() const
 {
-    RealType res = std::numeric_limits<RealType>::min(), res_global, tmp;
-    for(size_t i=0; i<_dim_local; i++)
-    {
-        tmp = ScalarTraits<Scalar>::abs(_data[i]);
-        if(tmp > res) res = tmp;
-    }
+    RealType res = std::numeric_limits<RealType>::min(), res_global;
+
+    gpumaxnorm(_data,_dim_local, res);
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
     return res_global;
@@ -232,8 +231,11 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
     assert(_dim_global == other._dim_global);
 
     Scalar res(0), res_global;
-    for(size_t i=0; i<_dim_local; i++)
-        res += ScalarTraits<Scalar>::smult(_data[i], other._data[i]);
+
+    alloc_unified(res, 1.0);
+
+    gpu_dot_(_data, other.getDataPointer(), _dim_local, res);
+
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<Scalar>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
