@@ -22,7 +22,7 @@ int neumann_demo()
 	//std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
 	
 	// assemblieren
-	auto lgs = Icarus::assemble_neumann<double>(nx, ny, nz, h, bdry);
+	auto lgs = Icarus::assemble_neumann_unrolled<double>(nx, ny, nz, h, bdry);
 	//ausgabe der Matrix:
 	std::cout << "Die Matrix A:" << std::endl;
 	Icarus::print_sliced_object(lgs.first);
