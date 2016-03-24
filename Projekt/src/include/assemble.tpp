@@ -2768,7 +2768,7 @@ void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fr
 	}
 }
 
-void printIndexMatrix(int** indexMatrix, int msize)
+/*void printIndexMatrix(int** indexMatrix, int msize)
 {
 
     for (int i=0;i< msize;i++)
@@ -2780,7 +2780,7 @@ void printIndexMatrix(int** indexMatrix, int msize)
     std::cout <<" "<<std::endl;
     }
 }
-
+*/
 
 
 
