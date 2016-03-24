@@ -52,7 +52,7 @@ double mathfunction::eval(double x, double y, double z, int plane)
             if (plane == 2)
                 return 0.0;
             if (plane == 3)
-                return 0.0
+                return 0.0;
             assert(false); // nicht vorgesehen
     }
     assert(!true); // nicht vorgesehen

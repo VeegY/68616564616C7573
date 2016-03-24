@@ -98,7 +98,7 @@ void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx,
     solver.solve(sol);
 
     Icarus::FullVector<double> fullsol(sol);
-    std::string casename = "case" + std::string(testcase) + (neumann ? "n" : "d");
+    std::string casename = "case" + std::to_string(testcase) + (neumann ? "n" : "d");
     Icarus::vtkWriter writer(casename, casename, nx, ny, nz, h, 1);
     writer.addPointDataToTimestep(fullsol, 0, "Potential");
 
