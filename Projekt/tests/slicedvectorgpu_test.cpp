@@ -95,11 +95,5 @@ int slicedvectorgputest()
 
 int main()
 {
-    int myrank;
-    MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
-    if (myrank == 0)
-    {
-        return slicedvectorgputest();
-    }
-    return 0;
+    return slicedvectorgputest();
 }
