@@ -1,99 +1,72 @@
 \section{Hardware}
-Der zweite wichtige Aspekt beim Aufbau eines unkonventionellen 
-Supercomputers ist der physikalische Aufbau des Computers.
-Hierbei muss man darauf achten ein Gleichgewicht zwischen den Faktoren 
-Energieverbrauch, Rechengeschwindigkeit, und Kühlung zu finden.
-Zusätzlich soll unabhängig von der Größe des Clusters eine
-einfache Lösung für das Monitoring bereitgestellt werden.
 
-\subsection{Hardwareauswahl und Motivation}
-HIER NOCH INHALT EINFÜGEN! (wenn nicht redundant mit der Einleitung)
+\subsection{Zielsetzung des Hardwareaspekts}
+Entscheident beim Aufbau eines Supercomputers ist
+es die Faktoren Platzbedarf, Rechengeschwindigkeit und Kühlung 
+in eine gleichgewicht zu bringen. Bei einem grünen Supercomputer 
+muss darüberhinaus auch die Energeeffizienz beachtet werden,
+welche maßgeblich durch den Aufbau des Clusters beeinflusst wird.
 
+%Der zweite wichtige Aspekt beim Aufbau eines unkonventionellen 
+%Supercomputers ist der physikalische Aufbau des Computers.
+%Hierbei muss man darauf achten ein Gleichgewicht zwischen den Faktoren 
+%Energieverbrauch, Rechengeschwindigkeit, und Kühlung zu finden.
+%Zusätzlich soll unabhängig von der Größe des Clusters eine
+%einfache Lösung für das Monitoring bereitgestellt werden.
 
-\subsection{Aufbau des Clusters}
-Für ein Jetson-TK1-Cluster mit insulärer Stromversorgung
-ist das Design des Racks der entscheidene Punkt um 
-auch unter dauerhafter Höchstbelastung eine
-stabile Funktion der Rechenknoten, zu gewährleisten.
-Durch die Verwendung eines Lithium-Ion-Akkus zur Energiespeicherung
-und das Risiko eines Kurzschlusses durch Kondensionswasser muss
-ein geschickt aufgebautes Rechencluster gewährleisten, dass die Temperatur
-der gesamten Anlage in dem Bereich von 
-$18^\circ\text{C}~\text{bis}~40^\circ \text{C}$ gehalten wird. 
-%Besonders beim Aufbau eines insulären Jetson-TK1-Clusters ist die Kühlung ein
-%heikles Thema, da sowohl die Temperatur des Rechenclusters als auch 
-%die Temperatur des Energiespeichers in seinem stark restringierten Bereich liegen müssen.
-\subsubsection{Anordnung der Rechenknoten}
-Hinsichtlich der oben beschriebenen Problematik ist die Anordnung der Knoten 
-das zentrale Instrument mit dem man die Bildung potenzieller Wärmenester 
-gegen den Platzverbrauch des Clusters abwägen kann.~\\
-Wegen zu hoher Energiekosten muss auf den Einsatz einer
-Wasserkühlung verzichtet werden, um eine möglichst 
-hohe Energieeffizienz zu erreichen.
-Die einfachsten Ansätze zum Aufbau des Supercomputers, 
-welche sich mittels Luftkühlung umsetzen lassen, sind:
-\begin{itemize}
-\item[1)]Rechenknoten in horizontalen Schichten anzuordnen
-\item[2)]Rechenknoten vertikal anzuordnen und nebeneinander aufstellen
-\end{itemize} 
-Je nach Aufbau ergeben sich dabei einige Vor- und Nachteile für den Großrechner, welche hier anhand der
-Wärmebildern gezeigt werden.\\
-~\\
-\begin{minipage}{0.50\textwidth}
-\centering
-	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/convective-horizontal-2.png}
-	\captionof{figure}{Horizontaler Aufbau}
-	\label{fig:HWPabb1}
-
+\subsection{Vorbereitung und Hardwareauswahl}
+Die für die Kühlung des Clusters benötigte Energie, und
+somit auch die Energeefizienz, ist eng mit der Anordnung der Rechenknoten
+verbunden. Daher wurden zu Beginn einige Modelle konstruiert 
+um diese zu Optimieren und einen zielgerichteten ablauf der Konstruktion
+zu gewährleisten.~\\
+\begin{minipage}{0.45\textwidth}
+\begin{figure}[H]
+  \centering
+    \includegraphics[scale=0.07]{./Bilder/20150929_133702-2.jpg}
+\caption{Aufbau als Doppelhelix (Modell)}
+    \label{fig:HWP_DoppelHelixModell}
+\end{figure} 
 \end{minipage}
 \hfill
-\begin{minipage}{0.50\textwidth}
-\centering
-	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/convective-vertical-2.png}
-	\captionof{figure}{Vertikaler Aufbau}
-	\label{fig:HWPabb2}
+\begin{minipage}{0.45\textwidth}
+ \begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{./Bilder/render3.jpg}
+\caption{Computermodell für den Aufbau als Doppelhelix}
+    \label{fig:HWP_DoppelHelixModellBlender}
+\end{figure}
 \end{minipage}
-~\\
-Vergleicht man diese beiden Ansätze, so sieht man, dass im horizontalen Szenario (\ref{fig:HWPabb1}) zwischen den 
-Platten, auf denen die Rechenknoten angebracht sind, Wärmenester entstehen. Zudem liefert die
-Analyse des Stromlinien-Diagramms, dass besonders in der Mitte der Platten die Wärme nur schlecht  
-abtransportiert werden kann.\\
-Im Gegensatz dazu ist der Wärmeabtransport beim vertikalem Ansatz (\ref{fig:HWPabb2}) durch aufsteigende warme Luft
-besser möglich. Hierbei sollte allerdings bemerkt werden, dass durch die schiefe Lage des Ventilators
-die Gravitationskraft Unregelmäßigkeiten bei der Rotation verursachen würde, was schlussendlich zu einer verkürzten Lebensdauer des Ventilators führen könnte.\\
-Um die Vorteile der beiden Ansätze zu kombinieren und gleichzeitig für Wartbarkeit des 
-Rechenclusters zu sorgen, wählt man einen Ansatz, bei dem die Boards in einer Doppelhelix-Struktur 
-angeordnet werden.\\
-~\\
-\begin{minipage}{0.50\textwidth}
-\centering
-	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/render3.jpg}
-	\captionof{figure}{Render des Serveraufbaus}
-	\label{fig:HWPabb3}
-\end{minipage}
-\hfill
-\begin{minipage}{0.50\textwidth}
-\centering
-	\includegraphics[width=0.99\textwidth]{./Bilder/Server-Aufbau/DSC_0020.JPG}
-	\captionof{figure}{Serveraufbau (17. März 2016)}
-	\label{fig:HWPabb4}
-\end{minipage}
-~\\
-Wie auf diesen Abbildungen (\ref{fig:HWPabb3} , \ref{fig:HWPabb4}) zu erkennen ist, wird durch die Verwendung der Doppelhelix-Struktur
-ein größerer Abstand zwischen den Bords für eine verbesserte Kühlung, bei gleichzeitig geringem
-Platzverbrauch ermöglicht.\\ 
-\subsubsection{Strom und Netzwerkanbindung}
-Über die Anordnung hinaus muss nun die Stromversorgung und die Netzwerkanbindung
-der Bords geregelt werden. Eine besondere Herausforderung hierbei ist die 
-Anordnung der Netzteile, der einzelnen Rechenknoten. 
-Um zu gewährleisten, dass sich durch das Aufheizen der Netzteile keine gefährlichen
+
+
+Um die Bildung von Wärmenestern zu vermeiden, hat man sich für die
+Anordnung der Boards in einer Doppelhelix entschieden. Siehe Abbildung \ref{fig:HWP_DoppelHelixModell} und \ref{fig:HWP_DoppelHelixModellBlender}.
+Besonders hinsichtlich Platzbedarf, und der vermeidung von Wärmenestern 
+bietet dieser Aufbau große vorteile gegenüber der Stategie, die 
+Rechenknoten in Schichten anzuordnen.
+~\\~\\
+Zusätzlich zur Anordnung der Knoten selbst ist die Auswahl der
+sonstigen Hardware entscheident für die Stabile funktion des
+Rechenclusters.\\
+Um die Operation des Clusters besser überwachen zu können, hat man sich
+für die Power-Distribution-Unit (PDU) [MODELLNAME] von APC entschieden, da
+diese laut Hersteller eine genaue Messung des aktuellen Stromverbrauchs und
+der Humidität unterstützt. Als Switch kommt der ``Small Business SG300-28''
+von Cisco zum einsatz, da dieser durch geringen Stromverbrauch und
+und viele Ports für die verwendung in einem grünen Supercomputer 
+besonders geeignet ist.
+
+\subsubsection{Planung der Stromversorgung}
+Eine besondere Herausforderung stellt auch die 
+Anordnung der Netzteile, der einzelnen Rechenknoten dar.
+Um zu gewährleisten, dass sich durch das Aufheizen der Netzteile keine
 Wärmenester bilden, wird eine spezielle Halterung verwendet.
 Unter Nutzung moderner 3D-Druck Technologien, wie sie häufig in der 'Maker-Szene' eingesetzt werden,
 wurde eine Halterung (\ref{fig:HWPabb5})entworfen und produziert, welche trotz geringem Materialaufwand eine sehr hohe Stabiliät 
-und eine gute Luftzufuhr ermöglicht.~\\
+und eine gute Luftzufuhr ermöglicht.~\\~\\
 \begin{minipage}{\textwidth}
 \begin{center}
-	\includegraphics[width=0.7\textwidth]{./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png}
+	\includegraphics[width=0.5\textwidth]{./Bilder/Server-Aufbau/RenderPowerSupplyBox30.png}
 	\captionof{figure}{Halterung für die Netzteile}
 	%\captionof{figure}{Halterung für die Netzteile}
 	\label{fig:HWPabb5}
@@ -106,6 +79,34 @@ Hinsichtlich des Aspektes 'Green-Computing' ist es wichtig, ein Druckfilament zu
 welches biokompatibel ist. Hierfür bietet sich der aus Maisstärke gewonnene Biokunststoff Polylactide (PLA) an.
 Dieser hat einen Schmelzpunkt von $150^\circ\text{C}~\text{bis}~160^\circ \text{C}$
 und ist daher ohne weiteres für die Halterung von Netzteilen verwendbar.
+
+
+
+\subsection{Umsetzung}
+Die Umsetzung des Aufbaus erfolgte aufgrund von guter Planung,
+und modellgetreuer Umsetzung ohne Probleme.
+Das fertig aufgebaute Cluster, sowie der verwendete Schlatplan 
+sind in den Abbildungen \ref{fig:HWP_ICARUS_Server}
+und \ref{fig:HWP_ICARUS_Schaltplan} dargestellt.~\\
+\begin{minipage}{0.45\textwidth}
+\begin{figure}[H]
+  \centering
+    \includegraphics[width=0.5\textwidth]{./Bilder/Server-Aufbau/DSC_0020-small.JPG}
+\caption{Aufbau des Servers}
+    \label{fig:HWP_ICARUS_Server}
+\end{figure} 
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+ \begin{figure}[H]
+  \centering
+    \includegraphics[width=\textwidth]{./Bilder/EMPTY.jpg}
+\caption{Schaltplan}
+    \label{fig:HWP_ICARUS_Schaltplan}
+\end{figure}
+\end{minipage}
+
+
 
 
 %\subsection{Wartung und Instandhaltung}

@@ -105,7 +105,7 @@ SlicedVector<Scalar>::
 operator=(const SlicedVector& other)
 {
     // selbst
-    if (this == &other) return this;
+    if (this == &other) return *this;
     // fremd
     if(_data) delete[] _data;
 	_my_comm = other._my_comm;
@@ -127,7 +127,7 @@ SlicedVector<Scalar>::
 operator=(SlicedVector&& other)
 {
     // selbst
-    if (this == &other) return this;
+    if (this == &other) return *this;
     // fremd
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;

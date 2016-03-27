@@ -2441,7 +2441,7 @@ void assembleKanteObenRechts(int** indexMatrix, double** valueMatrix,int fron, i
 void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
 	//int Eckenidx = 0;
-    /*
+    
 	if(fron <= 0 && 0 <= lron)
 	{
 		int vtx_global = 0;
@@ -2466,42 +2466,6 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
 		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(2),1/sqrt(3))
-		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
-		valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
-		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
-	}
-	*/
-	
-	//Die D-RB:
-	if(fron <= 0 && 0 <= lron)
-	{
-		int vtx_global = 0;
-		int vtx_local = vtx_global - fron;
-
-        indexMatrix[vtx_local][0] = vtx_global;
-		indexMatrix[vtx_local][1] = vtx_global + 1;
-		indexMatrix[vtx_local][2] = vtx_global + 2;
-		indexMatrix[vtx_local][3] = vtx_global + nx;
-		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
-		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
-		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-
-		//zentraler Differenzenquotient gar nicht möglich
-		//modifizierter Differenzenquotient in x/y/z-Richtung
-		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
-		valueMatrix[vtx_local][1] = -28.0/38.0;
-		valueMatrix[vtx_local][2] = 17.0/38.0;
-		valueMatrix[vtx_local][3] = -28.0 / 38.0;
-		valueMatrix[vtx_local][4] = 17.0 / 38.0;
-		valueMatrix[vtx_local][5] = -28.0 / 38.0;
-		valueMatrix[vtx_local][6] = 17.0 / 38.0;
-
-		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
@@ -2804,7 +2768,7 @@ void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fr
 	}
 }
 
-void printIndexMatrix(int** indexMatrix, int msize)
+/*void printIndexMatrix(int** indexMatrix, int msize)
 {
 
     for (int i=0;i< msize;i++)
@@ -2816,7 +2780,7 @@ void printIndexMatrix(int** indexMatrix, int msize)
     std::cout <<" "<<std::endl;
     }
 }
-
+*/
 
 
 
@@ -2873,28 +2837,6 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
 
     }
 
-//Setze eine Ladung in die Mitte:
-if(fron <= 555 && 555 <= lron)
-{
-	indexMatrix[555-fron][0] = 555; 
-	indexMatrix[555-fron][1] = 556;
-	indexMatrix[555-fron][2] = 557;
-	indexMatrix[555-fron][3] = 565;
-	indexMatrix[555-fron][4] = 545;
-	indexMatrix[555-fron][5] = 655;
-	indexMatrix[555-fron][6] = 455;
-
-	valueMatrix[555-fron][0] = 1.0;
-	valueMatrix[555-fron][1] = 0.0;
-        valueMatrix[555-fron][2] = 0.0;
-        valueMatrix[555-fron][3] = 0.0;
-        valueMatrix[555-fron][4] = 0.0;
-        valueMatrix[555-fron][5] = 0.0;
-        valueMatrix[555-fron][6] = 0.0;
-
-}
-
-
     //Fuelle nun die Seiten:
     //Links
     assembleLeftSidePanel(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
@@ -2937,8 +2879,28 @@ if(fron <= 555 && 555 <= lron)
     assembleEckeObenvornelinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-    printIndexMatrix(indexMatrix,msize);
 
+//Dirichlet-RB	
+/*if(fron <= 555 && 555 <= lron)
+{
+	indexMatrix[555-fron][0] = 555; 
+	indexMatrix[555-fron][1] = 556;
+	indexMatrix[555-fron][2] = 557;
+	indexMatrix[555-fron][3] = 565;
+	indexMatrix[555-fron][4] = 545;
+	indexMatrix[555-fron][5] = 655;
+	indexMatrix[555-fron][6] = 455;
+
+	valueMatrix[555-fron][0] = 1.0;
+	valueMatrix[555-fron][1] = 0.0;
+    valueMatrix[555-fron][2] = 0.0;
+    valueMatrix[555-fron][3] = 0.0;
+    valueMatrix[555-fron][4] = 0.0;
+    valueMatrix[555-fron][5] = 0.0;
+    valueMatrix[555-fron][6] = 0.0;
+
+}
+*/
     A.prepare_sequential_fill(7);
     
     for(int i =0;i< msize;i++)

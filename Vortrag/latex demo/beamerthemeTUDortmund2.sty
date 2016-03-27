@@ -1,0 +1,57 @@
+\ProvidesPackageRCS $Header: beamerthemeTUDortmund2.sty,v 1.0 2005/07/02 19:30:00 dgoeddeke Exp $
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+% Adaptations done to serve the needs of 
+% Chair of Mathematics III, Technische Universitaet Dortmund
+% by Christian Becker <christian.becker@math.tu-dortmund.de>
+%    Sven Buijssen <sven.buijssen@math.tu-dortmund.de>
+%    Dominik Goeddeke <dominik.goeddeke@math.tu-dortmund.de>
+
+
+\typeout{------ TUDortmund style for beamer package v0.1 ------}
+\typeout{presentation style for Chair of Mathematics III (Turek)}
+\typeout{written 2005--2008 by Christian Becker, Sven H.M. Buijssen & Dominik Goeddeke}
+\typeout{TU Dortmund}
+\typeout{ }
+
+\mode<presentation>
+
+\useoutertheme[subsection=false]{navbarbottom_TUDortmund2}
+\useinnertheme[shadow=true]{rounded}
+\usecolortheme{orchid}
+\usecolortheme{whale}
+\usefonttheme{professionalfonts}
+
+\setbeamertemplate{sections/subsections in toc}[square]
+\setbeamertemplate{items}[square]
+
+\setbeamercolor{frametitle}{fg=black,bg=TUDgreen}
+\setbeamercolor{navbar}{fg=black,bg=TUDgreen}
+
+\setbeamercolor{item}{fg=TUDgreen}
+\setbeamercolor{subitem}{fg=TUDgreen}
+\setbeamercolor{subsubitem}{fg=TUDgreen}
+\setbeamercolor{titlelike}{fg=white,bg=TUDgreen}
+
+\setbeamercolor{section in toc}{fg=TUDgreen}
+
+\setbeamercolor{block title}{fg=black,bg=TUDgreen!50!bg}
+\setbeamercolor{block body}{parent=normal text,%
+                            use=block title,%
+                            bg=block title.bg!20!bg}
+
+\setbeamercolor{block title alerted}{fg=white,bg=black!50!bg}
+\setbeamercolor{block body alerted}{parent=normal text,%
+                                 use=block title example,%
+                                 bg=block title example.bg!10!bg}
+
+\setbeamerfont{block title}{size={}}
+
+\setbeamercovered{transparent}
+
+\mode
+<all>

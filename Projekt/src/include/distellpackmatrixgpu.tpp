@@ -11,10 +11,7 @@ template <typename Scalar>
 void cleanupgpu(Scalar *data);
 
 template<typename Scalar>
-void alloc_unifiedD(Scalar **data, size_t **indices, int max_row_length, int dim_local);
-
-template<typename Scalar>
-void alloc_unifiedV(Scalar **fvec, int dim_fvec);
+void alloc_unified(Scalar **fvec, size_t dim_fvec);
 
 namespace Icarus
 {
@@ -69,7 +66,8 @@ _data(nullptr)
 {
 	try
 	{
-            alloc_unifiedD(& _data,& _indices, _max_row_length, _dim_local);
+        alloc_unified(& _data, _max_row_length*_dim_local);
+        alloc_unified(& _indices, _max_row_length*_dim_local);
 	}
 	catch (...)
 	{
@@ -144,7 +142,8 @@ DistEllpackMatrixGpu<Scalar>::operator=(const DistEllpackMatrixGpu& other)
 
 	try
 	{
-	    alloc_unifiedD(& _data,& _indices, _max_row_length, _dim_local);
+	    alloc_unified(& _data, _max_row_length*_dim_local);
+        alloc_unified(& _indices, _max_row_length*_dim_local);
 	}
 	catch (...)
 	{
@@ -176,7 +175,8 @@ void DistEllpackMatrixGpu<Scalar>::prepare_sequential_fill(size_t max_row_length
     _max_row_length = max_row_length;
     try
     {
-        alloc_unifiedD(& _data,& _indices, _max_row_length, _dim_local);
+        alloc_unified(& _data, _max_row_length*_dim_local);
+        alloc_unified(& _indices, _max_row_length*_dim_local);
     }
     catch(...)
     {

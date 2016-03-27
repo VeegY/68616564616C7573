@@ -1,0 +1,70 @@
+\ProvidesPackageRCS $Header: beamerouterthemenavbarbottom_TUDortmund2.sty,v 1.0 2005/07/02 19:30:00 cbecker Exp $
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+% Adaptations done to serve the needs of 
+% Chair of Mathematics III, Technische Universitaet Dortmund
+% by Christian Becker <christian.becker@math.tu-dortmund.de>
+%    Sven Buijssen <sven.buijssen@math.tu-dortmund.de>
+%    Dominik Goeddeke <dominik.goeddeke@math.tu-dortmund.de>
+
+
+\newif\ifbeamer@sb@subsection
+
+\DeclareOptionBeamer{subsection}[true]{\csname beamer@sb@subsection#1\endcsname}
+\ExecuteOptionsBeamer{subsection=true}
+\ProcessOptionsBeamer
+
+
+
+\mode<presentation>
+
+\setbeamercolor{frametitle}{parent=palette primary}
+\setbeamercolor{subsection in head/foot}{parent=palette secondary}
+\setbeamercolor{section in head/foot}{parent=palette quaternary}
+
+\definecolor{TUDgreen}{rgb}{0.52,0.72,0.09}
+\definecolor{TUDred}{rgb}{0.72,0.09,0.52}
+
+\beamer@compresstrue
+
+% Header
+\defbeamertemplate*{headline}{smoothbars theme}
+{%
+
+}%
+
+% Footer
+\defbeamertemplate*{footline}{smoothbars theme}
+{%
+
+}%
+
+% Frametitle
+\defbeamertemplate*{frametitle}{smoothbars theme}
+{%
+  \nointerlineskip%
+  \usebeamerfont{headline}%
+  \vskip0.4cm%
+  \nointerlineskip%
+  \begin{beamercolorbox}[wd=\paperwidth,leftskip=0.8cm,vmode]{empty}
+    \usebeamerfont*{frametitle}\insertframetitle%
+    \ifx\insertframesubtitle\@empty%
+    \strut\par%
+    \else
+    \par{\usebeamerfont*{framesubtitle}{\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}\strut\par}%
+    \fi%
+    \usebeamerfont{headline}%
+    \vskip1ex  
+    \rule{0.875\paperwidth}{0.2pt}
+  \end{beamercolorbox}%
+  \nointerlineskip
+}
+  
+\setbeamercolor{logo}{fg=black,bg=white}
+  
+\mode
+<all>

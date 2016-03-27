@@ -15,18 +15,29 @@
 // nur für intellisense
 #include "slicedvectorgpu.hpp"
 
-
 template<typename Scalar>
 void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local);
+
+template<typename type>
+void gpu_dot_(type *vecx, type *vecy, size_t dim, type erg);
+
+template<typename type>
+void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim);
+
+template<typename type>
+void gpu_l2(type *vec, size_t dim, type erg);
+
+template<typename type>
+void gpumaxnorm(type *vec, size_t dim, type erg);
+
+template<typename type>
+void copygpu_(type *vecin, type *vecout, size_t dim);
 
 template <typename Scalar>
 void cleanupgpu(Scalar *data);
 
 template<typename Scalar>
-void alloc_unifiedD(Scalar **data, int **indices, int max_row_length, int dim_local);
-
-template<typename Scalar>
-void alloc_unifiedV(Scalar **fvec, int dim_fvec);
+void alloc_unified(Scalar **fvec, size_t dim_fvec);
 
 namespace Icarus
 {
@@ -65,7 +76,7 @@ SlicedVectorGpu(size_t dim_global, MPI_Comm my_comm) :
     // allokiere lokalen speicher
     try
     {
-        alloc_unifiedV(& _data, _dim_local);
+        alloc_unified(& _data, _dim_local);
     }
     catch(...)
     {
@@ -118,7 +129,7 @@ SlicedVectorGpu<Scalar>::
 operator=(const SlicedVectorGpu& other)
 {
     // selbst
-    if (this == &other) return this;
+    if (this == &other) return *this;
     // fremd
     if(_data) delete[] _data;
 	_my_comm = other._my_comm;
@@ -140,7 +151,7 @@ SlicedVectorGpu<Scalar>::
 operator=(SlicedVectorGpu&& other)
 {
     // selbst
-    if (this == &other) return this;
+    if (this == &other) return *this;
     // fremd
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;
@@ -191,24 +202,23 @@ SlicedVectorGpu<Scalar>::
 l2norm2_impl() const
 {
     RealType res(0), res_global;
-    for(size_t i=0; i<_dim_local; i++)
-        res += ScalarTraits<Scalar>::abs2(_data[i]);
+
+    gpu_l2(_data,_dim_local,res);
+
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
 }
+
 
 template<typename Scalar>
 typename SlicedVectorGpu<Scalar>::RealType
 SlicedVectorGpu<Scalar>::
 maxnorm_impl() const
 {
-    RealType res = std::numeric_limits<RealType>::min(), res_global, tmp;
-    for(size_t i=0; i<_dim_local; i++)
-    {
-        tmp = ScalarTraits<Scalar>::abs(_data[i]);
-        if(tmp > res) res = tmp;
-    }
+    RealType res = std::numeric_limits<RealType>::min(), res_global;
+
+    gpumaxnorm(_data,_dim_local, res);
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
     return res_global;
@@ -221,8 +231,11 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
     assert(_dim_global == other._dim_global);
 
     Scalar res(0), res_global;
-    for(size_t i=0; i<_dim_local; i++)
-        res += ScalarTraits<Scalar>::smult(_data[i], other._data[i]);
+
+    alloc_unified(res, 1.0);
+
+    gpu_dot_(_data, other.getDataPointer(), _dim_local, res);
+
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<Scalar>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
@@ -234,8 +247,14 @@ axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
 {
     assert(_dim_global == y._dim_global);
 
-    for(size_t i=0; i<_dim_local; i++)
-        _data[i] = _data[i] + alpha*y._data[i];
+    Scalar alpha2(alpha);
+    SlicedVectorGpu<Scalar> yvec(y);
+    alloc_unified((Scalar **)&alpha2, (size_t)1.0);
+
+    gpu_axpy(_data, alpha2, yvec.getDataPointer(), _dim_local);
+
+    cleanupgpu(&alpha2);
+
 }
 
 template<typename Scalar>
@@ -262,7 +281,8 @@ copy_impl(const SlicedVectorGpu &other)
 {
     assert(_dim_global == other._dim_global);
 
-    for(size_t i=0; i<_dim_local; i++) _data[i] = other._data[i];
+    copygpu_(_data, other.getDataPointer(), _dim_local);
+
 }
 
 

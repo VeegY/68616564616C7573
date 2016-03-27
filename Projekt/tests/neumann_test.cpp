@@ -9,14 +9,15 @@
 
 double bdry(int vtx_global)
 {
-	if (vtx_global < 10) return 100;
+	if (vtx_global < 10000) return -100;
+	if (vtx_global >= 90000) return 100;
 	return 0.0;
 }
 
 int neumann_demo()
 {
-	const int nx = 10, ny = 10, nz = 10;
-	const float h = 0.1;
+	const int nx = 100, ny = 100, nz = 100;
+	const float h = 0.01;
 	// diskretisieren
 	//std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
 	
@@ -39,7 +40,7 @@ int neumann_demo()
 	MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
 	if (myrank == 0)
 	{
-		Icarus::vtkWriter writer("out", "Testdatensatz", nx, ny, nz, 1);
+		Icarus::vtkWriter writer("out/neumann", "Testdatensatz", nx, ny, nz, 1);
 		writer.addPointDataToTimestep(fullsol, 0, "Geschwindigkeitspotential");
 	}
 	MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
