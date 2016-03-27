@@ -15,7 +15,7 @@ int main(int nargs, char** args)
  
     constexpr size_t size = 1000000L;
 
-    if(nargs != 2)
+    if(nargs != 3)
     {
         std::cout << "Usage: matvec [#nnz/row] [#samples]" << std::endl;
         exit(-1);
