@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 2.6)
 project(stuprotm1516)
 
+CUDA_ADD_EXECUTABLE(mv_bench_gpu "mv_bench_gpu.cpp")
+ADD_EXECUTABLE(mv_bench "mv_bench.cpp")
+TARGET_LINK_LIBRARIES(mv_bench_gpu SRCLIB ${MPI_LIBRARIES} linalg ${CUDA_LIBRARIES})
+TARGET_LINK_LIBRARIES(mv_bench SRCLIB ${MPI_LIBRARIES})
 
-CUDA_ADD_EXECUTABLE(solverbench "solverbench.cpp")
-#TARGET_LINK_LIBRARIES(solverbench SRCLIB ${MPI_LIBRARIES} cuda ${CUDA_LIBRARIES})
-TARGET_LINK_LIBRARIES(solverbench SRCLIB ${MPI_LIBRARIES})
-
-target_include_directories(solverbench 
-     PUBLIC "include" 
+target_include_directories(mv_bench 
+     PUBLIC "../src/include")
+target_include_directories(mv_bench_gpu 
      PUBLIC "../src/include")
 
 LIST(APPEND CMAKE_CXX_FLAGS "-std=c++11 -O3 -ffast-math -Wall")

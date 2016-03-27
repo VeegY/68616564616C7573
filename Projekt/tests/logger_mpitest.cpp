@@ -1,13 +1,3 @@
-/*
-* Projekt:                  Studienprojekt TM 2015/16
-* Dateiname:                logger_test.cpp
-* Erstellt:                 17.11.15
-* Autor / Ansprechpartner:  David
-*
-* Kurzbeschreibung:
-* - Demonstration der Logger Klasse. (Noch) *kein* Unit-Test.
-*/
-
 #define LOGGING_LEVEL 3
 #include "../src/include/logger.hpp"
 #include <iostream>
@@ -21,4 +11,9 @@ int logger_test()
   
     // wird nie erreicht
     return 0;
+}
+
+int main()
+{
+    return logger_test();
 }

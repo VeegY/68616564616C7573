@@ -213,7 +213,6 @@ void DistEllpackMatrix<Scalar>::mult_vec_impl(const VectorType& vec, VectorType&
 
     // hole vec komplett in die node
 	FullVector<Scalar> fvec(vec);
-
 	// *************** BEGIN Durch CUDA-isierung ersetzen ************
 
     for(size_t row = 0; row < _dim_local; row++)
@@ -227,7 +226,6 @@ void DistEllpackMatrix<Scalar>::mult_vec_impl(const VectorType& vec, VectorType&
         }
         result.set_local(row, res);
     }
-
     // *************** END Durch CUDA-isierung ersetzen **************
 
 }
