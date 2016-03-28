@@ -12,7 +12,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
 {
     //TODO: vorlaeufig, wieder loeschen
     bool Dirichlet(true);
-    bool Neumann(false);
+    bool Neumann(true);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
@@ -41,9 +41,9 @@ LOG_INFO("assembled 0%");
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
         }
     }
 
@@ -70,8 +70,8 @@ LOG_INFO("assembled 0%");
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-                RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
             }
         }
     }//close I-Schleife (X-Achse)
@@ -96,9 +96,9 @@ LOG_INFO("assembled 0%");
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
         }
     }
 
@@ -126,8 +126,8 @@ LOG_INFO("assembled 0%");
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
             }
         }
 
@@ -137,28 +137,28 @@ LOG_INFO("assembled 0%");
         for(int i(1); i<_nx-1;i++)
         {
             Zeile++;
-            if(Dirichlet)
+//            if(Dirichlet)
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
-            else
-            {
-                _e[0]=Zeile -y-1; _A[0]=3;
-                _e[1]=Zeile -y; _A[1]=2;
-                _e[2]=Zeile -1; _A[2]=1;
-                _e[3]=Zeile; _A[3]=0;
-                assemblyMatrixRow();
-                for (int m(0); m<18; ++m)
-                    Matrix.sequential_fill(_column[m], _value[m]);
-                Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(f);
-                if(Neumann)
-                {
-                    RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-                }
-            }
+//            else
+//            {
+//                _e[0]=Zeile -y-1; _A[0]=3;
+//                _e[1]=Zeile -y; _A[1]=2;
+//                _e[2]=Zeile -1; _A[2]=1;
+//                _e[3]=Zeile; _A[3]=0;
+//                assemblyMatrixRow();
+//                for (int m(0); m<18; ++m)
+//                    Matrix.sequential_fill(_column[m], _value[m]);
+//                Matrix.end_of_row();
+//                RHS[Zeile] = assemblyRHSLoad(f);
+//                if(Neumann)
+//                {
+//                    RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+//                }
+//            }
         } //close I-Schleife (X-Achse)
 
         //Kante: 6
@@ -182,8 +182,8 @@ LOG_INFO("assembled 0%");
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
             }
         }
     } //close J-Schleife (Y-Achse)
@@ -208,9 +208,9 @@ LOG_INFO("assembled 0%");
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
         }
     }
 
@@ -237,8 +237,8 @@ LOG_INFO("assembled 0%");
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-                RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
             }
         }
     }//close I-Schleife (X-Achse)
@@ -263,9 +263,9 @@ LOG_INFO("assembled 0%");
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
         }
     }
 
@@ -293,8 +293,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
             }
         }
 
@@ -323,7 +323,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 RHS[Zeile] = assemblyRHSLoad(f);
                 if(Neumann)
                 {
-                    RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
+                    RHS[Zeile] += assemblyRHSNeumann(2, false, h);
                 }
             }
         }//close I-Schleife (X-Achse)
@@ -349,8 +349,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
             }
         }
 
@@ -379,7 +379,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 RHS[Zeile] = assemblyRHSLoad(f);
                 if(Neumann)
                 {
-                    RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+                    RHS[Zeile] += assemblyRHSNeumann(3, false, h);
                 }
             }
 
@@ -439,7 +439,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 RHS[Zeile] = assemblyRHSLoad(f);
                 if(Neumann)
                 {
-                    RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+                    RHS[Zeile] += assemblyRHSNeumann(3, true, h);
                 }
             }
         } //close J-Schleife (Y-Achse)
@@ -465,8 +465,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
             }
         }
 
@@ -495,7 +495,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 RHS[Zeile] = assemblyRHSLoad(f);
                 if(Neumann)
                 {
-                    RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
+                    RHS[Zeile] += assemblyRHSNeumann(2, true, h);
                 }
             }
         }//Close I-Schleife (X-Achse)
@@ -521,8 +521,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
             }
         }
     } //close K-schleife (Z-Achse)
@@ -548,9 +548,9 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
         }
     }
 
@@ -577,8 +577,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-                RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
             }
         }
     }//Close I-Schleife (X-Achse)
@@ -603,9 +603,9 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 0, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
         }
     }
 
@@ -632,8 +632,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
             }
         }
 
@@ -662,7 +662,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
                 RHS[Zeile] = assemblyRHSLoad(f);
                 if(Neumann)
                 {
-                    RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
+                    RHS[Zeile] += assemblyRHSNeumann(1, true, h);
                 }
             }
         }//Close I-Schleife (X-Achse)
@@ -688,8 +688,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-                RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
             }
         }
     }//Close J-Schleife (Y-Achse)
@@ -714,9 +714,9 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 0, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
         }
     }
 
@@ -743,8 +743,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
             RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-                RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
             }
         }
     }//Close I-Schleife (X-Achse)
@@ -769,9 +769,9 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            RHS[Zeile] += assemblyRHSNeumann(1, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, 1, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, 1, h);
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
         }
     }
 LOG_INFO("assembled 100%");
