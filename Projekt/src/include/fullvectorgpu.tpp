@@ -117,7 +117,14 @@ FullVectorGpu<Scalar>::FullVectorGpu(const FullVectorGpu& other) :
 	_num_nodes(other._num_nodes),
     _dim(other._dim)
 {
-    _data = new Scalar[_dim];
+    try
+    {
+        alloc_unified(& _data, _dim);
+    }
+    catch(...)
+    {
+        LOG_ERROR("Memory allocation for SlicedVectorGpu failed.");
+    }
     for (size_t i = 0; i < _dim; i++)
         _data[i] = other._data[i];
 }
@@ -140,13 +147,20 @@ FullVectorGpu<Scalar>::operator=(const FullVectorGpu& other)
     // selbst
     if (this == &other) return *this;
     // fremd
-    delete[] _data;
+    if (_data) cleanupgpu(_data);
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;
 	_num_nodes = other._num_nodes;
     _dim = other._dim;
 
-	_data = new Scalar[_dim];
+	try
+    {
+        alloc_unified(& _data, _dim);
+    }
+    catch(...)
+    {
+        LOG_ERROR("Memory allocation for SlicedVectorGpu failed.");
+    }
     for (size_t i = 0; i < _dim; i++)
         _data[i] = other._data[i];
     return *this;

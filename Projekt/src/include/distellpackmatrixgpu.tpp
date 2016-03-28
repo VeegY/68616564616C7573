@@ -129,8 +129,8 @@ DistEllpackMatrixGpu<Scalar>::operator=(const DistEllpackMatrixGpu& other)
 	if (this == &other) return *this;
 
 	// fremd
-	if (_indices) delete[] _indices;
-	if (_data) delete[] _data;
+	if (_indices) cleanupgpu(_indices);
+	if (_data) cleanupgpu(_data);
 
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;

@@ -12,7 +12,7 @@
 int fullvectorgputest()
 {
     srand (static_cast <unsigned> (time(0)));
-    const size_t N=100000;
+    const size_t N=40;
     Icarus::FullVectorGpu<double> vec1(N), vec2(N), vec4(N);
     Icarus::FullVectorGpu<double> vec6(N), vec7(N), vec8(N);
     if (vec1.get_dim()!=N){
@@ -91,7 +91,7 @@ int main()
     MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
     if (myrank == 0)
     {
-        return 0; //fullvectorgputest();
+        return fullvectorgputest();
     }
     return 0;
 }

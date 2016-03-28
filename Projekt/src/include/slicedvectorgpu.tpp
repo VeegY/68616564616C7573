@@ -103,7 +103,14 @@ SlicedVectorGpu(const SlicedVectorGpu& other) :
     _dim_local_nopad(other._dim_local_nopad),
 	_dim_local_last(other._dim_local_last)
 {
-    _data = new Scalar[_dim_local];
+    try
+    {
+        alloc_unified(& _data, _dim_local);
+    }
+    catch(...)
+    {
+        LOG_ERROR("Memory allocation for SlicedVectorGpu failed.");
+    }
     for (size_t i = 0; i < _dim_local; i++)
         _data[i] = other._data[i];
 }
@@ -131,7 +138,7 @@ operator=(const SlicedVectorGpu& other)
     // selbst
     if (this == &other) return *this;
     // fremd
-    if(_data) delete[] _data;
+    if(_data) cleanupgpu(_data);
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;
 	_num_nodes = other._num_nodes;
@@ -139,7 +146,14 @@ operator=(const SlicedVectorGpu& other)
     _dim_local = other._dim_local;
     _dim_local_nopad = other._dim_local_nopad;
 	_dim_local_last = other._dim_local_last;
-    _data = new Scalar[_dim_local];
+    try
+    {
+        alloc_unified(& _data, _dim_local);
+    }
+    catch(...)
+    {
+        LOG_ERROR("Memory allocation for SlicedVectorGpu failed.");
+    }
     for (size_t i = 0; i < _dim_local; i++)
         _data[i] = other._data[i];
     return *this;

@@ -13,7 +13,7 @@
 int slicedvectorgputest()
 {
     srand (static_cast <unsigned> (time(0)));
-    const size_t N=100000;
+    const size_t N=40;
     Icarus::SlicedVectorGpu<double> vec1(N), vec2(N), vec4(N);
     Icarus::SlicedVectorGpu<double> vec6(N), vec7(N), vec8(N);
     size_t dimloc = vec1.get_dim_local();
@@ -95,5 +95,5 @@ int slicedvectorgputest()
 
 int main()
 {
-    return 0; // slicedvectorgputest();
+    return slicedvectorgputest();
 }
