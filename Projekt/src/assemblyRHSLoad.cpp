@@ -8,7 +8,8 @@ double assembleFem::assemblyRHSLoad(mathfunction f)
     int n(_e.size());
     double RHS(0.0);
 
-    std::vector<double> X(27), Y(27), Z(27), Basis3d(27);
+//    std::vector<double> X(27), Y(27), Z(27), Basis3d(27);
+    std::vector<double> Basis3d(27);
 
     for (int i(0); i < n; i++)
     {

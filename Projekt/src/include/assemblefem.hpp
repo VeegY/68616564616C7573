@@ -33,7 +33,7 @@ private:
     void assemblyMatrixRow();
 
     double assemblyRHSLoad(mathfunction f=mathfunction(0));
-    double assemblyRHSNeumann(int Ebene, int leftright, mathfunction g=mathfunction(0));
+    double assemblyRHSNeumann(int Ebene, bool rightbacktop, mathfunction g=mathfunction(0));
 
     double getx(size_t index);
     double gety(size_t index);
@@ -53,10 +53,10 @@ private:
     std::vector<double> get_weight_2d();
     std::vector<double> get_quadrature_xpoints_2d_1();
     std::vector<double> get_quadrature_ypoints_2d_1();
-    std::vector<double> get_quadrature_xpoints_2d_2();
-    std::vector<double> get_quadrature_zpoints_2d_2();
-    std::vector<double> get_quadrature_ypoints_2d_3();
-    std::vector<double> get_quadrature_zpoints_2d_3();
+//    std::vector<double> get_quadrature_xpoints_2d_2();
+//    std::vector<double> get_quadrature_zpoints_2d_2();
+//    std::vector<double> get_quadrature_ypoints_2d_3();
+//    std::vector<double> get_quadrature_zpoints_2d_3();
 
     double _h;
     int _nx, _ny, _nz;

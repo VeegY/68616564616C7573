@@ -12,36 +12,37 @@ std::vector<double> assembleFem::evaluated_Basis3d(int A)
     assert(A >= 0 && A < 8);
 
     // Fuer Quadraturpunkte
-    std::vector<double> X(27), Y(27), Z(27), zwsp(27);
-    X = get_quadrature_xpoints();
-    Y = get_quadrature_ypoints();
-    Z = get_quadrature_zpoints();
+    std::vector<double> zwsp(27);
+//    std::vector<double> X(27), Y(27), Z(27), zwsp(27);
+//    X = get_quadrature_xpoints();
+//    Y = get_quadrature_ypoints();
+//    Z = get_quadrature_zpoints();
 
     switch(A)
     {
     case 0: for(int i(0); i < 27; ++i)
-                zwsp[i]= ((_h - X[i]) * (_h - Y[i]) * (_h - Z[i])) / (_h*_h*_h);
+                zwsp[i]= ((_h - _quadpoints_3d_x[i]) * (_h - _quadpoints_3d_y[i]) * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
             break;
     case 1: for(int i(0); i < 27; ++i)
-                zwsp[i]= (X[i] * (_h - Y[i]) * (_h - Z[i])) / (_h*_h*_h);
+                zwsp[i]= (_quadpoints_3d_x[i] * (_h - _quadpoints_3d_y[i]) * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
             break;
     case 2: for(int i(0); i < 27; ++i)
-                zwsp[i]= ((_h - X[i])  * Y[i]  * (_h - Z[i])) / (_h*_h*_h);
+                zwsp[i]= ((_h - _quadpoints_3d_x[i])  * _quadpoints_3d_y[i]  * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
             break;
     case 3: for(int i(0); i < 27; ++i)
-                zwsp[i]= (X[i] * Y[i] * (_h - Z[i])) / (_h*_h*_h);
+                zwsp[i]= (_quadpoints_3d_x[i] * _quadpoints_3d_y[i] * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
             break;
     case 4: for(int i(0); i < 27; ++i)
-                zwsp[i]= ((_h - X[i]) * (_h - Y[i]) * Z[i]) / (_h*_h*_h);
+                zwsp[i]= ((_h - _quadpoints_3d_x[i]) * (_h - _quadpoints_3d_y[i]) * _quadpoints_3d_z[i]) / (_h*_h*_h);
             break;
     case 5: for(int i(0); i < 27; ++i)
-                zwsp[i]= (X[i] * (_h - Y[i]) * Z[i]) / (_h*_h*_h);
+                zwsp[i]= (_quadpoints_3d_x[i] * (_h - _quadpoints_3d_y[i]) * _quadpoints_3d_z[i]) / (_h*_h*_h);
             break;
     case 6: for(int i(0); i < 27; ++i)
-                zwsp[i]= ((_h - X[i]) * Y[i] * Z[i]) / (_h*_h*_h);
+                zwsp[i]= ((_h - _quadpoints_3d_x[i]) * _quadpoints_3d_y[i] * _quadpoints_3d_z[i]) / (_h*_h*_h);
             break;
     case 7: for(int i(0); i < 27; ++i)
-                zwsp[i]= (X[i] * Y[i] * Z[i]) / (_h*_h*_h);
+                zwsp[i]= (_quadpoints_3d_x[i] * _quadpoints_3d_y[i] * _quadpoints_3d_z[i]) / (_h*_h*_h);
             break;
     }
 
@@ -55,68 +56,69 @@ std::vector<std::vector<double>> assembleFem::evaluated_gradient_Basis3d(int A)
     assert(A >= 0 && A < 8);
 
     // Fuer Quadraturpunkte
-    std::vector<double> X(27), Y(27), Z(27), zwsp1(27), zwsp2(27), zwsp3(27);
-    X = get_quadrature_xpoints();
-    Y = get_quadrature_ypoints();
-    Z = get_quadrature_zpoints();
+    std::vector<double> zwsp1(27), zwsp2(27), zwsp3(27);
+//    std::vector<double> X(27), Y(27), Z(27), zwsp1(27), zwsp2(27), zwsp3(27);
+//    X = get_quadrature_xpoints();
+//    Y = get_quadrature_ypoints();
+//    Z = get_quadrature_zpoints();
 
     //TODO _h*_h*_h ersetzen
     switch(A)
     {
     case 0: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = - ((_h - Y[i]) * (_h - Z[i])) / (_h*_h*_h);
-                zwsp2[i] = - ((_h - X[i]) * (_h - Z[i])) / (_h*_h*_h);
-                zwsp3[i] = - ((_h - X[i]) * (_h - Y[i])) / (_h*_h*_h);
+                zwsp1[i] = - ((_h - _quadpoints_3d_y[i]) * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
+                zwsp2[i] = - ((_h - _quadpoints_3d_x[i]) * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
+                zwsp3[i] = - ((_h - _quadpoints_3d_x[i]) * (_h - _quadpoints_3d_y[i])) / (_h*_h*_h);
             }
             break;
     case 1: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = (_h - Y[i]) * (_h - Z[i]) / (_h*_h*_h);
-                zwsp2[i] = - (X[i] * (_h - Z[i])) / (_h*_h*_h);
-                zwsp3[i] = - (X[i] * (_h - Y[i])) / (_h*_h*_h);
+                zwsp1[i] = (_h - _quadpoints_3d_y[i]) * (_h - _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp2[i] = - (_quadpoints_3d_x[i] * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
+                zwsp3[i] = - (_quadpoints_3d_x[i] * (_h - _quadpoints_3d_y[i])) / (_h*_h*_h);
             }
             break;
     case 2: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = - (Y[i] * (_h - Z[i])) / (_h*_h*_h);
-                zwsp2[i] = ((_h - X[i]) * (_h - Z[i])) / (_h*_h*_h);
-                zwsp3[i] = - ((_h - X[i]) * Y[i]) / (_h*_h*_h);
+                zwsp1[i] = - (_quadpoints_3d_y[i] * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
+                zwsp2[i] = ((_h - _quadpoints_3d_x[i]) * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
+                zwsp3[i] = - ((_h - _quadpoints_3d_x[i]) * _quadpoints_3d_y[i]) / (_h*_h*_h);
             }
             break;
     case 3: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = (Y[i] * (_h - Z[i])) / (_h*_h*_h);
-                zwsp2[i] = (X[i] * (_h - Z[i])) / (_h*_h*_h);
-                zwsp3[i] = - (X[i] * Y[i]) / (_h*_h*_h);
+                zwsp1[i] = (_quadpoints_3d_y[i] * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
+                zwsp2[i] = (_quadpoints_3d_x[i] * (_h - _quadpoints_3d_z[i])) / (_h*_h*_h);
+                zwsp3[i] = - (_quadpoints_3d_x[i] * _quadpoints_3d_y[i]) / (_h*_h*_h);
             }
             break;
     case 4: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = - ((_h - Y[i]) * Z[i]) / (_h*_h*_h);
-                zwsp2[i] = - ((_h - X[i]) * Z[i]) / (_h*_h*_h);
-                zwsp3[i] = ((_h - X[i]) * (_h - Y[i])) / (_h*_h*_h);
+                zwsp1[i] = - ((_h - _quadpoints_3d_y[i]) * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp2[i] = - ((_h - _quadpoints_3d_x[i]) * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp3[i] = ((_h - _quadpoints_3d_x[i]) * (_h - _quadpoints_3d_y[i])) / (_h*_h*_h);
             }
             break;
     case 5: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = ((_h - Y[i]) * Z[i]) / (_h*_h*_h);
-                zwsp2[i] = - (X[i] * Z[i]) / (_h*_h*_h);
-                zwsp3[i] = (X[i] * (_h - Y[i])) / (_h*_h*_h);
+                zwsp1[i] = ((_h - _quadpoints_3d_y[i]) * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp2[i] = - (_quadpoints_3d_x[i] * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp3[i] = (_quadpoints_3d_x[i] * (_h - _quadpoints_3d_y[i])) / (_h*_h*_h);
             }
             break;
     case 6: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = - (Y[i] * Z[i]) / (_h*_h*_h);
-                zwsp2[i] = ((_h - X[i]) * Z[i]) / (_h*_h*_h);
-                zwsp3[i] = ((_h - X[i]) * Y[i]) / (_h*_h*_h);
+                zwsp1[i] = - (_quadpoints_3d_y[i] * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp2[i] = ((_h - _quadpoints_3d_x[i]) * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp3[i] = ((_h - _quadpoints_3d_x[i]) * _quadpoints_3d_y[i]) / (_h*_h*_h);
             }
             break;
     case 7: for(int i(0); i < 27; ++i)
             {
-                zwsp1[i] = (Y[i] * Z[i]) / (_h*_h*_h);
-                zwsp2[i] = (X[i] * Z[i]) / (_h*_h*_h);
-                zwsp3[i] = (X[i] * Y[i]) / (_h*_h*_h);
+                zwsp1[i] = (_quadpoints_3d_y[i] * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp2[i] = (_quadpoints_3d_x[i] * _quadpoints_3d_z[i]) / (_h*_h*_h);
+                zwsp3[i] = (_quadpoints_3d_x[i] * _quadpoints_3d_y[i]) / (_h*_h*_h);
             }
             break;
     }
@@ -131,23 +133,24 @@ std::vector<double> assembleFem::evaluated_Basis2d_1(int A)
     assert(A >= 0 && A < 4);
 
     // Fuer Quadraturpunkte
-    std::vector<double> R1(9), R2(9), zwsp(9);
-    R1 = get_quadrature_xpoints_2d_1();
-    R2 = get_quadrature_ypoints_2d_1();
+    std::vector<double> zwsp(9);
+//    std::vector<double> R1(9), R2(9);
+//    R1 = get_quadrature_xpoints_2d_1();
+//    R2 = get_quadrature_ypoints_2d_1();
 
     switch (A)
     {
     case 0: for(int i(0); i < 9; ++i)
-                zwsp[i] = ((_h - R1[i]) * (_h - R2[i])) / (_h*_h);
+                zwsp[i] = ((_h - _quadpoints_2d_1[i]) * (_h - _quadpoints_2d_2[i])) / (_h*_h);
             break;
     case 1: for(int i(0); i < 9; ++i)
-                zwsp[i] = (R1[i] * (_h - R2[i])) / (_h*_h);
+                zwsp[i] = (_quadpoints_2d_1[i] * (_h - _quadpoints_2d_2[i])) / (_h*_h);
             break;
     case 2: for(int i(0); i < 9; ++i)
-                zwsp[i] = ((_h - R1[i]) * R2[i]) / (_h*_h);
+                zwsp[i] = ((_h - _quadpoints_2d_1[i]) * _quadpoints_2d_2[i]) / (_h*_h);
             break;
     case 3: for(int i(0); i < 9; ++i)
-                zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
+                zwsp[i] = (_quadpoints_2d_1[i] * _quadpoints_2d_2[i]) / (_h*_h);
             break;
     }
 
@@ -160,23 +163,24 @@ std::vector<double> assembleFem::evaluated_Basis2d_2(int A)
     assert(A == 0 || A == 1 || A == 4 || A == 5);
 
     // Fuer Quadraturpunkte
-    std::vector<double> R1(9), R2(9), zwsp(9);
-    R1 = get_quadrature_xpoints_2d_2();
-    R2 = get_quadrature_zpoints_2d_2();
+    std::vector<double> zwsp(9);
+//    std::vector<double> R1(9), R2(9);
+//    R1 = get_quadrature_xpoints_2d_2();
+//    R2 = get_quadrature_zpoints_2d_2();
 
     switch (A)
     {
     case 0: for(int i(0); i < 9; ++i)
-                zwsp[i] = ((_h - R1[i]) * (_h - R2[i])) / (_h*_h);
+                zwsp[i] = ((_h - _quadpoints_2d_1[i]) * (_h - _quadpoints_2d_2[i])) / (_h*_h);
             break;
     case 1: for(int i(0); i < 9; ++i)
-                zwsp[i] = (R1[i] * (_h - R2[i])) / (_h*_h);
+                zwsp[i] = (_quadpoints_2d_1[i] * (_h - _quadpoints_2d_2[i])) / (_h*_h);
             break;
     case 4: for(int i(0); i < 9; ++i)
-                zwsp[i] = ((_h - R1[i]) * R2[i]) / (_h*_h);
+                zwsp[i] = ((_h - _quadpoints_2d_1[i]) * _quadpoints_2d_2[i]) / (_h*_h);
             break;
     case 5: for(int i(0); i < 9; ++i)
-               zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
+               zwsp[i] = (_quadpoints_2d_1[i] * _quadpoints_2d_2[i]) / (_h*_h);
             break;
     }
 
@@ -188,23 +192,24 @@ std::vector<double> assembleFem::evaluated_Basis2d_3(int A)
     assert(A == 0 || A == 2 || A == 4 || A == 6);
 
     // Fuer Quadraturpunkte
-    std::vector<double> R1(9), R2(9), zwsp(9);
-    R1 = get_quadrature_ypoints_2d_3();
-    R2 = get_quadrature_zpoints_2d_3();
+    std::vector<double> zwsp(9);
+//    std::vector<double> R1(9), R2(9);
+//    R1 = get_quadrature_ypoints_2d_3();
+//    R2 = get_quadrature_zpoints_2d_3();
 
     switch (A)
     {
     case 0: for(int i(0); i < 9; ++i)
-                zwsp[i] = ((_h - R1[i]) * (_h - R2[i])) / (_h*_h);
+                zwsp[i] = ((_h - _quadpoints_2d_1[i]) * (_h - _quadpoints_2d_2[i])) / (_h*_h);
             break;
     case 2: for(int i(0); i < 9; ++i)
-                zwsp[i] = (R1[i] * (_h - R2[i])) / (_h*_h);
+                zwsp[i] = (_quadpoints_2d_1[i] * (_h - _quadpoints_2d_2[i])) / (_h*_h);
             break;
     case 4: for(int i(0); i < 9; ++i)
-                zwsp[i] = ((_h - R1[i]) * R2[i]) / (_h*_h);
+                zwsp[i] = ((_h - _quadpoints_2d_1[i]) * _quadpoints_2d_2[i]) / (_h*_h);
             break;
     case 6: for(int i(0); i < 9; ++i)
-               zwsp[i] = (R1[i] * R2[i]) / (_h*_h);
+               zwsp[i] = (_quadpoints_2d_1[i] * _quadpoints_2d_2[i]) / (_h*_h);
             break;
     }
 

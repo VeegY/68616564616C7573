@@ -84,7 +84,7 @@ std::vector<double> assembleFem::get_quadrature_ypoints_2d_1() //Berechnet die y
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a2,a3, a1,a2,a3, a1,a2,a3};
 }
-
+/*
 std::vector<double> assembleFem::get_quadrature_xpoints_2d_2() //Berechnet die x-Koordinaten der Gauss-Quadraturpunkte für das Intervall für die Seitenflaeche (X-Z-Ebene)
 {
     double a1((1.0-sqrt(3.0/5.0))*_h/2.0);
@@ -124,5 +124,5 @@ std::vector<double> assembleFem::get_quadrature_zpoints_2d_3() //Berechnet die z
     //Bastelt den Vektor zusammen
     return std::vector<double>{a1,a2,a3, a1,a2,a3, a1,a2,a3};
 }
-
+*/
 }//namespace Icarus
