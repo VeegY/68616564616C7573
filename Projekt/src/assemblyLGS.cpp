@@ -10,12 +10,14 @@ namespace Icarus
 void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
     std::vector<char>& disc_points, mathfunction f, mathfunction g, mathfunction h)
 {
+    LOG_INFO(disc_points.size(), ", ", _nx*_ny*_nz);
     //TODO: vorlaeufig, wieder loeschen
-    bool Dirichlet(true);
+    bool Dirichlet(false);
     bool Neumann(true);
     //TODO: vorlaeufig, wieder loeschen
 
     Matrix.prepare_sequential_fill(27);
+    int rowlength(0);
 
     int Zeile;
     std::vector<double> RHS(_nx*_ny*_nz);
@@ -24,32 +26,34 @@ LOG_INFO("assembled 0%");
     //Ecke 1
     _e.clear(); _e.resize(1);
     _A.clear(); _A.resize(1);
+    rowlength = 8;
     Zeile=0;
-    if(Dirichlet)
+//    if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
-    else
-    {
-        _e[0]=Zeile; _A[0]=0;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(_column[m], _value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(f);
-        if(Neumann)
-        {
-            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
-        }
-    }
+//    else
+//    {
+//        _e[0]=Zeile; _A[0]=0;
+//        assemblyMatrixRow(rowlength);
+//        for (int m(0); m < rowlength; ++m)
+//            Matrix.sequential_fill(_column[m], _value[m]);
+//        Matrix.end_of_row();
+//        RHS[Zeile] = assemblyRHSLoad(f);
+//        if(Neumann)
+//        {
+//            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+//            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+//            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+//        }
+//    }
 
     //Kante 1:
     _e.resize(2);
     _A.resize(2);
+    rowlength = 12;
     for(int i(1); i<_nx-1;i++)
     {
         Zeile++;
@@ -63,8 +67,8 @@ LOG_INFO("assembled 0%");
         {
             _e[0]=Zeile-1; _A[0]=1;
             _e[1]=Zeile; _A[1]=0;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -79,6 +83,7 @@ LOG_INFO("assembled 0%");
     //Ecke 2
     _e.resize(1);
     _A.resize(1);
+    rowlength = 8;
     Zeile++; //Zeile sollte hier y-1 sein
     if(Dirichlet)
     {
@@ -89,8 +94,8 @@ LOG_INFO("assembled 0%");
     else
     {
         _e[0]=Zeile-1; _A[0]=1;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
+        assemblyMatrixRow(rowlength);
+        for (int m(0); m < rowlength; ++m)
             Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
         RHS[Zeile] = assemblyRHSLoad(f);
@@ -107,6 +112,7 @@ LOG_INFO("assembled 0%");
         //Kante 5
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
 
         Zeile++;
         if(Dirichlet)
@@ -119,8 +125,8 @@ LOG_INFO("assembled 0%");
         {
             _e[0]=Zeile-y; _A[0]=2;
             _e[1]=Zeile; _A[1]=0;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -134,36 +140,38 @@ LOG_INFO("assembled 0%");
         //Flaeche 1
         _e.resize(4);
         _A.resize(4);
+        rowlength = 18;
         for(int i(1); i<_nx-1;i++)
         {
             Zeile++;
-//            if(Dirichlet)
+            if(Dirichlet)
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
-//            else
-//            {
-//                _e[0]=Zeile -y-1; _A[0]=3;
-//                _e[1]=Zeile -y; _A[1]=2;
-//                _e[2]=Zeile -1; _A[2]=1;
-//                _e[3]=Zeile; _A[3]=0;
-//                assemblyMatrixRow();
-//                for (int m(0); m<18; ++m)
-//                    Matrix.sequential_fill(_column[m], _value[m]);
-//                Matrix.end_of_row();
-//                RHS[Zeile] = assemblyRHSLoad(f);
-//                if(Neumann)
-//                {
-//                    RHS[Zeile] += assemblyRHSNeumann(1, false, h);
-//                }
-//            }
+            else
+            {
+                _e[0]=Zeile -y-1; _A[0]=3;
+                _e[1]=Zeile -y; _A[1]=2;
+                _e[2]=Zeile -1; _A[2]=1;
+                _e[3]=Zeile; _A[3]=0;
+                assemblyMatrixRow(rowlength);
+                for (int m(0); m < rowlength; ++m)
+                    Matrix.sequential_fill(_column[m], _value[m]);
+                Matrix.end_of_row();
+                RHS[Zeile] = assemblyRHSLoad(f);
+                if(Neumann)
+                {
+                    RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                }
+            }
         } //close I-Schleife (X-Achse)
 
         //Kante: 6
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
         Zeile++;
         if(Dirichlet)
         {
@@ -175,8 +183,8 @@ LOG_INFO("assembled 0%");
         {
             _e[0]=Zeile -1 -y; _A[0]=3;
             _e[1]=Zeile -1; _A[1]=1;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -191,6 +199,7 @@ LOG_INFO("assembled 0%");
     //Ecke 3:
     _e.resize(1);
     _A.resize(1);
+    rowlength = 8;
     Zeile++; //Zeile sollte hier (_ny-1)*y sein
     if(Dirichlet)
     {
@@ -201,8 +210,8 @@ LOG_INFO("assembled 0%");
     else
     {
         _e[0]=Zeile-y; _A[0]=2;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
+        assemblyMatrixRow(rowlength);
+        for (int m(0); m < rowlength; ++m)
             Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
         RHS[Zeile] = assemblyRHSLoad(f);
@@ -217,6 +226,7 @@ LOG_INFO("assembled 0%");
     //Kante 2:
     _e.resize(2);
     _A.resize(2);
+    rowlength = 12;
     for(int i(1); i<_nx-1; i++)
     {
         Zeile++;
@@ -230,8 +240,8 @@ LOG_INFO("assembled 0%");
         {
             _e[0]=Zeile-y-1; _A[0]=3;
             _e[1]=Zeile-y; _A[1]=2;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -246,6 +256,7 @@ LOG_INFO("assembled 0%");
     //Ecke 4:
     _e.resize(1);
     _A.resize(1);
+    rowlength = 8;
     Zeile++; //Zeile sollte hier z-1 sein
     if(Dirichlet)
     {
@@ -256,8 +267,8 @@ LOG_INFO("assembled 0%");
     else
     {
         _e[0]=Zeile-y-1; _A[0]=3;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
+        assemblyMatrixRow(rowlength);
+        for (int m(0); m < rowlength; ++m)
             Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
         RHS[Zeile] = assemblyRHSLoad(f);
@@ -275,6 +286,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         //Kante 9:
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
         Zeile++;
         if(Dirichlet)
         {
@@ -286,8 +298,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         {
             _e[0]=Zeile-z; _A[0]=4;
             _e[1]=Zeile; _A[1]=0;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -301,6 +313,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         //Flaeche 3:
         _e.resize(4);
         _A.resize(4);
+        rowlength = 18;
         for(int i(1); i<_nx-1; i++)
         {
             Zeile++;
@@ -316,8 +329,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 _e[1]=Zeile -z; _A[1]=4;
                 _e[2]=Zeile -1; _A[2]=1;
                 _e[3]=Zeile; _A[3]=0;
-                assemblyMatrixRow();
-                for (int m(0); m<18; ++m)
+                assemblyMatrixRow(rowlength);
+                for (int m(0); m < rowlength; ++m)
                     Matrix.sequential_fill(_column[m], _value[m]);
                 Matrix.end_of_row();
                 RHS[Zeile] = assemblyRHSLoad(f);
@@ -331,6 +344,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         //Kante 10:
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
         Zeile++;
         if(Dirichlet)
         {
@@ -342,8 +356,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         {
             _e[0]=Zeile-1 -z; _A[0]=5;
             _e[1]=Zeile-1; _A[1]=1;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -359,6 +373,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             //Flaeche 5:
             _e.resize(4);
             _A.resize(4);
+            rowlength = 18;
             Zeile++;
             if(Dirichlet)
             {
@@ -372,8 +387,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 _e[1]=Zeile -z; _A[1]=4;
                 _e[2]=Zeile -y; _A[2]=2;
                 _e[3]=Zeile; _A[3]=0;
-                assemblyMatrixRow();
-                for (int m(0); m<18; ++m)
+                assemblyMatrixRow(rowlength);
+                for (int m(0); m < rowlength; ++m)
                     Matrix.sequential_fill(_column[m], _value[m]);
                 Matrix.end_of_row();
                 RHS[Zeile] = assemblyRHSLoad(f);
@@ -384,19 +399,19 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             }
 
             //Inneres:
-            _e.resize(8);
-            _A.resize(8);
             for(int i(1); i<_nx-1; i++)
             {
-                Zeile++;;
-                //if(Dirichlet)
-                //{
-                //    Matrix.sequential_fill(Zeile, 1.0);
-                //    Matrix.end_of_row();
-                //    RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
-                //}
-                //else
+                Zeile++;
+                if (disc_points[Zeile] == 'o')
                 {
+                    Matrix.sequential_fill(Zeile, 1.0);
+                    Matrix.end_of_row();
+                    RHS[Zeile] = -100000.0;
+                }
+                else if (disc_points[Zeile] == 'a')
+                {
+                    _e.resize(8);
+                    _A.resize(8);
                     _e[0]=Zeile -1-y-z; _A[0]=7;
                     _e[1]=Zeile -y-z; _A[1]=6;
                     _e[2]=Zeile -1-z; _A[2]=5;
@@ -405,20 +420,75 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                     _e[5]=Zeile -y; _A[5]=2;
                     _e[6]=Zeile -1; _A[6]=1;
                     _e[7]=Zeile; _A[7]=0;
+                    rowlength = 27;
 
-                    assemblyMatrixRow();
-                    for (int m(0); m<27; ++m)
+                    assemblyMatrixRow(rowlength);
+                    for (int m(0); m < rowlength; ++m)
                         Matrix.sequential_fill(_column[m], _value[m]);
                     Matrix.end_of_row();
                     RHS[Zeile] = assemblyRHSLoad(f);
-
-                    //Neumann eventuell hinzufuegen
                 }
+                else if (disc_points[Zeile] == 'b')
+                {
+                    if (Dirichlet)
+                    {
+                        Matrix.sequential_fill(Zeile, 1.0);
+                        Matrix.end_of_row();
+                        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+                    }
+                    else
+                    {
+                        rowlength = setup_A(Zeile, disc_points);
+                        setup_e(Zeile);
+                        assemblyMatrixRow(rowlength);
+                        for (int m(0); m < rowlength; ++m)
+                            Matrix.sequential_fill(_column[m], _value[m]);
+                        Matrix.end_of_row();
+                        RHS[Zeile] = assemblyRHSLoad(f);
+                        if (Neumann)
+                        {
+                        }
+                    }
+                }
+                else
+                {
+                    assert(false);
+                }
+
+
+
+
+                //if(Dirichlet)
+                //{
+                //    Matrix.sequential_fill(Zeile, 1.0);
+                //    Matrix.end_of_row();
+                //    RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+                //}
+                //else
+                //{
+                //    _e[0]=Zeile -1-y-z; _A[0]=7;
+                //    _e[1]=Zeile -y-z; _A[1]=6;
+                //    _e[2]=Zeile -1-z; _A[2]=5;
+                //    _e[3]=Zeile -z; _A[3]=4;
+                //    _e[4]=Zeile -1-y; _A[4]=3;
+                //    _e[5]=Zeile -y; _A[5]=2;
+                //    _e[6]=Zeile -1; _A[6]=1;
+                //    _e[7]=Zeile; _A[7]=0;
+
+                //    assemblyMatrixRow(rowlength);
+                //    for (int m(0); m < rowlength; ++m)
+                //        Matrix.sequential_fill(_column[m], _value[m]);
+                //    Matrix.end_of_row();
+                //    RHS[Zeile] = assemblyRHSLoad(f);
+
+                //    //Neumann eventuell hinzufuegen
+                //}
             } //Close I-Schleife (X-Achse)
 
             //Flaeche 6:
             _e.resize(4);
             _A.resize(4);
+            rowlength = 18;
             Zeile++;
             if(Dirichlet)
             {
@@ -432,8 +502,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 _e[1]=Zeile -z -1; _A[1]=5;
                 _e[2]=Zeile -y -1; _A[2]=3;
                 _e[3]=Zeile -1; _A[3]=1;
-                assemblyMatrixRow();
-                for (int m(0); m<18; ++m)
+                assemblyMatrixRow(rowlength);
+                for (int m(0); m < rowlength; ++m)
                     Matrix.sequential_fill(_column[m], _value[m]);
                 Matrix.end_of_row();
                 RHS[Zeile] = assemblyRHSLoad(f);
@@ -447,6 +517,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         //Kante 12:
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
         Zeile++;
         if(Dirichlet)
         {
@@ -458,8 +529,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         {
             _e[0]=Zeile-y -z; _A[0]=6;
             _e[1]=Zeile-y; _A[1]=2;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -473,6 +544,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         //Flaeche 4
         _e.resize(4);
         _A.resize(4);
+        rowlength = 18;
         for(int i(1); i< _nx-1; i++)
         {
             Zeile++;
@@ -488,8 +560,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 _e[1]= Zeile -z -y; _A[1]=6;
                 _e[2]= Zeile -1 -y; _A[2]=3;
                 _e[3]= Zeile -y; _A[3]=2;
-                assemblyMatrixRow();
-                for (int m(0); m<18; ++m)
+                assemblyMatrixRow(rowlength);
+                for (int m(0); m < rowlength; ++m)
                     Matrix.sequential_fill(_column[m], _value[m]);
                 Matrix.end_of_row();
                 RHS[Zeile] = assemblyRHSLoad(f);
@@ -503,6 +575,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         //Kante 11:
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
         Zeile++;
         if(Dirichlet)
         {
@@ -514,8 +587,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         {
             _e[0]=Zeile-1-y-z; _A[0]=7;
             _e[1]=Zeile-1-y; _A[1]=3;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -531,6 +604,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     //Ecke 5
     _e.resize(1);
     _A.resize(1);
+    rowlength = 8;
     Zeile++; //Zeile sollte hier (_nz-1)*z sein
     if(Dirichlet)
     {
@@ -541,8 +615,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     else
     {
         _e[0]= Zeile-z; _A[0]=4;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
+        assemblyMatrixRow(rowlength);
+        for (int m(0); m < rowlength; ++m)
             Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
         RHS[Zeile] = assemblyRHSLoad(f);
@@ -557,6 +631,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     //Kante 4
     _e.resize(2);
     _A.resize(2);
+    rowlength = 12;
     for(int i(1); i<_nx-1;i++)
     {
         Zeile++;
@@ -570,8 +645,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         {
             _e[0]=Zeile-z -1; _A[0]=5;
             _e[1]=Zeile-z; _A[1]=4;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -586,6 +661,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     //Ecke 6:
     _e.resize(1);
     _A.resize(1);
+    rowlength = 8;
     Zeile++; //Zeile sollte hier (_nz-1)*z+y-1 sein
     if(Dirichlet)
     {
@@ -596,8 +672,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     else
     {
         _e[0]= Zeile-1-z; _A[0]=5;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
+        assemblyMatrixRow(rowlength);
+        for (int m(0); m < rowlength; ++m)
             Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
         RHS[Zeile] = assemblyRHSLoad(f);
@@ -614,6 +690,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         //Kante 8
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
         Zeile++;
         if(Dirichlet)
         {
@@ -625,8 +702,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         {
             _e[0]=Zeile -z-y; _A[0]=6;
             _e[1]=Zeile -z; _A[1]=4;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -640,6 +717,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         //Flaeche 2:
         _e.resize(4);
         _A.resize(4);
+        rowlength = 18;
         for(int i(1); i<_nx-1; i++)
         {
             Zeile++;
@@ -655,8 +733,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
                 _e[1]=Zeile -y -z; _A[1]=6;
                 _e[2]=Zeile -1 -z; _A[2]=5;
                 _e[3]=Zeile -z ; _A[3]=4;
-                assemblyMatrixRow();
-                for (int m(0); m<18; ++m)
+                assemblyMatrixRow(rowlength);
+                for (int m(0); m < rowlength; ++m)
                     Matrix.sequential_fill(_column[m], _value[m]);
                 Matrix.end_of_row();
                 RHS[Zeile] = assemblyRHSLoad(f);
@@ -670,6 +748,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         //Kante 7
         _e.resize(2);
         _A.resize(2);
+        rowlength = 12;
         Zeile++;
         if(Dirichlet)
         {
@@ -681,8 +760,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         {
             _e[0]=Zeile-1-z -y; _A[0]=7;
             _e[1]=Zeile-1-z; _A[1]=5;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -697,6 +776,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     //Ecke 7
     _e.resize(1);
     _A.resize(1);
+    rowlength = 8;
     Zeile++; //Zeile sollte hier (_nx*_ny*_nz)-_nx sein
     if(Dirichlet)
     {
@@ -707,8 +787,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     else
     {
         _e[0]=Zeile-y-z; _A[0]=6;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
+        assemblyMatrixRow(rowlength);
+        for (int m(0); m < rowlength; ++m)
             Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
         RHS[Zeile] = assemblyRHSLoad(f);
@@ -723,6 +803,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     //Kante 3
     _e.resize(2);
     _A.resize(2);
+    rowlength = 12;
     for(int i(1); i<_nx-1; i++)
     {
         Zeile++;
@@ -736,8 +817,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
         {
             _e[0]= Zeile-y-z -1; _A[0]=7;
             _e[1]= Zeile-y-z; _A[1]=6;
-            assemblyMatrixRow();
-            for (int m(0); m<12; ++m)
+            assemblyMatrixRow(rowlength);
+            for (int m(0); m < rowlength; ++m)
                 Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
             RHS[Zeile] = assemblyRHSLoad(f);
@@ -752,6 +833,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     //Ecke 8:
     _e.resize(1);
     _A.resize(1);
+    rowlength = 8;
     Zeile++; //Zeile sollte hier (_nx*_ny*_nz) sein
     if(Dirichlet)
     {
@@ -762,8 +844,8 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     else
     {
         _e[0]=Zeile-z-y-1; _A[0]=7;
-        assemblyMatrixRow();
-        for (int m(0); m<8; ++m)
+        assemblyMatrixRow(rowlength);
+        for (int m(0); m < rowlength; ++m)
             Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
         RHS[Zeile] = assemblyRHSLoad(f);

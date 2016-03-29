@@ -18,12 +18,11 @@ int main()
     const int nn(10);
     const double h(1.0/static_cast<double>(nn));
     const int nx(nn+1), ny(nn+1), nz(nn+1);
-    std::vector<char> disc = Icarus::discretizer("leer.obj", h, nx, ny, nz);
+    std::vector<char> disc = Icarus::discretizer("../model/cube.obj", h, nx, ny, nz);
 
-    for (int i(1); i <= 3; ++i)
+//    for (int i(1); i <= 3; ++i)
     {
-//        test(i, false, disc, h, nx, ny, nz);
-        test(i, true, disc, h, nx, ny, nz);
+        test(3, true, disc, h, nx, ny, nz);
     }
 
 /*
@@ -47,8 +46,10 @@ int main()
     solver_0d.solve(sol_0d);
 
     Icarus::FullVector<double> fullsol_0d(sol_0d);
+//    Icarus::vtkWriter writer_0d("case0d", "case0d", nx+1, ny+1, nz+1, h, 1);
     Icarus::vtkWriter writer_0d("case0d", "case0d", nx, ny, nz, h, 1);
     writer_0d.addPointDataToTimestep(fullsol_0d, 0, "Potential");
+//    writer_0d.addCellDataToTimestep(fullsol_0d, 0, "Potential");
 
     LOG_INFO("L2norm_0d = ", assembler_0d.calcL2Error(u_0, fullsol_0d));
 

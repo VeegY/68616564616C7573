@@ -54,18 +54,17 @@ double mathfunction::eval(double x, double y, double z, int plane)
             if (plane == 3)
                 return 1.0;
             assert(false); // nicht vorgesehen
-    /*
-    case 9: return x*x;
-    case 10:return -2.0;
-    case 11:return x*x;
-    case 12:if (plane == 1)
-                return 2.0*x;
-            if (plane == 2)
+    // 13: u, 14: f, 15: dirichlet, 16: neumann - femflow_test
+    case 13:return 0.0;
+    case 14:return 0.0;
+    case 15:return 0.0;
+    case 16:if (plane == 1)
                 return 0.0;
+            if (plane == 2)
+                return 10.0;
             if (plane == 3)
                 return 0.0;
             assert(false); // nicht vorgesehen
-            */
     }
     assert(!true); // nicht vorgesehen
     return 0.0;
