@@ -9,8 +9,8 @@
 
 double bdry(int vtx_global)
 {
-	if (vtx_global < 100) return 100;
-	if (vtx_global >= 900) return -100;
+	//if (vtx_global < 100) return 100;
+	//if (vtx_global >= 900) return -100;
 	return 0.0;
 }
 
@@ -24,8 +24,8 @@ int neumann_demo()
 	// assemblieren
 	auto lgs = Icarus::assemble_neumann_unrolled<double>(nx, ny, nz, h, bdry);
 	//ausgabe der Matrix:
-	std::cout << "Die Matrix A:" << std::endl;
-	Icarus::print_sliced_object(lgs.first);
+	//std::cout << "Die Matrix A:" << std::endl;
+	//Icarus::print_sliced_object(lgs.first);
 	
 	// loesen
 	size_t n = lgs.first.get_dim_global();
