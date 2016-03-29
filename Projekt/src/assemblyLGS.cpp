@@ -1,921 +1,787 @@
-//Ich lasse eine ganze Menge an Redundanz drin, einfach nur für die Lesbarkeit
-//Kann man nachher natürlich abändern
-
-//int Nx=3;
-//int Ny=4;
-//int Nz=5;
-//int h=1;
-//int z=Nx*Ny;
-//int y=Nx;
-
-//#include "include/assemblyMatrixRow.hpp"
-//#include "include/assemblyRHSLoad.hpp"
-//#include "include/assemblyRHSNeumann.hpp"
-//#include "include/distellpackmatrix.hpp"
-
 #include "include/assemblefem.hpp"
+#include "include/mathfunction.hpp"
+
+#include "include/logger.hpp"
+#include <iostream>
 
 namespace Icarus
 {
 
-void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs)
+void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
+    std::vector<char>& disc_points, mathfunction f, mathfunction g, mathfunction h)
 {
     //TODO: vorlaeufig, wieder loeschen
     bool Dirichlet(true);
-    bool Neumann(false);
+    bool Neumann(true);
     //TODO: vorlaeufig, wieder loeschen
-    int z(Nx*Ny);
-    int y(Nx);
 
     Matrix.prepare_sequential_fill(27);
-    //DistEllpackMatrix<double> Matrix(Nx*Ny*Nz);
 
-    int i;
     int Zeile;
-    std::vector<int> e(1);
-    std::vector<int> A(1);
-    std::vector<double> RHS(Nx*Ny*Nz);
+    std::vector<double> RHS(_nx*_ny*_nz);
 
-    std::vector<int> column(27);
-    std::vector<double> value(27);
-
+LOG_INFO("assembled 0%");
     //Ecke 1
-    i=0;
+    _e.clear(); _e.resize(1);
+    _A.clear(); _A.resize(1);
     Zeile=0;
     if(Dirichlet)
     {
-        Matrix.sequential_fill(i, 1.0);
+        Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
-        RHS[Zeile]= 999999;
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
     else
     {
-        e[0]=i; A[0]=0;
-        //Matrix.setZeile(i, assemblyMatrixRow(e, A));
-        //TODO Zeile i befuellen nicht die naechste
-        assemblyMatrixRow(e, A, column, value);
+        _e[0]=Zeile; _A[0]=0;
+        assemblyMatrixRow();
         for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
+            Matrix.sequential_fill(_column[m], _value[m]);
         Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
+        RHS[Zeile] = assemblyRHSLoad(f);
         if(Neumann)
         {
-            e[0]=i; A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i; A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i; A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
         }
     }
-
-    //Ecke 2
-    i=y-1;
-    Zeile++;
-    
-    if(Dirichlet)
-    {
-        Matrix.sequential_fill(i, 1.0);
-        Matrix.end_of_row();
-        RHS[Zeile]= 999999;
-    }
-    else
-    {
-        e[0]=i-1; A[0]=1;
-        //TODO Zeile i befuellen nicht die naechste
-        assemblyMatrixRow(e, A, column, value);
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
-        if(Neumann)
-        {
-            e[0]=i-1; A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i-1; A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i; A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-        }
-    }
-
-    //Ecke 3
-    i= z-1;
-    Zeile++;
-    if(Dirichlet)
-    {
-        Matrix.sequential_fill(i, 1.0);
-        Matrix.end_of_row();
-        RHS[Zeile]= 999999;
-    }
-    else
-    {
-        e[0]=i-1-y; A[0]=2;
-        assemblyMatrixRow(e, A, column, value);
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
-        if(Neumann)
-        {
-            e[0]=i-1-y; A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i-1; A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i-y; A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-        }
-    }
-
-    //Ecke 4
-    i=(Ny-1)*y;
-    Zeile++;
-    if(Dirichlet)
-    {
-        Matrix.sequential_fill(i, 1.0);
-        Matrix.end_of_row();
-        RHS[Zeile]= 999999;
-    }
-    else
-    {
-        e[0]=i-y; A[0]=3;
-        assemblyMatrixRow(e, A, column, value);
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
-        if(Neumann)
-        {
-            e[0]=i-y; A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i; A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i-y; A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-        }
-    }
-
-    //Ecke 5
-    i=(Nz-1)*z;
-    Zeile++;
-    if(Dirichlet)
-    {
-        Matrix.sequential_fill(i, 1.0);
-        Matrix.end_of_row();
-        RHS[Zeile]= 999999;
-    }
-    else
-    {
-        e[0]=i-z; A[0]=4;
-        assemblyMatrixRow(e, A, column, value);
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
-        if(Neumann)
-        {
-            e[0]=i; A[0]=0;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i-z; A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i-z; A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-        }
-    }
-
-    //Ecke 6
-    i=(Nz-1)*z+y-1;
-    Zeile++;
-    if(Dirichlet)
-    {
-        Matrix.sequential_fill(i, 1.0);
-        Matrix.end_of_row();
-        RHS[Zeile]= 999999;
-    }
-    else
-    {
-        e[0]=i-1-z; A[0]=5;
-        assemblyMatrixRow(e, A, column, value);
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
-        if(Neumann)
-        {
-            e[0]=i-1; A[0]=1;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i-1-z; A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i-z; A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-        }
-    }
-
-    //Ecke 7
-    i=Nx*Ny*Nz -1;
-    Zeile++;
-    if(Dirichlet)
-    {
-        Matrix.sequential_fill(i, 1.0);
-        Matrix.end_of_row();
-        RHS[Zeile]= 999999;
-    }
-    else
-    {
-        e[0]=i-1-y-z; A[0]=6;
-        assemblyMatrixRow(e, A, column, value);
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
-        if(Neumann)
-        {
-            e[0]=i-1-y; A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i-1-z; A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i-y-z; A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-        }
-    }
-
-    //Ecke 8
-    i=(Nx*Ny*Nz)-Nx;
-    Zeile++;
-    if(Dirichlet)
-    {
-        Matrix.sequential_fill(i, 1.0);
-        Matrix.end_of_row();
-        RHS[Zeile]= 999999;
-    }
-    else
-    {
-        e[0]=i-y-z; A[0]=7;
-        assemblyMatrixRow(e, A, column, value);
-        for (int m(0); m<8; ++m)
-            Matrix.sequential_fill(column[m], value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(e, A);
-        if(Neumann)
-        {
-            e[0]=i-y; A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-            e[0]=i-z; A[0]=3;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            e[0]=i-z-y; A[0]=2;
-            RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-        }
-    }
-
-    e.resize(2);
-    A.resize(2);
 
     //Kante 1:
-    for(int j=1; j<Nx-1;j++)
+    _e.resize(2);
+    _A.resize(2);
+    for(int i(1); i<_nx-1;i++)
     {
-        i=j;
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.sequential_fill(i, 1.0);
+            Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile] = g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
-            e[0]=i-1; A[0]=1;
-            e[1]=i; A[1]=0;
-            assemblyMatrixRow(e, A, column, value);
+            _e[0]=Zeile-1; _A[0]=1;
+            _e[1]=Zeile; _A[1]=0;
+            assemblyMatrixRow();
             for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
+                Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                e[0]=i-1; A[0]=1;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-1; A[0]=1;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
             }
+        }
+    }//close I-Schleife (X-Achse)
+
+    //Ecke 2
+    _e.resize(1);
+    _A.resize(1);
+    Zeile++; //Zeile sollte hier y-1 sein
+    if(Dirichlet)
+    {
+        Matrix.sequential_fill(Zeile, 1.0);
+        Matrix.end_of_row();
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+    }
+    else
+    {
+        _e[0]=Zeile-1; _A[0]=1;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+        }
+    }
+
+    for(int j(1); j<_ny-1;j++)
+    {
+        //Kante 5
+        _e.resize(2);
+        _A.resize(2);
+
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile-y; _A[0]=2;
+            _e[1]=Zeile; _A[1]=0;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+            }
+        }
+
+        //Flaeche 1
+        _e.resize(4);
+        _A.resize(4);
+        for(int i(1); i<_nx-1;i++)
+        {
+            Zeile++;
+//            if(Dirichlet)
+            {
+                Matrix.sequential_fill(Zeile, 1.0);
+                Matrix.end_of_row();
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+            }
+//            else
+//            {
+//                _e[0]=Zeile -y-1; _A[0]=3;
+//                _e[1]=Zeile -y; _A[1]=2;
+//                _e[2]=Zeile -1; _A[2]=1;
+//                _e[3]=Zeile; _A[3]=0;
+//                assemblyMatrixRow();
+//                for (int m(0); m<18; ++m)
+//                    Matrix.sequential_fill(_column[m], _value[m]);
+//                Matrix.end_of_row();
+//                RHS[Zeile] = assemblyRHSLoad(f);
+//                if(Neumann)
+//                {
+//                    RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+//                }
+//            }
+        } //close I-Schleife (X-Achse)
+
+        //Kante: 6
+        _e.resize(2);
+        _A.resize(2);
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile -1 -y; _A[0]=3;
+            _e[1]=Zeile -1; _A[1]=1;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+            }
+        }
+    } //close J-Schleife (Y-Achse)
+
+    //Ecke 3:
+    _e.resize(1);
+    _A.resize(1);
+    Zeile++; //Zeile sollte hier (_ny-1)*y sein
+    if(Dirichlet)
+    {
+        Matrix.sequential_fill(Zeile, 1.0);
+        Matrix.end_of_row();
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+    }
+    else
+    {
+        _e[0]=Zeile-y; _A[0]=2;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
         }
     }
 
     //Kante 2:
-    for(int j=1; j<Nx-1; j++)
+    _e.resize(2);
+    _A.resize(2);
+    for(int i(1); i<_nx-1; i++)
     {
-        i=(Ny-1)*y + j;
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.sequential_fill(i, 1.0);
+            Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
-            e[0]=i-y -1; A[0]=2;
-            e[1]=i-y; A[1]=3;
-            assemblyMatrixRow(e, A, column, value);
+            _e[0]=Zeile-y-1; _A[0]=3;
+            _e[1]=Zeile-y; _A[1]=2;
+            assemblyMatrixRow();
             for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
+                Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                e[0]=i-y-1; A[0]=2;
-                e[1]=i-y; A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-1; A[0]=1;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
+                RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
             }
+        }
+    }//close I-Schleife (X-Achse)
+
+    //Ecke 4:
+    _e.resize(1);
+    _A.resize(1);
+    Zeile++; //Zeile sollte hier z-1 sein
+    if(Dirichlet)
+    {
+        Matrix.sequential_fill(Zeile, 1.0);
+        Matrix.end_of_row();
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+    }
+    else
+    {
+        _e[0]=Zeile-y-1; _A[0]=3;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
         }
     }
 
-    //Kante 3:
-    for(int j=1; j<Nx-1; j++)
+    for(int k(1); k<_nz-1; k++)
     {
-        i=Nx*Nz*Ny-Nx + j;
+LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%");
+        //Kante 9:
+        _e.resize(2);
+        _A.resize(2);
         Zeile++;
         if(Dirichlet)
         {
-            Matrix.sequential_fill(i, 1.0);
+            Matrix.sequential_fill(Zeile, 1.0);
             Matrix.end_of_row();
-            RHS[Zeile]= 999999;
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
         }
         else
         {
-            e[0]=i-y-z -1; A[0]=6;
-            e[1]=i-y-z; A[1]=7;
-            assemblyMatrixRow(e, A, column, value);
+            _e[0]=Zeile-z; _A[0]=4;
+            _e[1]=Zeile; _A[1]=0;
+            assemblyMatrixRow();
             for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
+                Matrix.sequential_fill(_column[m], _value[m]);
             Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
+            RHS[Zeile] = assemblyRHSLoad(f);
             if(Neumann)
             {
-                e[0]=i-1-y; A[0]=2;
-                e[1]=i-y; A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-1-z; A[0]=2;
-                e[1]=i-z; A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
             }
         }
-    }
 
-    //Kante 4:
-    for(int j=1; j<Nx-1; j++)
-    {
-       i=(Nz-1)*z + j;
-       Zeile++;
-        if(Dirichlet)
+        //Flaeche 3:
+        _e.resize(4);
+        _A.resize(4);
+        for(int i(1); i<_nx-1; i++)
         {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-z -1; A[0]=5;
-            e[1]=i-z; A[1]=4;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-1; A[0]=1;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-z -1; A[0]=2;
-                e[1]=i-z; A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-            }
-        }
-    }
-
-    //Kante 5:
-    for(int j=1; j<Ny-1; j++)
-    {
-        i= j*y;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-y; A[0]=3;
-            e[1]=i; A[1]=0;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-y; A[0]=3;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-y; A[0]=1;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    //Kante 6:
-    for(int j=1; j<Ny-1; j++)
-    {
-        i=(y-1) + j*y;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-1 -y; A[0]=2;
-            e[1]=i-1; A[1]=1;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-y-1; A[0]=2;
-                e[1]=i-1; A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-y; A[0]=1;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    //Kante 7:
-    for(int j=1; j<Ny-1; j++)
-    {
-        i=(Nz-1)*z+y-1 + j*y;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-1-z -y; A[0]=6;
-            e[1]=i-1-z; A[1]=5;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-y-1; A[0]=2;
-                e[1]=i-1; A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-y-z; A[0]=2;
-                e[1]=i-z; A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    //Kante 8:
-    for(int j=1; j<Ny-1; j++)
-    {
-        i = z*(Nz-1) + j*y;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i -z; A[0]=4;
-            e[1]=i; A[1]=0;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-y; A[0]=3;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
-                e[0]=i-y-z; A[0]=2;
-                e[1]=i-z; A[1]=3;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    //Kante 9:
-    for(int j=1; j<Nz-1; j++)
-    {
-        i = j*z;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-z -y; A[0]=7;
-            e[1]=i-z; A[1]=4;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-z; A[0]=3;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-                e[0]=i-z; A[0]=3;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    //Kante 10:
-    for(int j=1; j<Nz-1; j++)
-    {
-        i=y-1 + j*z;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-1 -z; A[0]=5;
-            e[1]=i-1; A[1]=1;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-1-z; A[0]=2;
-                e[1]=i-1; A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-                e[0]=i-z; A[0]=3;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    //Kante 11:
-    for(int j=1; j<Nz-1; j++)
-    {
-        i = z-1 + j*z;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-1 -z; A[0]=5;
-            e[1]=i-1; A[1]=1;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-1-z; A[0]=2;
-                e[1]=i-1; A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-                e[0]=i-z-y; A[0]=2;
-                e[1]=i-y; A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    //Kante 12:
-    for(int j=1; j<Nz-1; j++)
-    {
-        i=z-y + j*z;
-        Zeile++;
-        if(Dirichlet)
-        {
-            Matrix.sequential_fill(i, 1.0);
-            Matrix.end_of_row();
-            RHS[Zeile]= 999999;
-        }
-        else
-        {
-            e[0]=i-y -z; A[0]=7;
-            e[1]=i-y; A[1]=3;
-            assemblyMatrixRow(e, A, column, value);
-            for (int m(0); m<12; ++m)
-                Matrix.sequential_fill(column[m], value[m]);
-            Matrix.end_of_row();
-            RHS[Zeile] = assemblyRHSLoad(e, A);
-            if(Neumann)
-            {
-                e[0]=i-z; A[0]=3;
-                e[1]=i; A[1]=0;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-                e[0]=i-z-y; A[0]=2;
-                e[1]=i-y; A[1]=1;
-                RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-            }
-        }
-    }
-
-    e.resize(4);
-    A.resize(4);
-
-    //Fläche 1:
-    for(int j=1; j<Nx-1; j++)
-    {
-        for(int k=1; k<Ny-1; k++)
-        {
-            i = j + k*y;
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.sequential_fill(i, 1.0);
+                Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
-                e[0]=i -y-1; A[0]=2;
-                e[1]=i -y; A[1]=3;
-                e[2]=i; A[2]=0;
-                e[3]=i -1; A[3]=1;
-                assemblyMatrixRow(e, A, column, value);
+                _e[0]=Zeile -1-z; _A[0]=5;
+                _e[1]=Zeile -z; _A[1]=4;
+                _e[2]=Zeile -1; _A[2]=1;
+                _e[3]=Zeile; _A[3]=0;
+                assemblyMatrixRow();
                 for (int m(0); m<18; ++m)
-                    Matrix.sequential_fill(column[m], value[m]);
+                    Matrix.sequential_fill(_column[m], _value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(f);
                 if(Neumann)
                 {
-                    e[0]=i -y-1; A[0]=2;
-                    e[1]=i -y; A[1]=3;
-                    e[2]=i; A[2]=0;
-                    e[3]=i -1; A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
+                    RHS[Zeile] += assemblyRHSNeumann(2, false, h);
                 }
             }
-       }
-    }
+        }//close I-Schleife (X-Achse)
 
-    //Fläche 2:
-    for(int j=1; j<Nx-1; j++)
-    {
-        for(int k=1; k<Ny-1; k++)
+        //Kante 10:
+        _e.resize(2);
+        _A.resize(2);
+        Zeile++;
+        if(Dirichlet)
         {
-            i = (Nz-1)*z + j + k*y;
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile-1 -z; _A[0]=5;
+            _e[1]=Zeile-1; _A[1]=1;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+            }
+        }
+
+        for(int j(1); j<_ny-1; j++)
+        {
+            //Flaeche 5:
+            _e.resize(4);
+            _A.resize(4);
             Zeile++;
             if(Dirichlet)
             {
-                Matrix.sequential_fill(i, 1.0);
+                Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
-                RHS[Zeile]= 999999;
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
             else
             {
-                e[0]=i -y-1 -z; A[0]=6;
-                e[1]=i -y -z; A[1]=7;
-                e[2]=i -z ; A[2]=4;
-                e[3]=i -1 -z; A[3]=5;
-                assemblyMatrixRow(e, A, column, value);
+                _e[0]=Zeile -y-z; _A[0]=6;
+                _e[1]=Zeile -z; _A[1]=4;
+                _e[2]=Zeile -y; _A[2]=2;
+                _e[3]=Zeile; _A[3]=0;
+                assemblyMatrixRow();
                 for (int m(0); m<18; ++m)
-                    Matrix.sequential_fill(column[m], value[m]);
+                    Matrix.sequential_fill(_column[m], _value[m]);
                 Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
+                RHS[Zeile] = assemblyRHSLoad(f);
                 if(Neumann)
                 {
-                    e[0]=i -y-1; A[0]=2;
-                    e[1]=i -y; A[1]=3;
-                    e[2]=i; A[2]=0;
-                    e[3]=i -1; A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(e, A, 1);
+                    RHS[Zeile] += assemblyRHSNeumann(3, false, h);
                 }
             }
-       }
-    }
 
-    //Fläche 3:
-    for(int j=1; j<Nx-1; j++)
-    {
-        for(int k=1; k<Nz-1; k++)
-        {
-            i = j + k*z;
-            Zeile++;
-            if(Dirichlet)
+            //Inneres:
+            _e.resize(8);
+            _A.resize(8);
+            for(int i(1); i<_nx-1; i++)
             {
-                Matrix.sequential_fill(i, 1.0);
-                Matrix.end_of_row();
-                RHS[Zeile]= 999999;
-            }
-            else
-            {
-                e[0]=i -1-z; A[0]=5;
-                e[1]=i -z; A[1]=4;
-                e[2]=i; A[2]=0;
-                e[3]=i -1; A[3]=1;
-                assemblyMatrixRow(e, A, column, value);
-                for (int m(0); m<18; ++m)
-                    Matrix.sequential_fill(column[m], value[m]);
-                Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
-                if(Neumann)
+                Zeile++;;
+                //if(Dirichlet)
+                //{
+                //    Matrix.sequential_fill(Zeile, 1.0);
+                //    Matrix.end_of_row();
+                //    RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+                //}
+                //else
                 {
-                    e[0]=i -1-z; A[0]=2;
-                    e[1]=i -z; A[1]=3;
-                    e[2]=i; A[2]=0;
-                    e[3]=i -1; A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-                }
-            }
-       }
-    }
+                    _e[0]=Zeile -1-y-z; _A[0]=7;
+                    _e[1]=Zeile -y-z; _A[1]=6;
+                    _e[2]=Zeile -1-z; _A[2]=5;
+                    _e[3]=Zeile -z; _A[3]=4;
+                    _e[4]=Zeile -1-y; _A[4]=3;
+                    _e[5]=Zeile -y; _A[5]=2;
+                    _e[6]=Zeile -1; _A[6]=1;
+                    _e[7]=Zeile; _A[7]=0;
 
-    //Fläche 4:
-    for(int j=1; j<Nx-1; j++)
-    {
-        for(int k=1; k<Nz-1; k++)
-        {
-            i = (Ny-1)*y + j + k*z;
-            Zeile++;
-            if(Dirichlet)
-            {
-                Matrix.sequential_fill(i, 1.0);
-                Matrix.end_of_row();
-                RHS[Zeile]= 999999;
-            }
-            else
-            {
-                e[0]=i -1-z -y; A[0]=6;
-                e[1]=i -z -y; A[1]=7;
-                e[2]=i -y; A[2]=3;
-                e[3]=i -1 -y; A[3]=2;
-                assemblyMatrixRow(e, A, column, value);
-                for (int m(0); m<18; ++m)
-                    Matrix.sequential_fill(column[m], value[m]);
-                Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
-                if(Neumann)
-                {
-                    e[0]=i -1-z; A[0]=2;
-                    e[1]=i -z; A[1]=3;
-                    e[2]=i; A[2]=0;
-                    e[3]=i -1; A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(e, A, 2);
-                }
-            }
-       }
-    }
-
-    //Fläche 5:
-    for(int j=1; j<Ny-1; j++)
-    {
-        for(int k=1; k<Nz-1; k++)
-        {
-            i = j*y + k*z;
-            Zeile++;
-            if(Dirichlet)
-            {
-                Matrix.sequential_fill(i, 1.0);
-                Matrix.end_of_row();
-                RHS[Zeile]= 999999;
-            }
-            else
-            {
-                e[0]=i -y-z; A[0]=7;
-                e[1]=i -z; A[1]=4;
-                e[2]=i; A[2]=0;
-                e[3]=i -y; A[3]=3;
-                assemblyMatrixRow(e, A, column, value);
-                for (int m(0); m<18; ++m)
-                    Matrix.sequential_fill(column[m], value[m]);
-                Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
-                if(Neumann)
-                {
-                    e[0]=i -y-z; A[0]=2;
-                    e[1]=i -z; A[1]=3;
-                    e[2]=i; A[2]=0;
-                    e[3]=i -y; A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-                }
-            }
-       }
-    }
-
-    //Fläche 6:
-    for(int j=1; j<Ny-1; j++)
-    {
-        for(int k=1; k<Nz-1; k++)
-        {
-            i = (Nx-1) + j*y + k*z;
-            Zeile++;
-            if(Dirichlet)
-            {
-                Matrix.sequential_fill(i, 1.0);
-                Matrix.end_of_row();
-                RHS[Zeile]= 999999;
-            }
-            else
-            {
-                e[0]=i -y-z -1; A[0]=6;
-                e[1]=i -z -1; A[1]=5;
-                e[2]=i -1; A[2]=1;
-                e[3]=i -y -1; A[3]=2;
-                assemblyMatrixRow(e, A, column, value);
-                for (int m(0); m<18; ++m)
-                    Matrix.sequential_fill(column[m], value[m]);
-                Matrix.end_of_row();
-                RHS[Zeile] = assemblyRHSLoad(e, A);
-                if(Neumann)
-                {
-                    e[0]=i -y-z; A[0]=2;
-                    e[1]=i -z; A[1]=3;
-                    e[2]=i; A[2]=0;
-                    e[3]=i -y; A[3]=1;
-                    RHS[Zeile] += assemblyRHSNeumann(e, A, 3);
-                }
-            }
-       }
-    }
-
-    e.resize(8);
-    A.resize(8);
-
-    //Inneres 1:
-    for(int j=1; j<Nx-1; j++)
-    {
-        for(int k=1; k<Ny-1; k++)
-        {
-            for(int l=1; l<Nz-1; l++)
-            {
-                i= j + k*y + l*z;
-                Zeile++;
-                if(Dirichlet)
-                {
-                    Matrix.sequential_fill(i, 1.0);
-                    Matrix.end_of_row();
-                    RHS[Zeile]= 999999;
-                }
-                else
-                {
-                    e[0]=i -1-y-z; A[0]=6;
-                    e[1]=i -y-z; A[1]=7;
-                    e[2]=i -z; A[2]=4;
-                    e[3]=i -1-z; A[3]=5;
-                    e[4]=i -1-y; A[4]=2;
-                    e[5]=i -y; A[5]=3;
-                    e[6]=i; A[6]=0;
-                    e[7]=i -1; A[7]=1;
-                    assemblyMatrixRow(e, A, column, value);
+                    assemblyMatrixRow();
                     for (int m(0); m<27; ++m)
-                        Matrix.sequential_fill(column[m], value[m]);
+                        Matrix.sequential_fill(_column[m], _value[m]);
                     Matrix.end_of_row();
-                    RHS[Zeile] = assemblyRHSLoad(e, A);
+                    RHS[Zeile] = assemblyRHSLoad(f);
 
                     //Neumann eventuell hinzufuegen
                 }
+            } //Close I-Schleife (X-Achse)
+
+            //Flaeche 6:
+            _e.resize(4);
+            _A.resize(4);
+            Zeile++;
+            if(Dirichlet)
+            {
+                Matrix.sequential_fill(Zeile, 1.0);
+                Matrix.end_of_row();
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
+            else
+            {
+                _e[0]=Zeile -y-z -1; _A[0]=7;
+                _e[1]=Zeile -z -1; _A[1]=5;
+                _e[2]=Zeile -y -1; _A[2]=3;
+                _e[3]=Zeile -1; _A[3]=1;
+                assemblyMatrixRow();
+                for (int m(0); m<18; ++m)
+                    Matrix.sequential_fill(_column[m], _value[m]);
+                Matrix.end_of_row();
+                RHS[Zeile] = assemblyRHSLoad(f);
+                if(Neumann)
+                {
+                    RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+                }
+            }
+        } //close J-Schleife (Y-Achse)
+
+        //Kante 12:
+        _e.resize(2);
+        _A.resize(2);
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile-y -z; _A[0]=6;
+            _e[1]=Zeile-y; _A[1]=2;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+            }
+        }
+
+        //Flaeche 4
+        _e.resize(4);
+        _A.resize(4);
+        for(int i(1); i< _nx-1; i++)
+        {
+            Zeile++;
+            if(Dirichlet)
+            {
+                Matrix.sequential_fill( Zeile, 1.0);
+                Matrix.end_of_row();
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+            }
+            else
+            {
+                _e[0]= Zeile -1-z -y; _A[0]=7;
+                _e[1]= Zeile -z -y; _A[1]=6;
+                _e[2]= Zeile -1 -y; _A[2]=3;
+                _e[3]= Zeile -y; _A[3]=2;
+                assemblyMatrixRow();
+                for (int m(0); m<18; ++m)
+                    Matrix.sequential_fill(_column[m], _value[m]);
+                Matrix.end_of_row();
+                RHS[Zeile] = assemblyRHSLoad(f);
+                if(Neumann)
+                {
+                    RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+                }
+            }
+        }//Close I-Schleife (X-Achse)
+
+        //Kante 11:
+        _e.resize(2);
+        _A.resize(2);
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile-1-y-z; _A[0]=7;
+            _e[1]=Zeile-1-y; _A[1]=3;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+            }
+        }
+    } //close K-schleife (Z-Achse)
+LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0, "%");
+
+    //Ecke 5
+    _e.resize(1);
+    _A.resize(1);
+    Zeile++; //Zeile sollte hier (_nz-1)*z sein
+    if(Dirichlet)
+    {
+        Matrix.sequential_fill( Zeile, 1.0);
+        Matrix.end_of_row();
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+    }
+    else
+    {
+        _e[0]= Zeile-z; _A[0]=4;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
         }
     }
 
-    for (int i(0); i<Nx*Ny*Nz; ++i)
+    //Kante 4
+    _e.resize(2);
+    _A.resize(2);
+    for(int i(1); i<_nx-1;i++)
+    {
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile-z -1; _A[0]=5;
+            _e[1]=Zeile-z; _A[1]=4;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            }
+        }
+    }//Close I-Schleife (X-Achse)
+
+    //Ecke 6:
+    _e.resize(1);
+    _A.resize(1);
+    Zeile++; //Zeile sollte hier (_nz-1)*z+y-1 sein
+    if(Dirichlet)
+    {
+        Matrix.sequential_fill( Zeile, 1.0);
+        Matrix.end_of_row();
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+    }
+    else
+    {
+        _e[0]= Zeile-1-z; _A[0]=5;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+        }
+    }
+
+    for(int j(1); j< _ny-1; j++)
+    {
+        //Kante 8
+        _e.resize(2);
+        _A.resize(2);
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile -z-y; _A[0]=6;
+            _e[1]=Zeile -z; _A[1]=4;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+            }
+        }
+
+        //Flaeche 2:
+        _e.resize(4);
+        _A.resize(4);
+        for(int i(1); i<_nx-1; i++)
+        {
+            Zeile++;
+            if(Dirichlet)
+            {
+                Matrix.sequential_fill(Zeile, 1.0);
+                Matrix.end_of_row();
+                RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+            }
+            else
+            {
+                _e[0]=Zeile -y-1 -z; _A[0]=7;
+                _e[1]=Zeile -y -z; _A[1]=6;
+                _e[2]=Zeile -1 -z; _A[2]=5;
+                _e[3]=Zeile -z ; _A[3]=4;
+                assemblyMatrixRow();
+                for (int m(0); m<18; ++m)
+                    Matrix.sequential_fill(_column[m], _value[m]);
+                Matrix.end_of_row();
+                RHS[Zeile] = assemblyRHSLoad(f);
+                if(Neumann)
+                {
+                    RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                }
+            }
+        }//Close I-Schleife (X-Achse)
+
+        //Kante 7
+        _e.resize(2);
+        _A.resize(2);
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill(Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]=Zeile-1-z -y; _A[0]=7;
+            _e[1]=Zeile-1-z; _A[1]=5;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+            }
+        }
+    }//Close J-Schleife (Y-Achse)
+
+    //Ecke 7
+    _e.resize(1);
+    _A.resize(1);
+    Zeile++; //Zeile sollte hier (_nx*_ny*_nz)-_nx sein
+    if(Dirichlet)
+    {
+        Matrix.sequential_fill(Zeile, 1.0);
+        Matrix.end_of_row();
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+    }
+    else
+    {
+        _e[0]=Zeile-y-z; _A[0]=6;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+        }
+    }
+
+    //Kante 3
+    _e.resize(2);
+    _A.resize(2);
+    for(int i(1); i<_nx-1; i++)
+    {
+        Zeile++;
+        if(Dirichlet)
+        {
+            Matrix.sequential_fill( Zeile, 1.0);
+            Matrix.end_of_row();
+            RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+        }
+        else
+        {
+            _e[0]= Zeile-y-z -1; _A[0]=7;
+            _e[1]= Zeile-y-z; _A[1]=6;
+            assemblyMatrixRow();
+            for (int m(0); m<12; ++m)
+                Matrix.sequential_fill(_column[m], _value[m]);
+            Matrix.end_of_row();
+            RHS[Zeile] = assemblyRHSLoad(f);
+            if(Neumann)
+            {
+                RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            }
+        }
+    }//Close I-Schleife (X-Achse)
+
+    //Ecke 8:
+    _e.resize(1);
+    _A.resize(1);
+    Zeile++; //Zeile sollte hier (_nx*_ny*_nz) sein
+    if(Dirichlet)
+    {
+        Matrix.sequential_fill(Zeile, 1.0);
+        Matrix.end_of_row();
+        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+    }
+    else
+    {
+        _e[0]=Zeile-z-y-1; _A[0]=7;
+        assemblyMatrixRow();
+        for (int m(0); m<8; ++m)
+            Matrix.sequential_fill(_column[m], _value[m]);
+        Matrix.end_of_row();
+        RHS[Zeile] = assemblyRHSLoad(f);
+        if(Neumann)
+        {
+            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+        }
+    }
+LOG_INFO("assembled 100%");
+
+    //TODO rhs direkt fuellen (erst wenn alles laeuft)
+    for (int i(0); i<_nx*_ny*_nz; ++i)
         rhs.set_global(i, RHS[i]);
 
-}//nomain()
+    LOG_INFO("Matrix succesfully assembled");
+
+}//assemble()
 
 }//namespace Icarus

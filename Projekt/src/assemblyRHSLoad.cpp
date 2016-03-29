@@ -1,42 +1,27 @@
-//#include <vector>
-//#include "quadratur.hpp"
-//#include "basis.hpp"
-
-//#include "testfunctions.hpp"
 #include "include/assemblefem.hpp"
 
 namespace Icarus
 {
 
-double assembleFem::assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, mathfunction f)
+double assembleFem::assemblyRHSLoad(mathfunction f)
 {
-    int n = e.size();
+    int n(_e.size());
     double RHS(0.0);
 
-    //TODO TOCHECK changed 02-24-16
-    std::vector<double> X(27), Y(27), Z(27), weight(27);
-    double aa(sqrt(0.6));
-    std::vector<double> ax{-aa, -aa, -aa, -aa, -aa, -aa, -aa, -aa, -aa, 0, 0, 0, 0, 0, 0, 0, 0, 0, aa, aa, aa, aa, aa, aa, aa, aa, aa};  //x-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-    std::vector<double> ay{-aa, -aa, -aa, 0.5, 0, 0, aa, aa, aa, -aa, -aa, -aa, 0, 0, 0, aa, aa, aa, -aa, -aa, -aa, 0, 0, 0.25, aa, aa, aa}; //y-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-    std::vector<double> az{-aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa, -aa, 0, aa};   //z-Koordinaten der Gauss-Quadraturpunkte auf [-1,1]
-    std::vector<double> trans(27);
-    //TODO TOCHECK changed 02-24-16
+//    std::vector<double> X(27), Y(27), Z(27), Basis3d(27);
+    std::vector<double> Basis3d(27);
 
-    for(int i = 0; i < n; i++)
+    for (int i(0); i < n; i++)
     {
-        //getQuadrature(e[i], "Name") = X, Y, Z, weigth;
-        //TODO TOCHECK changed 02-24-16
-        X = get_quadrature_xpoints(e[i], h, ax, trans);
-        Y = get_quadrature_xpoints(e[i], h, ay, trans);
-        Z = get_quadrature_xpoints(e[i], h, az, trans);
-        //TODO TOCHECK changed 02-24-16
-        //get_quadrature_xpoints(e[i], X, h);
-        int nqp = X.size();
+        double e_x(getx(_e[i]));
+        double e_y(gety(_e[i]));
+        double e_z(getz(_e[i]));
 
-        for(int q = 0; q<nqp; q++)
-        {
-            RHS += evaluate_Basis3d(e[i], A[i], X[q], Y[q], Z[q]) * f.eval(X[q], Y[q], Z[q]) * weight[q];
-        }
+        Basis3d = evaluated_Basis3d(_A[i]);
+
+        //Zum auswerten von f, translatiere die Gauspunkte zum Element e[i]
+        for (int q(0); q < 27; q++)
+            RHS += Basis3d[q] * f.eval(_quadpoints_3d_x[q] + e_x, _quadpoints_3d_y[q] + e_y, _quadpoints_3d_z[q] + e_z) * _weight[q];
     }
     return RHS;
 }

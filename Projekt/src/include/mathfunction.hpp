@@ -1,32 +1,21 @@
 #ifndef __MATHFUNCTION_HPP_
 #define __MATHFUNCTION_HPP_
 
+#include <limits>
+#include <cassert>
+
 namespace Icarus
 {
 
 class mathfunction
 {
 public:
-    mathfunction(int type):
-        _type(type) { }
-
-    double eval(double x, double y, double z)
-    {
-        switch (_type)
-        {
-        case 0:
-            return 0.0;
-        case 1:
-            return 1.0;
-        case 2:
-            return 3.14159265358979323846;
-        default:
-            return 0.0;
-        }
-        return 0.0;
-    }
+    mathfunction(int type, double val=0.0):
+        _type(type), _val(val) { }
+    double eval(double x, double y, double z, int plane=0);
 private:
-    int _type;
+    const int _type;
+    const double _val;
 };
 
 }//namespace Icarus

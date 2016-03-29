@@ -3,11 +3,13 @@
 
 #include "distellpackmatrix.hpp"
 #include "slicedvector.hpp"
+#include "fullvector.hpp"
 
 #include "mathfunction.hpp"
 
 #include <cmath>
 #include <vector>
+#include <cassert>
 
 namespace Icarus
 {
@@ -16,28 +18,55 @@ class assembleFem
 {
 public:
     assembleFem(double sh, int sx, int sy, int sz):
-        h(sh), Nx(sx), Ny(sy), Nz(sz), z(Nx*Ny), y(Nx) {};
-    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs);
+        _h(sh), _nx(sx), _ny(sy), _nz(sz), z(_nx*_ny), y(_nx),
+        _weight(get_weight()), _weight_2d(get_weight_2d()),
+        _quadpoints_3d_x(get_quadrature_xpoints()), _quadpoints_3d_y(get_quadrature_ypoints()), _quadpoints_3d_z(get_quadrature_zpoints()),
+        _quadpoints_2d_1(get_quadrature_xpoints_2d_1()), _quadpoints_2d_2(get_quadrature_ypoints_2d_1())
+    { }
+
+    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, std::vector<char>& disc_points,
+        mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
+
+    double calcL2Error(mathfunction realsol, FullVector<double>& calcsol);
 
 private:
-    void assemblyMatrixRow(std::vector<int>& e, std::vector<int>& A, std::vector<int>& column, std::vector<double>& value);
-    double assemblyRHSLoad(std::vector<int>& e, std::vector<int>& A, mathfunction f=mathfunction(0));
-    double assemblyRHSNeumann(std::vector<int>& e, std::vector<int>& A, int Ebene, mathfunction g=mathfunction(0));
-    double evaluate_Basis3d(int e, int A, double X, double Y, double Z);
-    std::vector<double> evaluate_gradient_Basis3d(int e, int A, double X, double Y, double Z);
-    double evaluate_Basis2d(int e, int A, int type, double R1, double R2);
-    double getx(size_t index, double h, size_t nx, size_t ny);
-    double gety(size_t index, double h, size_t nx, size_t ny);
-    double getz(size_t index, double h, size_t nx, size_t ny);
-    std::vector<double> get_weight(double c, double d);
-    void transformation(std::vector<double>& ai, double h, std::vector<double>& trans);
-    std::vector<double> get_quadrature_xpoints(int e, double h, std::vector<double>& ax, std::vector<double>& trans);
-    std::vector<double> get_quadrature_ypoints(int e, double h, std::vector<double>& ay, std::vector<double>& trans);
-    std::vector<double> get_quadrature_zpoints(int e, double h, std::vector<double>& az, std::vector<double>& trans);
+    void assemblyMatrixRow();
 
-    double h;
-    int Nx, Ny, Nz;
+    double assemblyRHSLoad(mathfunction f=mathfunction(0));
+    double assemblyRHSNeumann(int Ebene, bool rightbacktop, mathfunction g=mathfunction(0));
+
+    double getx(size_t index);
+    double gety(size_t index);
+    double getz(size_t index);
+
+    std::vector<double> evaluated_Basis3d(int A);
+    std::vector<std::vector<double>> evaluated_gradient_Basis3d(int A);
+    std::vector<double> get_weight();
+
+    std::vector<double> get_quadrature_xpoints();
+    std::vector<double> get_quadrature_ypoints();
+    std::vector<double> get_quadrature_zpoints();
+
+    std::vector<double> evaluated_Basis2d_1(int A);
+    std::vector<double> evaluated_Basis2d_2(int A);
+    std::vector<double> evaluated_Basis2d_3(int A);
+    std::vector<double> get_weight_2d();
+    std::vector<double> get_quadrature_xpoints_2d_1();
+    std::vector<double> get_quadrature_ypoints_2d_1();
+//    std::vector<double> get_quadrature_xpoints_2d_2();
+//    std::vector<double> get_quadrature_zpoints_2d_2();
+//    std::vector<double> get_quadrature_ypoints_2d_3();
+//    std::vector<double> get_quadrature_zpoints_2d_3();
+
+    double _h;
+    int _nx, _ny, _nz;
     int z, y;
+    std::vector<double> _weight, _weight_2d;
+    std::vector<double> _quadpoints_3d_x, _quadpoints_3d_y, _quadpoints_3d_z;
+    std::vector<double> _quadpoints_2d_1, _quadpoints_2d_2;
+    std::vector<int> _e, _A;
+    std::vector<int> _column;
+    std::vector<double> _value;
 };
 
 }//namespace Icarus
