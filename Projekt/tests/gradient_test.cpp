@@ -1,5 +1,6 @@
 #include "../src/include/fullvector.hpp"
 #include "../src/include/vtkwriter.hpp"
+#include "../src/include/potentialgradients.hpp"
 /*
 *test fuer den vtk writer
 *ausgabe im ordner out (muss existieren)
@@ -8,6 +9,7 @@
 */
 int gradient_test()
 {
+    /*
 	const int Nx = 5, Ny = 5, Nz = 5, points=Nx*Ny*Nz, cells=(Nx-1)*(Ny-1)*(Nz-1);
 	const float h = 0.3;
 
@@ -31,6 +33,7 @@ int gradient_test()
     writer.addPointDataToAll(potential, "potential");
     writer.addPointVecToTimestep(pointx, pointy, pointz,0, "inner gradients");
     writer.addCellVecToTimestep(cellx, celly, cellz, 0, "cell midpoint gradients");
+    */
     return 0;
 }
 

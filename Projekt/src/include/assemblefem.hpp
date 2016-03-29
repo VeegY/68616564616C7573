@@ -39,7 +39,8 @@ private:
     double gety(size_t index);
     double getz(size_t index);
 
-    int setup_A(int row);
+    int setup_A(int row, std::vector<char>& disc_points);
+    void setup_e(int row);
 
     std::vector<double> evaluated_Basis3d(int A);
     std::vector<std::vector<double>> evaluated_gradient_Basis3d(int A);

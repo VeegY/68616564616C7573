@@ -20,7 +20,7 @@ double assembleFem::assemblyRHSNeumann(int Ebene, bool rightbacktop, mathfunctio
             double e_x(getx(_e[i]));
             double e_y(gety(_e[i]));
             double e_z((rightbacktop ? getz(_e[i]) + _h : getz(_e[i])));
-            Basis2d = (rightbacktop ? evaluated_Basis2d_3(_A[i] - 4) : evaluated_Basis2d_3(_A[i]));
+            Basis2d = (rightbacktop ? evaluated_Basis2d_1(_A[i] - 4) : evaluated_Basis2d_1(_A[i]));
 
             for(int q(0); q < 9; q++)
             {
@@ -40,7 +40,7 @@ double assembleFem::assemblyRHSNeumann(int Ebene, bool rightbacktop, mathfunctio
             double e_x(getx(_e[i]));
             double e_y((rightbacktop ? gety(_e[i]) + _h : gety(_e[i])));
             double e_z(getz(_e[i]));
-            Basis2d = (rightbacktop ? evaluated_Basis2d_3(_A[i] - 2) : evaluated_Basis2d_3(_A[i]));
+            Basis2d = (rightbacktop ? evaluated_Basis2d_2(_A[i] - 2) : evaluated_Basis2d_2(_A[i]));
 
             for(int q(0); q < 9; q++)
             {

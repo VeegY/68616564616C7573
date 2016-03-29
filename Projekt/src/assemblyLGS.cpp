@@ -10,8 +10,9 @@ namespace Icarus
 void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
     std::vector<char>& disc_points, mathfunction f, mathfunction g, mathfunction h)
 {
+    LOG_INFO(disc_points.size(), ", ", _nx*_ny*_nz);
     //TODO: vorlaeufig, wieder loeschen
-    bool Dirichlet(true);
+    bool Dirichlet(false);
     bool Neumann(true);
     //TODO: vorlaeufig, wieder loeschen
 
@@ -27,27 +28,27 @@ LOG_INFO("assembled 0%");
     _A.clear(); _A.resize(1);
     rowlength = 8;
     Zeile=0;
-    if(Dirichlet)
+//    if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
         Matrix.end_of_row();
         RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
     }
-    else
-    {
-        _e[0]=Zeile; _A[0]=0;
-        assemblyMatrixRow(rowlength);
-        for (int m(0); m < rowlength; ++m)
-            Matrix.sequential_fill(_column[m], _value[m]);
-        Matrix.end_of_row();
-        RHS[Zeile] = assemblyRHSLoad(f);
-        if(Neumann)
-        {
-            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
-            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
-            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
-        }
-    }
+//    else
+//    {
+//        _e[0]=Zeile; _A[0]=0;
+//        assemblyMatrixRow(rowlength);
+//        for (int m(0); m < rowlength; ++m)
+//            Matrix.sequential_fill(_column[m], _value[m]);
+//        Matrix.end_of_row();
+//        RHS[Zeile] = assemblyRHSLoad(f);
+//        if(Neumann)
+//        {
+//            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+//            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+//            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+//        }
+//    }
 
     //Kante 1:
     _e.resize(2);
@@ -143,28 +144,28 @@ LOG_INFO("assembled 0%");
         for(int i(1); i<_nx-1;i++)
         {
             Zeile++;
-//            if(Dirichlet)
+            if(Dirichlet)
             {
                 Matrix.sequential_fill(Zeile, 1.0);
                 Matrix.end_of_row();
                 RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
             }
-//            else
-//            {
-//                _e[0]=Zeile -y-1; _A[0]=3;
-//                _e[1]=Zeile -y; _A[1]=2;
-//                _e[2]=Zeile -1; _A[2]=1;
-//                _e[3]=Zeile; _A[3]=0;
-//                assemblyMatrixRow(rowlength);
-//                for (int m(0); m < rowlength; ++m)
-//                    Matrix.sequential_fill(_column[m], _value[m]);
-//                Matrix.end_of_row();
-//                RHS[Zeile] = assemblyRHSLoad(f);
-//                if(Neumann)
-//                {
-//                    RHS[Zeile] += assemblyRHSNeumann(1, false, h);
-//                }
-//            }
+            else
+            {
+                _e[0]=Zeile -y-1; _A[0]=3;
+                _e[1]=Zeile -y; _A[1]=2;
+                _e[2]=Zeile -1; _A[2]=1;
+                _e[3]=Zeile; _A[3]=0;
+                assemblyMatrixRow(rowlength);
+                for (int m(0); m < rowlength; ++m)
+                    Matrix.sequential_fill(_column[m], _value[m]);
+                Matrix.end_of_row();
+                RHS[Zeile] = assemblyRHSLoad(f);
+                if(Neumann)
+                {
+                    RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                }
+            }
         } //close I-Schleife (X-Achse)
 
         //Kante: 6
@@ -404,7 +405,8 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                 if (disc_points[Zeile] == 'o')
                 {
                     Matrix.sequential_fill(Zeile, 1.0);
-                    RHS[Zeile] = -1.0;
+                    Matrix.end_of_row();
+                    RHS[Zeile] = -100000.0;
                 }
                 else if (disc_points[Zeile] == 'a')
                 {
@@ -426,17 +428,32 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                     Matrix.end_of_row();
                     RHS[Zeile] = assemblyRHSLoad(f);
                 }
-                else if (disc_points[Zeile] == 'a')
+                else if (disc_points[Zeile] == 'b')
                 {
-                    rowlength = setup_A(Zeile);
-                    assemblyMatrixRow(rowlength);
-                    for (int m(0); m < rowlength; ++m)
-                        Matrix.sequential_fill(_column[m], _value[m]);
-                    Matrix.end_of_row();
-                    RHS[Zeile] = assemblyRHSLoad(f);
+                    if (Dirichlet)
+                    {
+                        Matrix.sequential_fill(Zeile, 1.0);
+                        Matrix.end_of_row();
+                        RHS[Zeile]= g.eval(getx(Zeile), gety(Zeile), getz(Zeile));
+                    }
+                    else
+                    {
+                        rowlength = setup_A(Zeile, disc_points);
+                        setup_e(Zeile);
+                        assemblyMatrixRow(rowlength);
+                        for (int m(0); m < rowlength; ++m)
+                            Matrix.sequential_fill(_column[m], _value[m]);
+                        Matrix.end_of_row();
+                        RHS[Zeile] = assemblyRHSLoad(f);
+                        if (Neumann)
+                        {
+                        }
+                    }
                 }
                 else
+                {
                     assert(false);
+                }
 
 
 
