@@ -9,15 +9,15 @@
 
 double bdry(int vtx_global)
 {
-	if (0<vtx_global<100) return 1000.0;
-	if (vtx_global>=900) return -1000.0;
+	if (0<vtx_global<2500) return 1000.0;
+	if (vtx_global>=122500) return -1000.0;
 	return 0.0;
 }
 
 int neumann_demo()
 {
-	const int nx = 10, ny = 10, nz = 10;
-	const float h = 0.1;
+	const int nx = 50, ny = 50, nz = 50;
+	const float h = 0.02;
 	// diskretisieren
 	//std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
 	
