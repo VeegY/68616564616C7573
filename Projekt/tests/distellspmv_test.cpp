@@ -25,7 +25,7 @@ int distEllSpmv_test(const size_t N, const size_t maxrow)
     mat1.prepare_sequential_fill(maxrow);
     for (size_t i(fron); i <= lron; i++)
     {
-        rhs.set_global(i, (1/N)*(i+1));
+        rhs.set_global(i, (1./N)*(i+1));
         rowlen = rand() % maxrow;
         for (size_t j(0); j <= rowlen; j++)
         {
@@ -33,7 +33,7 @@ int distEllSpmv_test(const size_t N, const size_t maxrow)
             colind = rand() % N;
             mat1.sequential_fill(colind, val);
 
-            res[i]+=(1/N)*(i+1)*val;
+            res[i]+=(1./N)*(i+1)*val;
         }
         mat1.end_of_row();
     }
