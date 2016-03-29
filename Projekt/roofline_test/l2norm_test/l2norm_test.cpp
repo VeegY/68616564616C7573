@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
     //=========================================//
     printf("3\n");
     
-    //l2norm_check_result_(result, vector_host, dimension);
+    l2norm_check_result_(result, vector_host, dimension);
     cleanup(vector_dev);
     cleanup(result);
     printf("4\n");
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 //================================================================================================/
 
     double schalter = 0.0;
-    //performance(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
+    performance(dimension, elapsed_overall, elapsed_kernel, schalter, iteration);
     printf("done\n");
     delete[] vector_host;
 

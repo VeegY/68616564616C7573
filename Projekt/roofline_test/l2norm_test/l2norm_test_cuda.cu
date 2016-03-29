@@ -71,6 +71,21 @@ __global__ void deviceReduceKernel(double *in, double *out, int N)
     out[blockIdx.x]=sum;
 }
 
+__global__ void deviceReduceKerneltwo(double *in, double *out, int N)
+{
+    double sum = 0;
+    double value = 0;
+    //reduce multiple elements per thread
+    for (int i = blockIdx.x * blockDim.x + threadIdx.x;
+    i < N;
+        i += blockDim.x * gridDim.x)
+    {
+        sum += in[i];
+    }
+    sum = blockReduceSum(sum);
+    if (threadIdx.x == 0)
+        out[blockIdx.x] = sum;
+}
 
 /*template<typename type>
 __global__ void kernel(type *vector, type *placehold, int dim_local)
@@ -175,6 +190,7 @@ float invoke_gpu_time(type *vector, type *result, int dim, int runs)
     for (int i = 0; i < runs; i++)
     {
         deviceReduceKernel << <num_blocks, num_threads >> >(vector, result, dim);
+        deviceReduceKerneltwo << <0,1024 >> >(result, result, 1024);
         //kernel<<<num_blocks, num_threads, sizeof(double)*num_threads>>>(vector,placehold,dim);
         //resultreduce<<<1, 1>>>(result, placehold, num_blocks);
     }
