@@ -89,13 +89,23 @@ FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVectorGpu<Scalar>& vec) :
     for(size_t i=0; i<vec.get_dim_local(); i++)
        this_chunk[i] = vec.get_local(i);
 
-	// synchronisiere die teile
-    for(int node = 0; node < _num_nodes; node++)
+    // synchronisiere die teile
+    if(vec.get_dim_local() != vec.get_dim_local_nopad())
     {
-        this_chunk = _data + node * vec.get_dim_local_nopad();
-		size_t this_len = (node == _num_nodes - 1) ? vec.get_dim_local_last() : vec.get_dim_local_nopad();
-        MPI_SCALL(MPI_Bcast(this_chunk,this_len,ScalarTraits<Scalar>::mpi_type,
-                  node,_my_comm));
+        LOG_DEBUG("Using non-optimal Bcast version of FullVector construction.");	
+        for(int node = 0; node < _num_nodes; node++)
+        {
+            this_chunk = _data + node * vec.get_dim_local_nopad();
+	    	size_t this_len = (node == _num_nodes - 1) ? vec.get_dim_local_last() : vec.get_dim_local_nopad();
+            MPI_SCALL(MPI_Bcast(this_chunk,this_len,ScalarTraits<Scalar>::mpi_type,
+                      node,_my_comm));
+        }
+    }
+    // Allgather ist schneller, funktioniert aber nur auf gleichen Bloecken.
+    else
+    {
+        MPI_SCALL(MPI_Allgather(this_chunk, vec.get_dim_local(), ScalarTraits<Scalar>::mpi_type, 
+          _data, vec.get_dim_local(), ScalarTraits<Scalar>::mpi_type, _my_comm));
     }
 
     // nach der barriere können die kopierquellen gefahrlos überschrieben werden

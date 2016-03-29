@@ -58,8 +58,6 @@ FullVector<Scalar>::FullVector(const SlicedVector<Scalar>& vec) :
 	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
 	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
 
-    if(vec.get_dim_local() != vec.get_dim_local_nopad())
-      LOG_ERROR("MPI_Allgather braucht gleiche Blocks.");
 
     Scalar* this_chunk = _data + _my_rank * vec.get_dim_local_nopad();
     
