@@ -2825,7 +2825,7 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
         A.end_of_row();
         int vtx_global = indexMatrix[i][0];
 
-        rhs.set_local(vtx_global, h*h*bdry(vtx_global));
+        rhs.set_local(vtx_global, 0.1*h*h*bdry(vtx_global));
     }
     return {A,rhs};
 }
