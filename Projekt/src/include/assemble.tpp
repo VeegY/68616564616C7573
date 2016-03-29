@@ -2390,6 +2390,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		int vtx_global = 0;
 		int vtx_local = vtx_global - fron;
 
+		
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + 1;
 		indexMatrix[vtx_local][2] = vtx_global + 2;
@@ -2398,6 +2399,15 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
 
+		valueMatrix[vtx_local][0] = 1.0;
+		valueMatrix[vtx_local][1] = 0.0;
+		valueMatrix[vtx_local][2] = 0.0;
+		valueMatrix[vtx_local][3] = 0.0;
+		valueMatrix[vtx_local][4] = 0.0;
+		valueMatrix[vtx_local][5] = 0.0;
+		valueMatrix[vtx_local][6] = 0.0;
+		
+		/*
 		//zentraler Differenzenquotient gar nicht möglich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
@@ -2417,6 +2427,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
+		*/
 	}
 }
 
