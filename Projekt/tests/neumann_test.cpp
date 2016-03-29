@@ -16,8 +16,8 @@ double bdry(int vtx_global)
 
 int neumann_demo()
 {
-	const int nx = 10, ny = 10, nz = 10;
-	const float h = 0.1;
+	const int nx = 20, ny = 20, nz = 20;
+	const float h = 0.05;
 	// diskretisieren
 	//std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
 	
