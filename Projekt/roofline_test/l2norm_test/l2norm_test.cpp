@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
     
     double *vector_dev = NULL;
     double *result = NULL;
-    int size_result = ceil((double)dimension / 1024);
+    int size_result = ceil((double)dimension / (double)1024);
     printf("0\n");
     allocation(&vector_dev, dimension);
     allocation(&result, size_result);
