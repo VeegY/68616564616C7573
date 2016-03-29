@@ -2389,16 +2389,16 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 	{
 		int vtx_global = 0;
 		int vtx_local = vtx_global - fron;
-	/*
-		// Dirichlet-RB
-        indexMatrix[vtx_local][0] = vtx_global;
+	
+		indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + 1;
 		indexMatrix[vtx_local][2] = vtx_global + 2;
 		indexMatrix[vtx_local][3] = vtx_global + nx;
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-	
+	/*
+		// Dirichlet-RB
 		valueMatrix[vtx_local][0] = 1.0;
 		valueMatrix[vtx_local][1] = 0.0;
 		valueMatrix[vtx_local][2] = 0.0;
