@@ -2397,8 +2397,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-	/*	
-		// Dirichlet-RB
+	// Dirichlet-RB
 		valueMatrix[vtx_local][0] = 1.0;
 		valueMatrix[vtx_local][1] = 0.0;
 		valueMatrix[vtx_local][2] = 0.0;
@@ -2407,7 +2406,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][5] = 0.0;
 		valueMatrix[vtx_local][6] = 0.0;
 	
-	*/	
+	/*	
 		//zentraler Differenzenquotient gar nicht möglich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
 		valueMatrix[vtx_local][0] = 3.0 * 1.0;
@@ -2427,7 +2426,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 1.0 / 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-4.0) / 2.0 * h;
 		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 1.0 / 2.0 * h;
-	
+	*/
 	}
 }
 
@@ -2792,27 +2791,6 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
 
-//Dirichlet-RB in der Mitte
-/*if(fron <= 555 && 555 <= lron)
-{
-	indexMatrix[555-fron][0] = 555; 
-	indexMatrix[555-fron][1] = 556;
-	indexMatrix[555-fron][2] = 557;
-	indexMatrix[555-fron][3] = 565;
-	indexMatrix[555-fron][4] = 545;
-	indexMatrix[555-fron][5] = 655;
-	indexMatrix[555-fron][6] = 455;
-
-	valueMatrix[555-fron][0] = 1.0;
-	valueMatrix[555-fron][1] = 0.0;
-    valueMatrix[555-fron][2] = 0.0;
-    valueMatrix[555-fron][3] = 0.0;
-    valueMatrix[555-fron][4] = 0.0;
-    valueMatrix[555-fron][5] = 0.0;
-    valueMatrix[555-fron][6] = 0.0;
-
-}
-*/
     A.prepare_sequential_fill(7);
     
     for(int i =0;i< msize;i++)
