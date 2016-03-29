@@ -388,7 +388,8 @@ namespace Icarus
 						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
 						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -436,7 +437,8 @@ namespace Icarus
 						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (1/sqrt(2),0,1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -484,7 +486,8 @@ namespace Icarus
 						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
 						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -533,7 +536,8 @@ namespace Icarus
 						//zeile[vtx_global+2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (0,0,1))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += 3.0 / 2.0 * h;
 						wert[5] += (-h) / 2.0;
@@ -577,7 +581,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 						wert[1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
@@ -625,7 +630,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 						wert[1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
@@ -673,7 +679,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 						wert[1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
@@ -721,7 +728,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (-1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += (-3.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 						wert[1] += (-1.0) * 1.0 / sqrt(3.0)*(-h) / 2.0;
@@ -773,7 +781,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (0,1/sqrt(2),-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
 						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -821,7 +830,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += (-2.0) * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -869,7 +879,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (1/sqrt(2),0,-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
 						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -917,7 +928,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,-1/sqrt(2))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += (-2.0) * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -965,7 +977,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx*ny] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (0,0,-1))
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += (-1.0) * 3.0 / 2.0 * h;
 						wert[5] += (-1.0)*(-h) / 2.0;
@@ -1013,7 +1026,8 @@ namespace Icarus
 						//zeile[vtx_global+2*nx] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (1/sqrt(2),1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -1062,7 +1076,8 @@ namespace Icarus
 						//zeile[vtx_global+2*nx] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (-1/sqrt(2),1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						//wert[0] += 0*1.0/sqrt(2.0)*3.0/2.0*h;
 						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -1110,7 +1125,8 @@ namespace Icarus
 						//zeile[vtx_global+2*nx] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (0,1,0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						wert[0] += 3.0 / 2.0 * h;
 						wert[5] += (-h) / 2.0;
@@ -1157,7 +1173,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (1/sqrt(2),-1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 
 						//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
 						wert[3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -1206,7 +1223,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (-1/sqrt(2),-1/sqrt(2),0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 						wert[0] += (-2.0) * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 						wert[3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
 						wert[4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
@@ -1253,7 +1271,8 @@ namespace Icarus
 						//zeile[vtx_global-2*nx] = 17.0/38.0;
 
 						//NeumannRB, Normalenvektor ist (0,-1,0)
-						//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
+						//RB wird auf die normale Zeile addiert, um die quadratische Struktur 
+						//beizubehalten
 						wert[0] += (-1.0) * 3.0 / 2.0 * h;
 						wert[5] += (-1.0)*(-h) / 2.0;
 						wert[6] += (-1.0) * 2.0 * h;
@@ -1274,7 +1293,8 @@ namespace Icarus
 					index[5] = vtx_global + 1;
 					index[6] = vtx_global + 2;
 
-					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb 
+					//zuerst normal in y/z-Richtung
 					wert[0] = -4.0;
 					wert[1] = 1.0;
 					wert[2] = 1.0;
@@ -1285,7 +1305,8 @@ namespace Icarus
 					wert[5] = -28.0 / 38.0;
 					wert[6] = 17.0 / 38.0;
 
-					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb 
+					//zuerst normal in y/z-Richtung
 					//zeile[vtx_global] = -4.0;
 					//zeile[vtx_global+nx] = 1.0;
 					//zeile[vtx_global-nx] = 1.0;
@@ -1308,7 +1329,8 @@ namespace Icarus
 					//zeile[vtx_global+2] += 2.0*h;
 				}
 
-				else if (i % nx == 0) //rechte Seite, aber nicht vordere/hintere Seite oder Boden/Deckel
+				else if (i % nx == 0) //rechte Seite, aber nicht vordere/hintere Seite oder Boden/
+				//Deckel
 				{
 					index[0] = vtx_global;
 					index[1] = vtx_global + nx;
@@ -1318,7 +1340,8 @@ namespace Icarus
 					index[5] = vtx_global - 1;
 					index[6] = vtx_global - 2;
 
-					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb 
+					//zuerst normal in y/z-Richtung
 					wert[0] = -4.0;
 					wert[1] = 1.0;
 					wert[2] = 1.0;
@@ -1329,7 +1352,8 @@ namespace Icarus
 					wert[5] = -28.0 / 38.0;
 					wert[6] = 17.0 / 38.0;
 
-					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+					////zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb 
+					//zuerst normal in y/z-Richtung
 					//zeile[vtx_global] = -4.0;
 					//zeile[vtx_global+nx] = 1.0;
 					//zeile[vtx_global-nx] = 1.0;
@@ -1414,13 +1438,11 @@ namespace Icarus
 void assembleLeftSidePanel(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int start = 0;
-    int end = nx*ny*nz -nx;
-
+    int end = nx*ny*nz-nx;
 
     while(start < fron)
     {
         start += nx;
-
     }
 
     while(end > lron)
@@ -1431,7 +1453,7 @@ void assembleLeftSidePanel(int** indexMatrix, double** valueMatrix,int fron, int
     for(int i =start; i<=end ;i+=nx)
     {
         int vtx_local = i - fron;
-        int vtx_global =i;
+        int vtx_global = i;
         //fuelle wie linke Seite
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
@@ -1440,7 +1462,8 @@ void assembleLeftSidePanel(int** indexMatrix, double** valueMatrix,int fron, int
 		indexMatrix[vtx_local][4] = vtx_global - nx*ny;
 		indexMatrix[vtx_local][5] = vtx_global + 1;
 		indexMatrix[vtx_local][6] = vtx_global + 2;
-		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in 
+		//y/z-Richtung
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1451,16 +1474,11 @@ void assembleLeftSidePanel(int** indexMatrix, double** valueMatrix,int fron, int
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-
-
 		//NeumannRB, Normalenvektor ist (1,0,0)
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
 		valueMatrix[vtx_local][0] += 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][5] += (-h) / 2.0;
 		valueMatrix[vtx_local][6] += 2.0 * h;
-
-
     }
 }
 
@@ -1469,11 +1487,9 @@ void assembleRightSidePanel(int** indexMatrix, double** valueMatrix,int fron, in
     int start = nx-1;
     int end = nx*ny*nz-1;
 
-
     while(start < fron)
     {
         start += nx;
-
     }
 
     while(end > lron)
@@ -1481,7 +1497,7 @@ void assembleRightSidePanel(int** indexMatrix, double** valueMatrix,int fron, in
         end -= nx;
     }
 
-    for(int i=start;i<=lron;i++)
+    for(int i=start;i<=lron;i+=nx)
     {
         int vtx_local = i-fron;
         int vtx_global = i;
@@ -1494,7 +1510,8 @@ void assembleRightSidePanel(int** indexMatrix, double** valueMatrix,int fron, in
 		indexMatrix[vtx_local][5] = vtx_global - 1;
 		indexMatrix[vtx_local][6] = vtx_global - 2;
 
-		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in y/z-Richtung
+		//zentraler Differenzenquotient ist nur in x-Richtung nicht möglich, deshalb zuerst normal in 
+		//y/z-Richtung
 		valueMatrix[vtx_local][0] = -4.0;
 		valueMatrix[vtx_local][1] = 1.0;
 		valueMatrix[vtx_local][2] = 1.0;
@@ -1510,20 +1527,20 @@ void assembleRightSidePanel(int** indexMatrix, double** valueMatrix,int fron, in
 		valueMatrix[vtx_local][0] += (-1.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][5] += (-1.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += (-1.0) * 2.0 * h;
-
     }
 }
 
 void assembleTopPanel(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-
     int start = nx*ny*(nz-1);
-    if(fron > start)
+    int end = nx*ny*nz-1;
+    
+	if(fron > start)
     {
         start = fron;
     }
-    int end = nx*ny*nz;
-    if(lron< end)
+	
+    if(lron < end)
     {
         end = lron;
     }
@@ -1552,33 +1569,25 @@ void assembleTopPanel(int** indexMatrix, double** valueMatrix,int fron, int lron
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-
 		//NeumannRB, Normalenvektor ist (0,0,-1))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
 		valueMatrix[vtx_local][0] += (-1.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][5] += (-1.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += (-1.0) * 2.0 * h;
-
-		//zeile[vtx_global] += (-1.0)*3.0/2.0*h;
-		//zeile[vtx_global-nx*ny] += (-1.0)*(-h)/2.0;
-		//zeile[vtx_global-2*nx*ny] += (-1.0)*2.0*h;
-
     }
-
-
 }
 
 void assembleBottomPanel(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-
     int start = 0;
-    if(fron > start)
+    int end = nx*ny-1;
+ 
+	if(fron > start)
     {
         start = fron;
     }
-    int end = nx*ny-1;
-    if(lron< end)
+ 
+	if(lron < end)
     {
         end = lron;
     }
@@ -1587,6 +1596,7 @@ void assembleBottomPanel(int** indexMatrix, double** valueMatrix,int fron, int l
     {
         int vtx_global =i;
         int vtx_local = vtx_global - fron;
+		
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + 1;
 		indexMatrix[vtx_local][2] = vtx_global - 1;
@@ -1612,15 +1622,11 @@ void assembleBottomPanel(int** indexMatrix, double** valueMatrix,int fron, int l
 		valueMatrix[vtx_local][0] += 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][5] += (-h) / 2.0;
 		valueMatrix[vtx_local][6] += 2.0 * h;
-
-
     }
-
 }
 
 void assembleFrontPanel(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-
     //Hier fuer finde welche punkte im front panel liegen und
     //fuelle alle die im bereich von fron..lron liegen.
     int* frontPanelIdxs = new int[nx*nz];
@@ -1633,14 +1639,12 @@ void assembleFrontPanel(int** indexMatrix, double** valueMatrix,int fron, int lr
         }
     }
 
-
     int idxStart =0;
     int start =frontPanelIdxs[idxStart];
     while(start < fron)
     {
         idxStart++;
         start = frontPanelIdxs[idxStart];
-
     }
 
     int idxEnd = nx*nz-1;
@@ -1649,7 +1653,6 @@ void assembleFrontPanel(int** indexMatrix, double** valueMatrix,int fron, int lr
     {
         idxEnd--;
         end = frontPanelIdxs[idxEnd];
-
     }
 
     //Alle Benoetigten idx's liegen zwischen idxStart und idxEnd
@@ -1677,16 +1680,12 @@ void assembleFrontPanel(int** indexMatrix, double** valueMatrix,int fron, int lr
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-
 		//NeumannRB, Normalenvektor ist (0,1,0)
 	    //RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
 		valueMatrix[vtx_local][0] += 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][5] += (-h) / 2.0;
 		valueMatrix[vtx_local][6] += 2.0 * h;
-
     }
-
 }
 
 void assembleBackPanel(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
@@ -1702,15 +1701,13 @@ void assembleBackPanel(int** indexMatrix, double** valueMatrix,int fron, int lro
             backPanelIdxs[iz*nx+ix] = idx;
         }
     }
-
-
+	
     int idxStart =0;
     int start =backPanelIdxs[idxStart];
     while(start < fron)
     {
         idxStart++;
         start = backPanelIdxs[idxStart];
-
     }
 
     int idxEnd = nx*nz-1;
@@ -1719,7 +1716,6 @@ void assembleBackPanel(int** indexMatrix, double** valueMatrix,int fron, int lro
     {
         idxEnd--;
         end = backPanelIdxs[idxEnd];
-
     }
 
     //Alle benoetigten idx's liegen zwischen idxStart und idxEnd
@@ -1751,10 +1747,7 @@ void assembleBackPanel(int** indexMatrix, double** valueMatrix,int fron, int lro
 		valueMatrix[vtx_local][0] += (-1.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][5] += (-1.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += (-1.0) * 2.0 * h;
-
     }
-
-
 }
 
 void assembleKanteVorneLinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
@@ -1806,9 +1799,7 @@ void assembleKanteVorneLinks(int** indexMatrix, double** valueMatrix,int fron, i
 		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
     }
-
 }
 
 void assembleKanteVorneRechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
@@ -1854,14 +1845,12 @@ void assembleKanteVorneRechts(int** indexMatrix, double** valueMatrix,int fron, 
 
 		//NeumannRB, Normalenvektor ist (-1/sqrt(2),1/sqrt(2),0)
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;					//2.0 oder 0 am Anfang? Ueberpruefen!
+		//valueMatrix[vtx_local][0] += 0.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][3] += (-1.0) / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += 1.0 / sqrt(2.0) * 2.0 * h;
-
     }
-
 }
 
 void assembleKanteHintenLinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
@@ -1882,7 +1871,6 @@ void assembleKanteHintenLinks(int** indexMatrix, double** valueMatrix,int fron, 
     {
         endidx--;
     }
-
 
 	 for(int idx = startidx; idx <= endidx ;idx++)
     {
@@ -1909,16 +1897,12 @@ void assembleKanteHintenLinks(int** indexMatrix, double** valueMatrix,int fron, 
 
 		//NeumannRB, Normalenvektor ist (1/sqrt(2),-1/sqrt(2),0)
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
+		//valueMatrix[vtx_local][0] += 0.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += (-1.0) / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += (-1.0) / sqrt(2.0) * 2.0 * h;
-
     }
-
-
-
 }
 
 void assembleKanteHintenRechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
@@ -1965,12 +1949,11 @@ void assembleKanteHintenRechts(int** indexMatrix, double** valueMatrix,int fron,
 
 		//NeumannRB, Normalenvektor ist (- 1/sqrt(2),- 1/sqrt(2),0)
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][0] += 2.0 * (-1.0) / sqrt(2.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][3] += (-1.0) / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += (-1.0) / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += (-1.0) / sqrt(2.0) * 2.0 * h;
-
     }
 }
 
@@ -1997,8 +1980,7 @@ void assembleKanteUntenVorne(int** indexMatrix, double** valueMatrix,int fron, i
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
         //Fuelle wie in Kante unten Vorne
         indexMatrix[vtx_local][0] = vtx_global;
@@ -2020,7 +2002,6 @@ void assembleKanteUntenVorne(int** indexMatrix, double** valueMatrix,int fron, i
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-
 		//NeumannRB, Normalenvektor ist (0,1/sqrt(2),1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
@@ -2036,7 +2017,7 @@ void assembleKanteUntenHinten(int** indexMatrix, double** valueMatrix,int fron, 
     int* kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
     {
-        kantenidxs[i] = i+(nx*(ny-1));
+        kantenidxs[i] = i+(nx*ny-1)-(nx-1);
     }
 
     int startidx = 0;
@@ -2052,8 +2033,7 @@ void assembleKanteUntenHinten(int** indexMatrix, double** valueMatrix,int fron, 
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
 
         indexMatrix[vtx_local][0] = vtx_global;
@@ -2077,8 +2057,7 @@ void assembleKanteUntenHinten(int** indexMatrix, double** valueMatrix,int fron, 
 
 		//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
+		//valueMatrix[vtx_local][0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
 		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -2086,7 +2065,7 @@ void assembleKanteUntenHinten(int** indexMatrix, double** valueMatrix,int fron, 
     }
 }
 
-void assembleKantenUntenLinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
+void assembleKanteUntenLinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
@@ -2107,8 +2086,7 @@ void assembleKantenUntenLinks(int** indexMatrix, double** valueMatrix,int fron, 
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
@@ -2160,7 +2138,7 @@ void assembleKanteUntenRechts(int** indexMatrix, double** valueMatrix,int fron, 
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
@@ -2183,8 +2161,7 @@ void assembleKanteUntenRechts(int** indexMatrix, double** valueMatrix,int fron, 
 
 		//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
+		//valueMatrix[vtx_local][0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
 		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -2215,8 +2192,7 @@ void assembleKanteObenVorne(int** indexMatrix, double** valueMatrix,int fron, in
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
         //Fuelle wie in Kante unten Vorne
         indexMatrix[vtx_local][0] = vtx_global;
@@ -2238,10 +2214,9 @@ void assembleKanteObenVorne(int** indexMatrix, double** valueMatrix,int fron, in
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-
 		//NeumannRB, Normalenvektor ist (0,1/sqrt(2),-1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
+		//valueMatrix[vtx_local][0] += 0.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += -1.0 / sqrt(2.0)*(-h) / 2.0;
@@ -2254,7 +2229,7 @@ void assembleKanteObenHinten(int** indexMatrix, double** valueMatrix,int fron, i
     int* kantenidxs = new int[nx];
     for(int i = 0;i < nx;i++)
     {
-        kantenidxs[i] = i+(nx*(ny-1));
+        kantenidxs[i] = i+(nx*(ny-1))+(nx*ny*(nz-1));
     }
 
     int startidx = 0;
@@ -2270,8 +2245,7 @@ void assembleKanteObenHinten(int** indexMatrix, double** valueMatrix,int fron, i
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
 
         indexMatrix[vtx_local][0] = vtx_global;
@@ -2295,12 +2269,11 @@ void assembleKanteObenHinten(int** indexMatrix, double** valueMatrix,int fron, i
 
 		//NeumannRB, Normalenvektor ist (0,-1/sqrt(2),-1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
+		valueMatrix[vtx_local][0] += 2.0*(-1.0)/sqrt(2.0)*3.0/2.0*h;
 		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-		valueMatrix[vtx_local][5] += -1.0 / sqrt(2.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][6] += -1.0 / sqrt(2.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += (-1.0) / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += (-1.0) / sqrt(2.0) * 2.0 * h;
     }
 }
 
@@ -2309,7 +2282,7 @@ void assembleKantenObenLinks(int** indexMatrix, double** valueMatrix,int fron, i
     int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
     {
-        kantenidxs[i] = i*nx;
+        kantenidxs[i] = i*nx+(nx*ny*(nz-1));
     }
 
     int startidx = 0;
@@ -2325,8 +2298,7 @@ void assembleKantenObenLinks(int** indexMatrix, double** valueMatrix,int fron, i
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
@@ -2348,12 +2320,11 @@ void assembleKantenObenLinks(int** indexMatrix, double** valueMatrix,int fron, i
 
 		//NeumannRB, Normalenvektor ist (1/sqrt(2),0,-1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-		valueMatrix[vtx_local][0] += 2.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
+		//valueMatrix[vtx_local][0] += 0.0 * 1.0 / sqrt(2.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][3] += 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] -= 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] -= 1.0 / sqrt(2.0) * 2.0 * h;
-
     }
 }
 
@@ -2362,7 +2333,7 @@ void assembleKanteObenRechts(int** indexMatrix, double** valueMatrix,int fron, i
     int* kantenidxs = new int[ny];
     for(int i = 0;i < ny;i++)
     {
-        kantenidxs[i] = i*nx+nx-1;
+        kantenidxs[i] = i*nx+nx-1+(nx*ny*(nz-1));
     }
 
     int startidx = 0;
@@ -2378,7 +2349,7 @@ void assembleKanteObenRechts(int** indexMatrix, double** valueMatrix,int fron, i
 
     for(int idx = startidx; idx <= endidx ;idx++)
     {
-        int vtx_global = idx;
+        int vtx_global = kantenidxs[idx];
         int vtx_local = vtx_global - fron;
         indexMatrix[vtx_local][0] = vtx_global;
 		indexMatrix[vtx_local][1] = vtx_global + nx;
@@ -2401,22 +2372,19 @@ void assembleKanteObenRechts(int** indexMatrix, double** valueMatrix,int fron, i
 
 		//NeumannRB, Normalenvektor ist (-1/sqrt(2),0,-1/sqrt(2))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		//wert[0] += 0.0*1.0/sqrt(2.0)*3.0/2.0*h;
+		valueMatrix[vtx_local][0] += 2.0*(-1.0)/sqrt(2.0)*3.0/2.0*h;
 		valueMatrix[vtx_local][3] += (-1.0) * 1.0 / sqrt(2.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) * 1.0 / sqrt(2.0) * 2.0 * h;
-		valueMatrix[vtx_local][5] += -1.0 / sqrt(2.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][6] += -1.0 / sqrt(2.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += (-1.0) / sqrt(2.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += (-1.0) / sqrt(2.0) * 2.0 * h;
     }
 }
 
 //Die Ecken:
-
 //Die unteren Ecken:
 void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
 	//int Eckenidx = 0;
-
 	if(fron <= 0 && 0 <= lron)
 	{
 		int vtx_global = 0;
@@ -2440,25 +2408,22 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(2),1/sqrt(3))
+		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
+		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
 	}
 }
 
-
 void assembleEckeuntenvornerechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	if(nx-1 <= fron && nx-1 <= lron)
+	if(fron <= nx-1 && nx-1 <= lron)
 	{
-		//int Eckenidx = nx-1;
-
 		int vtx_global = nx-1;
 		int vtx_local = vtx_global - fron;
 
@@ -2480,10 +2445,9 @@ void assembleEckeuntenvornerechts(int** indexMatrix, double** valueMatrix,int fr
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(2),1/sqrt(3))
+		//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][2] += (-1.0) / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += (1.0) / sqrt(3.0)*(-h) / 2.0;
@@ -2493,14 +2457,10 @@ void assembleEckeuntenvornerechts(int** indexMatrix, double** valueMatrix,int fr
 	}
 }
 
-
-
 void assembleEckeuntenhintenlinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	if(nx*(ny - 1)  <= fron && nx*(ny - 1)  <= lron)
+	if(fron <= nx*(ny - 1) && nx*(ny - 1)  <= lron)
 	{
-		//int Eckenidx = nx*(ny - 1) ;
-
 		int vtx_global = nx*(ny - 1) ;
 		int vtx_local = vtx_global - fron;
 
@@ -2525,9 +2485,9 @@ void assembleEckeuntenhintenlinks(int** indexMatrix, double** valueMatrix,int fr
 		//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
+		valueMatrix[vtx_local][0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][1] += (1.0) / sqrt(3.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][2] += (1.0) / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][4] += (-1.0) / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][5] += (1.0) / sqrt(3.0)*(-h) / 2.0;
@@ -2535,13 +2495,10 @@ void assembleEckeuntenhintenlinks(int** indexMatrix, double** valueMatrix,int fr
 	}
 }
 
-
 void assembleEckeuntenhintenrechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	if(nx*ny - 1 <= fron && nx*ny - 1 <= lron)
+	if(fron <= nx*ny - 1 && nx*ny - 1 <= lron)
 	{
-		//int Eckenidx = nx*ny - 1 ;
-
 		int vtx_global = nx*ny - 1 ;
 		int vtx_local = vtx_global - fron;
 
@@ -2565,8 +2522,7 @@ void assembleEckeuntenhintenrechts(int** indexMatrix, double** valueMatrix,int f
 
 		//NeumannRB, Normalenvektor ist (-1/sqrt(3),-1/sqrt(2),1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][2] += (-1.0) / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
@@ -2579,7 +2535,7 @@ void assembleEckeuntenhintenrechts(int** indexMatrix, double** valueMatrix,int f
 //die oberen ecken:
 void assembleEckeObenvornelinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-	int Eckenidx = 0+nx*ny*(nz-1);
+	int Eckenidx = nx*ny*(nz-1);
 
 	if(fron <= Eckenidx && Eckenidx <= lron)
 	{
@@ -2606,24 +2562,21 @@ void assembleEckeObenvornelinks(int** indexMatrix, double** valueMatrix,int fron
 
 		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),-1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][0] += 1.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][4] += 1.0 / sqrt(2.0) * 2.0 * h;
-		valueMatrix[vtx_local][5] += -1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][6] += -1.0 / sqrt(3.0) * 2.0 * h;
+		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
+		valueMatrix[vtx_local][5] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
+		valueMatrix[vtx_local][6] += (-1.0) / sqrt(3.0) * 2.0 * h;
 	}
 }
-
 
 void assembleEckeObenvornerechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int Eckenidx = nx-1+(nx*ny*(nz-1));
-	if(Eckenidx <= fron && Eckenidx <= lron)
+	if(fron <= Eckenidx && Eckenidx <= lron)
 	{
-
-
 		int vtx_global = Eckenidx;
 		int vtx_local = vtx_global - fron;
 
@@ -2645,10 +2598,9 @@ void assembleEckeObenvornerechts(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(2),1/sqrt(3))
+		//NeumannRB, Normalenvektor ist (-1/sqrt(3),1/sqrt(3),-1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][2] += (-1.0) / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += (1.0) / sqrt(3.0)*(-h) / 2.0;
@@ -2658,15 +2610,11 @@ void assembleEckeObenvornerechts(int** indexMatrix, double** valueMatrix,int fro
 	}
 }
 
-
-
 void assembleEckeObenhintenlinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int Eckenidx = nx*(ny - 1) +nx*ny*(nz-1);
-	if(Eckenidx <= fron && Eckenidx  <= lron)
+	if(fron <= Eckenidx && Eckenidx  <= lron)
 	{
-
-
 		int vtx_global = Eckenidx;
 		int vtx_local = vtx_global - fron;
 
@@ -2688,10 +2636,10 @@ void assembleEckeObenhintenlinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][5] = -28.0 / 38.0;
 		valueMatrix[vtx_local][6] = 17.0 / 38.0;
 
-		//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),1/sqrt(3))
+		//NeumannRB, Normalenvektor ist (1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][0] += (-1.0) * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
@@ -2701,14 +2649,11 @@ void assembleEckeObenhintenlinks(int** indexMatrix, double** valueMatrix,int fro
 	}
 }
 
-
 void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
-    int Eckenidx = nx*ny - 1 +nx*ny*(nz-1);
-	if(Eckenidx <= fron && Eckenidx <= lron)
+    int Eckenidx = nx*ny*nz-1;
+	if(fron <= Eckenidx && Eckenidx <= lron)
 	{
-
-
 		int vtx_global = Eckenidx;
 		int vtx_local = vtx_global - fron;
 
@@ -2732,8 +2677,7 @@ void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fr
 
 		//NeumannRB, Normalenvektor ist (-1/sqrt(3),-1/sqrt(3),-1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
-
-		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
+		valueMatrix[vtx_local][0] += (3.0) * (-1.0) / sqrt(3.0) * 3.0 / 2.0 * h;
 		valueMatrix[vtx_local][1] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
 		valueMatrix[vtx_local][2] += (-1.0) / sqrt(3.0) * 2.0 * h;
 		valueMatrix[vtx_local][3] += (-1.0) / sqrt(3.0)*(-h) / 2.0;
@@ -2742,8 +2686,6 @@ void assembleEckeObenhintenrechts(int** indexMatrix, double** valueMatrix,int fr
 		valueMatrix[vtx_local][6] += (-1.0) / sqrt(3.0) * 2.0 * h;
 	}
 }
-
-
 
 template<typename Scalar>
 std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
@@ -2771,7 +2713,6 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
 
     //Neuer Plan: Fuelle die Matrix zunaechst als inneres und ueberschreibe
     //danach die Seiten danach Kanten danach Ecken.
-
     //Das Innere
     for(int i =0;i<A.get_dim_local();i++)
     {
@@ -2795,7 +2736,6 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
 
         ////zentraler Differenzenquotient in alle Richtung moeglich
         //keine RB
-
     }
 
     //Fuelle nun die Seiten:
@@ -2817,7 +2757,7 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     assembleKanteUntenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteUntenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteUntenVorne(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-    assembleKanteVorneLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteUntenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     //mittlere Kanten
     assembleKanteHintenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteHintenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
@@ -2827,7 +2767,7 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     assembleKanteObenHinten(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleKantenObenLinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
-    assembleKanteObenRechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
+    assembleKanteObenVorne(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
 
     //Fuelle nun die Ecken:
     //untere ecken:
@@ -2841,11 +2781,34 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     assembleEckeObenhintenlinks(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
     assembleEckeObenhintenrechts(indexMatrix,valueMatrix,fron,lron,msize,h,nx,ny,nz);
 
+//Dirichlet-RB	
+/*if(fron <= 555 && 555 <= lron)
+{
+	indexMatrix[555-fron][0] = 555; 
+	indexMatrix[555-fron][1] = 556;
+	indexMatrix[555-fron][2] = 557;
+	indexMatrix[555-fron][3] = 565;
+	indexMatrix[555-fron][4] = 545;
+	indexMatrix[555-fron][5] = 655;
+	indexMatrix[555-fron][6] = 455;
+
+	valueMatrix[555-fron][0] = 1.0;
+	valueMatrix[555-fron][1] = 0.0;
+    valueMatrix[555-fron][2] = 0.0;
+    valueMatrix[555-fron][3] = 0.0;
+    valueMatrix[555-fron][4] = 0.0;
+    valueMatrix[555-fron][5] = 0.0;
+    valueMatrix[555-fron][6] = 0.0;
+
+}
+*/
     A.prepare_sequential_fill(7);
+    
     for(int i =0;i< msize;i++)
     {
         for(int j = 0; j<7;j++)
         {
+
             A.sequential_fill(indexMatrix[i][j],valueMatrix[i][j]);
         }
         A.end_of_row();
@@ -2856,5 +2819,5 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     return {A,rhs};
 }
 
-}//namespace Icarus
-
+}
+//namespace Icarus

@@ -1,0 +1,54 @@
+\ProvidesPackageRCS $Header: beamercolorthemeTUDortmund2.sty,v 1.27 2005/03/15 23:17:01 dgoeddeke Exp $
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\mode<presentation>
+
+\definecolor{beamer@tudortmundgreen}{rgb}{0.32,0.51,0.0} % use structure theme to change
+\definecolor{beamer@blendedgrey}{rgb}{0.7,0.7,0.7} % use structure theme to change
+
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{alerted text}{fg=red}
+\setbeamercolor{example text}{fg=green!50!black}
+
+\setbeamercolor{structure}{fg=beamer@tudortmundgreen}
+
+\setbeamercolor{background canvas}{parent=normal text}
+\setbeamercolor{background}{parent=background canvas}
+
+
+%% START: navigation symbols are grey, current one in white
+%\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+%\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
+%\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+%\setbeamercolor*{palette quaternary}{fg=white,bg=black}
+%
+%\setbeamercolor*{sidebar}{use=structure,bg=structure.fg}
+%
+%\setbeamercolor*{palette sidebar primary}{use=structure,fg=structure.fg!10}
+%\setbeamercolor*{palette sidebar secondary}{fg=white}
+%\setbeamercolor*{palette sidebar tertiary}{use=structure,fg=structure.fg!50}
+%\setbeamercolor*{palette sidebar quaternary}{fg=white}
+%% END: navigation symbols are grey, current one in white
+
+
+% START: navigation symbols are grey, current one in black
+\setbeamercolor*{palette primary}{use=structure,fg=black,bg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=black,bg=structure.fg!75!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=black,bg=structure.fg!85!black}
+\setbeamercolor*{palette quaternary}{fg=black,bg=white}
+
+\setbeamercolor*{sidebar}{use=structure,bg=structure.fg}
+
+\setbeamercolor*{palette sidebar primary}{use=structure,fg=structure.fg!10}
+\setbeamercolor*{palette sidebar secondary}{fg=black}
+\setbeamercolor*{palette sidebar tertiary}{use=structure,fg=structure.fg!85}
+\setbeamercolor*{palette sidebar quaternary}{fg=black}
+% END: navigation symbols are grey, current one in white
+
+
+\mode
+<all>

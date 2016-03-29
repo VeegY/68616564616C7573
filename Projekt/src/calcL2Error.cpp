@@ -15,9 +15,9 @@ double assembleFem::calcL2Error(mathfunction realsol, FullVector<double>& calcso
     //Hilfsvektor (DoF-Manager)
     std::vector<int> a{0, 1, _nx, _nx+1, _nx*_ny, _nx*_ny+1, _nx*_ny+_nx, _nx*_ny+_nx+1};
 
-    static std::vector<std::vector<double>> basis3d(8, std::vector<double>(27));
-    static bool calced(false);
-    if (!calced)
+    /*static*/ std::vector<std::vector<double>> basis3d(8, std::vector<double>(27));
+    //static bool calced(false);
+    //if (!calced)
         for (int B(0); B < 8; B++)
             basis3d[B] = evaluated_Basis3d(B);
 

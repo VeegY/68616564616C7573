@@ -20,7 +20,7 @@ void MpiHandler::MpiSafeCall(int line, std::string file, int error) const
 MpiHandler::MpiHandler() : _n_procs(0), _my_rank(0)
 {
     MPI_Init(NULL,NULL);
-    MPI_Errhandler_set(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
+    MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
     MpiSafeCall(__LINE__,__FILE__, MPI_Comm_rank(MPI_COMM_WORLD, &_my_rank));
     MpiSafeCall(__LINE__, __FILE__, MPI_Comm_size(MPI_COMM_WORLD, &_n_procs));
     LOG_INFO("Mpi successfully initialized.");

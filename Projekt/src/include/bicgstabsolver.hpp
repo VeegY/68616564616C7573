@@ -1,6 +1,7 @@
 #ifndef __BICGSTABSOLVER_HPP_
 #define __BICGSTABSOLVER_HPP_
 
+#include <mpi.h>
 #include "solver.hpp"
 #include "matrix.hpp"
 #include "vector.hpp"
@@ -33,10 +34,12 @@ private:
     const VectorType &_b;
     const MatrixType *_K1inv, *_K2inv;
 
+    MPI_Comm _comm;
+
 public:
     /// \brief  Anzahl der Iterationen, nach der abgebrochen wird, wenn die Toleranz nicht
     ///         erreicht werden kann.
-    static const int MAX_ITER = 10000;
+    static const long long MAX_ITER = 10000000000L;
 
     /// \brief  Toleranz, die ohne explizite Angabe angenommen wird
 	static const RealType DEFAULT_TOL;

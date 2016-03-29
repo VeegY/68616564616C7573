@@ -1,3 +1,4 @@
+/*
 #include "../src/include/slicedvector.hpp"
 #include "../src/include/bicgstabsolver.hpp"
 #include "../src/include/distellpackmatrix.hpp"
@@ -48,4 +49,9 @@ int neumann_demo()
 int main()
 {
 	return neumann_demo();
+}
+*/
+int main()
+{
+    return 1;
 }

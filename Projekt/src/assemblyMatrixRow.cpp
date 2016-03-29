@@ -5,27 +5,30 @@
 
 namespace Icarus
 {
-void assembleFem::assemblyMatrixRow()
+void assembleFem::assemblyMatrixRow(int rowlength)
 {
     int n(_e.size()); //Anzahl zu betrachtender Elemente
-    int length(0);
+/*    int length(0);
     switch(n) //Anpassen der Laenge der Ausgabe
     {
     case 1: length = 8;
             break;
     case 2: length = 12;
             break;
+    case 3: length = 16;
+            break;
     case 4: length = 18;
             break;
     case 8: length = 27;
             break;
-    default: assert(_e.size() == 1 || _e.size() == 2 || _e.size() == 4 || _e.size() == 8);
+    default: assert(_e.size() >= 1 || _e.size() <= 8);
     }
+*/
 
     _value.clear();
-    _column.resize(length);
-    _value.resize(length);
-    std::vector<bool> Belegt(length, false);
+    _column.resize(rowlength);
+    _value.resize(rowlength);
+    std::vector<bool> Belegt(rowlength, false);
 
     //TODO TOCHECK fatal bei mehreren Objekten der Klasse, die unterschiedliche nx,ny und nz haben, oder?
     /*static*/ std::vector<int> a{0, 1, y, 1+y, z, 1+z, y+z, 1+y+z}; //Hilfsvektor um auf die Ecken (global gezaehlt) eines Element zu kommen
@@ -65,7 +68,7 @@ void assembleFem::assemblyMatrixRow()
 
             //Berechneter Wert an die richtige Stelle von Column und Value aufaddieren. Ich schätze, dass hier irgenwo der Fehler liegt.
             bool abbr(false);
-            for(int j(0); (j<length) && (!abbr); j++)
+            for(int j(0); (j<rowlength) && (!abbr); j++)
             {
                 if(!Belegt[j])
                 {
@@ -85,7 +88,7 @@ void assembleFem::assemblyMatrixRow()
     }//Schleife ueber alle Elemente
 
 //TODO TOCHECK sinnvoll?
-    for (int i(0); i<length; ++i)
+    for (int i(0); i<rowlength; ++i)
         if (_value[i] < 1.0e-9 && _value[i] > -1.0e-9)
             _value[i] = 0.0;
 }//assemblyMatrixRow()

@@ -213,7 +213,6 @@ void DistEllpackMatrix<Scalar>::mult_vec_impl(const VectorType& vec, VectorType&
 
     // hole vec komplett in die node
 	FullVector<Scalar> fvec(vec);
-
 	// *************** BEGIN Durch CUDA-isierung ersetzen ************
 
     for(size_t row = 0; row < _dim_local; row++)
@@ -227,7 +226,6 @@ void DistEllpackMatrix<Scalar>::mult_vec_impl(const VectorType& vec, VectorType&
         }
         result.set_local(row, res);
     }
-
     // *************** END Durch CUDA-isierung ersetzen **************
 
 }
@@ -351,7 +349,7 @@ DistEllpackMatrix<Scalar>::precond_jacobi() const
 
     for(size_t i=0; i<_dim_local; i++)
     {
-          val = 1;
+        val = 1;
         for(size_t j=0; j<_max_row_length; j++)
         {
             if(_indices[j*_dim_local + i] == fron+i && _data[j*_dim_local + i] != 0)
@@ -360,7 +358,7 @@ DistEllpackMatrix<Scalar>::precond_jacobi() const
                 break;
             }
         }
-        Kinv.sequential_fill(i,val);
+        Kinv.sequential_fill(i+fron,val);
         Kinv.end_of_row();
     }
 

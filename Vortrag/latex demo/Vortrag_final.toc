@@ -1,0 +1,9 @@
+\beamer@endinputifotherversion {3.33pt}
+\select@language {ngerman}
+\beamer@sectionintoc {1}{Inhalts\IeC {\"u}bersicht}{2}{0}{1}
+\beamer@sectionintoc {2}{Motivation und Zielsetzung}{3}{0}{2}
+\beamer@sectionintoc {3}{Hardware}{5}{0}{3}
+\beamer@sectionintoc {4}{Problemstellung}{8}{0}{4}
+\beamer@sectionintoc {5}{Numerische Methoden}{9}{0}{5}
+\beamer@sectionintoc {6}{Performance}{18}{0}{6}
+\beamer@sectionintoc {7}{Fazit und Ausblick}{19}{0}{7}
