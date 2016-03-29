@@ -66,7 +66,6 @@ private:
     std::vector<int> _e, _A;
     std::vector<int> _column;
     std::vector<double> _value;
-    std::vector<char>& _disc_points;
 };
 
 }//namespace Icarus

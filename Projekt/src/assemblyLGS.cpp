@@ -11,7 +11,6 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     std::vector<char>& disc_points, mathfunction f, mathfunction g, mathfunction h)
 {
     //TODO: vorlaeufig, wieder loeschen
-    _disc_points = disc_points;
     bool Dirichlet(true);
     bool Neumann(true);
     //TODO: vorlaeufig, wieder loeschen
@@ -402,13 +401,13 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
             for(int i(1); i<_nx-1; i++)
             {
                 Zeile++;
-                switch (_disc_points[Zeile])
+                if (disc_points[Zeile] == 'o')
                 {
-                case 'o':
                     Matrix.sequential_fill(Zeile, 1.0);
                     RHS[Zeile] = -1.0;
-                    break;
-                case 'a':
+                }
+                else if (disc_points[Zeile] == 'a')
+                {
                     _e.resize(8);
                     _A.resize(8);
                     _e[0]=Zeile -1-y-z; _A[0]=7;
@@ -426,17 +425,18 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
                         Matrix.sequential_fill(_column[m], _value[m]);
                     Matrix.end_of_row();
                     RHS[Zeile] = assemblyRHSLoad(f);
-                    break;
-                case 'b':
+                }
+                else if (disc_points[Zeile] == 'a')
+                {
                     rowlength = setup_A(Zeile);
                     assemblyMatrixRow(rowlength);
                     for (int m(0); m < rowlength; ++m)
                         Matrix.sequential_fill(_column[m], _value[m]);
                     Matrix.end_of_row();
                     RHS[Zeile] = assemblyRHSLoad(f);
-                    break;
-                default: assert(false);
                 }
+                else
+                    assert(false);
 
 
 
