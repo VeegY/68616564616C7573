@@ -2398,7 +2398,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-
+	/*
 		valueMatrix[vtx_local][0] = 1.0;
 		valueMatrix[vtx_local][1] = 0.0;
 		valueMatrix[vtx_local][2] = 0.0;
@@ -2406,28 +2406,28 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][4] = 0.0;
 		valueMatrix[vtx_local][5] = 0.0;
 		valueMatrix[vtx_local][6] = 0.0;
+	*/	
 		
-		/*
 		//zentraler Differenzenquotient gar nicht möglich
 		//modifizierter Differenzenquotient in x/y/z-Richtung
-		valueMatrix[vtx_local][0] = 3.0 * 11.0 / 38.0;
-		valueMatrix[vtx_local][1] = -28.0/38.0;
-		valueMatrix[vtx_local][2] = 17.0/38.0;
-		valueMatrix[vtx_local][3] = -28.0 / 38.0;
-		valueMatrix[vtx_local][4] = 17.0 / 38.0;
-		valueMatrix[vtx_local][5] = -28.0 / 38.0;
-		valueMatrix[vtx_local][6] = 17.0 / 38.0;
+		valueMatrix[vtx_local][0] = 3.0 * 1.0;
+		valueMatrix[vtx_local][1] = -2.0;
+		valueMatrix[vtx_local][2] = 1.0;
+		valueMatrix[vtx_local][3] = -2.0;
+		valueMatrix[vtx_local][4] = 1.0;
+		valueMatrix[vtx_local][5] = -2.0;
+		valueMatrix[vtx_local][6] = 1.0;
 
 		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
 		//RB wird auf die normale Zeile addiert, um die quadratische Struktur beizubehalten
 		valueMatrix[vtx_local][0] += 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0 * h;
-		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 2.0 * h;
-		valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 2.0 * h;
-		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-h) / 2.0;
-		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 2.0 * h;
-		*/
+		valueMatrix[vtx_local][1] += 1.0 / sqrt(3.0)*(-4.0) / 2.0 * h;
+		valueMatrix[vtx_local][2] += 1.0 / sqrt(3.0) * 1.0 / 2.0 * h;
+		valueMatrix[vtx_local][3] += 1.0 / sqrt(3.0)*(-4.0) / 2.0 * h;
+		valueMatrix[vtx_local][4] += 1.0 / sqrt(3.0) * 1.0 / 2.0 * h;
+		valueMatrix[vtx_local][5] += 1.0 / sqrt(3.0)*(-4.0) / 2.0 * h;
+		valueMatrix[vtx_local][6] += 1.0 / sqrt(3.0) * 1.0 / 2.0 * h;
+		
 	}
 }
 
