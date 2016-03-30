@@ -1,8 +1,10 @@
 #ifndef __ASSEMBLEFEM_HPP_
 #define __ASSEMBLEFEM_HPP_
 
-#include "distellpackmatrix.hpp"
-#include "slicedvector.hpp"
+//#include "distellpackmatrix.hpp"
+//#include "slicedvector.hpp"
+#include "distellpackmatrixgpu.hpp"
+#include "slicedvectorgpu.hpp"
 #include "fullvector.hpp"
 
 #include "mathfunction.hpp"
@@ -24,7 +26,9 @@ public:
         _quadpoints_2d_1(get_quadrature_points_2d_1()), _quadpoints_2d_2(get_quadrature_points_2d_2())
     { }
 
-    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, std::vector<char>& disc_points,
+//    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, std::vector<char>& disc_points,
+//        mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
+    void assemble(DistEllpackMatrixGpu<double>& Matrix, SlicedVectorGpu<double>& rhs, std::vector<char>& disc_points,
         mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
 
     double calcL2Error(mathfunction realsol, FullVector<double>& calcsol);

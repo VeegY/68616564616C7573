@@ -19,20 +19,20 @@ void getInnerPotentialGradients
     {
         for (size_t y(1); y < ny-1 ; y++)
         {
-            globIdx=z*nx*ny+y*nx+1;
+            globIdx = z*nx*ny+y*nx+1;
             for (size_t x(1); x < nx-1; x++, globIdx++)
             {
                 if (discpoints[globIdx]=='a')
                 {
-                    zComp[globIdx]=(1.0/(2.0*h)) * (potential[globIdx + nx*ny] - potential[globIdx - nx*ny]);
-                    yComp[globIdx]=(1.0/(2.0*h)) * (potential[globIdx + nx]    - potential[globIdx - nx]);
-                    xComp[globIdx]=(1.0/(2.0*h)) * (potential[globIdx + 1]     - potential[globIdx - 1]);
+                    zComp[globIdx] = (1.0/(2.0*h)) * (potential[globIdx + nx*ny] - potential[globIdx - nx*ny]);
+                    yComp[globIdx] = (1.0/(2.0*h)) * (potential[globIdx + nx]    - potential[globIdx - nx]);
+                    xComp[globIdx] = (1.0/(2.0*h)) * (potential[globIdx + 1]     - potential[globIdx - 1]);
                 }
                 else
                 {
-                    zComp[globIdx]=0.0;
-                    yComp[globIdx]=0.0;
-                    xComp[globIdx]=0.0;
+                    zComp[globIdx] = 0.0;
+                    yComp[globIdx] = 0.0;
+                    xComp[globIdx] = 0.0;
                 }
             }
         }
@@ -54,9 +54,9 @@ void getCellMidpointGradientsFEM (const FullVector<Scalar>& potential, const siz
     std::vector<std::vector<double>> zwsp;
     for (size_t j(0); j<8; j++)
     {
-        gradCoeff[j]=assembleFem::evaluate_gradient_Basis3d(0,j,0.5*h,0.5*h,0.5*h);
-        zwsp=assembleFem::evaluated_gradient_Basis3d(j);
-        gradCoeff[j]={zwsp[0][13],zwsp[1][13],zwsp[2][13]};
+        gradCoeff[j] = assembleFem::evaluate_gradient_Basis3d(0, j, 0.5*h, 0.5*h, 0.5*h);
+        zwsp = assembleFem::evaluated_gradient_Basis3d(j);
+        gradCoeff[j] = {zwsp[0][13], zwsp[1][13], zwsp[2][13]};
     }
     for (size_t z(0); z < nz-1; z++)
     {
@@ -65,7 +65,7 @@ void getCellMidpointGradientsFEM (const FullVector<Scalar>& potential, const siz
             globIdx=z*nx*ny+y*nx;
             for (size_t x(0); x < nx-1 ; x++ , globIdx++ , vecIdx++)
             {
-                if (discpoints[globIdx]=='a')
+                if (discpoints[globIdx] == 'a')
                 {
                     zComp[vecIdx] = gradCoeff[0][0]*potential[globIdx]          + gradCoeff[1][0]*potential[globIdx+1]
                               + gradCoeff[2][0]*potential[globIdx+nx]       + gradCoeff[3][0]*potential[globIdx+nx+1]
@@ -87,6 +87,41 @@ void getCellMidpointGradientsFEM (const FullVector<Scalar>& potential, const siz
     }
 }
 */
+template<typename Scalar>
+void getInnerPotentialGradients
+    (const FullVectorGpu<Scalar>& potential, const size_t nx, const size_t ny, const size_t nz, double h,
+    std::vector<char> discpoints, FullVectorGpu<Scalar>& xComp, FullVectorGpu<Scalar>& yComp, FullVectorGpu<Scalar>& zComp)
+{
+    size_t globDim(nx*ny*nz);
+    if (potential.get_dim() != globDim) LOG_ERROR("Dimension of potential vector does not equal problem dimension");
+    if (xComp.get_dim() != globDim) LOG_ERROR("Dimension of vector xComp does not equal problem dimension");
+    if (yComp.get_dim() != globDim) LOG_ERROR("Dimension of vector yComp does not equal problem dimension");
+    if (zComp.get_dim() != globDim) LOG_ERROR("Dimension of vector zComp does not equal problem dimension");
+    size_t globIdx;
+    for (size_t z(1); z < nz-1; z++)
+    {
+        for (size_t y(1); y < ny-1 ; y++)
+        {
+            globIdx = z*nx*ny+y*nx+1;
+            for (size_t x(1); x < nx-1; x++, globIdx++)
+            {
+                if (discpoints[globIdx] == 'a')
+                {
+                    zComp[globIdx]=(1.0/(2.0*h)) * (potential[globIdx + nx*ny] - potential[globIdx - nx*ny]);
+                    yComp[globIdx]=(1.0/(2.0*h)) * (potential[globIdx + nx]    - potential[globIdx - nx]);
+                    xComp[globIdx]=(1.0/(2.0*h)) * (potential[globIdx + 1]     - potential[globIdx - 1]);
+                }
+                else
+                {
+                    zComp[globIdx] = 0.0;
+                    yComp[globIdx] = 0.0;
+                    xComp[globIdx] = 0.0;
+                }
+            }
+        }
+    }
+}
+
 }//namespace Icarus
 
 
