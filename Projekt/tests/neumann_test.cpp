@@ -9,28 +9,29 @@
 
 double bdry(int vtx_global)
 {
-	if (0<vtx_global && vtx_global<25) return 1.0;
-	if (vtx_global>=100) return -1.0;
+	if (200<vtx_global && vtx_global<400) return 10.0;
+	if (vtx_global>=7800) return -10.0;
 	return 0.0;
 }
 
 int neumann_demo()
 {
-	const int nx = 5, ny = 5, nz = 5;
-	const float h = 0.1;
+	const int nx = 20, ny = 20, nz = 20;
+	const float h = 0.05;
 	
 	// assemblieren
 	auto lgs = Icarus::assemble_neumann_unrolled<double>(nx, ny, nz, h, bdry);
 	//ausgabe der Matrix:
 	std::cout << "Die Matrix A:" << std::endl;
-	Icarus::print_sliced_object(lgs.first);
-	Icarus::print_sliced_object(lgs.second);
+	//Icarus::print_sliced_object(lgs.first);
+	//Icarus::print_sliced_object(lgs.second);
+	
 	// loesen
 	size_t n = lgs.first.get_dim_global();
 	Icarus::SlicedVector<double> sol(n);
 	sol.clear();
 	Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(lgs.first, lgs.second);
-	//solver.solve(sol);
+	solver.solve(sol);
 
 	// speichern (nur master)
 	Icarus::FullVector<double> fullsol(sol);	
