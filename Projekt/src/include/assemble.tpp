@@ -2809,10 +2809,7 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
         valueMatrix[i][4] = 1.0;
         valueMatrix[i][5] = 1.0;
         valueMatrix[i][6] = 1.0;
-
-        ////zentraler Differenzenquotient in alle Richtung moeglich
-        //keine RB
-    }
+	}
 
     //Fuelle nun die Seiten:
     //Links
@@ -2873,6 +2870,5 @@ std::pair < DistEllpackMatrix<Scalar>, SlicedVector < Scalar >>
     }
     return {A,rhs};
 }
-
 }
 //namespace Icarus
