@@ -19,19 +19,19 @@ template<typename Scalar>
 void gpu_ax_(Scalar *data, Scalar *fvec, Scalar *result, int *indices, int max_row_length, int dim_local);
 
 template<typename type>
-void gpu_dot_(type *vecx, type *vecy, size_t dim, type erg);
+void gpu_dot_(const type *vecx, const type *vecy, size_t dim, type *erg); //TODO TOCHECK
 
 template<typename type>
 void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim);
 
 template<typename type>
-void gpu_l2(type *vec, size_t dim, type erg);
+void gpu_l2(type *vec, size_t dim, type *erg);
 
 template<typename type>
 void gpumaxnorm(type *vec, size_t dim, type erg);
 
 template<typename type>
-void copygpu_(type *vecin, type *vecout, size_t dim);
+void copygpu_(const type *vecin, type *vecout, size_t dim);
 
 template <typename Scalar>
 void cleanupgpu(Scalar *data);
@@ -215,11 +215,12 @@ typename SlicedVectorGpu<Scalar>::RealType
 SlicedVectorGpu<Scalar>::
 l2norm2_impl() const
 {
-    RealType res(0), res_global;
+    RealType *res(0), res_global(0);
 
+    alloc_unified(&res, 1);//TODO TOCHECK
     gpu_l2(_data,_dim_local,res);
 
-    MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
+    MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
 }
@@ -244,13 +245,12 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
 {
     assert(_dim_global == other._dim_global);
 
-    Scalar res(0), res_global;
+    Scalar *res, res_global;
 
-    alloc_unified(res, 1.0);
-
+    alloc_unified(&res, 1);//TODO TOCHECK
     gpu_dot_(_data, other.getDataPointer(), _dim_local, res);
 
-    MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
+    MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<Scalar>::mpi_type, MPI_SUM, _my_comm));
     return res_global;
 }
@@ -295,7 +295,8 @@ copy_impl(const SlicedVectorGpu &other)
 {
     assert(_dim_global == other._dim_global);
 
-    copygpu_(_data, other.getDataPointer(), _dim_local);
+    copygpu_(other.getDataPointer(), _data, _dim_local);
+    //TODO TOCHECK
 
 }
 

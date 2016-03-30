@@ -70,6 +70,41 @@ __global__ void gpu_dot(type *vectorx, type *vectory, type *placehold, int dim_l
     }
 }
 
+template<typename type> // Dot Produkt Kernel mit const
+__global__ void gpu_dot(const type *vectorx, const type *vectory, type *placehold, int dim_local)
+{
+    extern __shared__ double array[];
+    type* shar = (type*)array;
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    int sidx = threadIdx.x;
+    type value = 0;
+    if (idx < dim_local)
+    {
+        value = vectorx[idx];
+        value *= vectory[idx];
+    }
+    shar[sidx] = value;
+    __syncthreads();
+
+    //reduce kernel
+    for (int offset = blockDim.x / 2; offset >0; offset >>= 1)
+    {
+        if (sidx < offset)
+        {
+            shar[sidx] += shar[sidx + offset];
+        }
+        __syncthreads();
+    }
+
+    if (sidx == 0)
+    {
+        placehold[blockIdx.x] = shar[0];
+    }
+}
+
+
+
+
 template<typename type> // reduce Kernel für Dot Produkt
 __global__ void resultreduce(type *result, type *placehold, int num_blocks)
 {
@@ -201,7 +236,7 @@ __global__ void resultreducemax(type *result, type *placehold, int num_blocks)
 
 
 template<typename type> // copy Kernel
-__global__ void copygpu(type *vecin, type scalar, type *vecout, size_t dim)
+__global__ void copygpu(const type *vecin, type scalar, type *vecout, size_t dim)
 {
     int idx = threadIdx.x + blockIdx.x * blockDim.x;
     if (idx < dim)
@@ -263,27 +298,53 @@ template void gpu_ax_<double, double, double>(double*, const double*, double*, s
 //                   Aufruf Dot Produkt (in FillVectorgpu Klasse)            //
 //=============================================================================
 template<typename type>
-void gpu_dot_(type *vecx, type *vecy, size_t dim, type erg)
+void gpu_dot_(type *vecx, type *vecy, size_t dim, type *erg)
 {
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
 
     //=================================//
         gpu_dot<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,vecy,placehold,dim);
-        resultreduce<<<1, 1>>>(&erg, placehold, num_blocks);
+        resultreduce<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
 
     //=================================//
     cleanupgpu(placehold);
 }
-template void gpu_dot_<double>(double *vecx, double *vecy, size_t dim, double erg);
-template void gpu_dot_<float>(float *vecx, float *vecy, size_t dim, float erg);
-template void gpu_dot_<int>(int *vecx, int *vecy, size_t dim, int erg);
+template void gpu_dot_<double>(double *vecx, double *vecy, size_t dim, double *erg);
+template void gpu_dot_<float>(float *vecx, float *vecy, size_t dim, float *erg);
+template void gpu_dot_<int>(int *vecx, int *vecy, size_t dim, int *erg);
 
+//=============================================================================
+//                   Aufruf Dot Produkt (in FillVectorgpu Klasse) mit const  //
+//=============================================================================
+template<typename type>
+void gpu_dot_(const type *vecx, const type *vecy, size_t dim, type *erg)
+{
+    int num_threads, num_blocks;
+    generate_config(&num_threads, &num_blocks, dim);
+
+    type *placehold = NULL;
+//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+
+    //=================================//
+        gpu_dot<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,vecy,placehold,dim);
+        cudaDeviceSynchronize();//TODO TODELETE
+        resultreduce<<<1, 1>>>(erg, placehold, num_blocks);
+
+        cudaDeviceSynchronize();
+    //=================================//
+    cleanupgpu(placehold);
+}
+template void gpu_dot_<double>(const double *vecx, const double *vecy, size_t dim, double *erg);
+template void gpu_dot_<float>(const float *vecx, const float *vecy, size_t dim, float *erg);
+template void gpu_dot_<int>(const int *vecx, const int *vecy, size_t dim, int *erg);
 
 //=============================================================================
 //                   Aufruf axpy                                             //
@@ -311,17 +372,18 @@ template void gpu_axpy<int>(int *vecx, int scalar, int *vecy, size_t dim);
 //                   Aufruf L2-Norm                                          //
 //=============================================================================
 template<typename type>
-void gpu_l2(type *vec, size_t dim, type erg)
+void gpu_l2(type *vec, size_t dim, type *erg)
 {
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
 
     //=================================//
         L2_Norm<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
-        resultreduce_l2<<<1, 1>>>(&erg, placehold, num_blocks);
+        resultreduce_l2<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
 
@@ -330,8 +392,10 @@ void gpu_l2(type *vec, size_t dim, type erg)
     cleanupgpu(placehold);
 
 }
-template void gpu_l2<double>(double *vec, size_t dim, double erg);
-template void gpu_l2<float>(float *vec, size_t dim, float erg);
+template void gpu_l2<double>(double *vec, size_t dim, double *erg);
+template void gpu_l2<float>(float *vec, size_t dim, float *erg);
+
+//TODO TOADD const
 
 
 //=============================================================================
@@ -344,7 +408,8 @@ void gpumaxnorm(type *vec, size_t dim, type erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
 
     //=================================//
         maxn<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
@@ -365,7 +430,7 @@ template void gpumaxnorm<float>(float *vec, size_t dim, float erg);
 //                          Aufruf für copy Kernel                           //
 //=============================================================================
 template<typename type>
-void copygpu_(type *vecin, type *vecout, size_t dim)
+void copygpu_(const type *vecin, type *vecout, size_t dim)
 {
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
@@ -379,9 +444,9 @@ void copygpu_(type *vecin, type *vecout, size_t dim)
     //=================================//
 }
 
-template void copygpu_<double>(double *vecin, double *vecout, size_t dim);
-template void copygpu_<float>(float *vecin, float *vecout, size_t dim);
-template void copygpu_<int>(int *vecin, int *vecout, size_t dim);
+template void copygpu_<double>(const double *vecin, double *vecout, size_t dim);
+template void copygpu_<float>(const float *vecin, float *vecout, size_t dim);
+template void copygpu_<int>(const int *vecin, int *vecout, size_t dim);
 
 
 //=============================================================================

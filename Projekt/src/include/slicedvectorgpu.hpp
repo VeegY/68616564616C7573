@@ -172,7 +172,9 @@ public:
         return _data[pos];
     }
 
-	Scalar* getDataPointer() { return _data; }
+    const Scalar* getDataPointer() const { return _data; }
+
+    Scalar* getDataPointer() { return _data; }
 
 private:
     void swap_impl(SlicedVectorGpu& other);
