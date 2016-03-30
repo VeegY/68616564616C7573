@@ -9,15 +9,15 @@
 
 double bdry(int vtx_global)
 {
-	if (200<vtx_global && vtx_global<400) return 10.0;
-	if (vtx_global>=7800) return -10.0;
+	if (50<vtx_global && vtx_global<400) return 1.0;
+	if (vtx_global>=9500) return -1.0;
 	return 0.0;
 }
 
 int neumann_demo()
 {
-	const int nx = 20, ny = 20, nz = 20;
-	const float h = 0.05;
+	const int nx = 100, ny = 100, nz = 100;
+	const float h = 0.01;
 	
 	// assemblieren
 	auto lgs = Icarus::assemble_neumann_unrolled<double>(nx, ny, nz, h, bdry);
