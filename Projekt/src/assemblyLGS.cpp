@@ -447,7 +447,7 @@ if (Zeile >= fron && Zeile <= lron)
                 {
                     Matrix.sequential_fill(Zeile, 1.0);
                     Matrix.end_of_row();
-                    RHS[Zeile] = -1.0;
+                    RHS[Zeile] = -100000.0;
                 }
                 else if (disc_points[Zeile] == 'a')
                 {
@@ -496,18 +496,18 @@ if (Zeile >= fron && Zeile <= lron)
 //                                setup_neumann(Zeile, planes[n], rightbacktops[n], disc_points);
 //                                RHS[Zeile] += assemblyRHSNeumann(planes[n], rightbacktops[n], h);
 //                            }
-                            setup_neumann(Zeile, 1, false, disc_points);
-                            RHS[Zeile] += assemblyRHSNeumann(1, false, h);
-                            setup_neumann(Zeile, 1, true, disc_points);
-                            RHS[Zeile] += assemblyRHSNeumann(1, true, h);
-                            setup_neumann(Zeile, 2, false, disc_points);
-                            RHS[Zeile] += assemblyRHSNeumann(2, false, h);
-                            setup_neumann(Zeile, 2, true, disc_points);
-                            RHS[Zeile] += assemblyRHSNeumann(2, true, h);
-                            setup_neumann(Zeile, 3, false, disc_points);
-                            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
-                            setup_neumann(Zeile, 3, true, disc_points);
-                            RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+                            //setup_neumann(Zeile, 1, false, disc_points);
+                            //RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                            //setup_neumann(Zeile, 1, true, disc_points);
+                            //RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                            //setup_neumann(Zeile, 2, false, disc_points);
+                            //RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+                            //setup_neumann(Zeile, 2, true, disc_points);
+                            //RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+                            //setup_neumann(Zeile, 3, false, disc_points);
+                            //RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+                            //setup_neumann(Zeile, 3, true, disc_points);
+                            //RHS[Zeile] += assemblyRHSNeumann(3, true, h);
                         }
                     }
                 }

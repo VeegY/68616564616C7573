@@ -12,10 +12,10 @@
 
 int main()
 {
-    const int nn(50);
+    const int nn(100);
     const double h(1.0/static_cast<double>(nn));
     const int nx(nn+1), ny(nn+1), nz(nn+1);
-    std::vector<char> disc = Icarus::discretizer("../model/cube.obj", h, nx, ny, nz);
+    std::vector<char> disc = Icarus::discretizer("../model/board_big.obj", h, nx, ny, nz);
 
     Icarus::mathfunction u(13);
     Icarus::mathfunction f(14);
