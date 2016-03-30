@@ -11,6 +11,7 @@ double bdry(int vtx_global)
 {
 	if (50<vtx_global && vtx_global<400) return 1.0;
 	if (vtx_global>=9500) return -1.0;
+	if (vtx_global == 0) return 1.0;
 	return 0.0;
 }
 
