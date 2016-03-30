@@ -9,8 +9,8 @@
 
 double bdry(int vtx_global)
 {
-	if (0<=vtx_global && vtx_global<100) return 1.0;
-	if (vtx_global>=900) return -1.0;
+	if (50<vtx_global && vtx_global<100) return 1.0;
+	if (vtx_global>=950) return -1.0;
 	return 0.0;
 }
 
