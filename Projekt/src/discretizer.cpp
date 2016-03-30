@@ -123,7 +123,6 @@ std::vector<char>discretizer(std::string inputFile,
     // dh: fin oeffnen, lesen, schliessen - rechnen - fout oeffnen, schreiben, schliessen
     // dadurch waeren waehrend der Rechnung alle Dateien geschlossen.
 
-
     //*** Daten einlesen ***//
 
     std::vector<Object> objects; // Vektor fuer alle Objekte
@@ -153,7 +152,6 @@ std::vector<char>discretizer(std::string inputFile,
             diff_vertices_id = num_vertices + 1;    // needed to calculate the local vertex id
             diff_normals_id = num_normals + 1;    // needed to calculate the local normal id
         }//== "o"
-        
         else if (type == "v")   // neuer Eckpunkt von aktuellem Objekt
         {
             stream >> x >> y >> z;
@@ -224,7 +222,8 @@ std::vector<char>discretizer(std::string inputFile,
 
     //*** Raum diskretisieren ***//
 
-    std::vector<char> discretized_points(nx*ny*nz);
+    //std::vector<char> discretized_points(nx*ny*nz);
+    std::vector<char> discretized_points;
     // Preufe fuer jeden Punkt, ob Luft oder Gegenstand
     
     //{

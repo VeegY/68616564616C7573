@@ -41,6 +41,8 @@ private:
 
     int setup_A(int row, std::vector<char>& disc_points);
     void setup_e(int row);
+    void setup_neumann(int row, int plane, bool rightbacktop, std::vector<char>& disc_points);
+    void setup_plane_rigthbacktop(int row, std::vector<char>& disc_points, std::vector<int>& planes, std::vector<bool>& rightbacktops);
 
     std::vector<double> evaluated_Basis3d(int A);
     std::vector<std::vector<double>> evaluated_gradient_Basis3d(int A);

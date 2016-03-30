@@ -22,7 +22,7 @@ void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<doubl
     Matrix.prepare_sequential_fill(27);
     int rowlength(0);
 
-    size_t Zeile;
+    int Zeile;
     std::vector<double> RHS(_nx*_ny*_nz);
 
 LOG_INFO("assembled 0%");
@@ -31,6 +31,8 @@ LOG_INFO("assembled 0%");
     _A.clear(); _A.resize(1);
     rowlength = 8;
     Zeile=0;
+//if (Zeile >= fron && Zeile <= lron)
+{
 //    if(Dirichlet)
     {
         Matrix.sequential_fill(Zeile, 1.0);
@@ -52,6 +54,7 @@ LOG_INFO("assembled 0%");
 //            RHS[Zeile] += assemblyRHSNeumann(3, false, h);
 //        }
 //    }
+}
 
     //Kante 1:
     _e.resize(2);
@@ -60,7 +63,7 @@ LOG_INFO("assembled 0%");
     for(int i(1); i<_nx-1;i++)
     {
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -91,7 +94,7 @@ if (Zeile >= fron && Zeile <= lron)
     _A.resize(1);
     rowlength = 8;
     Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 { //Zeile sollte hier y-1 sein
     if(Dirichlet)
     {
@@ -122,7 +125,7 @@ if (Zeile >= fron && Zeile <= lron)
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -153,7 +156,7 @@ if (Zeile >= fron && Zeile <= lron)
         for(int i(1); i<_nx-1;i++)
         {
             Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
             if(Dirichlet)
             {
@@ -185,7 +188,7 @@ if (Zeile >= fron && Zeile <= lron)
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -216,7 +219,7 @@ if (Zeile >= fron && Zeile <= lron)
     _A.resize(1);
     rowlength = 8;
     Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 { //Zeile sollte hier (_ny-1)*y sein
     if(Dirichlet)
     {
@@ -248,7 +251,7 @@ if (Zeile >= fron && Zeile <= lron)
     for(int i(1); i<_nx-1; i++)
     {
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -279,7 +282,7 @@ if (Zeile >= fron && Zeile <= lron)
     _A.resize(1);
     rowlength = 8;
     Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 { //Zeile sollte hier z-1 sein
     if(Dirichlet)
     {
@@ -312,7 +315,7 @@ LOG_INFO("assembled ", static_cast<float>(k)/static_cast<double>(_nz)*100.0, "%"
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -344,7 +347,7 @@ if (Zeile >= fron && Zeile <= lron)
         for(int i(1); i<_nx-1; i++)
         {
             Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
             if(Dirichlet)
             {
@@ -376,7 +379,7 @@ if (Zeile >= fron && Zeile <= lron)
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -408,7 +411,7 @@ if (Zeile >= fron && Zeile <= lron)
             _A.resize(4);
             rowlength = 18;
             Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
             if(Dirichlet)
             {
@@ -438,7 +441,7 @@ if (Zeile >= fron && Zeile <= lron)
             for(int i(1); i<_nx-1; i++)
             {
                 Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
                 if (disc_points[Zeile] == 'o')
                 {
@@ -485,6 +488,26 @@ if (Zeile >= fron && Zeile <= lron)
                         RHS[Zeile] = assemblyRHSLoad(f);
                         if (Neumann)
                         {
+//                            std::vector<int> planes;
+//                            std::vector<bool> rightbacktops;
+//                            setup_plane_rigthbacktop(Zeile, disc_points, planes, rightbacktops);
+//                            for (int n(0); n < planes.size(); ++n)
+//                            {
+//                                setup_neumann(Zeile, planes[n], rightbacktops[n], disc_points);
+//                                RHS[Zeile] += assemblyRHSNeumann(planes[n], rightbacktops[n], h);
+//                            }
+//                              setup_neumann(Zeile, 1, false, disc_points);
+//                              RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+//                              setup_neumann(Zeile, 1, true, disc_points);
+//                              RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+//                              setup_neumann(Zeile, 2, false, disc_points);
+//                              RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+//                              setup_neumann(Zeile, 2, true, disc_points);
+//                              RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+//                              setup_neumann(Zeile, 3, false, disc_points);
+//                              RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+//                              setup_neumann(Zeile, 3, true, disc_points);
+//                              RHS[Zeile] += assemblyRHSNeumann(3, true, h);
                         }
                     }
                 }
@@ -500,7 +523,7 @@ if (Zeile >= fron && Zeile <= lron)
             _A.resize(4);
             rowlength = 18;
             Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
             if(Dirichlet)
             {
@@ -532,7 +555,7 @@ if (Zeile >= fron && Zeile <= lron)
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -564,7 +587,7 @@ if (Zeile >= fron && Zeile <= lron)
         for(int i(1); i< _nx-1; i++)
         {
             Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
             if(Dirichlet)
             {
@@ -596,7 +619,7 @@ if (Zeile >= fron && Zeile <= lron)
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -628,7 +651,7 @@ LOG_INFO("assembled ", static_cast<float>(_nz-1)/static_cast<double>(_nz)*100.0,
     _A.resize(1);
     rowlength = 8;
     Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 { //Zeile sollte hier (_nz-1)*z sein
     if(Dirichlet)
     {
@@ -660,7 +683,7 @@ if (Zeile >= fron && Zeile <= lron)
     for(int i(1); i<_nx-1;i++)
     {
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -691,7 +714,7 @@ if (Zeile >= fron && Zeile <= lron)
     _A.resize(1);
     rowlength = 8;
     Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 { //Zeile sollte hier (_nz-1)*z+y-1 sein
     if(Dirichlet)
     {
@@ -723,7 +746,7 @@ if (Zeile >= fron && Zeile <= lron)
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -755,7 +778,7 @@ if (Zeile >= fron && Zeile <= lron)
         for(int i(1); i<_nx-1; i++)
         {
             Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
             if(Dirichlet)
             {
@@ -787,7 +810,7 @@ if (Zeile >= fron && Zeile <= lron)
         _A.resize(2);
         rowlength = 12;
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -818,7 +841,7 @@ if (Zeile >= fron && Zeile <= lron)
     _A.resize(1);
     rowlength = 8;
     Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 { //Zeile sollte hier (_nx*_ny*_nz)-_nx sein
     if(Dirichlet)
     {
@@ -850,7 +873,7 @@ if (Zeile >= fron && Zeile <= lron)
     for(int i(1); i<_nx-1; i++)
     {
         Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 {
         if(Dirichlet)
         {
@@ -881,7 +904,7 @@ if (Zeile >= fron && Zeile <= lron)
     _A.resize(1);
     rowlength = 8;
     Zeile++;
-if (Zeile >= fron && Zeile <= lron)
+//if (Zeile >= fron && Zeile <= lron)
 { //Zeile sollte hier (_nx*_ny*_nz) sein
     if(Dirichlet)
     {
