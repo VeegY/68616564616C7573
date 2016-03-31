@@ -33,7 +33,7 @@ int neumann_demo()
 	Icarus::SlicedVector<double> sol(n);
 	sol.clear();
 	Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(lgs.first, lgs.second);
-	solver.solve(sol);
+	//solver.solve(sol);
 
 	// speichern (nur master)
 	Icarus::FullVector<double> fullsol(sol);	
