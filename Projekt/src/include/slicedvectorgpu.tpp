@@ -215,7 +215,7 @@ typename SlicedVectorGpu<Scalar>::RealType
 SlicedVectorGpu<Scalar>::
 l2norm2_impl() const
 {
-    RealType *res(0), res_global(0);
+    RealType *res, res_global(0);
 
     alloc_unified(&res, 1);//TODO TOCHECK
     gpu_l2(_data,_dim_local,res);

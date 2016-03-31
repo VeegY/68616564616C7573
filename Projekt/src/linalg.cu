@@ -170,7 +170,7 @@ __global__ void resultreduce_l2(type *result, type *placehold, int num_blocks)
     {
         value += placehold[i];
     }
-    result[0] = sqrt(value);
+    result[0] = value;//sqrt(value);
 }
 
 
@@ -378,11 +378,12 @@ void gpu_l2(type *vec, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+//    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
 
     //=================================//
         L2_Norm<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
+        cudaDeviceSynchronize();//TODO TOREMOVE
         resultreduce_l2<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
