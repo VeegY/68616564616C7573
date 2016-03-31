@@ -90,7 +90,7 @@ FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVectorGpu<Scalar>& vec) :
        this_chunk[i] = vec.get_local(i);
 
     // synchronisiere die teile
-    if(vec.get_dim_local() != vec.get_dim_local_nopad())
+    if((vec.get_dim_global() % vec.get_dim_local()) != 0)
     {
         LOG_DEBUG("Using non-optimal Bcast version of FullVector construction.");	
         for(int node = 0; node < _num_nodes; node++)
