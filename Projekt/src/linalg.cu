@@ -403,18 +403,18 @@ template void gpu_l2<float>(float *vec, size_t dim, float *erg);
 //                   Aufruf unendlich-Norm                                   //
 //=============================================================================
 template<typename type>
-void gpumaxnorm(type *vec, size_t dim, type erg)
+void gpumaxnorm(type *vec, size_t dim, type *erg)
 {
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+ //   cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
 
     //=================================//
         maxn<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
-        resultreducemax<<<1, 1>>>(&erg, placehold, num_blocks);
+        resultreducemax<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
 
@@ -423,8 +423,8 @@ void gpumaxnorm(type *vec, size_t dim, type erg)
     cleanupgpu(placehold);
 
 }
-template void gpumaxnorm<double>(double *vec, size_t dim, double erg);
-template void gpumaxnorm<float>(float *vec, size_t dim, float erg);
+template void gpumaxnorm<double>(double *vec, size_t dim, double *erg);
+template void gpumaxnorm<float>(float *vec, size_t dim, float *erg);
 
 
 //=============================================================================

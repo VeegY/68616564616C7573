@@ -28,7 +28,7 @@ template<typename type>
 void gpu_l2(type *vec, size_t dim, type *erg);
 
 template<typename type>
-void gpumaxnorm(type *vec, size_t dim, type erg);
+void gpumaxnorm(type *vec, size_t dim, type *erg);
 
 template<typename type>
 void copygpu_(const type *vecin, type *vecout, size_t dim);
@@ -233,7 +233,7 @@ maxnorm_impl() const
 {
     RealType res = std::numeric_limits<RealType>::min(), res_global;
 
-    gpumaxnorm(_data,_dim_local, res);
+    gpumaxnorm(_data,_dim_local, &res);
     MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
     return res_global;
