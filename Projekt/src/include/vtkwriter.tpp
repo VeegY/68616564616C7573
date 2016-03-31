@@ -99,7 +99,6 @@ void vtkWriter::addPointVecToTimestep(const FullVector<type>& datax, const FullV
 					file << "POINT_DATA " << _points << std::endl;
 				}
 				file << "VECTORS " << name << " float" << std::endl;
-				file << "LOOKUP_TABLE default" << std::endl;
 				for (size_t i = 0; i < _points; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
@@ -140,7 +139,6 @@ void vtkWriter::addPointVecToTimestep(const type datax[], const type datay[],
 					file << "POINT_DATA " << _points << std::endl;
 				}
 				file << "VECTORS " << name << " float" << std::endl;
-				file << "LOOKUP_TABLE default" << std::endl;
 				for (size_t i = 0; i < _points; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
@@ -265,7 +263,6 @@ void vtkWriter::addCellVecToTimestep(const FullVector<type>& datax,
 					file << "CELL_DATA " << _cells << std::endl;
 				}
 				file << "VECTORS " << name << " float" << std::endl;
-				file << "LOOKUP_TABLE default" << std::endl;
 				for (size_t i = 0; i < _cells; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
@@ -306,7 +303,6 @@ void vtkWriter::addCellVecToTimestep(const type datax[], const type datay[],
 					file << "CELL_DATA " << _cells << std::endl;
 				}
 				file << "VECTORS " << name << " float" << std::endl;
-				file << "LOOKUP_TABLE default" << std::endl;
 				for (size_t i = 0; i < _cells; ++i)
 				{
 					file << static_cast<float>(datax[i]) << " " << static_cast<float>(datay[i]) << " " << static_cast<float>(dataz[i]) << std::endl;
