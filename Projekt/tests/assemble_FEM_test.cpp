@@ -11,10 +11,11 @@
 
 #include <string>
 
-void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx, int ny, int nz);
+//void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx, int ny, int nz);
 
 int main()
 {
+/*
     const int nn(10);
     const double h(1.0/static_cast<double>(nn));
     const int nx(nn+1), ny(nn+1), nz(nn+1);
@@ -25,7 +26,7 @@ int main()
         test(3, true, disc, h, nx, ny, nz);
     }
 
-/*
+
     // ***** ***** ***** ***** TEST 0 DIRICHLET ***** ***** ***** ***** //
     // u = 0
     // f = 0
@@ -79,7 +80,7 @@ int main()
 */
     return 0;
 }
-
+/*
 void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx, int ny, int nz)
 {
     Icarus::mathfunction u((testcase-1)*4+1);
@@ -104,4 +105,4 @@ void test(int testcase, bool neumann, std::vector<char>& disc, double h, int nx,
     writer.addPointDataToTimestep(fullsol, 0, "Potential");
 
     LOG_INFO("L2norm_", testcase, (neumann ? "n" : "d"), " = ", assembler.calcL2Error(u, fullsol));
-}
+}*/

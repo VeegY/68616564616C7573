@@ -61,7 +61,14 @@ double mathfunction::eval(double x, double y, double z, int plane)
     case 16:if (plane == 1)
                 return 0.0;
             if (plane == 2)
+                return 0.0;
+            if (plane == 3)
                 return 10.0;
+            assert(false); // nicht vorgesehen
+    case 99:if (plane == 1)
+                return 10.0;
+            if (plane == 2)
+                return 0.0;
             if (plane == 3)
                 return 0.0;
             assert(false); // nicht vorgesehen
