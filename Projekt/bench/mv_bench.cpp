@@ -13,15 +13,14 @@ int main(int nargs, char** args)
 {
     using namespace std::chrono;
  
-    constexpr size_t size = 1000000L;
-
-    if(nargs != 3)
+    if(nargs != 4)
     {
-        std::cout << "Usage: matvec [#nnz/row] [#samples]" << std::endl;
+        std::cout << "Usage: matvec [dim] [nnz/row] [#samples]" << std::endl;
         exit(-1);
     }
-    unsigned Ncol = atoi(args[1]);
-    unsigned Nmean = atoi(args[2]);
+    const size_t size = atoi(args[1]);
+    const unsigned Ncol = atoi(args[2]);
+    const unsigned Nmean = atoi(args[3]);
 
     Icarus::DistEllpackMatrix<double> mat(size);
     mat.prepare_sequential_fill(Ncol);
@@ -59,6 +58,7 @@ int main(int nargs, char** args)
     MPI_Barrier(MPI_COMM_WORLD);
     if(myrank == 0)
     {
+        std::cout << "Problem size: " << size << std::endl;
         std::cout << "Benchmark with " << nprocs << " processes finished." << std::endl;
         std::cout << "Total execution (wall) time: " << total_time << " ms" << std::endl
           << "Time per operation (1/" << Nmean << "): " << single_time << " ms" << std::endl; 

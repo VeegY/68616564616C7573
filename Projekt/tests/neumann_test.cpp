@@ -9,30 +9,30 @@
 
 double bdry(int vtx_global)
 {
-	if (vtx_global < 100) return 100;
-	if (vtx_global >= 900) return -100;
+	if (3<=vtx_global && vtx_global<9) return 1.0;
+	if (vtx_global>=21) return -1.0;
 	return 0.0;
 }
 
 int neumann_demo()
 {
-	const int nx = 10, ny = 10, nz = 10;
-	const float h = 0.1;
-	// diskretisieren
-	//std::vector<char> disc = Icarus::discretizer("leer.obj", h, Nx, Ny, Nz);
+	const int nx = 3, ny = 3, nz = 3;
+	const float h = 0.5;
 	
 	// assemblieren
 	auto lgs = Icarus::assemble_neumann_unrolled<double>(nx, ny, nz, h, bdry);
 	//ausgabe der Matrix:
 	std::cout << "Die Matrix A:" << std::endl;
 	Icarus::print_sliced_object(lgs.first);
+	std::cout << "Die rechte Seite b:" << std::endl;
+	Icarus::print_sliced_object(lgs.second);
 	
 	// loesen
 	size_t n = lgs.first.get_dim_global();
 	Icarus::SlicedVector<double> sol(n);
 	sol.clear();
 	Icarus::BiCgStabSolver<Icarus::DistEllpackMatrix<double>> solver(lgs.first, lgs.second);
-	solver.solve(sol);
+	//solver.solve(sol);
 
 	// speichern (nur master)
 	Icarus::FullVector<double> fullsol(sol);	
