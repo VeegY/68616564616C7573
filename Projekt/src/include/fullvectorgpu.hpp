@@ -103,6 +103,8 @@ public:
 
 	Scalar* getDataPointer() { return _data; }
 
+    const Scalar* getDataPointer() const { return _data; }
+
     RealType l2norm2_impl() const;
 
     RealType maxnorm_impl() const;
