@@ -7,7 +7,7 @@
 namespace Icarus
 {
 
-void assembleFem::assemble(DistEllpackMatrixGpu<double>& Matrix, SlicedVectorGpu<double>& rhs,
+void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
     std::vector<char>& disc_points, mathfunction f, mathfunction g, mathfunction h)
 {
     //TODO alles in size_t umwandeln
