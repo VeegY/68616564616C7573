@@ -2,6 +2,7 @@
 // Werden die grad_Basen richtig eingesetzt?
 
 #include "include/assemblefem.hpp"
+#include <iostream>
 
 namespace Icarus
 {
@@ -91,6 +92,19 @@ void assembleFem::assemblyMatrixRow(int rowlength)
     for (int i(0); i<rowlength; ++i)
         if (_value[i] < 1.0e-9 && _value[i] > -1.0e-9)
             _value[i] = 0.0;
+
+    // sortiere Zeile um
+    for (int i(0); i < rowlength; ++i)
+        for (int j(rowlength-1); j > i; --j)
+            if (_column[j] < _column[j-1])
+            {
+                int helpcol(_column[j]);
+                double helpval(_value[j]);
+                _column[j] = _column[j-1];
+                _column[j-1] = helpcol;
+                _value[j] = _value[j-1];
+                _value[j-1] = helpval;
+            }
 }//assemblyMatrixRow()
 
 }//namespace Icarus
