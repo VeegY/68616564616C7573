@@ -311,6 +311,7 @@ void assembleFem::setup_neumann(int row, int plane, bool rigthbacktop, std::vect
     }
 }
 
+/*
 void assembleFem::setup_plane_rigthbacktop(int row, std::vector<char>& disc_points, std::vector<int>& planes, std::vector<bool>& rightbacktops)
 {
     planes.clear();
@@ -366,5 +367,6 @@ void assembleFem::setup_plane_rigthbacktop(int row, std::vector<char>& disc_poin
         rightbacktops.push_back(true);
     }
 }
+*/
 
 }//namespace Icarus
