@@ -11,7 +11,6 @@ double bdry(int vtx_global)
 {
 	if (3<=vtx_global && vtx_global<9) return 1.0;
 	if (vtx_global>=21) return -1.0;
-	if (vtx_global == 0) return 1.0;
 	return 0.0;
 }
 

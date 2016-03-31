@@ -349,6 +349,7 @@ void assembleBackPanel(int** indexMatrix, double** valueMatrix,int fron, int lro
     }
 }
 
+// Die mittleren Kanten:
 void assembleKanteVorneLinks(int** indexMatrix, double** valueMatrix,int fron, int lron, int msize,double h,int nx,int ny, int nz)
 {
     int* kantenidxs = new int[nz];
@@ -880,7 +881,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		indexMatrix[vtx_local][4] = vtx_global + 2*nx;
 		indexMatrix[vtx_local][5] = vtx_global + nx*nz;
 		indexMatrix[vtx_local][6] = vtx_global + 2 * nx*ny;
-	
+		/*
 		// Dirichlet-RB in diesen Punkt gesetzt
 		valueMatrix[vtx_local][0] = 1.0;
 		valueMatrix[vtx_local][1] = 0.0;
@@ -889,7 +890,7 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][4] = 0.0;
 		valueMatrix[vtx_local][5] = 0.0;
 		valueMatrix[vtx_local][6] = 0.0;
-	/*	
+		*/
 		//NeumannRB, Normalenvektor ist (1/sqrt(3),1/sqrt(3),1/sqrt(3))
 		valueMatrix[vtx_local][0] = 3.0 * 1.0 / sqrt(3.0) * 3.0 / 2.0;
 		valueMatrix[vtx_local][1] = 1.0 / sqrt(3.0)*(-4.0) / 2.0;
@@ -898,7 +899,6 @@ void assembleEckeuntenvornelinks(int** indexMatrix, double** valueMatrix,int fro
 		valueMatrix[vtx_local][4] = 1.0 / sqrt(3.0) * 1.0 / 2.0;
 		valueMatrix[vtx_local][5] = 1.0 / sqrt(3.0)*(-4.0) / 2.0;
 		valueMatrix[vtx_local][6] = 1.0 / sqrt(3.0) * 1.0 / 2.0;
-	*/
 	}
 }
 
