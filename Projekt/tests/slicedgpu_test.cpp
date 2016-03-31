@@ -36,7 +36,7 @@ int slicedgputest()
     vec3 =vec1;
     for (size_t i(0); i<dimloc; i++)
     {
-        if (vec2.get_local(i)!=vec1.get_local(i))
+        if (vec4.get_local(i)!=gvec4.get_local(i))
         {
              LOG_ERROR("copy-constructor failed");
         }
