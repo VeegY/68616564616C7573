@@ -231,10 +231,12 @@ typename SlicedVectorGpu<Scalar>::RealType
 SlicedVectorGpu<Scalar>::
 maxnorm_impl() const
 {
-    RealType res = std::numeric_limits<RealType>::min(), res_global;
+    RealType *res, res_global;
+    alloc_unified(&res, 1);
+    *res = std::numeric_limits<RealType>::min();
 
-    gpumaxnorm(_data,_dim_local, &res);
-    MPI_SCALL(MPI_Allreduce(&res, &res_global, 1,
+    gpumaxnorm(_data,_dim_local, res);
+    MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
     return res_global;
 }
