@@ -3,13 +3,24 @@
 namespace Icarus
 {
 
+bool assembleFem::is_Element_air(int element, std::vector<char>& disc_points)
+{
+    if(disc_points[element] == 'a' || disc_points[element+1] == 'a' || disc_points[element+y] == 'a' || disc_points[element+y+1] == 'a'
+       || disc_points[element+z] == 'a' || disc_points[element+z+1] == 'a' || disc_points[element+z+y] == 'a' || disc_points[element+z+y+1] == 'a')
+        return true;
+    else
+        return false;
+}
+
+
+
 int assembleFem::setup_A(int row, std::vector<char>& disc_points)
 {
     int length(0);
     int numairelements(0);
     std::vector<int> ubf(27, 0); // used basis functions
     _A.resize(8);
-    if (disc_points[row + z + y + 1] == 'a')
+    if (is_Element_air(row, disc_points)) //(disc_points[row + z + y + 1] == 'a')
     {
         _A[numairelements] = 0;
         ++numairelements;
@@ -22,7 +33,7 @@ int assembleFem::setup_A(int row, std::vector<char>& disc_points)
         ubf[25] = 1;
         ubf[26] = 1;
     }
-    if (disc_points[row + z + y - 1] == 'a')
+    if (is_Element_air(row-1, disc_points)) //(disc_points[row + z + y - 1] == 'a')
     {
         _A[numairelements] = 1;
         ++numairelements;
@@ -35,7 +46,7 @@ int assembleFem::setup_A(int row, std::vector<char>& disc_points)
         ubf[24] = 1;
         ubf[25] = 1;
     }
-    if (disc_points[row + z - y + 1] == 'a')
+    if (is_Element_air(row-y, disc_points)) //(disc_points[row + z - y + 1] == 'a')
     {
         _A[numairelements] = 2;
         ++numairelements;
@@ -48,7 +59,7 @@ int assembleFem::setup_A(int row, std::vector<char>& disc_points)
         ubf[22] = 1;
         ubf[23] = 1;
     }
-    if (disc_points[row + z - y - 1] == 'a')
+    if (is_Element_air(row-y-1, disc_points)) //(disc_points[row + z - y - 1] == 'a')
     {
         _A[numairelements] = 3;
         ++numairelements;
@@ -61,7 +72,7 @@ int assembleFem::setup_A(int row, std::vector<char>& disc_points)
         ubf[21] = 1;
         ubf[22] = 1;
     }
-    if (disc_points[row - z + y + 1] == 'a')
+    if (is_Element_air(row-z, disc_points)) //(disc_points[row - z + y + 1] == 'a')
     {
         _A[numairelements] = 4;
         ++numairelements;
@@ -74,7 +85,7 @@ int assembleFem::setup_A(int row, std::vector<char>& disc_points)
         ubf[16] = 1;
         ubf[17] = 1;
     }
-    if (disc_points[row - z + y - 1] == 'a')
+    if (is_Element_air(row-z-1, disc_points)) //(disc_points[row - z + y - 1] == 'a')
     {
         _A[numairelements] = 5;
         ++numairelements;
@@ -87,7 +98,7 @@ int assembleFem::setup_A(int row, std::vector<char>& disc_points)
         ubf[15] = 1;
         ubf[16] = 1;
     }
-    if (disc_points[row - z - y + 1] == 'a')
+    if (is_Element_air(row-z-y, disc_points)) //(disc_points[row - z - y + 1] == 'a')
     {
         _A[numairelements] = 6;
         ++numairelements;
@@ -100,7 +111,7 @@ int assembleFem::setup_A(int row, std::vector<char>& disc_points)
         ubf[13] = 1;
         ubf[14] = 1;
     }
-    if (disc_points[row - z - y - 1] == 'a')
+    if (is_Element_air(row-z-y-1, disc_points)) //(disc_points[row - z - y - 1] == 'a')
     {
         _A[numairelements] = 7;
         ++numairelements;
@@ -129,7 +140,7 @@ uvl-------uvr
     return length;
 }
 
-void assembleFem::setup_e(int row)
+void assembleFem::setup_e(int row) //kann man eventuell direkt in setup_A schieben
 {
     int n(_A.size());
     _e.resize(n);
@@ -158,7 +169,6 @@ void assembleFem::setup_e(int row)
     }
 }
 
-/*
 void assembleFem::setup_neumann(int row, int plane, bool rigthbacktop, std::vector<char>& disc_points)
 {
     _A.clear();
@@ -169,66 +179,66 @@ void assembleFem::setup_neumann(int row, int plane, bool rigthbacktop, std::vect
         switch(plane)
         {
         case 1:
-            if(disc_points[row+z+y+1] == 'a' && disc_points[row+y+1] == 'b')
+            if(is_Element_air(row) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row+y] == 'b' && disc_points[row+y+1] == 'b')
             {
                 _e.push_back(row);
                 _A.push_back(0);
             }
-            if(disc_points[row+z+y-1] == 'a' && disc_points[row+y] == 'b')
+            if(is_Element_air(row-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row+y] == 'b' && disc_points[row+y-1] == 'b')
             {
                 _e.push_back(row -1);
                 _A.push_back(1);
             }
-            if(disc_points[row+z-y+1] == 'a' && disc_points[row+1] == 'b')
+            if(is_Element_air(row-y) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row-y] == 'b' && disc_points[row-y+1] == 'b')
             {
                 _e.push_back(row -y);
                 _A.push_back(2);
             }
-            if(disc_points[row+z-y-1] == 'a' && disc_points[row] == 'b')
+            if(is_Element_air(row-y-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row-y] == 'b' && disc_points[row-y-1] == 'b')
             {
                 _e.push_back(row -y-1);
                 _A.push_back(3);
             }
             break;
         case 2:
-            if(disc_points[row+z+y+1] == 'a' && disc_points[row+z+1] == 'b')
+            if(is_Element_air(row) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z+1] == 'b')
             {
                 _e.push_back(row);
                 _A.push_back(0);
             }
-            if(disc_points[row+z+y-1] == 'a' && disc_points[row+z] == 'b')
+            if(is_Element_air(row-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z-1] == 'b')
             {
                 _e.push_back(row -1);
                 _A.push_back(1);
             }
-            if(disc_points[row-z+y+1] == 'a' && disc_points[row+1] == 'b')
+            if(is_Element_air(row-z) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z+1] == 'b')
             {
                 _e.push_back(row -z);
                 _A.push_back(4);
             }
-            if(disc_points[row-z+y-1] == 'a' && disc_points[row] == 'b')
+            if(is_Element_air(row-z-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z-1] == 'b')
             {
                 _e.push_back(row -z-1);
                 _A.push_back(5);
             }
             break;
         case 3:
-            if(disc_points[row+z+y+1] == 'a' && disc_points[row+z+y] == 'b')
+            if(is_Element_air(row) && disc_points[row] == 'b' && disc_points[row+y] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z+y] == 'b')
             {
                 _e.push_back(row);
                 _A.push_back(0);
             }
-            if(disc_points[row+z-y+1] == 'a' && disc_points[row+z] == 'b')
+            if(is_Element_air(row-y) && disc_points[row] == 'b' && disc_points[row-y] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z-y] == 'b')
             {
                 _e.push_back(row -y);
                 _A.push_back(2);
             }
-            if(disc_points[row-z+y+1] == 'a' && disc_points[row+y] == 'b')
+            if(is_Element_air(row-z) && disc_points[row] == 'b' && disc_points[row+y] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z+y] == 'b')
             {
                 _e.push_back(row -z);
                 _A.push_back(4);
             }
-            if(disc_points[row-z-y+1] == 'a' && disc_points[row] == 'b')
+            if(is_Element_air(row-z-y) && disc_points[row] == 'b' && disc_points[row-y] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z-y] == 'b')
             {
                 _e.push_back(row -z-y);
                 _A.push_back(6);
@@ -242,66 +252,66 @@ void assembleFem::setup_neumann(int row, int plane, bool rigthbacktop, std::vect
         switch(plane)
         {
         case 1:
-            if(disc_points[row-z+y+1] == 'a' && disc_points[row+y+1] == 'b')
+            if(is_Element_air(row-z) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row+y] == 'b' && disc_points[row+y+1] == 'b')
             {
                 _e.push_back(row);
                 _A.push_back(4);
             }
-            if(disc_points[row-z+y-1] == 'a' && disc_points[row+y] == 'b')
+            if(is_Element_air(row-z-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row+y] == 'b' && disc_points[row+y-1] == 'b')
             {
                 _e.push_back(row -1);
                 _A.push_back(5);
             }
-            if(disc_points[row-z-y+1] == 'a' && disc_points[row+1] == 'b')
+            if(is_Element_air(row-z-y) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row-y] == 'b' && disc_points[row-y+1] == 'b')
             {
                 _e.push_back(row -y);
                 _A.push_back(6);
             }
-            if(disc_points[row-z-y-1] == 'a' && disc_points[row] == 'b')
+            if(is_Element_air(row-z-y-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row-y] == 'b' && disc_points[row-y-1] == 'b')
             {
                 _e.push_back(row -y-1);
                 _A.push_back(7);
             }
             break;
         case 2:
-            if(disc_points[row+z-y+1] == 'a' && disc_points[row+z+1] == 'b')
+            if(is_Element_air(row-y) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z+1] == 'b')
             {
                 _e.push_back(row);
                 _A.push_back(2);
             }
-            if(disc_points[row+z-y-1] == 'a' && disc_points[row+z] == 'b')
+            if(is_Element_air(row-y-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z-1] == 'b')
             {
                 _e.push_back(row -1);
                 _A.push_back(3);
             }
-            if(disc_points[row-z-y+1] == 'a' && disc_points[row+1] == 'b')
+            if(is_Element_air(row-z-y) && disc_points[row] == 'b' && disc_points[row+1] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z+1] == 'b')
             {
                 _e.push_back(row -z);
                 _A.push_back(6);
             }
-            if(disc_points[row-z-y-1] == 'a' && disc_points[row] == 'b')
+            if(is_Element_air(row-z-y-1) && disc_points[row] == 'b' && disc_points[row-1] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z-1] == 'b')
             {
                 _e.push_back(row -z-1);
                 _A.push_back(7);
             }
             break;
         case 3:
-            if(disc_points[row+z+y-1] == 'a' && disc_points[row+z+y] == 'b')
+            if(is_Element_air(row-1) && disc_points[row] == 'b' && disc_points[row+y] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z+y] == 'b')
             {
                 _e.push_back(row);
                 _A.push_back(1);
             }
-            if(disc_points[row+z-y-1] == 'a' && disc_points[row+z] == 'b')
+            if(is_Element_air(row-y-1) && disc_points[row] == 'b' && disc_points[row-y] == 'b' && disc_points[row+z] == 'b' && disc_points[row+z-y] == 'b')
             {
                 _e.push_back(row -y);
                 _A.push_back(3);
             }
-            if(disc_points[row-z+y-1] == 'a' && disc_points[row+y] == 'b')
+            if(is_Element_air(row-z-1) && disc_points[row] == 'b' && disc_points[row+y] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z+y] == 'b')
             {
                 _e.push_back(row -z);
                 _A.push_back(5);
             }
-            if(disc_points[row-z-y-1] == 'a' && disc_points[row] == 'b')
+            if(is_Element_air(row-z-y-1) && disc_points[row] == 'b' && disc_points[row-y] == 'b' && disc_points[row-z] == 'b' && disc_points[row-z-y] == 'b')
             {
                 _e.push_back(row -z-y);
                 _A.push_back(7);
@@ -311,7 +321,6 @@ void assembleFem::setup_neumann(int row, int plane, bool rigthbacktop, std::vect
         }
     }
 }
-*/
 
 /*
 void assembleFem::setup_plane_rigthbacktop(int row, std::vector<char>& disc_points, std::vector<int>& planes, std::vector<bool>& rightbacktops)

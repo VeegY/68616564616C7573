@@ -125,8 +125,11 @@ private:
     **/
     void setup_e(int row);
 
-    //TODO
-    //void setup_neumann(int row, int plane, bool rightbacktop, std::vector<char>& disc_points);
+    //TODO add doxy
+    void setup_neumann(int row, int plane, bool rightbacktop, std::vector<char>& disc_points);
+
+    //TODO add doxy
+    bool is_Element_air(int element, std::vector<char>& disc_points);
 
     /**
     *   \brief Man wählt eine der 3D-Basen aus und erhält die ausgewerteten Quadraturpunkte
