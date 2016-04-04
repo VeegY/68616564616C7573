@@ -192,6 +192,7 @@ __global__ void maxn(type *vector, type *placehold, int dim_local)
             value = -value;
         }
     }
+
     shar[sidx] = value;
     __syncthreads();
 
@@ -200,11 +201,11 @@ __global__ void maxn(type *vector, type *placehold, int dim_local)
     {
         if (sidx < offset)
         {
-            compare_one = shar[idx];
-            compare_two = shar[idx + offset];
+            compare_one = shar[sidx];
+            compare_two = shar[sidx + offset];
             if (compare_two > compare_one)
             {
-                shar[idx] = compare_two;
+                shar[sidx] = compare_two;
             }
         }
         __syncthreads();
@@ -214,7 +215,6 @@ __global__ void maxn(type *vector, type *placehold, int dim_local)
     {
         placehold[blockIdx.x] = shar[0];
     }
-
 }
 
 
@@ -383,7 +383,7 @@ void gpu_l2(type *vec, size_t dim, type *erg)
 
     //=================================//
         L2_Norm<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
-        cudaDeviceSynchronize();//TODO TOREMOVE
+        //cudaDeviceSynchronize();//TODO TOREMOVE
         resultreduce_l2<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
