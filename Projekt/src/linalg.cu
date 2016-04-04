@@ -304,7 +304,7 @@ void gpu_dot_(type *vecx, type *vecy, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
+//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks); TODO TODISCUSS ist das (void**) casten notwendig?
     cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
 
     //=================================//
@@ -357,7 +357,7 @@ void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim)
 
 
     //=================================//
-        axpygpu<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,scalar,vecy,vecx,dim);
+        axpygpu<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,scalar,vecy,vecy,dim);
         cudaDeviceSynchronize();
 
     //=================================//

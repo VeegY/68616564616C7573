@@ -265,7 +265,7 @@ axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
     SlicedVectorGpu<Scalar> yvec(y);
     alloc_unified((Scalar **)&alpha2, (size_t)1.0);
 
-    gpu_axpy(_data, alpha2, yvec.getDataPointer(), _dim_local);
+    gpu_axpy(yvec.getDataPointer(), alpha2, _data, _dim_local);
 
     cleanupgpu(&alpha2);
 
