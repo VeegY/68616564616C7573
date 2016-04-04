@@ -116,7 +116,7 @@ std::vector<char>discretizer(std::string inputFile,
 // TODO: "von wo bis wo" einstellen koennen
 {
     //*** Ein- und Ausgabedatei oeffnen ***//
-    
+
     std::ifstream fin;
     fin.open(inputFile);
     // TODISCUSS: Dateien lieber nur so lange wie noetig oeffnen?
@@ -126,7 +126,7 @@ std::vector<char>discretizer(std::string inputFile,
     //*** Daten einlesen ***//
 
     std::vector<Object> objects; // Vektor fuer alle Objekte
-    
+
     // diverse Variablen, die zum Einlesen benoetigt werden
     std::string line;
     std::string type;
@@ -136,14 +136,14 @@ std::vector<char>discretizer(std::string inputFile,
     int num_objects(0), num_vertices(0), num_faces(0), num_normals(0);
     int num_vertices_per_face(0), num_slashes(0), id(0), diff_vertices_id(-1), diff_normals_id(-1), id_normal(0);
     std::vector<int> vertices_ids_of_face;
-    
+
     // das ganze Dokument wird Zeile fuer Zeile durchgelesen
     // Format/ Aufbau einer .obj Datei von Blender, siehe: http://www.martinreddy.net/gfx/3d/OBJ.spec
     while (getline(fin, line))
     {
         stream.str(line);   // ein Stringstream vereinfacht das Einlesen der Daten einer Zeile wesentlich
         stream >> type;
-        
+
         if (type == "o")    // neues Objekt
         {
             stream >> name;
@@ -158,14 +158,14 @@ std::vector<char>discretizer(std::string inputFile,
             objects[num_objects-1].set_vertex(x, y, z);
             ++num_vertices;
         }//== "v"
-        
+
         else if (type == "vn")  // neuer Normalenvektor von aktuellem Objekt
         {
             stream >> x >> y >> z;
             objects[num_objects-1].set_normal(x, y, z);
             ++num_normals;
         }//== "vn"
-        
+
         else if (type == "f")   // neue Flaeche von aktuellem Objekt (nur Polygone werden sinnvoll eingelesen)
         {
             // erst wird der Aufbau der Zeile untersucht
@@ -183,7 +183,7 @@ std::vector<char>discretizer(std::string inputFile,
             {
                 num_slashes = 0;
             }
-            
+
             // Wenn noch kein Normalenvektor existiert, muss er noch berechnet werden (TODO)
             if (line.find_last_of('/') + 1 < line.length())
             {
@@ -194,7 +194,7 @@ std::vector<char>discretizer(std::string inputFile,
                 stream >> id_normal;
                 id_normal -= diff_normals_id;
             }
-            
+
             // zugehoerige Eckpunkte werden eingelesen
             vertices_ids_of_face.erase(vertices_ids_of_face.begin(), vertices_ids_of_face.end());
             stream.seekg(2);    // first char is f, then space, then first vertex-id
@@ -205,18 +205,18 @@ std::vector<char>discretizer(std::string inputFile,
                 getline(stream, line, ' '); // der Rest an Information des Punktes wird nicht benoetigt
                 ++num_vertices_per_face;
             }
-            
+
             // Flache wird dem aktuellen Objekt hinzugefuegt
             objects[num_objects-1].set_face(num_vertices_per_face, vertices_ids_of_face, id_normal);
             ++num_faces;
         }//== "f"
-        
+
         /*else if (type == "usemtl")
         * {
         *     // TODO: spaeter, wenn auch Waermeleitung in Festkoerpern betrachtet wird
         * }//== "usemtl"
         */
-        
+
         stream.clear();
     }//while(getline)
 
@@ -225,7 +225,7 @@ std::vector<char>discretizer(std::string inputFile,
     //std::vector<char> discretized_points(nx*ny*nz);
     std::vector<char> discretized_points;
     // Preufe fuer jeden Punkt, ob Luft oder Gegenstand
-    
+
     //{
     for (int z(0); z<nz; ++z)
     {
@@ -235,7 +235,7 @@ std::vector<char>discretizer(std::string inputFile,
             {
                 Vertex point{(float)x*h, (float)y*h, (float)z*h};
                 char what('a');
-				// prüfe, ob punkt in irgendeinem objekt liegt
+            // prÃ¼fe, ob punkt in irgendeinem objekt liegt
                 for (int o(0); o<num_objects && what=='a'; ++o)
                 {
                     what = objects[o].pointInside(point);
@@ -244,7 +244,7 @@ std::vector<char>discretizer(std::string inputFile,
             }//x-loop
         }//y-loop
     }//z-loop
-    
+
     // Pruefe fuer alle Objekt-Punkte, ob es Randpunkte sind
     for (int z(0); z<nz; ++z)
     {
@@ -254,19 +254,48 @@ std::vector<char>discretizer(std::string inputFile,
             {
                 if (discretized_points[z*ny*nx + y*nx + x] != 'a')
                 {
-					// globaler rand des gebiets
+                    // globaler rand des gebiets
                     if (x==0 || y==0 || z==0 || x==nx-1 || y==ny-1 || z==nz-1)
                     {
                         // TODO
                         discretized_points[z*ny*nx + y*nx + x] = 'b';
                     }
-					// wenn min. ein nachbar frei und ich nicht, bin ich rand
+                    /*
+                    // wenn min. ein nachbar frei und ich nicht, bin ich rand
                     else if ((discretized_points[z*ny*nx + y*nx + x + 1] == 'a')
                     || (discretized_points[z*ny*nx + y*nx + x - 1] == 'a')
                     || (discretized_points[z*ny*nx + (y+1)*nx + x] == 'a')
                     || (discretized_points[z*ny*nx + (y-1)*nx + x] == 'a')
                     || (discretized_points[(z+1)*ny*nx + y*nx + x] == 'a')
                     || (discretized_points[(z-1)*ny*nx + y*nx + x] == 'a'))
+                    */
+                    // wenn min. ein Nachbar frei und ich nicht, bin ich rand. Auch die Diagonalen pruefen! Geht die Ueberpruefung eventuell schneller?
+                    else if ((discretized_points[(z-1) *ny*nx + (y-1) *nx + x-1] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y-1) *nx + x  ] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y-1) *nx + x+1] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y)   *nx + x-1] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y)   *nx + x  ] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y)   *nx + x+1] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y+1) *nx + x-1] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y+1) *nx + x  ] == 'a')
+                          || (discretized_points[(z-1) *ny*nx + (y+1) *nx + x+1] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y-1) *nx + x-1] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y-1) *nx + x  ] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y-1) *nx + x+1] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y)   *nx + x-1] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y)   *nx + x+1] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y+1) *nx + x-1] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y+1) *nx + x  ] == 'a')
+                          || (discretized_points[(z)   *ny*nx + (y+1) *nx + x+1] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y-1) *nx + x-1] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y-1) *nx + x  ] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y-1) *nx + x+1] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y)   *nx + x-1] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y)   *nx + x  ] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y)   *nx + x+1] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y+1) *nx + x-1] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y+1) *nx + x  ] == 'a')
+                          || (discretized_points[(z+1) *ny*nx + (y+1) *nx + x+1] == 'a'))
                     {
                         discretized_points[z*ny*nx + y*nx + x] = 'b';
                     }
@@ -275,7 +304,7 @@ std::vector<char>discretizer(std::string inputFile,
         }//y-loop
     }//z-loop
     //*/
-    
+
     // hier ist discretized_points fertig
     return discretized_points;
 }
@@ -289,7 +318,7 @@ void save_discretizer(std::vector<char> discretized_points,
 
     //*** Diskretisierung abspeichern ***//
     fout << nx << " " << ny << " " << nz << std::endl;
-    
+
     /*
     for (int i(0); i<nx*ny*nz; ++i)
     {
@@ -298,7 +327,7 @@ void save_discretizer(std::vector<char> discretized_points,
         // TODISCUSS: direkt hintereinander, Leerzeichen oder neue Zeile?
     }
     */
-    
+
     ///*
     for (int z(0); z<nz; ++z)
     {   fout << "z = " << z*h << std::endl;
