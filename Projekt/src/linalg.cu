@@ -170,7 +170,7 @@ __global__ void resultreduce_l2(type *result, type *placehold, int num_blocks)
     {
         value += placehold[i];
     }
-    result[0] = value;//sqrt(value);
+    result[0] = value;
 }
 
 
@@ -304,8 +304,7 @@ void gpu_dot_(type *vecx, type *vecy, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks); TODO TODISCUSS ist das (void**) casten notwendig?
-    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         gpu_dot<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,vecy,placehold,dim);
@@ -330,12 +329,10 @@ void gpu_dot_(const type *vecx, const type *vecy, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         gpu_dot<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,vecy,placehold,dim);
-        cudaDeviceSynchronize();//TODO TODELETE
         resultreduce<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
@@ -378,12 +375,10 @@ void gpu_l2(type *vec, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-//    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         L2_Norm<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
-        //cudaDeviceSynchronize();//TODO TOREMOVE
         resultreduce_l2<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
@@ -409,8 +404,7 @@ void gpumaxnorm(type *vec, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
- //   cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         maxn<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
