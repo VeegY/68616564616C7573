@@ -223,7 +223,7 @@ l2norm2_impl() const
 
     MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_SUM, _my_comm));
-    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TO DISCUSS
+    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TODISCUSS
     cleanupgpu(res);
     return res_global;
 }
@@ -242,7 +242,7 @@ maxnorm_impl() const
 
     MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
-    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TO DISCUSS
+    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TODISCUSS
     cleanupgpu(res);
     return res_global;
 }
@@ -260,8 +260,7 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
 
     MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<Scalar>::mpi_type, MPI_SUM, _my_comm));
-    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TO DISCUSS
-    cleanupgpu(res);
+    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TODISCUSS
     cleanupgpu(res);
     return res_global;
 }
@@ -269,7 +268,7 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
 template<typename Scalar>
 void SlicedVectorGpu<Scalar>::
 axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
-{
+
     assert(_dim_global == y._dim_global);
 
     gpu_axpy(y.getDataPointer(), alpha, _data, _dim_local);
@@ -315,6 +314,6 @@ struct VectorTraits<SlicedVectorGpu<Scalar>>
     typedef Scalar ScalarType;
 };
 
-}
+}//namespace Icarus
 
 #endif // __SLICEDVECTORGPU_TPP_
