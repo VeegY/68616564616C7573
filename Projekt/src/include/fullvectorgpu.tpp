@@ -183,7 +183,8 @@ FullVectorGpu<Scalar>::operator=(FullVectorGpu&& other)
     // selbst
     if (this == &other) return *this;
     // fremd
-	_my_comm = other._my_comm;
+	if (_data) cleanupgpu(_data);
+    _my_comm = other._my_comm;
 	_my_rank = other._my_rank;
 	_num_nodes = other._num_nodes;
 	_dim = other._dim;
@@ -213,7 +214,7 @@ FullVectorGpu<Scalar>::maxnorm_impl() const
 {
     RealType *res, res2;
     alloc_unified(&res, 1);
-    *res = std::numeric_limits<RealType>::min();
+//    *res = std::numeric_limits<RealType>::min();
 
     gpumaxnorm(_data,_dim, res);
     res2 = *res;
@@ -243,13 +244,10 @@ axpy_impl(const Scalar& alpha, const FullVectorGpu<Scalar>& y)
 {
     assert(_dim == y._dim);
 
-    //Scalar alpha2(alpha);
     FullVectorGpu<Scalar> yvec(y);
-    //alloc_unified((Scalar **)&alpha2, (size_t)1.0);
 
     gpu_axpy(yvec.getDataPointer(), alpha, _data, _dim);
 
-   // cleanupgpu(&alpha2);
 }
 
 template<typename Scalar>

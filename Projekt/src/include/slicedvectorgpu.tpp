@@ -167,7 +167,7 @@ operator=(SlicedVectorGpu&& other)
     // selbst
     if (this == &other) return *this;
     // fremd
-    // TODO TODISCUSS wieso kein cleanup? : if(_data) cleanupgpu(_data);
+     if(_data) cleanupgpu(_data);
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;
 	_num_nodes = other._num_nodes;
@@ -223,6 +223,8 @@ l2norm2_impl() const
 
     MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_SUM, _my_comm));
+    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TO DISCUSS
+    cleanupgpu(res);
     return res_global;
 }
 
@@ -235,11 +237,13 @@ maxnorm_impl() const
     RealType *res, res_global;
 
     alloc_unified(&res, 1);
-    *res = std::numeric_limits<RealType>::min(); //TODO TODISCUSS wofuer ist das?
+//    *res = std::numeric_limits<RealType>::min(); //TODO TODISCUSS wofuer ist das?
     gpumaxnorm(_data, _dim_local, res);
 
     MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<RealType>::mpi_type, MPI_MAX, MPI_COMM_WORLD));
+    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TO DISCUSS
+    cleanupgpu(res);
     return res_global;
 }
 
@@ -256,6 +260,9 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
 
     MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
                             ScalarTraits<Scalar>::mpi_type, MPI_SUM, _my_comm));
+    //MPI_SCALL(MPI_Barrier, _my_comm)); TODO TO DISCUSS
+    cleanupgpu(res);
+    cleanupgpu(res);
     return res_global;
 }
 
