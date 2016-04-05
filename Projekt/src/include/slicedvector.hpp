@@ -40,13 +40,13 @@ class SlicedVector : public Vector<SlicedVector<Scalar>>
 {
     friend class Vector<SlicedVector<Scalar>>;
 
-	// mpi umgebung
-	MPI_Comm _my_comm;
-	int _my_rank, _num_nodes;
+    // mpi umgebung
+    MPI_Comm _my_comm;
+    int _my_rank, _num_nodes;
 
     // Globale und lokale Dimension
     size_t _dim_global, _dim_local;
-    
+
     // Größe des lokalen Blocks auf den ersten N-1 bzw. der letzten Node
     size_t _dim_local_nopad, _dim_local_last;
     Scalar* _data;
@@ -123,12 +123,12 @@ public:
     /**
       * \brief   Gibt die Größe des Blocks, der auf der letzten Node liegt, zurück.
       */
-	size_t get_dim_local_last() const { return _dim_local_last; }
+    size_t get_dim_local_last() const { return _dim_local_last; }
 
     /**
       * \brief   Gibt den MPI-Kommunikator in doe Prozessgrupe, der der Vektor gehört, zurück.
       */
-	MPI_Comm get_comm() const { return _my_comm; }
+    MPI_Comm get_comm() const { return _my_comm; }
 
     /**
       * \brief   Schreibe den lokalen Inhalt des Block in den Stream out.
@@ -138,7 +138,7 @@ public:
       *
       * \param out  Stream, in den die Ausgabe geschrieben werden soll.
       */
-	void print_local_data(std::ostream& out) const;
+    void print_local_data(std::ostream& out) const;
 
     /**
       * \brief   Setze den Wert val an die lokale Position pos.
@@ -198,7 +198,7 @@ private:
 
 };
 
-}
+}//namespace Icarus
 
 #include "slicedvector.tpp"
 

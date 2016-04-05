@@ -126,12 +126,12 @@ public:
     /**
       * \brief   Gibt die Größe des Blocks, der auf der letzten Node liegt, zurück.
       */
-	size_t get_dim_local_last() const { return _dim_local_last; }
+    size_t get_dim_local_last() const { return _dim_local_last; }
 
     /**
       * \brief   Gibt den MPI-Kommunikator in doe Prozessgrupe, der der Vektor gehört, zurück.
       */
-	MPI_Comm get_comm() const { return _my_comm; }
+    MPI_Comm get_comm() const { return _my_comm; }
 
     /**
       * \brief   Schreibe den lokalen Inhalt des Block in den Stream out.
@@ -141,7 +141,7 @@ public:
       *
       * \param out  Stream, in den die Ausgabe geschrieben werden soll.
       */
-	void print_local_data(std::ostream& out) const;
+    void print_local_data(std::ostream& out) const;
 
     /**
       * \brief   Setze den Wert val an die lokale Position pos.
@@ -205,7 +205,7 @@ private:
 
 };
 
-}
+}//namespace Icarus
 
 #include "slicedvectorgpu.tpp"
 

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(stuprotm1516)
 
 #========================================================================
-#               Executables         
+#               Executables
 #========================================================================
 
 # Globale cxx-Library
@@ -18,7 +18,7 @@ ENDIF(NOT DEMO STREQUAL "")
 CUDA_ADD_LIBRARY(linalg "linalg.cu")
 
 #========================================================================
-#               Compiler            
+#               Compiler
 #========================================================================
 
 LIST(APPEND CMAKE_CXX_FLAGS "-std=c++11 -O3 -ffast-math -Wall")

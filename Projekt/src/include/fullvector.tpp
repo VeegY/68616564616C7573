@@ -29,7 +29,7 @@ FullVector<Scalar>::FullVector(size_t dim, MPI_Comm my_comm) :
 {
     MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
     MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
-    
+
     try
     {
         _data = new Scalar[_dim];
@@ -42,37 +42,37 @@ FullVector<Scalar>::FullVector(size_t dim, MPI_Comm my_comm) :
 
 template<typename Scalar>
 FullVector<Scalar>::FullVector(const SlicedVector<Scalar>& vec) :
-	_my_comm(vec.get_comm()),
+    _my_comm(vec.get_comm()),
     _data(nullptr),
     _dim(vec.get_dim_global())
 {
     try
     {
-		_data = new Scalar[_dim];
+        _data = new Scalar[_dim];
     }
-	catch (...)
-	{
-		LOG_ERROR("Memory allocation for FullVector failed.");
-	}
+    catch (...)
+    {
+        LOG_ERROR("Memory allocation for FullVector failed.");
+    }
 
-	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
-	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
+    MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
+    MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
 
 
     Scalar* this_chunk = _data + _my_rank * vec.get_dim_local_nopad();
-    
+
     // eigenen teil herauskopieren
     for(size_t i=0; i<vec.get_dim_local(); i++)
        this_chunk[i] = vec.get_local(i);
-    
+
     // synchronisiere die teile
     if((vec.get_dim_global() % vec.get_dim_local()) != 0)
     {
-        LOG_DEBUG("Using non-optimal Bcast version of FullVector construction.");	
+        LOG_DEBUG("Using non-optimal Bcast version of FullVector construction.");
         for(int node = 0; node < _num_nodes; node++)
         {
             this_chunk = _data + node * vec.get_dim_local_nopad();
-	    	size_t this_len = (node == _num_nodes - 1) ? vec.get_dim_local_last() : vec.get_dim_local_nopad();
+            size_t this_len = (node == _num_nodes - 1) ? vec.get_dim_local_last() : vec.get_dim_local_nopad();
             MPI_SCALL(MPI_Bcast(this_chunk,this_len,ScalarTraits<Scalar>::mpi_type,
                       node,_my_comm));
         }
@@ -80,7 +80,7 @@ FullVector<Scalar>::FullVector(const SlicedVector<Scalar>& vec) :
     // Allgather ist schneller, funktioniert aber nur auf gleichen Bloecken.
     else
     {
-        MPI_SCALL(MPI_Allgather(this_chunk, vec.get_dim_local(), ScalarTraits<Scalar>::mpi_type, 
+        MPI_SCALL(MPI_Allgather(this_chunk, vec.get_dim_local(), ScalarTraits<Scalar>::mpi_type,
           _data, vec.get_dim_local(), ScalarTraits<Scalar>::mpi_type, _my_comm));
     }
 
@@ -98,9 +98,9 @@ FullVector<Scalar>::~FullVector()
 
 template<typename Scalar>
 FullVector<Scalar>::FullVector(const FullVector& other) :
-	_my_comm(other._my_comm),
-	_my_rank(other._my_rank),
-	_num_nodes(other._num_nodes),
+    _my_comm(other._my_comm),
+    _my_rank(other._my_rank),
+    _num_nodes(other._num_nodes),
     _dim(other._dim)
 {
     _data = new Scalar[_dim];
@@ -110,9 +110,9 @@ FullVector<Scalar>::FullVector(const FullVector& other) :
 
 template<typename Scalar>
 FullVector<Scalar>::FullVector(FullVector&& other) :
-	_my_comm(other._my_comm),
-	_my_rank(other._my_rank),
-	_num_nodes(other._num_nodes),
+    _my_comm(other._my_comm),
+    _my_rank(other._my_rank),
+    _num_nodes(other._num_nodes),
     _dim(other._dim)
 {
     _data = other._data;
@@ -127,12 +127,12 @@ FullVector<Scalar>::operator=(const FullVector& other)
     if (this == &other) return *this;
     // fremd
     delete[] _data;
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
     _dim = other._dim;
-    
-	_data = new Scalar[_dim];
+
+    _data = new Scalar[_dim];
     for (size_t i = 0; i < _dim; i++)
         _data[i] = other._data[i];
     return *this;
@@ -145,12 +145,12 @@ FullVector<Scalar>::operator=(FullVector&& other)
     // selbst
     if (this == &other) return *this;
     // fremd
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
-	_dim = other._dim;
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
+    _dim = other._dim;
 
-	_data = other._data;
+    _data = other._data;
     other._data = nullptr;
     return *this;
 }
@@ -239,6 +239,6 @@ struct VectorTraits<FullVector<Scalar>>
     typedef Scalar ScalarType;
 };
 
-}
+}//namespace Icarus
 
 #endif // __FULLVECTOR_HPP_

@@ -71,7 +71,7 @@ int slicedvectortest()
         }
         if (vec8.get_local(i)!=vec6.get_local(i)+randdouble*vec7.get_local(i))
         {
-             LOG_ERROR("axpy failed; value: ",vec8.get_local(i), "  reference value: ", randdouble*vec6.get_local(i)+vec7.get_local(i));
+             LOG_ERROR("axpy failed; value: ",vec8.get_local(i), "  reference value: ", randdouble*vec7.get_local(i)+vec6.get_local(i));
         }
     }
 

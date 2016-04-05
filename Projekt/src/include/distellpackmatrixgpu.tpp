@@ -21,7 +21,7 @@ namespace Icarus
 
 template <typename Scalar>
 DistEllpackMatrixGpu<Scalar>::DistEllpackMatrixGpu(size_t dim_global, MPI_Comm my_comm) :
-	_my_comm(my_comm),
+    _my_comm(my_comm),
     _dim_global(dim_global),
     _dim_local(0),
     _dim_local_nopad(0),
@@ -32,9 +32,9 @@ DistEllpackMatrixGpu<Scalar>::DistEllpackMatrixGpu(size_t dim_global, MPI_Comm m
     _col_ptr(0),
     _filled(false)
 {
-	// hole informationen über die mpi umgebung
-	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
-	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
+    // hole informationen über die mpi umgebung
+    MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
+    MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
 
     // geht die division genau auf
     if(_dim_global % _num_nodes == 0)
@@ -64,20 +64,20 @@ _max_row_length(other._max_row_length),
 _indices(nullptr),
 _data(nullptr)
 {
-	try
-	{
+    try
+    {
         alloc_unified(& _data, _max_row_length*_dim_local);
         alloc_unified(& _indices, _max_row_length*_dim_local);
-	}
-	catch (...)
-	{
-		LOG_ERROR("Memory allocation in DistEllpackMatrixGpu failed.");
-	}
-	for (size_t i = 0; i < _dim_local * _max_row_length; i++)
-	{
-		_indices[i] = other._indices[i];
-		_data[i] = other._data[i];
-	}
+    }
+    catch (...)
+    {
+        LOG_ERROR("Memory allocation in DistEllpackMatrixGpu failed.");
+    }
+    for (size_t i = 0; i < _dim_local * _max_row_length; i++)
+    {
+        _indices[i] = other._indices[i];
+        _data[i] = other._data[i];
+    }
 }
 
 template <typename Scalar>
@@ -93,69 +93,69 @@ _max_row_length(other._max_row_length),
 _indices(other._indices),
 _data(other._data)
 {
-	other._indices = nullptr;
-	other._data = nullptr;
+    other._indices = nullptr;
+    other._data = nullptr;
 }
 
 template <typename Scalar>
 DistEllpackMatrixGpu<Scalar>&
 DistEllpackMatrixGpu<Scalar>::operator=(DistEllpackMatrixGpu&& other)
 {
-	// selbst
-	if (this == &other) return *this;
+    // selbst
+    if (this == &other) return *this;
 
-	// fremd
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
-	_dim_global = other._dim_global;
-	_dim_local = other._dim_local;
-	_dim_local_nopad = other._dim_local_nopad;
-	_max_row_length = other._max_row_length;
-	_indices = other._indices;
-	_data = other._data;
+    // fremd
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
+    _dim_global = other._dim_global;
+    _dim_local = other._dim_local;
+    _dim_local_nopad = other._dim_local_nopad;
+    _max_row_length = other._max_row_length;
+    _indices = other._indices;
+    _data = other._data;
 
-	other._indices = nullptr;
-	other._data = nullptr;
+    other._indices = nullptr;
+    other._data = nullptr;
 
-	return *this;
+    return *this;
 }
 
 template <typename Scalar>
 DistEllpackMatrixGpu<Scalar>&
 DistEllpackMatrixGpu<Scalar>::operator=(const DistEllpackMatrixGpu& other)
 {
-	// selbst
-	if (this == &other) return *this;
+    // selbst
+    if (this == &other) return *this;
 
-	// fremd
-	if (_indices) cleanupgpu(_indices);
-	if (_data) cleanupgpu(_data);
+    // fremd
+    if (_indices) cleanupgpu(_indices);
+    if (_data) cleanupgpu(_data);
 
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
-	_dim_global = other._dim_global;
-	_dim_local = other._dim_local;
-	_dim_local_nopad = other._dim_local_nopad;
-	_max_row_length = other._max_row_length;
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
+    _dim_global = other._dim_global;
+    _dim_local = other._dim_local;
+    _dim_local_nopad = other._dim_local_nopad;
+    _max_row_length = other._max_row_length;
 
-	try
-	{
-	    alloc_unified(& _data, _max_row_length*_dim_local);
+    try
+    {
+        alloc_unified(& _data, _max_row_length*_dim_local);
         alloc_unified(& _indices, _max_row_length*_dim_local);
-	}
-	catch (...)
-	{
-		LOG_ERROR("Memory allocation in DistEllpackMatrixGpu failed.");
-	}
-	for (size_t i = 0; i < _dim_local * _max_row_length; i++)
-	{
-		_indices[i] = other._indices[i];
-		_data[i] = other._data[i];
-	}
+    }
+    catch (...)
+    {
+        LOG_ERROR("Memory allocation in DistEllpackMatrixGpu failed.");
+    }
+    for (size_t i = 0; i < _dim_local * _max_row_length; i++)
+    {
+        _indices[i] = other._indices[i];
+        _data[i] = other._data[i];
+    }
 
-	return *this;
+    return *this;
 }
 
 
@@ -189,7 +189,7 @@ void DistEllpackMatrixGpu<Scalar>::sequential_fill(size_t colind, const Scalar& 
 {
     assert(!_filled);
     assert(_col_ptr < _max_row_length);
-	assert(colind < _dim_global);
+    assert(colind < _dim_global);
 
     _data[_col_ptr * _dim_local + _row_ptr] = val;
     _indices[_col_ptr * _dim_local + _row_ptr] = colind;
@@ -232,10 +232,10 @@ template <typename Scalar>
 DistEllpackMatrixGpu<Scalar>
 DistEllpackMatrixGpu<Scalar>::import_csr_file(const std::string &filename, MPI_Comm new_comm)
 {
-	// mpi umgebung des ziels
-	int num_nodes, my_rank;
-	MPI_SCALL(MPI_Comm_size(new_comm, &num_nodes));
-	MPI_SCALL(MPI_Comm_rank(new_comm, &my_rank));
+    // mpi umgebung des ziels
+    int num_nodes, my_rank;
+    MPI_SCALL(MPI_Comm_size(new_comm, &num_nodes));
+    MPI_SCALL(MPI_Comm_rank(new_comm, &my_rank));
 
     std::ifstream file_colind, file_rowptr, file_vals;
 
@@ -367,7 +367,7 @@ void DistEllpackMatrixGpu<Scalar>::print_local_data(std::ostream& os) const
 {
     for(size_t i=0; i<_dim_local; i++)
     {
-		os << i << ":\t";
+        os << i << ":\t";
         for(size_t j=0; j <_max_row_length; j++)
         {
             size_t pos = j*_dim_local + i;
@@ -388,6 +388,6 @@ struct MatrixTraits<DistEllpackMatrixGpu<Scalar>>
     typedef SlicedVectorGpu<Scalar> VectorType;
 };
 
-}
+}//namespace Icarus
 
 #endif // __DISTELLPACKMATRIXGPU_TPP_

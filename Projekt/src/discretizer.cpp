@@ -235,7 +235,7 @@ std::vector<char>discretizer(std::string inputFile,
             {
                 Vertex point{(float)x*h, (float)y*h, (float)z*h};
                 char what('a');
-            // prüfe, ob punkt in irgendeinem objekt liegt
+                // pruefe, ob punkt in irgendeinem objekt liegt
                 for (int o(0); o<num_objects && what=='a'; ++o)
                 {
                     what = objects[o].pointInside(point);

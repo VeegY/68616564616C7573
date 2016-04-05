@@ -28,7 +28,7 @@ namespace Icarus
   *
   * Alle Elemente dieses Vektors liegen auf jeder Node der zugeordneten Prozessgruppe.
   *
-  * \tparam   Scalar  Skalarer Typ der Einträge.  
+  * \tparam   Scalar  Skalarer Typ der Einträge.
   */
 template<typename Scalar>
 class FullVector : public Vector<FullVector<Scalar>>
@@ -46,7 +46,7 @@ public:
     typedef Scalar ScalarType;
     typedef typename ScalarTraits<Scalar>::RealType RealType;
 
-   /** 
+   /**
      * \brief   Standardkonstruktor.
      *
      * Erzeugt einen Vektor der Dimension dim, der komplett auf jeder Node der
@@ -56,8 +56,8 @@ public:
      * \param   my_comm Kommunikator in die Prozessgruppe des Vektors.
      */
     explicit FullVector(size_t dim, MPI_Comm my_comm = MPI_COMM_WORLD);
-    
-     /** 
+
+     /**
      * \brief   Konvertierkonstruktor für einen SlicedVector.
      *
      * Erzeugt einen Vektor mit der globalen Dimension von vec, der alle
@@ -84,7 +84,7 @@ public:
      * Dieser Operator ermöglicht die elementweise Manipulation des FullVector,
      * analog zu C-Arrays und STL-Containern.
      *
-     * \param   index   Index des Elements, auf das zugegriffen werden soll.   
+     * \param   index   Index des Elements, auf das zugegriffen werden soll.
      */
     Scalar& operator[](size_t index) {assert(index<_dim); return _data[index];}
 
@@ -94,9 +94,9 @@ public:
      * Dieser Operator ermöglicht das elementweise Auslesen des FullVector,
      * analog zu C-Arrays und STL-Containern.
      *
-     * \param   index   Index des Elements, das gelesen werden soll.   
+     * \param   index   Index des Elements, das gelesen werden soll.
      */
-	const Scalar& operator[](size_t index) const { assert(index<_dim); return _data[index]; }
+    const Scalar& operator[](size_t index) const { assert(index<_dim); return _data[index]; }
 
 private:
     RealType l2norm2_impl() const;
@@ -126,7 +126,7 @@ private:
     size_t get_dim_impl() const { return _dim; }
 };
 
-}
+}//namespace Icarus
 
 #include "fullvector.tpp"
 

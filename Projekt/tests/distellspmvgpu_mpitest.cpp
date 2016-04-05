@@ -25,9 +25,12 @@ int distEllSpmvGPU_test(const size_t N, const size_t maxrow)
     size_t rowlen, colind;
     double val;
     mat1.prepare_sequential_fill(maxrow);
+    
+    for (size_t i(fron); i <= lron; i++)
+        rhs.set_global(i, (1.0/N)*(i+1));
+    MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
     for (size_t i(fron); i <= lron; i++)
     {
-        rhs.set_global(i, (1./N)*(i+1));
         rowlen = rand() % maxrow;
         for (size_t j(0); j <= rowlen; j++)
         {
@@ -35,7 +38,7 @@ int distEllSpmvGPU_test(const size_t N, const size_t maxrow)
             colind = rand() % N;
             mat1.sequential_fill(colind, val);
 
-            res[i]+=(1./N)*(i+1)*val;
+            res[i]+=rhs.get_global(colind)*val;
         }
         mat1.end_of_row();
     }
@@ -47,8 +50,11 @@ int distEllSpmvGPU_test(const size_t N, const size_t maxrow)
     {
         if (std::abs(rhs.get_global(i) - res[i]) > checktol)
             LOG_ERROR("spmv failed, result: ", rhs.get_global(i),
-                      " ;  reference value: ", res[i], "  ; differnce: ",
+                      " ;  reference value: ", res[i], "  ; difference: ",
                        std::abs(rhs.get_global(i) - res[i]));
+        LOG_DEBUG("spmv info: result: ", rhs.get_global(i),
+                  " ;  reference value: ", res[i], "  ; difference: ",
+                   std::abs(rhs.get_global(i) - res[i]));
     }
     return 0;
 }

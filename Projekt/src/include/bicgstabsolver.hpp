@@ -42,7 +42,7 @@ public:
     static const long long MAX_ITER = 10000000000L;
 
     /// \brief  Toleranz, die ohne explizite Angabe angenommen wird
-	static const RealType DEFAULT_TOL;
+    static const RealType DEFAULT_TOL;
 
 
     /// \brief  Konstruktor
@@ -67,7 +67,7 @@ private:
 template <typename MatrixType>
 const typename BiCgStabSolver<MatrixType>::RealType BiCgStabSolver<MatrixType>::DEFAULT_TOL(1e-9);
 
-}
+}//namespace Icarus
 
 #include "bicgstabsolver.tpp"
 

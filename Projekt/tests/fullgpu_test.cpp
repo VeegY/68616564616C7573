@@ -1,5 +1,5 @@
-#include "../src/include/slicedvectorgpu.hpp"
-#include "../src/include/slicedvector.hpp"
+#include "../src/include/fullvectorgpu.hpp"
+#include "../src/include/fullvector.hpp"
 #include "../src/include/vtkwriter.hpp"
 #include "../src/include/scalartraits.hpp"
 #include <cstdlib>
@@ -7,17 +7,16 @@
 #include <cmath>
 #include <limits>
 /*
-*test fuer slicedvectorgpu
-*KEIN unit-test
+*test fuer fullvectorgpu
 *
 */
-int slicedgputest()
+int fullgputest()
 {
     srand (static_cast<unsigned>(time(0)));
     const size_t N(4900);
-    Icarus::SlicedVector<double> vec1(N), vec2(N), vec3(N);
-    Icarus::SlicedVectorGpu<double> gvec1(N), gvec2(N), gvec3(N);
-    size_t dimloc = vec1.get_dim_local();
+    Icarus::FullVector<double> vec1(N), vec2(N), vec3(N);
+    Icarus::FullVectorGpu<double> gvec1(N), gvec2(N), gvec3(N);
+    size_t dimloc = vec1.get_dim();
     if (gvec1.get_dim()!=vec1.get_dim())
     {
         LOG_ERROR("get_dim failed");
@@ -28,24 +27,24 @@ int slicedgputest()
     for (size_t i(0); i < dimloc; i++)
     {
         double r = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
-        vec2.set_local(i, r);
-        gvec2.set_local(i, r);
+        vec2[i]=r;
+        gvec2[i]=r;
     }
-    Icarus::SlicedVectorGpu<double> gvec4(gvec1); //test copy constructor
-    Icarus::SlicedVector<double> vec4(vec1); //test copy constructor
+    Icarus::FullVectorGpu<double> gvec4(gvec1); //test copy constructor
+    Icarus::FullVector<double> vec4(vec1); //test copy constructor
     gvec3 = gvec1;
     vec3 = vec1;
     for (size_t i(0); i < dimloc; i++)
     {
-        if (vec4.get_local(i) != gvec4.get_local(i))
+        if (vec4[i] != gvec4[i])
         {
             LOG_ERROR("copy-constructor failed");
         }
-        if (vec3.get_local(i) != gvec3.get_local(i))
+        if (vec3[i] != gvec3[i])
         {
             LOG_ERROR("assignment operator failed");
         }
-        if (vec1.get_local(i) != gvec1.get_local(i))
+        if (vec1[i] != gvec1[i])
         {
             LOG_ERROR("fill_const failed");
         }
@@ -62,19 +61,18 @@ int slicedgputest()
     LOG_DEBUG("checktol:   ", checktol);
     for (size_t i(0); i < dimloc; i++)
     {
-        if (std::abs(vec2.get_local(i) - gvec2.get_local(i)) >= (vec2.get_local(i) + gvec2.get_local(i))*checktol)
+        if (std::abs(vec2[i] - gvec2[i]) >= (vec2[i] + gvec2[i])*checktol)
         {
             LOG_ERROR("scal");
         }
-        if (std::abs(vec3.get_local(i) - gvec3.get_local(i)) >= (vec3.get_local(i) + gvec3.get_local(i))*checktol*2)
+        if (std::abs(vec3[i] - gvec3[i]) >= (vec3[i] + gvec3[i])*checktol*2)
         {
-            LOG_ERROR("axpy at pos ", i, ". is: ", gvec3.get_local(i), ", should be: ", vec3.get_local(i));
+            LOG_ERROR("axpy at pos ", i, ". is: ", gvec3[i], ", should be: ", vec3[i]);
         }
-        LOG_DEBUG("axpy value : ", gvec3.get_local(i), "     difference:   ", gvec3.get_local(i)-vec3.get_local(i));
-        LOG_DEBUG("checktol:   ", (vec3.get_local(i)+gvec3.get_local(i))*checktol*2);
-        LOG_DEBUG("vec:   ", vec3.get_local(i));
-        LOG_DEBUG("gvec:   ", gvec3.get_local(i));
-        
+        LOG_DEBUG("axpy value : ", gvec3[i], "     difference:   ", gvec3[i]-vec3[i]);
+        LOG_DEBUG("checktol:   ", (vec3[i]+gvec3[i])*checktol*2);
+        LOG_DEBUG("vec:   ", vec3[i]);
+        LOG_DEBUG("gvec:   ", gvec3[i]);
     }
     vec4.copy(vec1);
     gvec4.copy(gvec1);
@@ -100,5 +98,5 @@ int slicedgputest()
 
 int main()
 {
-    return slicedgputest();
+    return fullgputest();
 }

@@ -101,7 +101,7 @@ namespace Icarus
         unsigned _lnum;
         std::stringstream _s;
         std::mutex _mx_log;
-        std::unique_ptr<LogPolicyType> _pol;        
+        std::unique_ptr<LogPolicyType> _pol;
 
     protected:
         static const unsigned FIELD_WIDTH = 7;

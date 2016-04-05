@@ -52,6 +52,7 @@ int fullvectorgputest()
     vec8=vec6;
     vec7.scal(randdouble);
     vec8.axpy(randdouble, vec7);
+    double checktol = std::numeric_limits<double>::epsilon();
     for (size_t i(0); i<N; i++)
     {
         l2norm2+=vec6[i]*vec6[i];
@@ -63,12 +64,11 @@ int fullvectorgputest()
         {
              LOG_ERROR("scal failed ; value: ",vec7[i], "  reference value: ", randdouble*vec6[i]);
         }
-        if (vec8[i]!=vec6[i]+randdouble*vec7[i])
+        if (vec8[i] - (vec6[i]+randdouble*vec7[i])>=checktol*3)
         {
-             LOG_ERROR("axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec6[i]+vec7[i]);
+             LOG_ERROR("axpy failed; value: ",vec8[i], "  reference value: ", randdouble*vec7[i]+vec6[i]);
         }
     }
-    double checktol = std::numeric_limits<double>::epsilon();
     if (maxnorm!=vec6.maxnorm())
     {
         LOG_ERROR("maxnorm failed; value: ",vec6.maxnorm(), "  reference value: ", maxnorm);

@@ -99,9 +99,9 @@ public:
      *
      * \param   index   Index des Elements, das gelesen werden soll.
      */
-	const Scalar& operator[](size_t index) const { assert(index<_dim); return _data[index]; }
+    const Scalar& operator[](size_t index) const { assert(index<_dim); return _data[index]; }
 
-	Scalar* getDataPointer() { return _data; }
+    Scalar* getDataPointer() { return _data; }
 
     const Scalar* getDataPointer() const { return _data; }
 
@@ -132,7 +132,7 @@ public:
     size_t get_dim_impl() const { return _dim; }
 };
 
-}
+}//namespace Icarus
 
 #include "fullvectorgpu.tpp"
 

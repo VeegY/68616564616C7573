@@ -32,9 +32,9 @@ class DistEllpackMatrixGpu : public Matrix<DistEllpackMatrixGpu<Scalar>>
 {
     friend class Matrix<DistEllpackMatrixGpu<Scalar>>;
 
-	// MPI Eigenschaften
-	MPI_Comm _my_comm;
-	int _my_rank, _num_nodes;
+    // MPI Eigenschaften
+    MPI_Comm _my_comm;
+    int _my_rank, _num_nodes;
 
     // Mit PAD wird das padding durchgeführt
     static const int PAD = 0;
@@ -67,18 +67,18 @@ public:
 
     ~DistEllpackMatrixGpu();
 
-	DistEllpackMatrixGpu(DistEllpackMatrixGpu&& other);
+    DistEllpackMatrixGpu(DistEllpackMatrixGpu&& other);
 
-	DistEllpackMatrixGpu(const DistEllpackMatrixGpu& other);
+    DistEllpackMatrixGpu(const DistEllpackMatrixGpu& other);
 
-	DistEllpackMatrixGpu& operator=(DistEllpackMatrixGpu&& other);
+    DistEllpackMatrixGpu& operator=(DistEllpackMatrixGpu&& other);
 
-	DistEllpackMatrixGpu& operator=(const DistEllpackMatrixGpu& other);
+    DistEllpackMatrixGpu& operator=(const DistEllpackMatrixGpu& other);
 
      /**
      * \brief   Gibt den Kommunikator in die Prozessgruppe der Matrix zurück.
      */
-	MPI_Comm get_comm() const { return _my_comm; }
+    MPI_Comm get_comm() const { return _my_comm; }
 
     /**
       * \brief   Gibt die lokale Dimension der Matrix, d.h. die Anzahl
@@ -207,11 +207,8 @@ private:
     void mult_vec_impl(const VectorType& vec, VectorType& result) const;
 };
 
-}
+}//namespace Icarus
 
 #include "distellpackmatrixgpu.tpp"
-
-
-
 
 #endif // __DISTELLPACKMATRIXGPU_HPP_

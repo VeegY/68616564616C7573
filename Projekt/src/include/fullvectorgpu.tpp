@@ -23,7 +23,7 @@ template<typename type>
 void gpu_dot_(type *vecx, type *vecy, size_t dim, type *erg);
 
 template<typename type>
-void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim);
+void gpu_axpy(const type *vecx, type scalar, type *vecy, size_t dim);
 
 template<typename type>
 void gpu_l2(type *vec, size_t dim, type *erg);
@@ -67,7 +67,7 @@ FullVectorGpu<Scalar>::FullVectorGpu(size_t dim, MPI_Comm my_comm) :
 
 template<typename Scalar>
 FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVectorGpu<Scalar>& vec) :
-	_my_comm(vec.get_comm()),
+    _my_comm(vec.get_comm()),
     _data(nullptr),
     _dim(vec.get_dim_global())
 {
@@ -75,13 +75,13 @@ FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVectorGpu<Scalar>& vec) :
     {
         alloc_unified(& _data, _dim);
     }
-	catch (...)
-	{
-		LOG_ERROR("Memory allocation for FullVectorGpu failed.");
-	}
+    catch (...)
+    {
+        LOG_ERROR("Memory allocation for FullVectorGpu failed.");
+    }
 
-	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
-	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
+    MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
+    MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
 
     Scalar* this_chunk = _data + _my_rank * vec.get_dim_local_nopad();
 
@@ -92,11 +92,11 @@ FullVectorGpu<Scalar>::FullVectorGpu(const SlicedVectorGpu<Scalar>& vec) :
     // synchronisiere die teile
     if((vec.get_dim_global() % vec.get_dim_local()) != 0)
     {
-        LOG_DEBUG("Using non-optimal Bcast version of FullVector construction.");	
+        LOG_DEBUG("Using non-optimal Bcast version of FullVector construction.");   
         for(int node = 0; node < _num_nodes; node++)
         {
             this_chunk = _data + node * vec.get_dim_local_nopad();
-	    	size_t this_len = (node == _num_nodes - 1) ? vec.get_dim_local_last() : vec.get_dim_local_nopad();
+            size_t this_len = (node == _num_nodes - 1) ? vec.get_dim_local_last() : vec.get_dim_local_nopad();
             MPI_SCALL(MPI_Bcast(this_chunk,this_len,ScalarTraits<Scalar>::mpi_type,
                       node,_my_comm));
         }
@@ -122,9 +122,9 @@ FullVectorGpu<Scalar>::~FullVectorGpu()
 
 template<typename Scalar>
 FullVectorGpu<Scalar>::FullVectorGpu(const FullVectorGpu& other) :
-	_my_comm(other._my_comm),
-	_my_rank(other._my_rank),
-	_num_nodes(other._num_nodes),
+    _my_comm(other._my_comm),
+    _my_rank(other._my_rank),
+    _num_nodes(other._num_nodes),
     _dim(other._dim)
 {
     try
@@ -141,9 +141,9 @@ FullVectorGpu<Scalar>::FullVectorGpu(const FullVectorGpu& other) :
 
 template<typename Scalar>
 FullVectorGpu<Scalar>::FullVectorGpu(FullVectorGpu&& other) :
-	_my_comm(other._my_comm),
-	_my_rank(other._my_rank),
-	_num_nodes(other._num_nodes),
+    _my_comm(other._my_comm),
+    _my_rank(other._my_rank),
+    _num_nodes(other._num_nodes),
     _dim(other._dim)
 {
     _data = other._data;
@@ -158,12 +158,12 @@ FullVectorGpu<Scalar>::operator=(const FullVectorGpu& other)
     if (this == &other) return *this;
     // fremd
     if (_data) cleanupgpu(_data);
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
     _dim = other._dim;
 
-	try
+    try
     {
         alloc_unified(& _data, _dim);
     }
@@ -183,12 +183,13 @@ FullVectorGpu<Scalar>::operator=(FullVectorGpu&& other)
     // selbst
     if (this == &other) return *this;
     // fremd
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
-	_dim = other._dim;
+    if (_data) cleanupgpu(_data);
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
+    _dim = other._dim;
 
-	_data = other._data;
+    _data = other._data;
     other._data = nullptr;
     return *this;
 }
@@ -197,10 +198,13 @@ template<typename Scalar>
 typename FullVectorGpu<Scalar>::RealType
 FullVectorGpu<Scalar>::l2norm2_impl() const
 {
-    RealType res(0);
+    RealType *res, res2;
+    alloc_unified(&res, 1);
 
-    gpu_l2(_data,_dim, &res);
-    return res;
+    gpu_l2(_data,_dim, res);
+    res2=*res;
+    cleanupgpu(res);
+    return res2;
 }
 
 
@@ -208,11 +212,14 @@ template<typename Scalar>
 typename FullVectorGpu<Scalar>::RealType
 FullVectorGpu<Scalar>::maxnorm_impl() const
 {
-    RealType res = std::numeric_limits<RealType>::min();
+    RealType *res, res2;
+    alloc_unified(&res, 1);
+//    *res = std::numeric_limits<RealType>::min();
 
-    gpumaxnorm(_data,_dim, &res);
-
-    return res;
+    gpumaxnorm(_data,_dim, res);
+    res2 = *res;
+    cleanupgpu(res);
+    return res2;
 }
 
 template<typename Scalar>
@@ -221,11 +228,13 @@ scal_prod_impl(const FullVectorGpu<Scalar>& other) const
 {
     assert(_dim == other._dim);
 
-    Scalar* erg;
+    Scalar *erg, erg2;
     alloc_unified(&erg, 1.0);
 
     gpu_dot_(_data, other.getDataPointer(), _dim, erg);
-    return *erg;
+    erg2 = *erg;
+    cleanupgpu(erg);
+    return erg2;
 }
 
 
@@ -235,13 +244,7 @@ axpy_impl(const Scalar& alpha, const FullVectorGpu<Scalar>& y)
 {
     assert(_dim == y._dim);
 
-    Scalar alpha2(alpha);
-    FullVectorGpu<Scalar> yvec(y);
-    alloc_unified((Scalar **)&alpha2, (size_t)1.0);
-
-    gpu_axpy(_data, alpha2, yvec.getDataPointer(), _dim);
-
-    cleanupgpu(&alpha2);
+    gpu_axpy(y.getDataPointer(), alpha, _data, _dim);
 }
 
 template<typename Scalar>
@@ -281,6 +284,6 @@ struct VectorTraits<FullVectorGpu<Scalar>>
     typedef Scalar ScalarType;
 };
 
-}
+}//namespace Icarus
 
 #endif // __FULLVECTORGPU_HPP_

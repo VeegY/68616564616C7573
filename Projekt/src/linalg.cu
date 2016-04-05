@@ -118,7 +118,7 @@ __global__ void resultreduce(type *result, type *placehold, int num_blocks)
 
 
 template<typename type> // Kernel für axpy
-__global__ void axpygpu(type *vector_x, type scalar, type *vector_y, type *result, size_t dim)
+__global__ void axpygpu(const type *vector_x, type scalar, type *vector_y, type *result, size_t dim)
 {
     size_t idx = threadIdx.x + blockIdx.x*blockDim.x;
     if (idx < dim)
@@ -170,7 +170,7 @@ __global__ void resultreduce_l2(type *result, type *placehold, int num_blocks)
     {
         value += placehold[i];
     }
-    result[0] = value;//sqrt(value);
+    result[0] = value;
 }
 
 
@@ -192,6 +192,7 @@ __global__ void maxn(type *vector, type *placehold, int dim_local)
             value = -value;
         }
     }
+
     shar[sidx] = value;
     __syncthreads();
 
@@ -200,11 +201,11 @@ __global__ void maxn(type *vector, type *placehold, int dim_local)
     {
         if (sidx < offset)
         {
-            compare_one = shar[idx];
-            compare_two = shar[idx + offset];
+            compare_one = shar[sidx];
+            compare_two = shar[sidx + offset];
             if (compare_two > compare_one)
             {
-                shar[idx] = compare_two;
+                shar[sidx] = compare_two;
             }
         }
         __syncthreads();
@@ -214,7 +215,6 @@ __global__ void maxn(type *vector, type *placehold, int dim_local)
     {
         placehold[blockIdx.x] = shar[0];
     }
-
 }
 
 
@@ -304,8 +304,7 @@ void gpu_dot_(type *vecx, type *vecy, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         gpu_dot<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,vecy,placehold,dim);
@@ -330,12 +329,10 @@ void gpu_dot_(const type *vecx, const type *vecy, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-//    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         gpu_dot<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,vecy,placehold,dim);
-        cudaDeviceSynchronize();//TODO TODELETE
         resultreduce<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
@@ -350,22 +347,22 @@ template void gpu_dot_<int>(const int *vecx, const int *vecy, size_t dim, int *e
 //                   Aufruf axpy                                             //
 //=============================================================================
 template<typename type>
-void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim)
+void gpu_axpy(const type *vecx, type scalar, type *vecy, size_t dim)
 {
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
 
 
     //=================================//
-        axpygpu<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,scalar,vecy,vecx,dim);
+        axpygpu<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vecx,scalar,vecy,vecy,dim);
         cudaDeviceSynchronize();
 
     //=================================//
 
 }
-template void gpu_axpy<double>(double *vecx, double scalar, double *vecy, size_t dim);
-template void gpu_axpy<float>(float *vecx, float scalar, float *vecy, size_t dim);
-template void gpu_axpy<int>(int *vecx, int scalar, int *vecy, size_t dim);
+template void gpu_axpy<double>(const double *vecx, double scalar, double *vecy, size_t dim);
+template void gpu_axpy<float>(const float *vecx, float scalar, float *vecy, size_t dim);
+template void gpu_axpy<int>(const int *vecx, int scalar, int *vecy, size_t dim);
 
 
 //=============================================================================
@@ -378,12 +375,10 @@ void gpu_l2(type *vec, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
-//    cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         L2_Norm<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
-        cudaDeviceSynchronize();//TODO TOREMOVE
         resultreduce_l2<<<1, 1>>>(erg, placehold, num_blocks);
 
         cudaDeviceSynchronize();
@@ -409,8 +404,7 @@ void gpumaxnorm(type *vec, size_t dim, type *erg)
     generate_config(&num_threads, &num_blocks, dim);
 
     type *placehold = NULL;
-    cudaMallocManaged((void **)&placehold, sizeof(type)*num_blocks);
- //   cudaMallocManaged(&placehold, sizeof(type)*num_blocks);
+    alloc_unified(&placehold, num_blocks);
 
     //=================================//
         maxn<<<num_blocks, num_threads, sizeof(type)*num_threads>>>(vec,placehold,dim);
