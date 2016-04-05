@@ -22,7 +22,7 @@ template<typename type>
 void gpu_dot_(const type *vecx, const type *vecy, size_t dim, type *erg); //TODO TOCHECK
 
 template<typename type>
-void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim);
+void gpu_axpy(const type *vecx, type scalar, type *vecy, size_t dim);
 
 template<typename type>
 void gpu_l2(type *vec, size_t dim, type *erg);
@@ -272,10 +272,7 @@ axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
 {
     assert(_dim_global == y._dim_global);
 
-    //Scalar alpha2(alpha);            // TODO TODISCUSS wieso?
-    SlicedVectorGpu<Scalar> yvec(y); // TODO TODISCUSS wieso?
-
-    gpu_axpy(yvec.getDataPointer(), alpha, _data, _dim_local);
+    gpu_axpy(y.getDataPointer(), alpha, _data, _dim_local);
 }
 
 template<typename Scalar>

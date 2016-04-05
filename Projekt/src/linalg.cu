@@ -118,7 +118,7 @@ __global__ void resultreduce(type *result, type *placehold, int num_blocks)
 
 
 template<typename type> // Kernel für axpy
-__global__ void axpygpu(type *vector_x, type scalar, type *vector_y, type *result, size_t dim)
+__global__ void axpygpu(const type *vector_x, type scalar, type *vector_y, type *result, size_t dim)
 {
     size_t idx = threadIdx.x + blockIdx.x*blockDim.x;
     if (idx < dim)
@@ -347,7 +347,7 @@ template void gpu_dot_<int>(const int *vecx, const int *vecy, size_t dim, int *e
 //                   Aufruf axpy                                             //
 //=============================================================================
 template<typename type>
-void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim)
+void gpu_axpy(const type *vecx, type scalar, type *vecy, size_t dim)
 {
     int num_threads, num_blocks;
     generate_config(&num_threads, &num_blocks, dim);
@@ -360,9 +360,9 @@ void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim)
     //=================================//
 
 }
-template void gpu_axpy<double>(double *vecx, double scalar, double *vecy, size_t dim);
-template void gpu_axpy<float>(float *vecx, float scalar, float *vecy, size_t dim);
-template void gpu_axpy<int>(int *vecx, int scalar, int *vecy, size_t dim);
+template void gpu_axpy<double>(const double *vecx, double scalar, double *vecy, size_t dim);
+template void gpu_axpy<float>(const float *vecx, float scalar, float *vecy, size_t dim);
+template void gpu_axpy<int>(const int *vecx, int scalar, int *vecy, size_t dim);
 
 
 //=============================================================================

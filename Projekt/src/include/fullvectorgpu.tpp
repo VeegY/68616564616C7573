@@ -23,7 +23,7 @@ template<typename type>
 void gpu_dot_(type *vecx, type *vecy, size_t dim, type *erg);
 
 template<typename type>
-void gpu_axpy(type *vecx, type scalar, type *vecy, size_t dim);
+void gpu_axpy(const type *vecx, type scalar, type *vecy, size_t dim);
 
 template<typename type>
 void gpu_l2(type *vec, size_t dim, type *erg);
@@ -244,10 +244,7 @@ axpy_impl(const Scalar& alpha, const FullVectorGpu<Scalar>& y)
 {
     assert(_dim == y._dim);
 
-    FullVectorGpu<Scalar> yvec(y);
-
-    gpu_axpy(yvec.getDataPointer(), alpha, _data, _dim);
-
+    gpu_axpy(y.getDataPointer(), alpha, _data, _dim);
 }
 
 template<typename Scalar>
