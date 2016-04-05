@@ -167,6 +167,7 @@ operator=(SlicedVectorGpu&& other)
     // selbst
     if (this == &other) return *this;
     // fremd
+    // TODO TODISCUSS wieso kein cleanup? : if(_data) cleanupgpu(_data);
 	_my_comm = other._my_comm;
 	_my_rank = other._my_rank;
 	_num_nodes = other._num_nodes;
@@ -250,7 +251,7 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
 
     Scalar *res, res_global;
 
-    alloc_unified(&res, 1);//TODO TOCHECK
+    alloc_unified(&res, 1);
     gpu_dot_(_data, other.getDataPointer(), _dim_local, res);
 
     MPI_SCALL(MPI_Allreduce(res, &res_global, 1,
@@ -264,8 +265,8 @@ axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
 {
     assert(_dim_global == y._dim_global);
 
-//    Scalar alpha2(alpha);
-    SlicedVectorGpu<Scalar> yvec(y);
+    //Scalar alpha2(alpha);            // TODO TODISCUSS wieso?
+    SlicedVectorGpu<Scalar> yvec(y); // TODO TODISCUSS wieso?
 
     gpu_axpy(yvec.getDataPointer(), alpha, _data, _dim_local);
 }
