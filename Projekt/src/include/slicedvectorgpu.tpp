@@ -264,10 +264,10 @@ axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
 {
     assert(_dim_global == y._dim_global);
 
-    Scalar alpha2(alpha);
+//    Scalar alpha2(alpha);
     SlicedVectorGpu<Scalar> yvec(y);
 
-    gpu_axpy(yvec.getDataPointer(), alpha2, _data, _dim_local);
+    gpu_axpy(yvec.getDataPointer(), alpha, _data, _dim_local);
 }
 
 template<typename Scalar>

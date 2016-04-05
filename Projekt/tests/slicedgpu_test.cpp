@@ -14,7 +14,7 @@
 int slicedgputest()
 {
     srand (static_cast<unsigned>(time(0)));
-    const size_t N(49);
+    const size_t N(4900);
     Icarus::SlicedVector<double> vec1(N), vec2(N), vec3(N);
     Icarus::SlicedVectorGpu<double> gvec1(N), gvec2(N), gvec3(N);
     size_t dimloc = vec1.get_dim_local();
@@ -53,7 +53,7 @@ int slicedgputest()
 
     //check artihmetic operations
     double randdouble = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
-    double checktol = std::numeric_limits<float>::epsilon() * 100.0;
+    double checktol = std::numeric_limits<float>::epsilon();
     vec2.scal(randdouble);
     gvec2.scal(randdouble);
 
@@ -66,29 +66,33 @@ int slicedgputest()
         {
             LOG_ERROR("scal");
         }
-        if (std::abs(vec3.get_local(i) - gvec3.get_local(i)) >= (vec3.get_local(i) + gvec3.get_local(i))*checktol)
+        if (std::abs(vec3.get_local(i) - gvec3.get_local(i)) >= (vec3.get_local(i) + gvec3.get_local(i))*checktol*2)
         {
             LOG_ERROR("axpy at pos ", i, ". is: ", gvec3.get_local(i), ", should be: ", vec3.get_local(i));
         }
         LOG_DEBUG("axpy value : ", gvec3.get_local(i), "     difference:   ", gvec3.get_local(i)-vec3.get_local(i));
-        LOG_DEBUG("checktol:   ", (vec3.get_local(i)+gvec3.get_local(i))*checktol);
+        LOG_DEBUG("checktol:   ", (vec3.get_local(i)+gvec3.get_local(i))*checktol*2);
         LOG_DEBUG("vec:   ", vec3.get_local(i));
         LOG_DEBUG("gvec:   ", gvec3.get_local(i));
         
     }
     vec4.copy(vec1);
     gvec4.copy(gvec1);
-//    if (vec1.maxnorm() - gvec1.maxnorm() >= checktol * (vec1.maxnorm() + gvec1.maxnorm()))
+    if (vec1.maxnorm() - gvec1.maxnorm() >=  checktol * std::abs(vec1.maxnorm() + gvec1.maxnorm()))
     {
-//        LOG_ERROR("maxnorm failed; cpu: ", vec1.maxnorm(), "  gpu: ", gvec1.maxnorm());
+        LOG_ERROR("maxnorm failed; cpu: ", vec1.maxnorm(), "  gpu: ", gvec1.maxnorm());
     }
-    if (vec1.l2norm2() - gvec1.l2norm2() >= checktol * (vec1.l2norm2() + gvec1.l2norm2()))
+    if (vec1.l2norm2() - gvec1.l2norm2() >=100 * checktol * std::abs(vec1.l2norm2() + gvec1.l2norm2()))
     {
         LOG_ERROR("L2norm2 failed; cpu: ", vec1.l2norm2(), "  gpu: ", gvec1.l2norm2());
     }
-    if (vec1.l2norm() - gvec1.l2norm() >= checktol * (vec1.l2norm() + gvec1.l2norm()))
+    if (vec1.l2norm() - gvec1.l2norm() >= 100 * checktol * std::abs(vec1.l2norm() + gvec1.l2norm()))
     {
         LOG_ERROR("L2norm failed; cpu: ", vec1.l2norm2(), "  gpu: ", gvec1.l2norm2());
+    }
+    if ( (vec1.scal_prod(vec3) - gvec1.scal_prod(gvec3)) >= 100 * checktol * std::abs(vec1.scal_prod(vec3)))
+    {
+        LOG_ERROR("scalar product  failed; cpu: ", vec1.scal_prod(vec3), "  gpu: ", gvec1.scal_prod(gvec3));
     }
     LOG_INFO("suceeded");
     return 0;

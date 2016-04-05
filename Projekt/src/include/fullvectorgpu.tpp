@@ -197,10 +197,13 @@ template<typename Scalar>
 typename FullVectorGpu<Scalar>::RealType
 FullVectorGpu<Scalar>::l2norm2_impl() const
 {
-    RealType res(0);
+    RealType *res, res2;
+    alloc_unified(&res, 1);
 
-    gpu_l2(_data,_dim, &res);
-    return res;
+    gpu_l2(_data,_dim, res);
+    res2=*res;
+    cleanupgpu(res);
+    return res2;
 }
 
 
@@ -208,11 +211,14 @@ template<typename Scalar>
 typename FullVectorGpu<Scalar>::RealType
 FullVectorGpu<Scalar>::maxnorm_impl() const
 {
-    RealType res = std::numeric_limits<RealType>::min();
+    RealType *res, res2;
+    alloc_unified(&res, 1);
+    *res = std::numeric_limits<RealType>::min();
 
-    gpumaxnorm(_data,_dim, &res);
-
-    return res;
+    gpumaxnorm(_data,_dim, res);
+    res2 = *res;
+    cleanupgpu(res);
+    return res2;
 }
 
 template<typename Scalar>
@@ -221,11 +227,13 @@ scal_prod_impl(const FullVectorGpu<Scalar>& other) const
 {
     assert(_dim == other._dim);
 
-    Scalar* erg;
+    Scalar *erg, erg2;
     alloc_unified(&erg, 1.0);
 
     gpu_dot_(_data, other.getDataPointer(), _dim, erg);
-    return *erg;
+    erg2 = *erg;
+    cleanupgpu(erg);
+    return erg2;
 }
 
 
@@ -235,13 +243,13 @@ axpy_impl(const Scalar& alpha, const FullVectorGpu<Scalar>& y)
 {
     assert(_dim == y._dim);
 
-    Scalar alpha2(alpha);
+    //Scalar alpha2(alpha);
     FullVectorGpu<Scalar> yvec(y);
-    alloc_unified((Scalar **)&alpha2, (size_t)1.0);
+    //alloc_unified((Scalar **)&alpha2, (size_t)1.0);
 
-    gpu_axpy(_data, alpha2, yvec.getDataPointer(), _dim);
+    gpu_axpy(yvec.getDataPointer(), alpha, _data, _dim);
 
-    cleanupgpu(&alpha2);
+   // cleanupgpu(&alpha2);
 }
 
 template<typename Scalar>

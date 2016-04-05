@@ -13,7 +13,7 @@
 int slicedvectorgputest()
 {
     srand (static_cast <unsigned> (time(0)));
-    const size_t N=40;
+    const size_t N=123481;
     Icarus::SlicedVectorGpu<double> vec1(N), vec2(N), vec4(N);
     Icarus::SlicedVectorGpu<double> vec6(N), vec7(N), vec8(N);
     size_t dimloc = vec1.get_dim_local();
@@ -71,10 +71,10 @@ int slicedvectorgputest()
         }
         if (vec8.get_local(i)!=vec6.get_local(i)+randdouble2*vec7.get_local(i))
         {
-            LOG_INFO("axpy failed; value: ",vec8.get_local(i), " difference: ", randdouble2*vec7.get_local(i)+vec6.get_local(i)-vec8.get_local(i));
+            LOG_INFO("axpy INFO; value: ",vec8.get_local(i), " difference: ", randdouble2*vec7.get_local(i)+vec6.get_local(i)-vec8.get_local(i));
         }
         if (std::abs(vec8.get_local(i) - (vec6.get_local(i)+randdouble2*vec7.get_local(i))) >=
-             100 * checktol *  std::abs(vec8.get_local(i) + (vec6.get_local(i)+randdouble2*vec7.get_local(i))))
+             2*checktol) //*  std::abs(vec8.get_local(i) + (vec6.get_local(i)+randdouble2*vec7.get_local(i))))
         {
             LOG_ERROR("axpy failed; value: ",vec8.get_local(i), " difference: ", randdouble2*vec7.get_local(i)+vec6.get_local(i)-vec8.get_local(i));
         }
@@ -96,7 +96,7 @@ int slicedvectorgputest()
     {
         LOG_ERROR("L2norm failed; value: ",vec6.l2norm(), "  reference value: ", l2norm, "  difference: ",l2norm-vec6.l2norm());
     }
-
+    LOG_INFO("test passed");
     return 0;
 }
 
