@@ -45,11 +45,11 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
 
     r.copy(_b);
     _A.mult_vec(x0,nu);
-	r.axpy(-1,nu);
+    r.axpy(-1,nu);
 
-	r_hat.copy(r);
+    r_hat.copy(r);
 
-	rho_ = 1;
+    rho_ = 1;
     alpha = 1;
     omega = 1;
 
@@ -61,7 +61,7 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
         rho = r_hat.scal_prod(r);
         beta = (rho/rho_)*(alpha/omega);
 
-		p.scal(beta);
+        p.scal(beta);
         p.axpy(1,r);
         p.axpy(-beta*omega,nu);
 
@@ -81,11 +81,11 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
             _K1inv->mult_vec(p,*y);
             _A.mult_vec(*y,nu);
         }
-		else
-			_A.mult_vec(p, nu);
+        else
+            _A.mult_vec(p, nu);
 
-		alpha = rho/r_hat.scal_prod(nu);
-		
+        alpha = rho/r_hat.scal_prod(nu);
+
         s.copy(r);
         s.axpy(-alpha, nu);
         LOG_DEBUG("BiCgStab: After ",i+1," its, sq_tol = ", s.l2norm2());
@@ -114,7 +114,7 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
         else
             _A.mult_vec(s,t);
 
-		if(_K1inv)
+        if(_K1inv)
         {
             _K1inv->mult_vec(t,*K1inv_t);
             _K1inv->mult_vec(s,*K1inv_s);
@@ -130,8 +130,8 @@ void BiCgStabSolver<MatrixType>::solve_impl(VectorType& x0)
 
         r.copy(s);
         r.axpy(-omega, t);
-		
-		// shift index
+
+        // shift index
         rho_ = rho;
     }
 
@@ -145,6 +145,6 @@ struct SolverTraits<BiCgStabSolver<MatrixT>>
     typedef typename MatrixT::VectorType VectorType;
 };
 
-}
+}//namespace Icarus
 
 #endif // __BICGSTABSOLVER_TPP_

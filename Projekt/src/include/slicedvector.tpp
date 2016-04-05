@@ -24,18 +24,18 @@ namespace Icarus
 template<typename Scalar>
 SlicedVector<Scalar>::
 SlicedVector(size_t dim_global, MPI_Comm my_comm) :
-	_my_comm(my_comm),
+    _my_comm(my_comm),
     _dim_global(dim_global),
     _dim_local(0),
     _dim_local_nopad(0),
-	_dim_local_last(0),
+    _dim_local_last(0),
     _data(nullptr)
 {
-	// hole informationen über die mpi umgebung
-	MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
-	MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
+    // hole informationen über die mpi umgebung
+    MPI_SCALL(MPI_Comm_size(_my_comm, &_num_nodes));
+    MPI_SCALL(MPI_Comm_rank(_my_comm, &_my_rank));
 
-	// geht die division genau auf
+    // geht die division genau auf
     if(_dim_global % _num_nodes == 0)
     {
         _dim_local = _dim_local_nopad = _dim_local_last = _dim_global/_num_nodes;
@@ -44,7 +44,7 @@ SlicedVector(size_t dim_global, MPI_Comm my_comm) :
     else
     {
         _dim_local = _dim_local_nopad = _dim_global/_num_nodes + 1;
-		_dim_local_last = _dim_global - (_num_nodes - 1)*_dim_local_nopad;
+        _dim_local_last = _dim_global - (_num_nodes - 1)*_dim_local_nopad;
         if(_my_rank == _num_nodes - 1)
             _dim_local = _dim_local_last;
         assert(_dim_local >= 0);
@@ -71,13 +71,13 @@ SlicedVector<Scalar>::
 template<typename Scalar>
 SlicedVector<Scalar>::
 SlicedVector(const SlicedVector& other) :
-	_my_comm(other._my_comm),
-	_my_rank(other._my_rank),
-	_num_nodes(other._num_nodes),
+    _my_comm(other._my_comm),
+    _my_rank(other._my_rank),
+    _num_nodes(other._num_nodes),
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
     _dim_local_nopad(other._dim_local_nopad),
-	_dim_local_last(other._dim_local_last)
+    _dim_local_last(other._dim_local_last)
 {
     _data = new Scalar[_dim_local];
     for (size_t i = 0; i < _dim_local; i++)
@@ -87,13 +87,13 @@ SlicedVector(const SlicedVector& other) :
 template<typename Scalar>
 SlicedVector<Scalar>::
 SlicedVector(SlicedVector&& other) :
-	_my_comm(other._my_comm),
-	_my_rank(other._my_rank),
-	_num_nodes(other._num_nodes),
+    _my_comm(other._my_comm),
+    _my_rank(other._my_rank),
+    _num_nodes(other._num_nodes),
     _dim_global(other._dim_global),
     _dim_local(other._dim_local),
     _dim_local_nopad(other._dim_local_nopad),
-	_dim_local_last(other._dim_local_last)
+    _dim_local_last(other._dim_local_last)
 {
     _data = other._data;
     other._data = nullptr;
@@ -108,13 +108,13 @@ operator=(const SlicedVector& other)
     if (this == &other) return *this;
     // fremd
     if(_data) delete[] _data;
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
     _dim_global = other._dim_global;
     _dim_local = other._dim_local;
     _dim_local_nopad = other._dim_local_nopad;
-	_dim_local_last = other._dim_local_last;
+    _dim_local_last = other._dim_local_last;
     _data = new Scalar[_dim_local];
     for (size_t i = 0; i < _dim_local; i++)
         _data[i] = other._data[i];
@@ -129,13 +129,13 @@ operator=(SlicedVector&& other)
     // selbst
     if (this == &other) return *this;
     // fremd
-	_my_comm = other._my_comm;
-	_my_rank = other._my_rank;
-	_num_nodes = other._num_nodes;
+    _my_comm = other._my_comm;
+    _my_rank = other._my_rank;
+    _num_nodes = other._num_nodes;
     _dim_global = other._dim_global;
     _dim_local = other._dim_local;
     _dim_local_nopad = other._dim_local_nopad;
-	_dim_local_last = other._dim_local_last;
+    _dim_local_last = other._dim_local_last;
     _data = other._data;
     other._data = nullptr;
     return *this;
@@ -168,8 +168,8 @@ get_global(size_t pos) const
 template<typename Scalar>
 void SlicedVector<Scalar>::print_local_data(std::ostream& out) const
 {
-	for (size_t i = 0; i < _dim_local; i++)
-		out << i << ":\t" << _data[i] << std::endl;
+    for (size_t i = 0; i < _dim_local; i++)
+        out << i << ":\t" << _data[i] << std::endl;
 }
 
 template<typename Scalar>
@@ -263,6 +263,6 @@ struct VectorTraits<SlicedVector<Scalar>>
     typedef Scalar ScalarType;
 };
 
-}
+}//namespace Icarus
 
 #endif // __SLICEDVECTOR_TPP_

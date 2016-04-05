@@ -30,7 +30,7 @@ public:
     /// \param  normal          Normalenvektor zur Flaeche.
     Face(int num_vertices, std::vector<int>& id_vertices,
         std::vector<Vertex>& vertices, Vertex normal);
- 
+
     /// \brief  Ueberprueft, ob ein Punkt in der Projektion der Flaeche auf die Y-Z-Ebene liegt.
     /// \param  point   Raumpunkt der ueberprueft werden soll.
     /// \return Gibt zurueck, ob der Punkt in der Projektion der Flaeche auf die Y-Z-Ebene liegt oder nicht.
@@ -44,7 +44,7 @@ public:
     /// \brief  Gibt Normalenvektor zurueck.
     /// \return Normalenvektor der Flaeche.
     Vertex get_normal() { return _normal; }
-    
+
 private:
     int _num_vertices;
     std::vector<Vertex> _vertices;
@@ -87,7 +87,7 @@ public:
 
     /// \brief  Ueberprueft, ob Punkt in, auf oder ausserhalb vom Objekt liegt.
     /// \param  point   Zu ueberpruefender Punkt.
-	/// \return Gibt 'o' zurück, wenn sich der Punkt im Objekt befindet, sonst 'a'.
+    /// \return Gibt 'o' zurück, wenn sich der Punkt im Objekt befindet, sonst 'a'.
     char pointInside(Vertex point);
 
 private:

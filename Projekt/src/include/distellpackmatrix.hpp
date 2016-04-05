@@ -30,13 +30,13 @@ class DistEllpackMatrix : public Matrix<DistEllpackMatrix<Scalar>>
 {
     friend class Matrix<DistEllpackMatrix<Scalar>>;
 
-	// MPI Eigenschaften
-	MPI_Comm _my_comm;
-	int _my_rank, _num_nodes;
+    // MPI Eigenschaften
+    MPI_Comm _my_comm;
+    int _my_rank, _num_nodes;
 
     // Mit PAD wird das padding durchgeführt
     static const int PAD = 0;
-	
+
     size_t _dim_global, _dim_local, _dim_local_nopad, _max_row_length;
 
     size_t * _indices;
@@ -52,7 +52,7 @@ public:
     /// Zugeordneter (d.h. bezüglich der Operatoren vertäglicher) Vektor-Typ.
     typedef typename MatrixTraits<DistEllpackMatrix<Scalar>>::VectorType VectorType;
 
-    /** 
+    /**
      * \brief   Standardkonstruktor.
      *
      * Erzeugt einen Vektor der Dimension dim, der komplett auf jeder Node der
@@ -65,18 +65,18 @@ public:
 
     ~DistEllpackMatrix();
 
-	DistEllpackMatrix(DistEllpackMatrix&& other);
+    DistEllpackMatrix(DistEllpackMatrix&& other);
 
-	DistEllpackMatrix(const DistEllpackMatrix& other);
+    DistEllpackMatrix(const DistEllpackMatrix& other);
 
-	DistEllpackMatrix& operator=(DistEllpackMatrix&& other);
+    DistEllpackMatrix& operator=(DistEllpackMatrix&& other);
 
-	DistEllpackMatrix& operator=(const DistEllpackMatrix& other);
+    DistEllpackMatrix& operator=(const DistEllpackMatrix& other);
 
-     /** 
+     /**
      * \brief   Gibt den Kommunikator in die Prozessgruppe der Matrix zurück.
      */
-	MPI_Comm get_comm() const { return _my_comm; }
+    MPI_Comm get_comm() const { return _my_comm; }
 
     /**
       * \brief   Gibt die lokale Dimension der Matrix, d.h. die Anzahl
@@ -103,7 +103,7 @@ public:
       * Anschließend können die Zeilen mit sequential_fill und end_of_row gefüllt werden, beginnend
       * bei der lokal ersten Zeile.
       * Die maximale auf dieser Node auftretende Zeilenlänge muss vorher bekannt sein.
-      * 
+      *
       * \param max_row_length Maximal auf dieser Node auftretende Zeilenlänge.
       */
     void prepare_sequential_fill(size_t max_row_length);
@@ -116,10 +116,10 @@ public:
       * auf der füllenden Node auftretende Zeilenlänge gesetzt werden.
       * Nachdem der letzte Eintrag einer Zeile gesetzt wurde, wird mit end_of_row
       * die Zeile beendet.
-      * 
+      *
       * \param colind Spaltenindex des einzutregenden Werts. Es muss colind < dim_global gelten.
       * \param val    Wert, der an die Position colind geschrieben werden soll.
-      */    
+      */
     void sequential_fill(size_t colind, const Scalar& val);
 
     /**
@@ -134,7 +134,7 @@ public:
       *
       * Diese Funktion muss während eines Füllvorgangs auf der Node genau dim_local mal
       * aufgerufen werden.
-      */   
+      */
     void end_of_row();
 
     /**
@@ -143,14 +143,14 @@ public:
       * Ein positiver Rückgabewert dieser Funktion ist einerseits ein Indikator für einen erfolgreich
       * abgeschlossenen Füllvorgang und andererseits die Voraussetzung für sämtliche algebraische
       * Operationen mit der Matrix.
-      * 
+      *
       * \return Gibt zurück, ob die Matrix korrekt gefüllt wurde.
-      */  
+      */
     bool is_filled() const { return _filled; }
 
     /**
       * \brief   Gibt den globalen Index der ersten auf der Node liegenden Zeile zurück.
-      */  
+      */
     size_t first_row_on_node() const { return _my_rank * _dim_local_nopad; }
 
     /**
@@ -158,7 +158,7 @@ public:
       *
       * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion 
       *          aufgerufen wird.
-      */ 
+      */
     DistEllpackMatrix precond_equi() const;
 
     /**
@@ -169,7 +169,7 @@ public:
       *
       * \return  Der Vorkonditionierer hat denselben Typ wie das Objekt, auf das die Funktion 
       *          aufgerufen wird.
-      */ 
+      */
     DistEllpackMatrix precond_jacobi() const;
 
     /**
@@ -195,7 +195,7 @@ public:
       *                  gehören soll.
       *
       * \return Gibt die aus dem Dateitripel erzeugte DistEllpackMatrix zurück.
-      */  
+      */
     static DistEllpackMatrix import_csr_file(const std::string& filename, MPI_Comm new_comm = MPI_COMM_WORLD);
 
 private:
@@ -205,11 +205,8 @@ private:
     void mult_vec_impl(const VectorType& vec, VectorType& result) const;
 };
 
-}
+}//namespace Icarus
 
 #include "distellpackmatrix.tpp"
-
-
-
 
 #endif // __DISTELLPACKMATRIX_HPP_

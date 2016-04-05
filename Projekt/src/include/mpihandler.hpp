@@ -8,7 +8,7 @@
 * - Diese Klasse verwaltet Initialisierung und Deinitialisierung der MPI-Umgebung und
 *   stellt die Makrofunktion MPI_SCALL(...) zur Verfügung, die als Wrapper für alle
 *   Aufrufe an die MPI-API benutzt werden sollte.
-* - Es wird garantiert, dass der Thread, der Init aufruft, auch Finalize aufruft. 
+* - Es wird garantiert, dass der Thread, der Init aufruft, auch Finalize aufruft.
 *   MpiSafeCall ist in dieser Form *nicht* Thread-sicher.
 * - Das Symbol USE_MPI_ERROR_CHECKING steuert, ob MPI_SCALL wirklich etwas tut (leichter Overhead).
 * - Über die Abkürzung MPI_HANDLER stehen ein paar praktische
@@ -32,12 +32,12 @@
 #include "proto.hpp"
 
 namespace Icarus
-{ 
+{
    class MpiHandler : public NonCopyable
     {
         int _n_procs, _my_rank;
 
-    public:       
+    public:
 
         int get_n_procs() const { return _n_procs; }
 
