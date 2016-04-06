@@ -268,7 +268,7 @@ scal_prod_impl(const SlicedVectorGpu<Scalar>& other) const
 template<typename Scalar>
 void SlicedVectorGpu<Scalar>::
 axpy_impl(const Scalar& alpha, const SlicedVectorGpu<Scalar>& y)
-
+{
     assert(_dim_global == y._dim_global);
 
     gpu_axpy(y.getDataPointer(), alpha, _data, _dim_local);
