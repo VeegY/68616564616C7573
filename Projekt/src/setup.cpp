@@ -169,6 +169,7 @@ void assembleFem::setup_e(int row) //kann man eventuell direkt in setup_A schieb
     }
 }
 
+/*
 void assembleFem::setup_neumann(int row, int plane, bool rigthbacktop, std::vector<char>& disc_points)
 {
     _A.clear();
@@ -321,7 +322,7 @@ void assembleFem::setup_neumann(int row, int plane, bool rigthbacktop, std::vect
         }
     }
 }
-
+*/
 /*
 void assembleFem::setup_plane_rigthbacktop(int row, std::vector<char>& disc_points, std::vector<int>& planes, std::vector<bool>& rightbacktops)
 {

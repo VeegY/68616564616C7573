@@ -1,13 +1,11 @@
-#include "include/assemblefem.hpp"
-#include "include/mathfunction.hpp"
-
-#include "include/logger.hpp"
-#include <iostream>
+// nur fuer intellisense
+#include "assemblefem.hpp"
 
 namespace Icarus
 {
 
-void assembleFem::assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs,
+template <typename MatrixType, typename VectorType>
+void assembleFem::assemble(MatrixType& Matrix, VectorType& rhs,
     std::vector<char>& disc_points, mathfunction f, mathfunction g, mathfunction h)
 {
     //TODO alles in size_t umwandeln
@@ -497,17 +495,17 @@ if (Zeile >= fron && Zeile <= lron)
 //                                RHS[Zeile] += assemblyRHSNeumann(planes[n], rightbacktops[n], h);
 //                            }
                             //setup_neumann(Zeile, 1, false, disc_points);
-                            //RHS[Zeile] += assemblyRHSNeumann(1, false, h);
+                            //RHS[Zeile] += assemblyRHSNeumann(1, false, mathfunction(99));
                             //setup_neumann(Zeile, 1, true, disc_points);
-                            //RHS[Zeile] += assemblyRHSNeumann(1, true, h);
+                            //RHS[Zeile] += assemblyRHSNeumann(1, true, mathfunction(99));
                             //setup_neumann(Zeile, 2, false, disc_points);
-                            //RHS[Zeile] += assemblyRHSNeumann(2, false, h);
+                            //RHS[Zeile] += assemblyRHSNeumann(2, false, mathfunction(99));
                             //setup_neumann(Zeile, 2, true, disc_points);
-                            //RHS[Zeile] += assemblyRHSNeumann(2, true, h);
+                            //RHS[Zeile] += assemblyRHSNeumann(2, true, mathfunction(99));
                             //setup_neumann(Zeile, 3, false, disc_points);
-                            //RHS[Zeile] += assemblyRHSNeumann(3, false, h);
+                            //RHS[Zeile] += assemblyRHSNeumann(3, false, mathfunction(99));
                             //setup_neumann(Zeile, 3, true, disc_points);
-                            //RHS[Zeile] += assemblyRHSNeumann(3, true, h);
+                            //RHS[Zeile] += assemblyRHSNeumann(3, true, mathfunction(99));
                         }
                     }
                 }

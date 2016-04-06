@@ -4,6 +4,10 @@
 #include "distellpackmatrix.hpp"
 #include "slicedvector.hpp"
 #include "fullvector.hpp"
+#include "distellpackmatrixgpu.hpp"
+#include "slicedvectorgpu.hpp"
+#include "fullvectorgpu.hpp"
+#include "logger.hpp"
 
 #include "mathfunction.hpp"
 
@@ -56,7 +60,9 @@ public:
     *   \param h           Funktion für die Neumann-Randbedingungen
     *
     **/
-    void assemble(DistEllpackMatrix<double>& Matrix, SlicedVector<double>& rhs, std::vector<char>& disc_points,
+
+    template <typename MatrixType, typename VectorType>
+    void assemble(MatrixType& Matrix, VectorType& rhs, std::vector<char>& disc_points,
         mathfunction f=mathfunction(0), mathfunction g=mathfunction(0), mathfunction h=mathfunction(0)); // rechte Seite, Dirichlet, Neumann
 
     /**
@@ -209,5 +215,7 @@ private:
 };
 
 }//namespace Icarus
+
+#include "assemblefem.tpp"
 
 #endif//__ASSEMBLEFEM_HPP_

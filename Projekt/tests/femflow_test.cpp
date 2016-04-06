@@ -27,6 +27,7 @@ int main()
     Icarus::mathfunction n(16);
 
     // CPU
+    LOG_INFO("start CPU test");
     Icarus::DistEllpackMatrix<double> matrix(nx*ny*nz);
     Icarus::SlicedVector<double> rhs(nx*ny*nz);
     Icarus::SlicedVector<double> sol(nx*ny*nz);
@@ -40,30 +41,31 @@ int main()
     Icarus::FullVector<double> fullsol(sol);
     Icarus::FullVector<double> gradx(nx*ny*nz), grady(nx*ny*nz), gradz(nx*ny*nz);
     Icarus::getInnerPotentialGradients(fullsol, nx, ny, nz, h, disc, gradx, grady, gradz);
-    Icarus::vtkWriter writer("casefemflow", "casefemflow", nx, ny, nz, h, 1);
+    Icarus::vtkWriter writer("casefemflow_cpu", "casefemflow_cpu", nx, ny, nz, h, 1);
     writer.addPointDataToTimestep(fullsol, 0, "Potential");
     writer.addPointVecToTimestep(gradx, grady, gradz, 0, "Gradient");
+    LOG_INFO("end CPU test");
 
-/*
     // GPU
-    Icarus::DistEllpackMatrixGpu<double> matrix(nx*ny*nz);
-    Icarus::SlicedVectorGpu<double> rhs(nx*ny*nz);
-    Icarus::SlicedVectorGpu<double> sol(nx*ny*nz);
-    sol.clear(); sol.set_local(0, 0.1);
-    Icarus::BiCgStabSolver<Icarus::DistEllpackMatrixGpu<double>> solver(matrix, rhs);
-    Icarus::assembleFem assembler(h, nx, ny, nz);
+    LOG_INFO("start GPU test");
+    Icarus::DistEllpackMatrixGpu<double> matrix_gpu(nx*ny*nz);
+    Icarus::SlicedVectorGpu<double> rhs_gpu(nx*ny*nz);
+    Icarus::SlicedVectorGpu<double> sol_gpu(nx*ny*nz);
+    sol_gpu.clear(); sol_gpu.set_local(0, 0.1);
+    Icarus::BiCgStabSolver<Icarus::DistEllpackMatrixGpu<double>> solver_gpu(matrix_gpu, rhs_gpu);
+    Icarus::assembleFem assembler_gpu(h, nx, ny, nz);
 
-    assembler.assemble(matrix, rhs, disc, f, d, n);
-    solver.solve(sol);
+    assembler_gpu.assemble(matrix_gpu, rhs_gpu, disc, f, d, n);
+    solver_gpu.solve(sol_gpu);
 
-    Icarus::FullVectorGpu<double> fullsol(sol);
-    Icarus::FullVectorGpu<double> gradx(nx*ny*nz), grady(nx*ny*nz), gradz(nx*ny*nz);
+    Icarus::FullVectorGpu<double> fullsol_gpu(sol_gpu);
+    Icarus::FullVectorGpu<double> gradx_gpu(nx*ny*nz), grady_gpu(nx*ny*nz), gradz_gpu(nx*ny*nz);
 
-    Icarus::getInnerPotentialGradients(fullsol, nx, ny, nz, h, disc, gradx, grady, gradz);
-    Icarus::vtkWriter writer("casefemflow", "casefemflow", nx, ny, nz, h, 1);
-    writer.addPointDataToTimestep(fullsol.getDataPointer(), fullsol.get_dim(), 0, "Potential");
-    writer.addPointVecToTimestep(gradx.getDataPointer(), grady.getDataPointer(), gradz.getDataPointer(), gradx.get_dim(), 0, "Gradient");
-*/
+    Icarus::getInnerPotentialGradients(fullsol_gpu, nx, ny, nz, h, disc, gradx_gpu, grady_gpu, gradz_gpu);
+    Icarus::vtkWriter writer_gpu("casefemflow_gpu", "casefemflow_gpu", nx, ny, nz, h, 1);
+    writer.addPointDataToTimestep(fullsol_gpu.getDataPointer(), fullsol_gpu.get_dim(), 0, "Potential");
+    writer.addPointVecToTimestep(gradx_gpu.getDataPointer(), grady_gpu.getDataPointer(), gradz_gpu.getDataPointer(), gradx_gpu.get_dim(), 0, "Gradient");
+    LOG_INFO("end GPU test");
 
     return 0;
 }
