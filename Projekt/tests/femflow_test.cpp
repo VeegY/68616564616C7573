@@ -18,8 +18,9 @@
 
 int main()
 {
-//    const int nn(50);
-    for (int nn(50); nn <= 800; nn *= 2)
+    int myrank;
+    MPI_SCALL(MPI_Comm_rank(MPI_COMM_WORLD, &myrank));
+    for (int nn(64); nn <= 128; nn *= 2)
     {
         std::string model("cube");
         std::string modelpath("../model/" + model + ".obj");
@@ -46,12 +47,16 @@ int main()
         solver.solve(sol);
 
         Icarus::FullVector<double> fullsol(sol);
-        Icarus::FullVector<double> gradx(nx*ny*nz), grady(nx*ny*nz), gradz(nx*ny*nz);
-        Icarus::getInnerPotentialGradients(fullsol, nx, ny, nz, h, disc, gradx, grady, gradz);
-        Icarus::vtkWriter writer(model + "_cpu", model + "_cpu", nx, ny, nz, h, 1);
-        writer.addPointDataToTimestep(fullsol, 0, "Potential");
-        writer.addPointVecToTimestep(gradx, grady, gradz, 0, "Gradient");
-        LOG_INFO("end CPU test");
+        if (myrank == 0)
+        {
+            Icarus::FullVector<double> gradx(nx*ny*nz), grady(nx*ny*nz), gradz(nx*ny*nz);
+            Icarus::getInnerPotentialGradients(fullsol, nx, ny, nz, h, disc, gradx, grady, gradz);
+            Icarus::vtkWriter writer(model + "_cpu", model + "_cpu", nx, ny, nz, h, 1);
+            writer.addPointDataToTimestep(fullsol, 0, "Potential");
+            writer.addPointVecToTimestep(gradx, grady, gradz, 0, "Gradient");
+            LOG_INFO("end CPU test");
+        }
+        MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
 
         // GPU
         LOG_INFO("start GPU test");
@@ -66,13 +71,16 @@ int main()
         solver_gpu.solve(sol_gpu);
 
         Icarus::FullVectorGpu<double> fullsol_gpu(sol_gpu);
-        Icarus::FullVectorGpu<double> gradx_gpu(nx*ny*nz), grady_gpu(nx*ny*nz), gradz_gpu(nx*ny*nz);
-
-        Icarus::getInnerPotentialGradients(fullsol_gpu, nx, ny, nz, h, disc, gradx_gpu, grady_gpu, gradz_gpu);
-        Icarus::vtkWriter writer_gpu(model + "_gpu", model + "_gpu", nx, ny, nz, h, 1);
-        writer_gpu.addPointDataToTimestep(fullsol_gpu.getDataPointer(), fullsol_gpu.get_dim(), 0, "Potential");
-        writer_gpu.addPointVecToTimestep(gradx_gpu.getDataPointer(), grady_gpu.getDataPointer(), gradz_gpu.getDataPointer(), gradx_gpu.get_dim(), 0, "Gradient");
-        LOG_INFO("end GPU test");
+        if (myrank == 0)
+        {
+            Icarus::FullVectorGpu<double> gradx_gpu(nx*ny*nz), grady_gpu(nx*ny*nz), gradz_gpu(nx*ny*nz);
+            Icarus::getInnerPotentialGradients(fullsol_gpu, nx, ny, nz, h, disc, gradx_gpu, grady_gpu, gradz_gpu);
+            Icarus::vtkWriter writer_gpu(model + "_gpu", model + "_gpu", nx, ny, nz, h, 1);
+            writer_gpu.addPointDataToTimestep(fullsol_gpu.getDataPointer(), fullsol_gpu.get_dim(), 0, "Potential");
+            writer_gpu.addPointVecToTimestep(gradx_gpu.getDataPointer(), grady_gpu.getDataPointer(), gradz_gpu.getDataPointer(), gradx_gpu.get_dim(), 0, "Gradient");
+            LOG_INFO("end GPU test");
+        }
+        MPI_SCALL(MPI_Barrier(MPI_COMM_WORLD));
     }
 
     return 0;
