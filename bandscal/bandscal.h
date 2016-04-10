@@ -146,6 +146,8 @@ public:
         }
     }
 
+    cublasHandle_t get_cublas_handle() const { return _cublas_handle; }
+
     void start_comm()
     {
         MPI_Win_post(_mygroup, 0, _win_prev);
@@ -723,9 +725,9 @@ void cg_solve(const BCsrMatrix<Scalar>& mat,
     int B = mat.get_B();
     arch_t arch = mat.get_arch();
 
-    BVector<Scalar> x1(n,B,arch), z(n, B, arch), 
-        d0(n, B, arch), d1(n, B, arch), 
-        r0(n, B, arch), r1(n, B, arch);
+    BVector<Scalar> x1(n,B,arch), z(n, B, arch, b.get_cublas_handle()), 
+        d0(n, B, arch, b.get_cublas_handle()), d1(n, B, arch, b.get_cublas_handle()),
+        r0(n, B, arch, b.get_cublas_handle()), r1(n, B, arch, b.get_cublas_handle());
     Scalar alpha, beta;
     
     mat.spmv(x0, z);
