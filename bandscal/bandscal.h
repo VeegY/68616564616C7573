@@ -150,6 +150,7 @@ public:
 
     void start_comm()
     {
+        cudaDeviceSynchronize();
         MPI_Win_post(_mygroup, 0, _win_prev);
         MPI_Win_post(_mygroup, 0, _win_next);
         MPI_Win_start(_mygroup, 0, _win_prev);
@@ -247,6 +248,7 @@ public:
         case ARCH_GPU:
             cublas_dot(_cublas_handle, _nloc, _data + _local_offset, 1, 
                 other._data + other._local_offset, 1, &resloc);
+            cudaDeviceSynchronize();
             break;
         }
         MPI_Allreduce(&resloc, &res, 1, ScalarTraits<Scalar>::MPI_Type, MPI_SUM, MPI_COMM_WORLD);
@@ -283,6 +285,7 @@ public:
             resloc *= resloc;
             break;
         }
+        cudaDeviceSynchronize();
         MPI_Allreduce(&resloc, &res, 1, ScalarTraits<Scalar>::MPI_Type, MPI_SUM, MPI_COMM_WORLD);
         return sqrt(res);
     }
@@ -335,6 +338,7 @@ public:
     void swap(BVector<Scalar>& other)
     {
         using std::swap;
+        cudaDeviceSynchronize();
         swap(_data, other._data);
         swap(_n, other._n);
         swap(_m, other._m);
@@ -640,6 +644,7 @@ public:
         }
 
         src.finish_comm();
+        cudaDeviceSynchronize();
 
         // restliche, neu eingetroffene elemente (immer mit CPU)  
         if (!_iam_first)
