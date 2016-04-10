@@ -8,7 +8,8 @@ INCLUDE(FindCUDA)
 INCLUDE_DIRECTORIES(/usr/local/cuda/include ${MPI_INCLUDE_PATH})
 
 CUDA_ADD_EXECUTABLE(bandscal "bandscal.cpp")
-TARGET_LINK_LIBRARIES(bandscal ${MPI_LIBRARIES})
+TARGET_LINK_LIBRARIES(bandscal ${MPI_LIBRARIES} ${CUDA_cusparse_LIBRARY})
+CUDA_ADD_CUBLAS_TO_TARGET(bandscal)
 
 LIST(APPEND CMAKE_CXX_FLAGS "-fopenmp -std=c++11 -O3 -ffast-math -Wall")
 

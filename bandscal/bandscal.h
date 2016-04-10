@@ -710,7 +710,7 @@ BCsrMatrix<Scalar> construct_model_matrix(int m, arch_t arch, cusparseHandle_t c
         raw.erase(i*m, i*m - 1);
         raw.erase((i + 1)*m - 1, (i + 1)*m);
     }
-    return BCsrMatrix<Scalar>(raw, arch, cusp_handle);
+    return BCsrMatrix<Scalar>(raw, arch, cusp);
 }
 
 template <class Scalar>
