@@ -16,7 +16,7 @@
 #include <iostream>
 #include <mpi.h>
 
-#include "cudahelper.h"
+//#include "cudahelper.h"
 
 enum arch_t { ARCH_CPU, ARCH_GPU };
 
@@ -35,7 +35,7 @@ struct ScalarTraits<double>
     static constexpr MPI_Datatype MPI_Type = MPI_DOUBLE;
 };
 
-void distribute_among_nodes(size_t n, size_t& l, size_t& p)
+void distribute_among_nodes(int n, int& l, int& p)
 {
     int myrank, nprocs;
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
@@ -57,25 +57,25 @@ class BVector
 {
     Scalar *_data;
 
-    size_t _n, _m, _B, _l, _p;
+    int _n, _m, _B, _l, _p;
     int _myrank, _nprocs;
-    size_t _offset;
+    int _offset;
     bool _iam_first, _iam_last;
 
     arch_t _arch;
-    size_t _nloc, _length;
+    int _nloc, _length;
 
     MPI_Group _mygroup;
     MPI_Win _win_prev, _win_next;
     Scalar *_buf_prev, *_buf_next;
 
-    size_t _local_offset;
+    int _local_offset;
 
     //TODO
-    cublasHandle_t _cublas_handle;
+    //cublasHandle_t _cublas_handle;
 
 public:
-    BVector(size_t n, size_t B, arch_t arch) :
+    BVector(int n, int B, arch_t arch) :
         _data(nullptr),
         _n(n), _B(B),
         _arch(arch)
@@ -187,28 +187,28 @@ public:
     }
 
     // Zugriff auf den Datenteil (mit Buffer)
-    Scalar& operator[](size_t idx)
+    Scalar& operator[](int idx)
     {
         assert(idx < _length);
         return _data[idx];
     }
 
     // Zugriff auf den Datenteil (mit Buffer)
-    const Scalar& operator[](size_t idx) const
+    const Scalar& operator[](int idx) const
     {
         assert(idx < _length);
         return _data[idx];
     }
 
     // Zugriff auf den Datenteil (ohne Buffer)
-    Scalar& operator()(size_t idx)
+    Scalar& operator()(int idx)
     {
         assert(idx < _nloc);
         return _data[idx + _local_offset];
     }
 
     // Zugriff auf den Datenteil (ohne Buffer)
-    const Scalar& operator()(size_t idx) const
+    const Scalar& operator()(int idx) const
     {
         assert(idx < _nloc);
         return _data[idx + _local_offset];
@@ -216,11 +216,11 @@ public:
 
     void fill_with(const Scalar& val)
     {
-        for (size_t i = _local_offset; i < _local_offset + _nloc; i++)
+        for (int i = _local_offset; i < _local_offset + _nloc; i++)
             _data[i] = val;
     }
     
-    size_t get_nloc() const { return _nloc; }
+    int get_nloc() const { return _nloc; }
 
     void copy(BVector& dst) const
     {
@@ -228,7 +228,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
-            for (size_t i = _local_offset; i < _nloc + _local_offset; i++)
+            for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 dst[i] = _data[i];
             break;
         case ARCH_GPU:
@@ -245,7 +245,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
-            for (size_t i = _local_offset; i < _nloc + _local_offset; i++)
+            for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 resloc += _data[i] * other[i];
             break;
             
@@ -261,14 +261,14 @@ public:
         return res;
     }
 
-    size_t get_length() { return _length; }
+    int get_length() { return _length; }
 
     void scal(const Scalar& alpha)
     {
         switch (_arch)
         {
         case ARCH_CPU:
-            for (size_t i = _local_offset; i < _nloc + _local_offset; i++)
+            for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 _data[i] *= alpha;
             break;
         case ARCH_GPU:
@@ -286,7 +286,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
-            for (size_t i = _local_offset; i < _nloc + _local_offset; i++)
+            for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 resloc += _data[i] * _data[i];
             break;
         case ARCH_GPU:
@@ -307,15 +307,15 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
-            for (size_t i = _local_offset; i < _nloc + _local_offset; i++)
+            for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 _data[i] += alpha * x[i];
             break;
         case ARCH_GPU:
             // TODO
-            
+            /*
             cublas_axpy(_cublas_handle, _nloc, &alpha,
                 x._data + x._local_offset, 1, _data + _local_offset, 1);
-            
+            */
             break;
         }
     }
@@ -332,17 +332,17 @@ public:
             if (_iam_first) out << "EMPTY" << std::endl;
             else
             {
-                for (size_t i = 0; i < _B; i++)
+                for (int i = 0; i < _B; i++)
                     out << "(" << i << "):\t" << _data[i] << std::endl;
             }
             out << std::endl << "Main-Buffer: " << std::endl;
-            for (size_t i = (_iam_first ? 0 : _B); i < (_iam_last ? _length : (_length - _B)); i++)
+            for (int i = (_iam_first ? 0 : _B); i < (_iam_last ? _length : (_length - _B)); i++)
                 out << "(" << i << "):\t" << _data[i] << std::endl;
             out << std::endl << "Next-Buffer: " << std::endl;
             if (_iam_last) out << "EMPTY" << std::endl;
             else
             {
-                for (size_t i = (_iam_first ? _nloc : (_nloc + _B)); i < _length; i++)
+                for (int i = (_iam_first ? _nloc : (_nloc + _B)); i < _length; i++)
                     out << "(" << i << "):\t" << _data[i] << std::endl;
             }
             out << std::endl;
@@ -386,7 +386,7 @@ void swap(BVector<Scalar>& v1, BVector<Scalar>& v2)
 
 struct CsrIndexPair
 {
-    size_t i, j;
+    int i, j;
 
     // Zeilenordnung
     bool operator<(const CsrIndexPair& other) const
@@ -406,12 +406,12 @@ class RawSparseMatrix
     friend class BCsrMatrix<Scalar>;
 
     std::map<CsrIndexPair, Scalar> _local_data;
-    size_t _n, _B, _l, _p;
+    int _n, _B, _l, _p;
     int _myrank, _nprocs;
-    size_t _offset;
+    int _offset;
 
 public:
-    RawSparseMatrix(size_t n, size_t B) : _n(n), _B(B)
+    RawSparseMatrix(int n, int B) : _n(n), _B(B)
     {
         //assert(_B > 0);
         MPI_Comm_size(MPI_COMM_WORLD, &_nprocs);
@@ -430,7 +430,7 @@ public:
         else _offset = _myrank*_l - _B;
     }
 
-    void insert(size_t i, size_t j, const Scalar& v)
+    void insert(int i, int j, const Scalar& v)
     {
         assert(i < _n);
         assert(j < _n);
@@ -438,7 +438,7 @@ public:
             _local_data.insert({ { i - _l*_myrank,j - _offset}, v });
     }
 
-    size_t erase(size_t i, size_t j)
+    int erase(int i, int j)
     {
         return _local_data.erase({ i - _l*_myrank, j - _offset });
     }
@@ -453,24 +453,24 @@ template<class Scalar>
 class BCsrMatrix
 {
     Scalar *_val;
-    size_t *_row_ptr, *_col_ind;
+    int *_row_ptr, *_col_ind;
 
-    size_t _n, _m, _B, _l, _p;
+    int _n, _m, _B, _l, _p;
     int _myrank, _nprocs;
-    size_t _offset;
+    int _offset;
     bool _iam_first, _iam_last;
 
     arch_t _arch;
-    size_t _nloc;
-    size_t _localoffset;
+    int _nloc;
+    int _localoffset;
 
     //TODO
-    cusparseHandle_t _cusp_handle;
+    //cusparseHandle_t _cusp_handle;
 
 public:
-    size_t get_n() const { return _n; }
+    int get_n() const { return _n; }
     arch_t get_arch() const { return _arch; }
-    size_t get_B() const { return _B; }
+    int get_B() const { return _B; }
     
     BCsrMatrix(RawSparseMatrix<Scalar>& mat, arch_t arch) :
         _val(nullptr), _row_ptr(nullptr), _col_ind(nullptr),
@@ -484,7 +484,7 @@ public:
         _nloc(_iam_last ? _p : _l),
         _localoffset(_B*(!_iam_first))
     {
-        std::vector<size_t> epl(_nloc); // Anzahl Einträge pro Zeile
+        std::vector<int> epl(_nloc); // Anzahl Einträge pro Zeile
         for (auto& p : mat._local_data)
               epl[p.first.i]++;
         _m = *std::max_element(epl.begin(), epl.end());
@@ -493,8 +493,8 @@ public:
         {
         case ARCH_CPU:
             _val = new Scalar[_nloc * _m];
-            _row_ptr = new size_t[_nloc + 1];
-            _col_ind = new size_t[_nloc * _m];
+            _row_ptr = new int[_nloc + 1];
+            _col_ind = new int[_nloc * _m];
             break;
         case ARCH_GPU:
             /*
@@ -509,14 +509,14 @@ public:
         // Zugriffe auf Fuelleinträge haben Wert Null und
         // sollten lesend in gültigen Speicher (einfach erster Eintrag) 
         // (und nicht irgendwohin) gehen
-        memset(_col_ind, 0, sizeof(size_t)*_nloc*_m);
+        memset(_col_ind, 0, sizeof(int)*_nloc*_m);
 
         // Fülle row_ptr
-        for (size_t i = 0; i <= _nloc; i++)
+        for (int i = 0; i <= _nloc; i++)
             _row_ptr[i] = i*_m;
 
         // Fülle val und colctr
-        size_t colctr = 0, iprev = 0;
+        int colctr = 0, iprev = 0;
         for (auto p : mat._local_data)
         {
             if (p.first.i != iprev)
@@ -553,7 +553,7 @@ public:
 
     int get_myrank() const { return _myrank; }
 
-    size_t idx2(size_t i, size_t j) const
+    int idx2(int i, int j) const
     {
         assert(i < _nloc);
         assert(j < _m);
@@ -569,17 +569,17 @@ public:
                 continue;
             out << "PROCESS " << rank << ":" << std::endl;
             out << "rowptr: " << std::endl;
-            for (size_t i = 0; i < _nloc+1; i++)
+            for (int i = 0; i < _nloc+1; i++)
                 out << "(" << i << "):\t" << _row_ptr[i] << std::endl;
           
             out << std::endl << "col_ind: " << std::endl;
-            for (size_t i = 0; i < _nloc; i++)
-                for (size_t j = 0; j < _m; j++)
+            for (int i = 0; i < _nloc; i++)
+                for (int j = 0; j < _m; j++)
                     out << "(" << i << "," << j <<"):\t" << _col_ind[idx2(i,j)] << std::endl;
 
             out << std::endl << "vals: " << std::endl;
-            for (size_t i = 0; i < _nloc; i++)
-                for (size_t j = 0; j < _m; j++)
+            for (int i = 0; i < _nloc; i++)
+                for (int j = 0; j < _m; j++)
                     out << "(" << i << "," << j << "):\t" << _val[idx2(i, j)] << std::endl;
 
             out << std::endl;
@@ -615,7 +615,7 @@ public:
             const Scalar one = 1.0, zero = 0.0;
             if (_nprocs == 1)
             {
-                
+                /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc, _nloc, _nloc * _m, &one,
                 CUSPARSE_MATRIX_TYPE_GENERAL,
@@ -623,7 +623,7 @@ public:
                 _row_ptr, _col_ind,
                 src.local_data(), &zero,
                 dst.local_data());
-                
+                */
             }
             else if (_iam_first)
             {
@@ -676,25 +676,22 @@ public:
             compute_dst(_nloc - _B, _nloc, src, dst);
     }
 
-    void compute_dst(size_t begin, size_t end, const BVector<Scalar>& src, BVector<Scalar>& dst) const
+    void compute_dst(int begin, int end, const BVector<Scalar>& src, BVector<Scalar>& dst) const
     {
-        // Benutze int, um mit alten OpenMP-Versionen < 3 kompatibel zu bleiben.
-        assert(begin < std::numeric_limits<int>::max);
-        assert(end < std::numeric_limits<int>::max);
 #       pragma omp parallel for
-        for (int i = (int)begin; i < (int)end; i++)
+        for (int i = begin; i < end; i++)
         {
             dst(i) = 0;
-            for (int j = 0; j < (int)_m; j++)
+            for (int j = 0; j < _m; j++)
                 dst(i) += _val[idx2(i, j)] * src[_col_ind[idx2(i, j)]];
         }
     }
 
-    size_t get_nloc() const { return _nloc; }
+    int get_nloc() const { return _nloc; }
 };
 
 template <class Scalar>
-BCsrMatrix<Scalar> construct_model_matrix(size_t m, arch_t arch)
+BCsrMatrix<Scalar> construct_model_matrix(int m, arch_t arch)
 {
     RawSparseMatrix<Scalar> raw(m*m, m);
 
@@ -702,7 +699,7 @@ BCsrMatrix<Scalar> construct_model_matrix(size_t m, arch_t arch)
     raw.insert(0, 1, -1);
     raw.insert(0, m, -1);
     // 4, -1 [...] -1
-    for (size_t i = 1; i < m; i++)
+    for (int i = 1; i < m; i++)
     {
         raw.insert(i, i - 1, -1);
         raw.insert(i, i, 4);
@@ -710,7 +707,7 @@ BCsrMatrix<Scalar> construct_model_matrix(size_t m, arch_t arch)
         raw.insert(i, i + m, -1);
         // -1, 4,-1 [...] - 1
     }
-    for (size_t i = m*(m - 1); i < m*m - 1; i++)
+    for (int i = m*(m - 1); i < m*m - 1; i++)
     {
         raw.insert(i, i - m, -1);
         raw.insert(i, i - 1, -1);
@@ -719,7 +716,7 @@ BCsrMatrix<Scalar> construct_model_matrix(size_t m, arch_t arch)
         // -1 [...] -1 4 -1 
     }
 
-    for (size_t i = m; i < m*(m - 1); i++)
+    for (int i = m; i < m*(m - 1); i++)
     {
         raw.insert(i, i - m, -1);
         raw.insert(i, i - 1, -1);
@@ -735,7 +732,7 @@ BCsrMatrix<Scalar> construct_model_matrix(size_t m, arch_t arch)
     // -1 [...] -1 4
 
     // Entferne linke, rechte Nachbarn am Rand
-    for (size_t i = 0; i < m; i++)
+    for (int i = 0; i < m; i++)
     {
         raw.erase(i*m, i*m - 1);
         raw.erase((i + 1)*m - 1, (i + 1)*m);
@@ -751,8 +748,8 @@ void cg_solve(const BCsrMatrix<Scalar>& mat,
     assert(mat.get_nloc() == b.get_nloc());
     assert(mat.get_nloc() == x0.get_nloc());
 
-    size_t n = mat.get_n();
-    size_t B = mat.get_B();
+    int n = mat.get_n();
+    int B = mat.get_B();
     arch_t arch = mat.get_arch();
 
     BVector<Scalar> x1(n,B,arch), z(n, B, arch), 

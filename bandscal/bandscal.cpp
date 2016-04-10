@@ -14,14 +14,14 @@
 
 void print_usage();
 
-void parse_args(int nargs, char** args, arch_t& arch, bool& dp, size_t& m);
+void parse_args(int nargs, char** args, arch_t& arch, bool& dp, int& m);
 
 int main(int nargs, char** args)
 {
     // cmd line
     arch_t arch;
     bool dp;
-    size_t m;
+    int m;
     parse_args(nargs, args, arch, dp, m);
 
     // init
@@ -108,7 +108,7 @@ void print_usage()
         << "size: specify parameter m in model matrix" << std::endl;
 }
 
-void parse_args(int nargs, char** args, arch_t& arch, bool& dp, size_t& m)
+void parse_args(int nargs, char** args, arch_t& arch, bool& dp, int& m)
 {
     if (nargs != 4)
     {
