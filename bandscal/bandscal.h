@@ -72,7 +72,7 @@ class BVector
     size_t _local_offset;
 
     //TODO
-    //cublasHandle_t _cublas_handle;
+    cublasHandle_t _cublas_handle;
 
 public:
     BVector(size_t n, size_t B, arch_t arch) :
@@ -312,10 +312,10 @@ public:
             break;
         case ARCH_GPU:
             // TODO
-            /*
+            
             cublas_axpy(_cublas_handle, _nloc, &alpha,
                 x._data + x._local_offset, 1, _data + _local_offset, 1);
-            */
+            
             break;
         }
     }
@@ -465,7 +465,7 @@ class BCsrMatrix
     size_t _localoffset;
 
     //TODO
-    //cusparseHandle_t _cusp_handle;
+    cusparseHandle_t _cusp_handle;
 
 public:
     size_t get_n() const { return _n; }
@@ -615,15 +615,15 @@ public:
             const Scalar one = 1.0, zero = 0.0;
             if (_nprocs == 1)
             {
-                /*
+                
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc, _nloc, _nloc * _m, &one,
                 CUSPARSE_MATRIX_TYPE_GENERAL,
                 _val,
                 _row_ptr, _col_ind,
-                _src.local_data(), &zero,
-                _dst.local_data());
-                */
+                src.local_data(), &zero,
+                dst.local_data());
+                
             }
             else if (_iam_first)
             {
