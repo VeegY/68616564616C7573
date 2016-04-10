@@ -8,10 +8,12 @@
 #ifndef __CUDAHELPER_H_
 #define __CUDAHELPER_H_
 
+#include <exception>
+
 #include <cusparse.h>
-//#include <cublas.h>
-#define CUBLASAPI
-#include <cublas_api.h>
+#include <cublas_v2.h>
+//#define CUBLASAPI
+//#include <cublas_api.h>
 #include <cuda_runtime.h>
 
 template<class T>
@@ -26,7 +28,7 @@ inline void cublas_axpy<float>(cublasHandle_t handle, int n,
     const float *x, int incx,
     float *y, int incy)
 {
-    if (cublasSaxpy_v2(handle, n, alpha, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
+    if (cublasSaxpy(handle, n, alpha, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS axpy failed.");
 }
 
@@ -36,7 +38,7 @@ inline void cublas_axpy<double>(cublasHandle_t handle, int n,
     const double *x, int incx,
     double *y, int incy)
 {
-    if (cublasDaxpy_v2(handle, n, alpha, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
+    if (cublasDaxpy(handle, n, alpha, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS axpy failed.");
 }
 
@@ -50,7 +52,7 @@ inline void cublas_copy<float>(cublasHandle_t handle, int n,
     const float *x, int incx,
     float *y, int incy)
 {
-    if (cublasScopy_v2(handle, n, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
+    if (cublasScopy(handle, n, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
             throw std::runtime_error("cuBLAS copy failed.");
 }
 
@@ -59,7 +61,7 @@ inline void cublas_copy<double>(cublasHandle_t handle, int n,
     const double *x, int incx,
     double *y, int incy)
 {
-    if (cublasDcopy_v2(handle, n, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
+    if (cublasDcopy(handle, n, x, incx, y, incy) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS copy failed.");
 }
 
@@ -75,7 +77,7 @@ inline void cublas_dot<float>(cublasHandle_t handle, int n,
     const float *y, int incy,
     float *result)
 {
-    if (cublasSdot_v2(handle, n, x, incx, y, incy, result) != CUBLAS_STATUS_SUCCESS)
+    if (cublasSdot(handle, n, x, incx, y, incy, result) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS dot failed.");
 }
 
@@ -85,7 +87,7 @@ inline void cublas_dot<double>(cublasHandle_t handle, int n,
     const double *y, int incy,
     double *result)
 {
-    if (cublasDdot_v2(handle, n, x, incx, y, incy, result) != CUBLAS_STATUS_SUCCESS)
+    if (cublasDdot(handle, n, x, incx, y, incy, result) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS dot failed.");
 }
 
@@ -97,7 +99,7 @@ template<>
 inline void cublas_nrm2<float>(cublasHandle_t handle, int n,
     const float *x, int incx, float *result)
 {
-    if (cublasSnrm2_v2(handle, n, x, incx, result) != CUBLAS_STATUS_SUCCESS)
+    if (cublasSnrm2(handle, n, x, incx, result) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS nrm2 failed.");
 }
 
@@ -105,7 +107,7 @@ template<>
 inline void cublas_nrm2<double>(cublasHandle_t handle, int n,
     const double *x, int incx, double *result)
 {
-    if (cublasDnrm2_v2(handle, n, x, incx, result) != CUBLAS_STATUS_SUCCESS)
+    if (cublasDnrm2(handle, n, x, incx, result) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS nrm2 failed.");
 }
 
@@ -119,7 +121,7 @@ inline void cublas_scal<float>(cublasHandle_t handle, int n,
     const float *alpha,
     float *x, int incx)
 {
-    if (cublasSscal_v2(handle, n, alpha, x, incx) != CUBLAS_STATUS_SUCCESS)
+    if (cublasSscal(handle, n, alpha, x, incx) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS scal failed.");
 }
 
@@ -128,7 +130,7 @@ inline void cublas_scal<double>(cublasHandle_t handle, int n,
     const double *alpha,
     double *x, int incx)
 {
-    if (cublasDscal_v2(handle, n, alpha, x, incx) != CUBLAS_STATUS_SUCCESS)
+    if (cublasDscal(handle, n, alpha, x, incx) != CUBLAS_STATUS_SUCCESS)
         throw std::runtime_error("cuBLAS scal failed.");
 }
 

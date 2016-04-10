@@ -16,7 +16,7 @@
 #include <iostream>
 #include <mpi.h>
 
-//#include "cudahelper.h"
+#include "cudahelper.h"
 
 enum arch_t { ARCH_CPU, ARCH_GPU };
 
@@ -71,8 +71,7 @@ class BVector
 
     int _local_offset;
 
-    //TODO
-    //cublasHandle_t _cublas_handle;
+    cublasHandle_t _cublas_handle;
 
 public:
     BVector(int n, int B, arch_t arch) :
@@ -109,10 +108,7 @@ public:
             _data = new Scalar[_length];
             break;
         case ARCH_GPU:
-            /*
             cudaMallocManaged(&_data,sizeof(Scalar)*_length);
-            */
-            //TODO:Cuda
             break;
         }
         memset(_data, 0, sizeof(Scalar)*_length);
@@ -144,10 +140,7 @@ public:
             if (_data) delete[] _data;
             break;
         case ARCH_GPU:
-            /*
             if(_data) cudaFree(_data);
-            */
-            //TODO:CUDA
             break;
         }
     }
@@ -232,8 +225,7 @@ public:
                 dst[i] = _data[i];
             break;
         case ARCH_GPU:
-            //cublas_copy(_cublas_handle, _nloc, _data + _local_offset, dst._data + dst._local_offset);
-            // TODO
+            cublas_copy(_cublas_handle, _nloc, _data + _local_offset, 1, dst._data + dst._local_offset, 1);
             break;
         }
     }
@@ -250,11 +242,8 @@ public:
             break;
             
         case ARCH_GPU:
-            // TODO
-            /*
             cublas_dot(_cublas_handle, _nloc, _data + _local_offset, 1, 
                 other._data + other._local_offset, 1, &resloc);
-            */
             break;
         }
         MPI_Allreduce(&resloc, &res, 1, ScalarTraits<Scalar>::MPI_Type, MPI_SUM, MPI_COMM_WORLD);
@@ -272,10 +261,7 @@ public:
                 _data[i] *= alpha;
             break;
         case ARCH_GPU:
-            // TODO
-            /*
             cublas_scal(_cublas_handle, _nloc, &alpha, _data + _local_offset, 1);
-            */
             break;
         }
     }
@@ -290,11 +276,8 @@ public:
                 resloc += _data[i] * _data[i];
             break;
         case ARCH_GPU:
-            // TODO
-            /*
             cublas_nrm2(_cublas_handle, _nloc, _data + _local_offset, 1, &resloc);
             resloc *= resloc;
-            */
             break;
         }
         MPI_Allreduce(&resloc, &res, 1, ScalarTraits<Scalar>::MPI_Type, MPI_SUM, MPI_COMM_WORLD);
@@ -311,11 +294,8 @@ public:
                 _data[i] += alpha * x[i];
             break;
         case ARCH_GPU:
-            // TODO
-            /*
             cublas_axpy(_cublas_handle, _nloc, &alpha,
                 x._data + x._local_offset, 1, _data + _local_offset, 1);
-            */
             break;
         }
     }
@@ -464,9 +444,8 @@ class BCsrMatrix
     int _nloc;
     int _localoffset;
 
-    //TODO
-    //cusparseHandle_t _cusp_handle;
-    //cusparseMatDescr_t _desc;
+    cusparseHandle_t _cusp_handle;
+    cusparseMatDescr_t _desc;
 
 public:
     int get_n() const { return _n; }
@@ -498,14 +477,11 @@ public:
             _col_ind = new int[_nloc * _m];
             break;
         case ARCH_GPU:
-            /*
             cudaMallocManaged(&_val, sizeof(Scalar)*_nloc*_m);
             cudaMallocManaged(&_row_ptr, sizeof(Scalar)*(_nloc+1));
             cudaMallocManaged(&_col_ind, sizeof(Scalar)*_nloc*_m);
 
             cusparseCreateMatDescr(&_desc);
-            */
-            //TODO:CUDA
             break;
         }
         memset(_val, 0, sizeof(Scalar)*_nloc*_m);
@@ -544,14 +520,11 @@ public:
             if (_col_ind) delete[] _col_ind;
             break;
         case ARCH_GPU:
-            /*
             if(_val) cudaFree(_val);
             if(_row_ptr) cudaFree(_row_ptr);
             if(_col_ind) cudaFree(_col_ind);
 
-            cusparseDestroyMatDescr(_descr);
-            */
-            //TODO:CUDA
+            cusparseDestroyMatDescr(_desc);
             break;
         }
     }
@@ -620,7 +593,6 @@ public:
             const Scalar one = 1.0, zero = 0.0;
             if (_nprocs == 1)
             {
-                /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc, _nloc, _nloc * _m, &one,
                 _desc,
@@ -628,45 +600,37 @@ public:
                 _row_ptr, _col_ind,
                 src.local_data(), &zero,
                 dst.local_data());
-                */
             }
             else if (_iam_first)
             {
-                /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc - _B, _nloc, (_nloc - _B) * _m, &one,
                 _desc,
                 _val,
                 _row_ptr, _col_ind,
-                _src.local_data(), &zero,
-                _dst.local_data());
-                */
+                src.local_data(), &zero,
+                dst.local_data());
             }
             else if (_iam_last)
             {
-                /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc - _B, _nloc, (_nloc - _B) * _m, &one,
                 _desc,
                 _val + _B*_m,
                 _row_ptr + _B, _col_ind + _B*_m,
-                _src.local_data(), &zero,
-                _dst.local_data() + _B);
-                */
+                src.local_data(), &zero,
+                dst.local_data() + _B);
             }
             else
             {
-                /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc - 2 * _B, _nloc, (_nloc - 2 * _B) * _m, &one,
                 _desc,
                 _val + _B*_m,
                 _row_ptr + _B, _col_ind + _B*_m,
-                _src.local_data(), &zero,
-                _dst.local_data() + _B);
-                */
+                src.local_data(), &zero,
+                dst.local_data() + _B);
             }
-            //TODO:CUDA
             break;
         }
         }

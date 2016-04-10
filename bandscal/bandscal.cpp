@@ -10,6 +10,8 @@
 #include <chrono>
 #include <iostream>
 #include <omp.h>
+#include <cuda_runtime.h>
+
 #include "bandscal.h"
 
 void print_usage();
@@ -29,15 +31,15 @@ int main(int nargs, char** args)
     int myrank, nprocs;
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
     MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
-    //cublaseHandle_t cublas_handle;
-    //err1 = cublasCreate(&cublas_handle);
-    //cusparseHandle_t cusp_handle;
-    //err2 = cusparseCreate(&cusp_handle;)
-    //if(err1 || err2)
-    //{
-    //  std::cerr << "Failed to initialize cuBLAS / cuSPARSE. << std::endl;
-    //  exit(-1);
-    //}
+    cublasHandle_t cublas_handle;
+    cublasStatus_t err1 = cublasCreate(&cublas_handle);
+    cusparseHandle_t cusp_handle;
+    cusparseStatus_t err2 = cusparseCreate(&cusp_handle);
+    if(err1 != CUBLAS_STATUS_SUCCESS || err2 != CUSPARSE_STATUS_SUCCESS)
+    {
+      std::cerr << "Failed to initialize cuBLAS / cuSPARSE." << std::endl;
+      std::exit(-1);
+    }
     int nthreads;
 #pragma omp parallel
     {
