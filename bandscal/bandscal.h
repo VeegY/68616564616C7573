@@ -16,6 +16,8 @@
 #include <iostream>
 #include <mpi.h>
 
+#include "cudahelper.h"
+
 enum arch_t { ARCH_CPU, ARCH_GPU };
 
 template<class Scalar>
@@ -230,7 +232,7 @@ public:
                 dst[i] = _data[i];
             break;
         case ARCH_GPU:
-            //cuda_copy(_cublas_handle, _nloc, _data + _local_offset, dst._data + dst._local_offset);
+            //cublas_copy(_cublas_handle, _nloc, _data + _local_offset, dst._data + dst._local_offset);
             // TODO
             break;
         }
