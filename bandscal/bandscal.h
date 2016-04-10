@@ -725,7 +725,7 @@ void cg_solve(const BCsrMatrix<Scalar>& mat,
     int B = mat.get_B();
     arch_t arch = mat.get_arch();
 
-    BVector<Scalar> x1(n,B,arch), z(n, B, arch, b.get_cublas_handle()), 
+    BVector<Scalar> x1(n,B,arch, b.get_cublas_handle()), z(n, B, arch, b.get_cublas_handle()), 
         d0(n, B, arch, b.get_cublas_handle()), d1(n, B, arch, b.get_cublas_handle()),
         r0(n, B, arch, b.get_cublas_handle()), r1(n, B, arch, b.get_cublas_handle());
     Scalar alpha, beta;
