@@ -466,6 +466,7 @@ class BCsrMatrix
 
     //TODO
     //cusparseHandle_t _cusp_handle;
+    //cusparseMatDescr_t _desc;
 
 public:
     int get_n() const { return _n; }
@@ -501,6 +502,8 @@ public:
             cudaMallocManaged(&_val, sizeof(Scalar)*_nloc*_m);
             cudaMallocManaged(&_row_ptr, sizeof(Scalar)*(_nloc+1));
             cudaMallocManaged(&_col_ind, sizeof(Scalar)*_nloc*_m);
+
+            cusparseCreateMatDescr(&_desc);
             */
             //TODO:CUDA
             break;
@@ -545,6 +548,8 @@ public:
             if(_val) cudaFree(_val);
             if(_row_ptr) cudaFree(_row_ptr);
             if(_col_ind) cudaFree(_col_ind);
+
+            cusparseDestroyMatDescr(_descr);
             */
             //TODO:CUDA
             break;
@@ -618,7 +623,7 @@ public:
                 /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc, _nloc, _nloc * _m, &one,
-                CUSPARSE_MATRIX_TYPE_GENERAL,
+                _desc,
                 _val,
                 _row_ptr, _col_ind,
                 src.local_data(), &zero,
@@ -630,7 +635,7 @@ public:
                 /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc - _B, _nloc, (_nloc - _B) * _m, &one,
-                CUSPARSE_MATRIX_TYPE_GENERAL,
+                _desc,
                 _val,
                 _row_ptr, _col_ind,
                 _src.local_data(), &zero,
@@ -642,7 +647,7 @@ public:
                 /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc - _B, _nloc, (_nloc - _B) * _m, &one,
-                CUSPARSE_MATRIX_TYPE_GENERAL,
+                _desc,
                 _val + _B*_m,
                 _row_ptr + _B, _col_ind + _B*_m,
                 _src.local_data(), &zero,
@@ -654,7 +659,7 @@ public:
                 /*
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
                 _nloc - 2 * _B, _nloc, (_nloc - 2 * _B) * _m, &one,
-                CUSPARSE_MATRIX_TYPE_GENERAL,
+                _desc,
                 _val + _B*_m,
                 _row_ptr + _B, _col_ind + _B*_m,
                 _src.local_data(), &zero,
