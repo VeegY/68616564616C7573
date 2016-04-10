@@ -74,10 +74,11 @@ class BVector
     cublasHandle_t _cublas_handle;
 
 public:
-    BVector(int n, int B, arch_t arch) :
+    BVector(int n, int B, arch_t arch, cublasHandle_t cublas_handle) :
         _data(nullptr),
         _n(n), _B(B),
-        _arch(arch)
+        _arch(arch),
+        _cublas_handle(cublas_handle)
     {
         assert(_B > 0);
         MPI_Comm_size(MPI_COMM_WORLD, &_nprocs);
@@ -452,7 +453,7 @@ public:
     arch_t get_arch() const { return _arch; }
     int get_B() const { return _B; }
     
-    BCsrMatrix(RawSparseMatrix<Scalar>& mat, arch_t arch) :
+    BCsrMatrix(RawSparseMatrix<Scalar>& mat, arch_t arch, cusparseHandle_t cusp_handle) :
         _val(nullptr), _row_ptr(nullptr), _col_ind(nullptr),
         _n(mat._n), _B(mat._B), _l(mat._l), _p(mat._p),
         _myrank(mat._myrank),
@@ -462,7 +463,8 @@ public:
         _iam_last(_myrank == _nprocs - 1),
         _arch(arch),
         _nloc(_iam_last ? _p : _l),
-        _localoffset(_B*(!_iam_first))
+        _localoffset(_B*(!_iam_first)),
+        _cusp_handle(cusp_handle)
     {
         std::vector<int> epl(_nloc); // Anzahl Einträge pro Zeile
         for (auto& p : mat._local_data)
@@ -660,7 +662,7 @@ public:
 };
 
 template <class Scalar>
-BCsrMatrix<Scalar> construct_model_matrix(int m, arch_t arch)
+BCsrMatrix<Scalar> construct_model_matrix(int m, arch_t arch, cusparseHandle_t cusp)
 {
     RawSparseMatrix<Scalar> raw(m*m, m);
 
@@ -706,7 +708,7 @@ BCsrMatrix<Scalar> construct_model_matrix(int m, arch_t arch)
         raw.erase(i*m, i*m - 1);
         raw.erase((i + 1)*m - 1, (i + 1)*m);
     }
-    return BCsrMatrix<Scalar>(raw, arch);
+    return BCsrMatrix<Scalar>(raw, arch, cusp_handle);
 }
 
 template <class Scalar>
