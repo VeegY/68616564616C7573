@@ -74,6 +74,7 @@ int main(int nargs, char** args)
                 std::chrono::high_resolution_clock::now() - start;
             if (myrank == 0)
                 std::cout << "Elapsed time for matvec (ms):" << std::endl << elapsed.count()/nsamples << std::endl;
+            y.print(std::cout);
         }
         else // single precision
         {

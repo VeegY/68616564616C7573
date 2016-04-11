@@ -9,6 +9,7 @@
 #define __BANDSCAL_H_
 
 #include <map>
+#include <thread>
 #include <algorithm>
 #include <exception>
 #include <cassert>
@@ -168,6 +169,7 @@ public:
 
     void finish_comm()
     {
+        cudaDeviceSynchronize();
         MPI_Win_complete(_win_prev);
         MPI_Win_complete(_win_next);
         MPI_Win_wait(_win_prev);
@@ -298,9 +300,9 @@ public:
         case ARCH_GPU:
             cublas_nrm2(_cublas_handle, _nloc, _data + _local_offset, 1, &resloc);
             resloc *= resloc;
+            cudaDeviceSynchronize();
             break;
         }
-        cudaDeviceSynchronize();
         MPI_Allreduce(&resloc, &res, 1, ScalarTraits<Scalar>::MPI_Type, MPI_SUM, MPI_COMM_WORLD);
         return sqrt(res);
     }
@@ -328,7 +330,11 @@ public:
         {
             MPI_Barrier(MPI_COMM_WORLD);
             if (_myrank != rank)
+            {
+                // schnelle loesung zum geordneten ausgeben
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 continue;
+            }
             out << "PROCESS " << rank << ":" << std::endl;
             out << "Prev-Buffer: " << std::endl;
             if (_iam_first) out << "EMPTY" << std::endl;
@@ -354,7 +360,6 @@ public:
     void swap(BVector<Scalar>& other)
     {
         using std::swap;
-        cudaDeviceSynchronize();
         swap(_data, other._data);
         swap(_n, other._n);
         swap(_m, other._m);
@@ -578,7 +583,10 @@ public:
         {
             MPI_Barrier(MPI_COMM_WORLD);
             if (_myrank != rank)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 continue;
+            }
             out << "PROCESS " << rank << ":" << std::endl;
             out << "rowptr: " << std::endl;
             for (int i = 0; i < _nloc+1; i++)
@@ -595,6 +603,7 @@ public:
                     out << "(" << i << "," << j << "):\t" << _val[idx2(i, j)] << std::endl;
 
             out << std::endl;
+            out.flush();
         }
     }
 
@@ -602,7 +611,7 @@ public:
     {
         //std::cout << "startmv: " << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
         src.start_comm();
-
+        
         // lokale elemente
         switch (_arch)
         {
@@ -620,11 +629,13 @@ public:
             else // ich bin weder erster noch letzter
                 compute_dst(_B, _nloc - _B, src, dst);
             
-
             break;
         }
         case ARCH_GPU:
         {
+            // ACHTUNG: Der rowptr bleibt bzgl. der verschobenen
+            // vals, colindcs nullbasiert, d.h. dieser Trick
+            // funktioniert nur fuer festes _m
             const Scalar one = 1.0, zero = 0.0;
             if (_nprocs == 1)
             {
@@ -652,9 +663,9 @@ public:
                 _nloc - _B, _length, (_nloc - _B) * _m, &one,
                 _desc,
                 _val + _B*_m,
-                _row_ptr + _B, _col_ind + _B*_m,
+                _row_ptr, _col_ind + _B*_m,
                 src.data(), &zero,
-                dst.local_data() + _B);
+                dst.data() + 2*_B);
             }
             else
             {
@@ -662,17 +673,15 @@ public:
                 _nloc - 2 * _B, _length, (_nloc - 2 * _B) * _m, &one,
                 _desc,
                 _val + _B*_m,
-                _row_ptr + _B, _col_ind + _B*_m,
+                _row_ptr, _col_ind + _B*_m,
                 src.data(), &zero,
                 dst.local_data() + _B);
             }
             break;
         }
         }
-
         src.finish_comm();
-        cudaDeviceSynchronize();
-
+        
         // restliche, neu eingetroffene elemente (immer mit CPU)  
         if (!_iam_first)
             compute_dst(0, _B, src, dst);

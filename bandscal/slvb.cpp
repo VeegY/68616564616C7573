@@ -62,7 +62,6 @@ int main(int nargs, char** args)
         if (dp) // double precision
         {
             BCsrMatrix<double> mat = construct_model_matrix<double>(m, arch, cusp_handle);
-            //mat.print(std::cout);
             BVector<double> b(m*m, m, arch, cublas_handle), sol(m*m, m, arch, cublas_handle);
             b.fill_with(1.0);
             if(myrank == 0) std::cout << "Starting bechmark." << std::endl;
@@ -77,7 +76,6 @@ int main(int nargs, char** args)
         else // single precision
         {
             BCsrMatrix<float> mat = construct_model_matrix<float>(m, arch, cusp_handle);
-            //mat.print(std::cout);
             BVector<float> b(m*m, m, arch, cublas_handle), sol(m*m, m, arch, cublas_handle);
             b.fill_with(1.0);
             if(myrank == 0) std::cout << "Starting bechmark." << std::endl;
