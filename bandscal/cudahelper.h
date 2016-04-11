@@ -12,9 +12,14 @@
 
 #include <cusparse.h>
 #include <cublas_v2.h>
-//#define CUBLASAPI
-//#include <cublas_api.h>
 #include <cuda_runtime.h>
+
+template<class T>
+void gpuMalloc(T** dst, size_t n)
+{
+    if(cudaMallocManaged(dst,n) != cudaSuccess)
+        throw std::runtime_error("cudaMallocManaged failed.");
+}
 
 template<class T>
 void cublas_axpy(cublasHandle_t handle, int n,

@@ -14,6 +14,7 @@
 #include <cassert>
 #include <vector>
 #include <iostream>
+#include <chrono>
 #include <mpi.h>
 
 #include "cudahelper.h"
@@ -109,7 +110,7 @@ public:
             _data = new Scalar[_length];
             break;
         case ARCH_GPU:
-            cudaMallocManaged(&_data,sizeof(Scalar)*_length);
+            gpuMalloc(&_data,sizeof(Scalar)*_length);
             break;
         }
         memset(_data, 0, sizeof(Scalar)*_length);
@@ -173,6 +174,16 @@ public:
         MPI_Win_wait(_win_next);
     }
 
+    Scalar* data()
+    {
+        return _data;
+    }
+
+    const Scalar* data() const
+    {
+        return _data;
+    }
+
     Scalar* local_data()
     {
         return _data + _local_offset;
@@ -225,6 +236,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
+#           pragma omp parallel for
             for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 dst[i] = _data[i];
             break;
@@ -241,6 +253,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
+#           pragma omp parallel for
             for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 resloc += _data[i] * other[i];
             break;
@@ -262,6 +275,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
+#           pragma omp parallel for
             for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 _data[i] *= alpha;
             break;
@@ -277,6 +291,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
+#           pragma omp parallel for
             for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 resloc += _data[i] * _data[i];
             break;
@@ -296,6 +311,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
+#           pragma omp parallel for
             for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 _data[i] += alpha * x[i];
             break;
@@ -450,6 +466,7 @@ class BCsrMatrix
     arch_t _arch;
     int _nloc;
     int _localoffset;
+    int _length;
 
     cusparseHandle_t _cusp_handle;
     cusparseMatDescr_t _desc;
@@ -472,6 +489,15 @@ public:
         _localoffset(_B*(!_iam_first)),
         _cusp_handle(cusp_handle)
     {
+        if (_nprocs == 1)
+            _length = _l;
+        else if (_iam_first)
+            _length = _l + _B;
+        else if (_iam_last)
+            _length = _p + _B;
+        else
+            _length = _l + 2 * _B;
+        
         std::vector<int> epl(_nloc); // Anzahl Einträge pro Zeile
         for (auto& p : mat._local_data)
               epl[p.first.i]++;
@@ -485,9 +511,9 @@ public:
             _col_ind = new int[_nloc * _m];
             break;
         case ARCH_GPU:
-            cudaMallocManaged(&_val, sizeof(Scalar)*_nloc*_m);
-            cudaMallocManaged(&_row_ptr, sizeof(Scalar)*(_nloc+1));
-            cudaMallocManaged(&_col_ind, sizeof(Scalar)*_nloc*_m);
+            gpuMalloc(&_val, sizeof(Scalar)*_nloc*_m);
+            gpuMalloc(&_row_ptr, sizeof(Scalar)*(_nloc+1));
+            gpuMalloc(&_col_ind, sizeof(Scalar)*_nloc*_m);
 
             cusparseCreateMatDescr(&_desc);
             break;
@@ -574,6 +600,7 @@ public:
 
     void spmv(BVector<Scalar>& src, BVector<Scalar>& dst) const
     {
+        //std::cout << "startmv: " << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
         src.start_comm();
 
         // lokale elemente
@@ -602,41 +629,41 @@ public:
             if (_nprocs == 1)
             {
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
-                _nloc, _nloc, _nloc * _m, &one,
+                _nloc, _length, _nloc * _m, &one,
                 _desc,
                 _val,
                 _row_ptr, _col_ind,
-                src.local_data(), &zero,
+                src.data(), &zero,
                 dst.local_data());
             }
             else if (_iam_first)
             {
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
-                _nloc - _B, _nloc, (_nloc - _B) * _m, &one,
+                _nloc - _B, _length, (_nloc - _B) * _m, &one,
                 _desc,
                 _val,
                 _row_ptr, _col_ind,
-                src.local_data(), &zero,
+                src.data(), &zero,
                 dst.local_data());
             }
             else if (_iam_last)
             {
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
-                _nloc - _B, _nloc, (_nloc - _B) * _m, &one,
+                _nloc - _B, _length, (_nloc - _B) * _m, &one,
                 _desc,
                 _val + _B*_m,
                 _row_ptr + _B, _col_ind + _B*_m,
-                src.local_data(), &zero,
+                src.data(), &zero,
                 dst.local_data() + _B);
             }
             else
             {
                 cusparse_csrmv(_cusp_handle, CUSPARSE_OPERATION_NON_TRANSPOSE,
-                _nloc - 2 * _B, _nloc, (_nloc - 2 * _B) * _m, &one,
+                _nloc - 2 * _B, _length, (_nloc - 2 * _B) * _m, &one,
                 _desc,
                 _val + _B*_m,
                 _row_ptr + _B, _col_ind + _B*_m,
-                src.local_data(), &zero,
+                src.data(), &zero,
                 dst.local_data() + _B);
             }
             break;
@@ -652,16 +679,19 @@ public:
         
         if (!_iam_last)
             compute_dst(_nloc - _B, _nloc, src, dst);
+        
+        //std::cout << "endmv: " << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
     }
 
-    void compute_dst(int begin, int end, const BVector<Scalar>& src, BVector<Scalar>& dst) const
+    void compute_dst(const int begin, const int end, const BVector<Scalar>& src, BVector<Scalar>& dst) const
     {
-#       pragma omp parallel for
+        Scalar* dstptr = dst.local_data();
+#pragma omp parallel for
         for (int i = begin; i < end; i++)
         {
-            dst(i) = 0;
+            dstptr[i] = 0;
             for (int j = 0; j < _m; j++)
-                dst(i) += _val[idx2(i, j)] * src[_col_ind[idx2(i, j)]];
+                dstptr[i] += _val[idx2(i, j)] * src[_col_ind[idx2(i, j)]];
         }
     }
 

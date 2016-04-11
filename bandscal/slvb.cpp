@@ -24,6 +24,7 @@ int main(int nargs, char** args)
     arch_t arch;
     bool dp;
     int m;
+    omp_set_dynamic(0);
     parse_args(nargs, args, arch, dp, m);
 
     // init
@@ -55,6 +56,7 @@ int main(int nargs, char** args)
     }
     
     // Benchmark
+    if(myrank == 0) std::cout << "Setting up benchmark..." << std::endl;
     try
     {
         if (dp) // double precision
@@ -63,13 +65,14 @@ int main(int nargs, char** args)
             //mat.print(std::cout);
             BVector<double> b(m*m, m, arch, cublas_handle), sol(m*m, m, arch, cublas_handle);
             b.fill_with(1.0);
+            if(myrank == 0) std::cout << "Starting bechmark." << std::endl;
             std::chrono::high_resolution_clock::time_point start =
                 std::chrono::high_resolution_clock::now();
             cg_solve(mat, b, sol, 1e-6);
             std::chrono::duration<double, std::milli> elapsed =
                 std::chrono::high_resolution_clock::now() - start;
             if (myrank == 0)
-                std::cout << "Elapsed time for solver (ms): " << elapsed.count() << std::endl;
+                std::cout << "Elapsed time for solver (ms): " << std::endl << elapsed.count() << std::endl;
         }
         else // single precision
         {
@@ -77,13 +80,14 @@ int main(int nargs, char** args)
             //mat.print(std::cout);
             BVector<float> b(m*m, m, arch, cublas_handle), sol(m*m, m, arch, cublas_handle);
             b.fill_with(1.0);
+            if(myrank == 0) std::cout << "Starting bechmark." << std::endl;
             std::chrono::high_resolution_clock::time_point start =
                 std::chrono::high_resolution_clock::now();
             cg_solve(mat, b, sol, 1e-6f);
             std::chrono::duration<double, std::milli> elapsed =
                 std::chrono::high_resolution_clock::now() - start;
             if (myrank == 0)
-                std::cout << "Elapsed time for solver (ms): " << elapsed.count() << std::endl;
+                std::cout << "Elapsed time for solver (ms): " <<  std::endl << elapsed.count() << std::endl;
         }
     }
     catch (const std::exception& e)
@@ -96,15 +100,15 @@ int main(int nargs, char** args)
     }
 
     // cleanup
-    //cusparseDestroy(cusp_handle);
-    //cublasDestroy(cublas_handle);
+    cusparseDestroy(cusp_handle);
+    cublasDestroy(cublas_handle);
     MPI_Finalize();
     return 0;
 }
 
 void print_usage()
 {
-    std::cout << ">>> Usage: bandscal [arch/threads] [prec] [size]" << std::endl
+    std::cout << ">>> Usage: slvb [arch/threads] [prec] [size]" << std::endl
         << "arch: {'G','1','2','3','4'} for GPU or up to 4 threads on ARM" << std::endl
         << "prec: {'s','d'} for single or double precision" << std::endl
         << "size: specify parameter m in model matrix" << std::endl;
