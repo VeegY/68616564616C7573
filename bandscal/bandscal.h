@@ -255,7 +255,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
-#           pragma omp parallel for
+#           pragma omp parallel for reduction(+:resloc)
             for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 resloc += _data[i] * other[i];
             break;
@@ -293,7 +293,7 @@ public:
         switch (_arch)
         {
         case ARCH_CPU:
-#           pragma omp parallel for
+#           pragma omp parallel for reduction(+:resloc)
             for (int i = _local_offset; i < _nloc + _local_offset; i++)
                 resloc += _data[i] * _data[i];
             break;
