@@ -31,9 +31,9 @@
 // sizez:    Ausdehnung in z-Richtung vom Ursprung aus (nicht Anzahl der Elemente!)
 //           int/float/double, default: 1
 // gpu:      Gibt an, ob auf der GPU oder auf der CPU gerechnet werden soll
-//           "cpu" oder "gpu", default: cpu
+//           "cpu" oder "gpu", default: cpu, TODO/ Bemerkung: gpu noch nicht eingebaut
 // Beispiel:
-// ./useful_demo board 0.005 10 10 5 gpu
+// ./demo board 0.005 10 10 5 gpu
 // TODO: Funktionennummern uebergeben koennen
 // TODO: gpu Berechnung
 
