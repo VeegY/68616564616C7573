@@ -120,6 +120,7 @@ std::vector<char> discretizer(std::string inputFile,
 /* \ s a     #discretizer */ //TODO TOCHECK klappt sowas?
 void save_discretizer(std::vector<char> discretized_points,
                       std::string outputFile,
+                      float h,
                       int nx, int ny, int nz);
 
 }//namespace Icarus
