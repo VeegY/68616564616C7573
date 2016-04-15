@@ -66,7 +66,18 @@ double mathfunction::eval(double x, double y, double z, int plane)
                 return 10.0;
             assert(false); // nicht vorgesehen
     case 99:if (plane == 1)
-                return 10.0;
+            {
+                // Mitte der Luefters:
+                // x = (0.4 + 0.633 ) / 2
+                // y = (0.30147 + 0.53733) / 2
+                // z = 0.12623
+                // Aufbau: Deckel | prop | Deckel | Mitte | Deckel | prop | Deckel
+                if ((x-0.5165)*(x-0.5165) + (y-0.4194)*(y-0.4194) < 0.117   // nah genug dran
+                    && (x-0.5165)*(x-0.5165) + (y-0.4194)*(y-0.4194) > 0.5  // weit genug weg
+                    && z > 0.12623-1.0e-3 && z < 0.12623+1.0e-3)            // Hoehe richtig
+                    return 50.0;
+                return 0.0; // nicht Luefter
+            }
             if (plane == 2)
                 return 0.0;
             if (plane == 3)
